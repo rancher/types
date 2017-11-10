@@ -1,8 +1,8 @@
 package v1
 
 import (
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 type ClusterConditionType string
@@ -57,7 +57,7 @@ type ClusterStatus struct {
 	Conditions []ClusterCondition `json:"conditions,omitempty"`
 	//Component statuses will represent cluster's components (etcd/controller/scheduler) health
 	// https://kubernetes.io/docs/api-reference/v1.8/#componentstatus-v1-core
-	ComponentStatuses   v1.ComponentStatusList
+	ComponentStatuses   []v1.ComponentStatus
 	APIEndpoint         string          `json:"apiEndpoint,omitempty"`
 	ServiceAccountToken string          `json:"serviceAccountToken,omitempty"`
 	CACert              string          `json:"caCert,omitempty"`
@@ -212,13 +212,6 @@ type baseService struct {
 
 type ClusterNode struct {
 	v1.Node
-}
-
-type ClusterNodeMetadata struct {
-	// Standard object’s metadata. More info:
-	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#metadata
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	ClusterName       string `json:"clusterName,omitempty"`
 }
 
 type ClusterNodeList struct {
