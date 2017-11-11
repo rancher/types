@@ -3,7 +3,10 @@ package v1
 import (
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
+
+var SchemeBuilder = runtime.NewSchemeBuilder()
 
 type ClusterConditionType string
 
@@ -23,6 +26,8 @@ const (
 	// More conditions can be added if unredlying controllers request it
 )
 
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
 type Cluster struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object’s metadata. More info:
@@ -36,13 +41,12 @@ type Cluster struct {
 	Status *ClusterStatus `json:"status"`
 }
 
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
 type ClusterList struct {
-	metav1.TypeMeta `json:",inline"`
-	// Standard list metadata
-	// More info: https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#metadata
-	metav1.ListMeta `json:"metadata,omitempty"`
-	// List of Clusters
-	Items []*Cluster `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Items             []Cluster
 }
 
 type ClusterSpec struct {
@@ -57,12 +61,17 @@ type ClusterStatus struct {
 	Conditions []ClusterCondition `json:"conditions,omitempty"`
 	//Component statuses will represent cluster's components (etcd/controller/scheduler) health
 	// https://kubernetes.io/docs/api-reference/v1.8/#componentstatus-v1-core
-	ComponentStatuses   []v1.ComponentStatus
+	ComponentStatuses   []ClusterComponentStatus
 	APIEndpoint         string          `json:"apiEndpoint,omitempty"`
 	ServiceAccountToken string          `json:"serviceAccountToken,omitempty"`
 	CACert              string          `json:"caCert,omitempty"`
 	Capacity            v1.ResourceList `json:"capacity,omitempty"`
 	Allocatable         v1.ResourceList `json:"allocatable,omitempty"`
+}
+
+type ClusterComponentStatus struct {
+	Name       string
+	Conditions []v1.ComponentCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,2,rep,name=conditions"`
 }
 
 type ClusterCondition struct {
@@ -210,15 +219,16 @@ type baseService struct {
 	Image string `yaml:"image"`
 }
 
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
 type ClusterNode struct {
 	v1.Node
 }
 
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
 type ClusterNodeList struct {
-	metav1.TypeMeta `json:",inline"`
-	// Standard list metadata
-	// More info: https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#metadata
-	metav1.ListMeta `json:"metadata,omitempty"`
-	// List of Clusters
-	Items []*Cluster `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Items             []ClusterNode
 }
