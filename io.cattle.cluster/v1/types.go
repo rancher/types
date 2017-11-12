@@ -3,10 +3,7 @@ package v1
 import (
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 )
-
-var SchemeBuilder = runtime.NewSchemeBuilder()
 
 type ClusterConditionType string
 
@@ -26,8 +23,6 @@ const (
 	// More conditions can be added if unredlying controllers request it
 )
 
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
 type Cluster struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object’s metadata. More info:
@@ -39,14 +34,6 @@ type Cluster struct {
 	// Most recent observed status of the cluster. More info:
 	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
 	Status *ClusterStatus `json:"status"`
-}
-
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
-type ClusterList struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Items             []Cluster
 }
 
 type ClusterSpec struct {
@@ -219,16 +206,6 @@ type baseService struct {
 	Image string `yaml:"image"`
 }
 
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
 type ClusterNode struct {
 	v1.Node
-}
-
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
-type ClusterNodeList struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Items             []ClusterNode
 }
