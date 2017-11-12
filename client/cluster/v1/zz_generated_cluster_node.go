@@ -35,7 +35,7 @@ type ClusterNodeOperations interface {
 	List(opts *types.ListOpts) (*ClusterNodeCollection, error)
 	Create(opts *ClusterNode) (*ClusterNode, error)
 	Update(existing *ClusterNode, updates interface{}) (*ClusterNode, error)
-	ById(id string) (*ClusterNode, error)
+	ByID(id string) (*ClusterNode, error)
 	Delete(container *ClusterNode) error
 }
 
@@ -74,9 +74,9 @@ func (cc *ClusterNodeCollection) Next() (*ClusterNodeCollection, error) {
 	return nil, nil
 }
 
-func (c *ClusterNodeClient) ById(id string) (*ClusterNode, error) {
+func (c *ClusterNodeClient) ByID(id string) (*ClusterNode, error) {
 	resp := &ClusterNode{}
-	err := c.apiClient.Ops.DoById(ClusterNodeType, id, resp)
+	err := c.apiClient.Ops.DoByID(ClusterNodeType, id, resp)
 	return resp, err
 }
 
