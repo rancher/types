@@ -35,7 +35,7 @@ type ClusterOperations interface {
 	List(opts *types.ListOpts) (*ClusterCollection, error)
 	Create(opts *Cluster) (*Cluster, error)
 	Update(existing *Cluster, updates interface{}) (*Cluster, error)
-	ById(id string) (*Cluster, error)
+	ByID(id string) (*Cluster, error)
 	Delete(container *Cluster) error
 }
 
@@ -74,9 +74,9 @@ func (cc *ClusterCollection) Next() (*ClusterCollection, error) {
 	return nil, nil
 }
 
-func (c *ClusterClient) ById(id string) (*Cluster, error) {
+func (c *ClusterClient) ByID(id string) (*Cluster, error) {
 	resp := &Cluster{}
-	err := c.apiClient.Ops.DoById(ClusterType, id, resp)
+	err := c.apiClient.Ops.DoByID(ClusterType, id, resp)
 	return resp, err
 }
 

@@ -212,7 +212,7 @@ func (a *APIOperations) DoUpdate(schemaType string, existing *types.Resource, up
 	return a.DoModify("PUT", selfUrl, updates, respObject)
 }
 
-func (a *APIOperations) DoById(schemaType string, id string, respObject interface{}) error {
+func (a *APIOperations) DoByID(schemaType string, id string, respObject interface{}) error {
 	schema, ok := a.Types[schemaType]
 	if !ok {
 		return errors.New("Unknown schema type [" + schemaType + "]")
@@ -227,9 +227,7 @@ func (a *APIOperations) DoById(schemaType string, id string, respObject interfac
 		return errors.New("Failed to find collection URL for [" + schemaType + "]")
 	}
 
-	err := a.DoGet(collectionUrl+"/"+id, nil, respObject)
-	//TODO check for 404 and return nil, nil
-	return err
+	return a.DoGet(collectionUrl+"/"+id, nil, respObject)
 }
 
 func (a *APIOperations) DoResourceDelete(schemaType string, existing *types.Resource) error {

@@ -29,6 +29,12 @@ var (
 	}
 )
 
+type ClusterNodeList struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Items             []ClusterNode
+}
+
 type ClusterNodeHandlerFunc func(key string, obj *ClusterNode) error
 
 type ClusterNodeController interface {
