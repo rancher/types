@@ -15,7 +15,7 @@ import (
 var (
 	ProjectRoleBindingGroupVersionKind = schema.GroupVersionKind{
 		Version: "v1",
-		Group:   "io.cattle.authorization",
+		Group:   "authorization.cattle.io",
 		Kind:    "ProjectRoleBinding",
 	}
 	ProjectRoleBindingResource = metav1.APIResource{

@@ -3,15 +3,15 @@ package schema
 import (
 	"github.com/rancher/norman/types"
 	m "github.com/rancher/norman/types/mapping/mapper"
+	"github.com/rancher/types/apis/workload.cattle.io/v1/schema/mapper"
 	"github.com/rancher/types/commonmappers"
-	"github.com/rancher/types/io.cattle.workload/v1/schema/mapper"
 	"k8s.io/api/core/v1"
 )
 
 var (
 	Version = types.APIVersion{
 		Version: "v1",
-		Group:   "io.cattle.workload",
+		Group:   "workload.cattle.io",
 		Path:    "/v1-app",
 		SubContexts: map[string]bool{
 			"projects": true,

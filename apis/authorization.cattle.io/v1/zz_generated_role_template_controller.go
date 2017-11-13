@@ -15,7 +15,7 @@ import (
 var (
 	RoleTemplateGroupVersionKind = schema.GroupVersionKind{
 		Version: "v1",
-		Group:   "io.cattle.authorization",
+		Group:   "authorization.cattle.io",
 		Kind:    "RoleTemplate",
 	}
 	RoleTemplateResource = metav1.APIResource{

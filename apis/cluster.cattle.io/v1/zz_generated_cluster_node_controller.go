@@ -15,7 +15,7 @@ import (
 var (
 	ClusterNodeGroupVersionKind = schema.GroupVersionKind{
 		Version: "v1",
-		Group:   "io.cattle.cluster",
+		Group:   "cluster.cattle.io",
 		Kind:    "ClusterNode",
 	}
 	ClusterNodeResource = metav1.APIResource{

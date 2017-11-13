@@ -2,13 +2,13 @@ package schema
 
 import (
 	"github.com/rancher/norman/types"
-	"github.com/rancher/types/io.cattle.authorization/v1"
+	"github.com/rancher/types/apis/authorization.cattle.io/v1"
 )
 
 var (
 	Version = types.APIVersion{
 		Version: "v1",
-		Group:   "io.cattle.authorization",
+		Group:   "authorization.cattle.io",
 		Path:    "/v1-authz",
 	}
 

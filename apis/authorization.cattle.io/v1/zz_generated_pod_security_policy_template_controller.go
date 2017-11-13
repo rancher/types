@@ -15,7 +15,7 @@ import (
 var (
 	PodSecurityPolicyTemplateGroupVersionKind = schema.GroupVersionKind{
 		Version: "v1",
-		Group:   "io.cattle.authorization",
+		Group:   "authorization.cattle.io",
 		Kind:    "PodSecurityPolicyTemplate",
 	}
 	PodSecurityPolicyTemplateResource = metav1.APIResource{
