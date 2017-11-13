@@ -19,7 +19,7 @@ var (
 		Kind:    "ClusterNode",
 	}
 	ClusterNodeResource = metav1.APIResource{
-		Name:         "",
+		Name:         "clusternodes",
 		SingularName: "clusternode",
 		Namespaced:   false,
 		Kind:         ClusterNodeGroupVersionKind.Kind,
