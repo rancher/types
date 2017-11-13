@@ -3,9 +3,9 @@ package schema
 import (
 	"github.com/rancher/norman/types"
 	m "github.com/rancher/norman/types/mapping/mapper"
+	"github.com/rancher/types/commonmappers"
 	"github.com/rancher/types/io.cattle.workload/v1/schema/mapper"
 	"k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 var (
@@ -18,7 +18,7 @@ var (
 		},
 	}
 
-	Schemas = types.NewSchemas().
+	Schemas = commonmappers.Add(&Version, types.NewSchemas()).
 		AddMapperForType(&Version, v1.Capabilities{}, &types.TypeMapper{
 			Mappers: []types.Mapper{
 				m.Move{From: "add", To: "capAdd"},
@@ -99,22 +99,6 @@ var (
 		AddMapperForType(&Version, v1.ResourceRequirements{}, &types.TypeMapper{
 			Mappers: []types.Mapper{
 				mapper.ResourceRequirementsMapper{},
-			},
-		}).
-		AddMapperForType(&Version, metav1.ObjectMeta{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Drop{"generateName"},
-				m.Drop{"selfLink"},
-				m.Move{From: "uid", To: "uuid"},
-				m.Drop{"resourceVersion"},
-				m.Drop{"generation"},
-				m.Move{From: "creationTimestamp", To: "created"},
-				m.Move{From: "deletionTimestamp", To: "removed"},
-				//DeletionGracePeriodSecondsMapper{},
-				m.Drop{"initializers"},
-				m.Drop{"finalizers"},
-				m.Drop{"clusterName"},
-				m.Drop{"ownerReferences"},
 			},
 		}).
 		MustImport(&Version, v1.Handler{}, handlerOverride{}).
