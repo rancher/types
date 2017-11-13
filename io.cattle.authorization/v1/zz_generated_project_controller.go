@@ -1,8 +1,6 @@
 package v1
 
 import (
-	"sync"
-
 	"context"
 
 	"github.com/rancher/norman/clientbase"
@@ -11,7 +9,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
-	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 )
 
@@ -52,7 +49,7 @@ type ProjectInterface interface {
 	List(opts metav1.ListOptions) (*ProjectList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Controller() (ProjectController, error)
+	Controller() ProjectController
 }
 
 type projectController struct {
@@ -83,35 +80,30 @@ func (c projectFactory) List() runtime.Object {
 	return &ProjectList{}
 }
 
-func NewProjectClient(namespace string, config rest.Config) (ProjectInterface, error) {
-	objectClient, err := clientbase.NewObjectClient(namespace, config, &ProjectResource, ProjectGroupVersionKind, projectFactory{})
-	return &projectClient{
-		objectClient: objectClient,
-	}, err
-}
+func (s *projectClient) Controller() ProjectController {
+	s.client.Lock()
+	defer s.client.Unlock()
 
-func (s *projectClient) Controller() (ProjectController, error) {
-	s.Lock()
-	defer s.Unlock()
-
-	if s.controller != nil {
-		return s.controller, nil
+	c, ok := s.client.projectControllers[s.ns]
+	if ok {
+		return c
 	}
 
-	controller, err := controller.NewGenericController(ProjectGroupVersionKind.Kind+"Controller",
+	genericController := controller.NewGenericController(ProjectGroupVersionKind.Kind+"Controller",
 		s.objectClient)
-	if err != nil {
-		return nil, err
+
+	c = &projectController{
+		GenericController: genericController,
 	}
 
-	s.controller = &projectController{
-		GenericController: controller,
-	}
-	return s.controller, nil
+	s.client.projectControllers[s.ns] = c
+
+	return c
 }
 
 type projectClient struct {
-	sync.Mutex
+	client       *Client
+	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   ProjectController
 }

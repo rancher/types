@@ -1,8 +1,6 @@
 package v1
 
 import (
-	"sync"
-
 	"context"
 
 	"github.com/rancher/norman/clientbase"
@@ -11,7 +9,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
-	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 )
 
@@ -52,7 +49,7 @@ type ProjectRoleBindingInterface interface {
 	List(opts metav1.ListOptions) (*ProjectRoleBindingList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Controller() (ProjectRoleBindingController, error)
+	Controller() ProjectRoleBindingController
 }
 
 type projectRoleBindingController struct {
@@ -83,35 +80,30 @@ func (c projectRoleBindingFactory) List() runtime.Object {
 	return &ProjectRoleBindingList{}
 }
 
-func NewProjectRoleBindingClient(namespace string, config rest.Config) (ProjectRoleBindingInterface, error) {
-	objectClient, err := clientbase.NewObjectClient(namespace, config, &ProjectRoleBindingResource, ProjectRoleBindingGroupVersionKind, projectRoleBindingFactory{})
-	return &projectRoleBindingClient{
-		objectClient: objectClient,
-	}, err
-}
+func (s *projectRoleBindingClient) Controller() ProjectRoleBindingController {
+	s.client.Lock()
+	defer s.client.Unlock()
 
-func (s *projectRoleBindingClient) Controller() (ProjectRoleBindingController, error) {
-	s.Lock()
-	defer s.Unlock()
-
-	if s.controller != nil {
-		return s.controller, nil
+	c, ok := s.client.projectRoleBindingControllers[s.ns]
+	if ok {
+		return c
 	}
 
-	controller, err := controller.NewGenericController(ProjectRoleBindingGroupVersionKind.Kind+"Controller",
+	genericController := controller.NewGenericController(ProjectRoleBindingGroupVersionKind.Kind+"Controller",
 		s.objectClient)
-	if err != nil {
-		return nil, err
+
+	c = &projectRoleBindingController{
+		GenericController: genericController,
 	}
 
-	s.controller = &projectRoleBindingController{
-		GenericController: controller,
-	}
-	return s.controller, nil
+	s.client.projectRoleBindingControllers[s.ns] = c
+
+	return c
 }
 
 type projectRoleBindingClient struct {
-	sync.Mutex
+	client       *Client
+	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   ProjectRoleBindingController
 }

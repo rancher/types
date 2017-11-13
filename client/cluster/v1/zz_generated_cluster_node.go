@@ -5,21 +5,41 @@ import (
 )
 
 const (
-	ClusterNodeType            = "clusterNode"
-	ClusterNodeFieldAPIVersion = "apiVersion"
-	ClusterNodeFieldKind       = "kind"
-	ClusterNodeFieldObjectMeta = "objectMeta"
-	ClusterNodeFieldSpec       = "spec"
-	ClusterNodeFieldStatus     = "status"
+	ClusterNodeType               = "clusterNode"
+	ClusterNodeFieldAPIVersion    = "apiVersion"
+	ClusterNodeFieldAnnotations   = "annotations"
+	ClusterNodeFieldConfigSource  = "configSource"
+	ClusterNodeFieldCreated       = "created"
+	ClusterNodeFieldExternalID    = "externalID"
+	ClusterNodeFieldKind          = "kind"
+	ClusterNodeFieldLabels        = "labels"
+	ClusterNodeFieldName          = "name"
+	ClusterNodeFieldNamespace     = "namespace"
+	ClusterNodeFieldPodCIDR       = "podCIDR"
+	ClusterNodeFieldProviderID    = "providerID"
+	ClusterNodeFieldRemoved       = "removed"
+	ClusterNodeFieldTaints        = "taints"
+	ClusterNodeFieldUnschedulable = "unschedulable"
+	ClusterNodeFieldUuid          = "uuid"
 )
 
 type ClusterNode struct {
 	types.Resource
-	APIVersion string     `json:"apiVersion,omitempty"`
-	Kind       string     `json:"kind,omitempty"`
-	ObjectMeta ObjectMeta `json:"objectMeta,omitempty"`
-	Spec       NodeSpec   `json:"spec,omitempty"`
-	Status     NodeStatus `json:"status,omitempty"`
+	APIVersion    string            `json:"apiVersion,omitempty"`
+	Annotations   map[string]string `json:"annotations,omitempty"`
+	ConfigSource  *NodeConfigSource `json:"configSource,omitempty"`
+	Created       string            `json:"created,omitempty"`
+	ExternalID    string            `json:"externalID,omitempty"`
+	Kind          string            `json:"kind,omitempty"`
+	Labels        map[string]string `json:"labels,omitempty"`
+	Name          string            `json:"name,omitempty"`
+	Namespace     string            `json:"namespace,omitempty"`
+	PodCIDR       string            `json:"podCIDR,omitempty"`
+	ProviderID    string            `json:"providerID,omitempty"`
+	Removed       string            `json:"removed,omitempty"`
+	Taints        []Taint           `json:"taints,omitempty"`
+	Unschedulable bool              `json:"unschedulable,omitempty"`
+	Uuid          string            `json:"uuid,omitempty"`
 }
 type ClusterNodeCollection struct {
 	types.Collection
