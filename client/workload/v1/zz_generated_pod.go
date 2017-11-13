@@ -13,7 +13,6 @@ const (
 	PodFieldContainers                    = "containers"
 	PodFieldCreated                       = "created"
 	PodFieldDNSPolicy                     = "dnsPolicy"
-	PodFieldDeletionGracePeriodSeconds    = "deletionGracePeriodSeconds"
 	PodFieldDeprecatedServiceAccount      = "deprecatedServiceAccount"
 	PodFieldFsgid                         = "fsgid"
 	PodFieldGids                          = "gids"
@@ -52,7 +51,6 @@ type Pod struct {
 	Containers                    map[string]Container   `json:"containers,omitempty"`
 	Created                       string                 `json:"created,omitempty"`
 	DNSPolicy                     string                 `json:"dnsPolicy,omitempty"`
-	DeletionGracePeriodSeconds    *int64                 `json:"deletionGracePeriodSeconds,omitempty"`
 	DeprecatedServiceAccount      string                 `json:"deprecatedServiceAccount,omitempty"`
 	Fsgid                         *int64                 `json:"fsgid,omitempty"`
 	Gids                          []int64                `json:"gids,omitempty"`

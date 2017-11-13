@@ -5,21 +5,35 @@ import (
 )
 
 const (
-	ClusterType            = "cluster"
-	ClusterFieldAPIVersion = "apiVersion"
-	ClusterFieldKind       = "kind"
-	ClusterFieldObjectMeta = "objectMeta"
-	ClusterFieldSpec       = "spec"
-	ClusterFieldStatus     = "status"
+	ClusterType             = "cluster"
+	ClusterFieldAKSConfig   = "aksConfig"
+	ClusterFieldAPIVersion  = "apiVersion"
+	ClusterFieldAnnotations = "annotations"
+	ClusterFieldCreated     = "created"
+	ClusterFieldGKEConfig   = "gkeConfig"
+	ClusterFieldKind        = "kind"
+	ClusterFieldLabels      = "labels"
+	ClusterFieldName        = "name"
+	ClusterFieldNamespace   = "namespace"
+	ClusterFieldRKEConfig   = "rkeConfig"
+	ClusterFieldRemoved     = "removed"
+	ClusterFieldUuid        = "uuid"
 )
 
 type Cluster struct {
 	types.Resource
-	APIVersion string         `json:"apiVersion,omitempty"`
-	Kind       string         `json:"kind,omitempty"`
-	ObjectMeta ObjectMeta     `json:"objectMeta,omitempty"`
-	Spec       ClusterSpec    `json:"spec,omitempty"`
-	Status     *ClusterStatus `json:"status,omitempty"`
+	AKSConfig   *AKSConfig        `json:"aksConfig,omitempty"`
+	APIVersion  string            `json:"apiVersion,omitempty"`
+	Annotations map[string]string `json:"annotations,omitempty"`
+	Created     string            `json:"created,omitempty"`
+	GKEConfig   *GKEConfig        `json:"gkeConfig,omitempty"`
+	Kind        string            `json:"kind,omitempty"`
+	Labels      map[string]string `json:"labels,omitempty"`
+	Name        string            `json:"name,omitempty"`
+	Namespace   string            `json:"namespace,omitempty"`
+	RKEConfig   *RKEConfig        `json:"rkeConfig,omitempty"`
+	Removed     string            `json:"removed,omitempty"`
+	Uuid        string            `json:"uuid,omitempty"`
 }
 type ClusterCollection struct {
 	types.Collection

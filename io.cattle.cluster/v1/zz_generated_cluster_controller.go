@@ -1,8 +1,6 @@
 package v1
 
 import (
-	"sync"
-
 	"context"
 
 	"github.com/rancher/norman/clientbase"
@@ -11,7 +9,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
-	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 )
 
@@ -22,7 +19,7 @@ var (
 		Kind:    "Cluster",
 	}
 	ClusterResource = metav1.APIResource{
-		Name:         "clusters",
+		Name:         "",
 		SingularName: "cluster",
 		Namespaced:   false,
 		Kind:         ClusterGroupVersionKind.Kind,
@@ -52,7 +49,7 @@ type ClusterInterface interface {
 	List(opts metav1.ListOptions) (*ClusterList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Controller() (ClusterController, error)
+	Controller() ClusterController
 }
 
 type clusterController struct {
@@ -83,35 +80,30 @@ func (c clusterFactory) List() runtime.Object {
 	return &ClusterList{}
 }
 
-func NewClusterClient(namespace string, config rest.Config) (ClusterInterface, error) {
-	objectClient, err := clientbase.NewObjectClient(namespace, config, &ClusterResource, ClusterGroupVersionKind, clusterFactory{})
-	return &clusterClient{
-		objectClient: objectClient,
-	}, err
-}
+func (s *clusterClient) Controller() ClusterController {
+	s.client.Lock()
+	defer s.client.Unlock()
 
-func (s *clusterClient) Controller() (ClusterController, error) {
-	s.Lock()
-	defer s.Unlock()
-
-	if s.controller != nil {
-		return s.controller, nil
+	c, ok := s.client.clusterControllers[s.ns]
+	if ok {
+		return c
 	}
 
-	controller, err := controller.NewGenericController(ClusterGroupVersionKind.Kind+"Controller",
+	genericController := controller.NewGenericController(ClusterGroupVersionKind.Kind+"Controller",
 		s.objectClient)
-	if err != nil {
-		return nil, err
+
+	c = &clusterController{
+		GenericController: genericController,
 	}
 
-	s.controller = &clusterController{
-		GenericController: controller,
-	}
-	return s.controller, nil
+	s.client.clusterControllers[s.ns] = c
+
+	return c
 }
 
 type clusterClient struct {
-	sync.Mutex
+	client       *Client
+	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   ClusterController
 }

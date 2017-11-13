@@ -1,8 +1,6 @@
 package v1
 
 import (
-	"sync"
-
 	"context"
 
 	"github.com/rancher/norman/clientbase"
@@ -11,7 +9,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
-	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 )
 
@@ -52,7 +49,7 @@ type RoleTemplateInterface interface {
 	List(opts metav1.ListOptions) (*RoleTemplateList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Controller() (RoleTemplateController, error)
+	Controller() RoleTemplateController
 }
 
 type roleTemplateController struct {
@@ -83,35 +80,30 @@ func (c roleTemplateFactory) List() runtime.Object {
 	return &RoleTemplateList{}
 }
 
-func NewRoleTemplateClient(namespace string, config rest.Config) (RoleTemplateInterface, error) {
-	objectClient, err := clientbase.NewObjectClient(namespace, config, &RoleTemplateResource, RoleTemplateGroupVersionKind, roleTemplateFactory{})
-	return &roleTemplateClient{
-		objectClient: objectClient,
-	}, err
-}
+func (s *roleTemplateClient) Controller() RoleTemplateController {
+	s.client.Lock()
+	defer s.client.Unlock()
 
-func (s *roleTemplateClient) Controller() (RoleTemplateController, error) {
-	s.Lock()
-	defer s.Unlock()
-
-	if s.controller != nil {
-		return s.controller, nil
+	c, ok := s.client.roleTemplateControllers[s.ns]
+	if ok {
+		return c
 	}
 
-	controller, err := controller.NewGenericController(RoleTemplateGroupVersionKind.Kind+"Controller",
+	genericController := controller.NewGenericController(RoleTemplateGroupVersionKind.Kind+"Controller",
 		s.objectClient)
-	if err != nil {
-		return nil, err
+
+	c = &roleTemplateController{
+		GenericController: genericController,
 	}
 
-	s.controller = &roleTemplateController{
-		GenericController: controller,
-	}
-	return s.controller, nil
+	s.client.roleTemplateControllers[s.ns] = c
+
+	return c
 }
 
 type roleTemplateClient struct {
-	sync.Mutex
+	client       *Client
+	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   RoleTemplateController
 }

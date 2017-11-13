@@ -1,8 +1,6 @@
 package v1
 
 import (
-	"sync"
-
 	"context"
 
 	"github.com/rancher/norman/clientbase"
@@ -11,7 +9,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
-	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 )
 
@@ -52,7 +49,7 @@ type PodSecurityPolicyTemplateInterface interface {
 	List(opts metav1.ListOptions) (*PodSecurityPolicyTemplateList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Controller() (PodSecurityPolicyTemplateController, error)
+	Controller() PodSecurityPolicyTemplateController
 }
 
 type podSecurityPolicyTemplateController struct {
@@ -83,35 +80,30 @@ func (c podSecurityPolicyTemplateFactory) List() runtime.Object {
 	return &PodSecurityPolicyTemplateList{}
 }
 
-func NewPodSecurityPolicyTemplateClient(namespace string, config rest.Config) (PodSecurityPolicyTemplateInterface, error) {
-	objectClient, err := clientbase.NewObjectClient(namespace, config, &PodSecurityPolicyTemplateResource, PodSecurityPolicyTemplateGroupVersionKind, podSecurityPolicyTemplateFactory{})
-	return &podSecurityPolicyTemplateClient{
-		objectClient: objectClient,
-	}, err
-}
+func (s *podSecurityPolicyTemplateClient) Controller() PodSecurityPolicyTemplateController {
+	s.client.Lock()
+	defer s.client.Unlock()
 
-func (s *podSecurityPolicyTemplateClient) Controller() (PodSecurityPolicyTemplateController, error) {
-	s.Lock()
-	defer s.Unlock()
-
-	if s.controller != nil {
-		return s.controller, nil
+	c, ok := s.client.podSecurityPolicyTemplateControllers[s.ns]
+	if ok {
+		return c
 	}
 
-	controller, err := controller.NewGenericController(PodSecurityPolicyTemplateGroupVersionKind.Kind+"Controller",
+	genericController := controller.NewGenericController(PodSecurityPolicyTemplateGroupVersionKind.Kind+"Controller",
 		s.objectClient)
-	if err != nil {
-		return nil, err
+
+	c = &podSecurityPolicyTemplateController{
+		GenericController: genericController,
 	}
 
-	s.controller = &podSecurityPolicyTemplateController{
-		GenericController: controller,
-	}
-	return s.controller, nil
+	s.client.podSecurityPolicyTemplateControllers[s.ns] = c
+
+	return c
 }
 
 type podSecurityPolicyTemplateClient struct {
-	sync.Mutex
+	client       *Client
+	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   PodSecurityPolicyTemplateController
 }
