@@ -27,9 +27,9 @@ var (
 )
 
 type RoleTemplateList struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Items             []RoleTemplate
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []RoleTemplate
 }
 
 type RoleTemplateHandlerFunc func(key string, obj *RoleTemplate) error

@@ -99,7 +99,7 @@ func (in *ClusterCondition) DeepCopy() *ClusterCondition {
 func (in *ClusterList) DeepCopyInto(out *ClusterList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	out.ListMeta = in.ListMeta
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Cluster, len(*in))
@@ -159,7 +159,7 @@ func (in *ClusterNode) DeepCopyObject() runtime.Object {
 func (in *ClusterNodeList) DeepCopyInto(out *ClusterNodeList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	out.ListMeta = in.ListMeta
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]ClusterNode, len(*in))
