@@ -13,7 +13,7 @@ const (
 	// ClusterConditionProvisioned Cluster is provisioned
 	ClusterConditionProvisioned = "Provisioned"
 	// ClusterConditionUpdating Cluster is being updating (upgrading, scaling up)
-	ClusterConditionUpdating = "Updating"
+	ClusterConditionUpdating = "Reconciling"
 	// ClusterConditionSufficientDisk true when all cluster nodes have sufficient disk
 	ClusterConditionSufficientDisk = "SufficientDisk"
 	// ClusterConditionSufficientMemory true when all cluster nodes have sufficient memory
