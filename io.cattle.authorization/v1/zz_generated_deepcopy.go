@@ -37,7 +37,7 @@ func (in *PodSecurityPolicyTemplate) DeepCopyObject() runtime.Object {
 func (in *PodSecurityPolicyTemplateList) DeepCopyInto(out *PodSecurityPolicyTemplateList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	out.ListMeta = in.ListMeta
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]PodSecurityPolicyTemplate, len(*in))
@@ -98,7 +98,7 @@ func (in *Project) DeepCopyObject() runtime.Object {
 func (in *ProjectList) DeepCopyInto(out *ProjectList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	out.ListMeta = in.ListMeta
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Project, len(*in))
@@ -164,7 +164,7 @@ func (in *ProjectRoleBinding) DeepCopyObject() runtime.Object {
 func (in *ProjectRoleBindingList) DeepCopyInto(out *ProjectRoleBindingList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	out.ListMeta = in.ListMeta
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]ProjectRoleBinding, len(*in))
@@ -237,7 +237,7 @@ func (in *RoleTemplate) DeepCopyObject() runtime.Object {
 func (in *RoleTemplateList) DeepCopyInto(out *RoleTemplateList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	out.ListMeta = in.ListMeta
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]RoleTemplate, len(*in))

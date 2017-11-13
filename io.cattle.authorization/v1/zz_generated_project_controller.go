@@ -27,9 +27,9 @@ var (
 )
 
 type ProjectList struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Items             []Project
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []Project
 }
 
 type ProjectHandlerFunc func(key string, obj *Project) error

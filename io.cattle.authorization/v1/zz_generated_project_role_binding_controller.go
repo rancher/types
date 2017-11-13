@@ -27,9 +27,9 @@ var (
 )
 
 type ProjectRoleBindingList struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Items             []ProjectRoleBinding
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []ProjectRoleBinding
 }
 
 type ProjectRoleBindingHandlerFunc func(key string, obj *ProjectRoleBinding) error

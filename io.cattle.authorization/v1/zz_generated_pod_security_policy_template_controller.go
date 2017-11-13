@@ -27,9 +27,9 @@ var (
 )
 
 type PodSecurityPolicyTemplateList struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Items             []PodSecurityPolicyTemplate
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []PodSecurityPolicyTemplate
 }
 
 type PodSecurityPolicyTemplateHandlerFunc func(key string, obj *PodSecurityPolicyTemplate) error
