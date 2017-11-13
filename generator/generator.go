@@ -12,14 +12,15 @@ import (
 var (
 	basePackage = "github.com/rancher/types"
 	baseCattle  = "client"
+	baseK8s     = "apis"
 )
 
 func Generate(schemas *types.Schemas) {
 	version := getVersion(schemas)
-	groupParts := strings.Split(version.Group, ".")
+	group := strings.Split(version.Group, ".")[0]
 
-	cattleOutputPackage := path.Join(basePackage, baseCattle, groupParts[len(groupParts)-1], version.Version)
-	k8sOutputPackage := path.Join(basePackage, version.Group, version.Version)
+	cattleOutputPackage := path.Join(basePackage, baseCattle, group, version.Version)
+	k8sOutputPackage := path.Join(basePackage, baseK8s, version.Group, version.Version)
 
 	if err := generator.Generate(schemas, cattleOutputPackage, k8sOutputPackage); err != nil {
 		panic(err)

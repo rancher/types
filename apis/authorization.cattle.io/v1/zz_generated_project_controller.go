@@ -15,7 +15,7 @@ import (
 var (
 	ProjectGroupVersionKind = schema.GroupVersionKind{
 		Version: "v1",
-		Group:   "io.cattle.authorization",
+		Group:   "authorization.cattle.io",
 		Kind:    "Project",
 	}
 	ProjectResource = metav1.APIResource{
