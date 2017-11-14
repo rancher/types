@@ -282,6 +282,7 @@ func (in *ClusterStatus) DeepCopyInto(out *ClusterStatus) {
 			(*out)[key] = val.DeepCopy()
 		}
 	}
+	in.AppliedSpec.DeepCopyInto(&out.AppliedSpec)
 	return
 }
 
