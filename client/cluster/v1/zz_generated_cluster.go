@@ -5,35 +5,35 @@ import (
 )
 
 const (
-	ClusterType                              = "cluster"
-	ClusterFieldAPIVersion                   = "apiVersion"
-	ClusterFieldAnnotations                  = "annotations"
-	ClusterFieldAzureKubernetesServiceConfig = "azureKubernetesServiceConfig"
-	ClusterFieldCreated                      = "created"
-	ClusterFieldGoogleKubernetesEngineConfig = "googleKubernetesEngineConfig"
-	ClusterFieldKind                         = "kind"
-	ClusterFieldLabels                       = "labels"
-	ClusterFieldName                         = "name"
-	ClusterFieldNamespace                    = "namespace"
-	ClusterFieldRKEConfig                    = "rkeConfig"
-	ClusterFieldRemoved                      = "removed"
-	ClusterFieldUuid                         = "uuid"
+	ClusterType                               = "cluster"
+	ClusterFieldAPIVersion                    = "apiVersion"
+	ClusterFieldAnnotations                   = "annotations"
+	ClusterFieldAzureKubernetesServiceConfig  = "azureKubernetesServiceConfig"
+	ClusterFieldCreated                       = "created"
+	ClusterFieldGoogleKubernetesEngineConfig  = "googleKubernetesEngineConfig"
+	ClusterFieldKind                          = "kind"
+	ClusterFieldLabels                        = "labels"
+	ClusterFieldName                          = "name"
+	ClusterFieldNamespace                     = "namespace"
+	ClusterFieldRancherKubernetesEngineConfig = "rancherKubernetesEngineConfig"
+	ClusterFieldRemoved                       = "removed"
+	ClusterFieldUuid                          = "uuid"
 )
 
 type Cluster struct {
 	types.Resource
-	APIVersion                   string                        `json:"apiVersion,omitempty"`
-	Annotations                  map[string]string             `json:"annotations,omitempty"`
-	AzureKubernetesServiceConfig *AzureKubernetesServiceConfig `json:"azureKubernetesServiceConfig,omitempty"`
-	Created                      string                        `json:"created,omitempty"`
-	GoogleKubernetesEngineConfig *GoogleKubernetesEngineConfig `json:"googleKubernetesEngineConfig,omitempty"`
-	Kind                         string                        `json:"kind,omitempty"`
-	Labels                       map[string]string             `json:"labels,omitempty"`
-	Name                         string                        `json:"name,omitempty"`
-	Namespace                    string                        `json:"namespace,omitempty"`
-	RKEConfig                    *RKEConfig                    `json:"rkeConfig,omitempty"`
-	Removed                      string                        `json:"removed,omitempty"`
-	Uuid                         string                        `json:"uuid,omitempty"`
+	APIVersion                    string                         `json:"apiVersion,omitempty"`
+	Annotations                   map[string]string              `json:"annotations,omitempty"`
+	AzureKubernetesServiceConfig  *AzureKubernetesServiceConfig  `json:"azureKubernetesServiceConfig,omitempty"`
+	Created                       string                         `json:"created,omitempty"`
+	GoogleKubernetesEngineConfig  *GoogleKubernetesEngineConfig  `json:"googleKubernetesEngineConfig,omitempty"`
+	Kind                          string                         `json:"kind,omitempty"`
+	Labels                        map[string]string              `json:"labels,omitempty"`
+	Name                          string                         `json:"name,omitempty"`
+	Namespace                     string                         `json:"namespace,omitempty"`
+	RancherKubernetesEngineConfig *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty"`
+	Removed                       string                         `json:"removed,omitempty"`
+	Uuid                          string                         `json:"uuid,omitempty"`
 }
 type ClusterCollection struct {
 	types.Collection
