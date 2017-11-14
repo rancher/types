@@ -52,6 +52,7 @@ type ClusterStatus struct {
 	CACert              string          `json:"caCert,omitempty"`
 	Capacity            v1.ResourceList `json:"capacity,omitempty"`
 	Allocatable         v1.ResourceList `json:"allocatable,omitempty"`
+	AppliedSpec         ClusterSpec     `json:"clusterSpec,omitempty"`
 }
 
 type ClusterComponentStatus struct {
