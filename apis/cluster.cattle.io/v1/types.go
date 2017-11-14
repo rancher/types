@@ -35,9 +35,9 @@ type Cluster struct {
 }
 
 type ClusterSpec struct {
-	GKEConfig *GKEConfig `json:"gkeConfig,omitempty"`
-	AKSConfig *AKSConfig `json:"aksConfig,omitempty"`
-	RKEConfig *RKEConfig `json:"rkeConfig,omitempty"`
+	GoogleKubernetesEngineConfig *GoogleKubernetesEngineConfig `json:"googleKubernetesEngineConfig,omitempty"`
+	AzureKubernetesServiceConfig *AzureKubernetesServiceConfig `json:"azureKubernetesServiceConfig,omitempty"`
+	RKEConfig                    *RKEConfig                    `json:"rkeConfig,omitempty"`
 }
 
 type ClusterStatus struct {
@@ -72,7 +72,7 @@ type ClusterCondition struct {
 	Reason string `json:"reason,omitempty"`
 }
 
-type GKEConfig struct {
+type GoogleKubernetesEngineConfig struct {
 	// ProjectID is the ID of your project to use when creating a cluster
 	ProjectID string `json:"projectId,omitempty"`
 	// The zone to launch the cluster
@@ -81,14 +81,16 @@ type GKEConfig struct {
 	ClusterIpv4Cidr string `json:"clusterIpv4Cidr,omitempty"`
 	// An optional description of this cluster
 	Description string `json:"description,omitempty"`
-	// The number of nodes to create in this cluster
-	InitialNodeCount int64 `json:"initialNodeCount,omitempty"`
+	// The number of nodes in this cluster
+	NodeCount int64 `json:"nodeCount,omitempty"`
 	// Size of the disk attached to each node
 	DiskSizeGb int64 `json:"diskSizeGb,omitempty"`
 	// The name of a Google Compute Engine
 	MachineType string `json:"machineType,omitempty"`
-	// the initial kubernetes version
-	InitialClusterVersion string `json:"initialClusterVersion,omitempty"`
+	// Node kubernetes version
+	NodeVersion string `json:"nodeVersion,omitempty"`
+	// the master kubernetes version
+	MasterVersion string `json:"masterVersion,omitempty"`
 	// The map of Kubernetes labels (key/value pairs) to be applied
 	// to each node.
 	Labels map[string]string `json:"labels,omitempty"`
@@ -96,23 +98,9 @@ type GKEConfig struct {
 	CredentialPath string `json:"credentialPath,omitempty"`
 	// Enable alpha feature
 	EnableAlphaFeature bool `json:"enableAlphaFeature,omitempty"`
-	// NodePool id
-	NodePoolID string `json:"nodePoolId,omitempty"`
-
-	// Update Config
-	UpdateConfig gkeUpdateConfig `json:"updateConfig,omitempty"`
 }
 
-type gkeUpdateConfig struct {
-	// the number of node
-	NodeCount int64 `json:"nodeCount,omitempty"`
-	// Master kubernetes version
-	MasterVersion string `json:"masterVersion,omitempty"`
-	// Node kubernetes version
-	NodeVersion string `json:"nodeVersion,omitempty"`
-}
-
-type AKSConfig struct {
+type AzureKubernetesServiceConfig struct {
 	//TBD
 }
 
