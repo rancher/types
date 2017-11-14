@@ -14,12 +14,10 @@ const (
 	ClusterConditionProvisioned = "Provisioned"
 	// ClusterConditionUpdating Cluster is being updating (upgrading, scaling up)
 	ClusterConditionUpdating = "Updating"
-	// ClusterConditionSufficientDisk true when all cluster nodes have sufficient disk
-	ClusterConditionSufficientDisk = "SufficientDisk"
-	// ClusterConditionSufficientMemory true when all cluster nodes have sufficient memory
-	ClusterConditionSufficientMemory = "SufficientMemory"
-	// ClusterConditionNoDiskPressure true when all cluster nodes have no disk pressure
+	// ClusterConditionNoDiskPressure true when all cluster nodes have sufficient disk
 	ClusterConditionNoDiskPressure = "NoDiskPressure"
+	// ClusterConditionNoMemoryPressure true when all cluster nodes have sufficient memory
+	ClusterConditionNoMemoryPressure = "NoMemoryPressure"
 	// More conditions can be added if unredlying controllers request it
 )
 
