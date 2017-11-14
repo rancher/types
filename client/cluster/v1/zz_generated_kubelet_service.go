@@ -10,9 +10,9 @@ const (
 )
 
 type KubeletService struct {
-	ClusterDNSServer    string   `json:"clusterDNSServer,omitempty"`
-	ClusterDomain       string   `json:"clusterDomain,omitempty"`
-	ExtraArgs           []string `json:"extraArgs,omitempty"`
-	Image               string   `json:"image,omitempty"`
-	InfraContainerImage string   `json:"infraContainerImage,omitempty"`
+	ClusterDNSServer    string            `json:"clusterDNSServer,omitempty"`
+	ClusterDomain       string            `json:"clusterDomain,omitempty"`
+	ExtraArgs           map[string]string `json:"extraArgs,omitempty"`
+	Image               string            `json:"image,omitempty"`
+	InfraContainerImage string            `json:"infraContainerImage,omitempty"`
 }

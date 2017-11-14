@@ -7,6 +7,6 @@ const (
 )
 
 type KubeproxyService struct {
-	ExtraArgs []string `json:"extraArgs,omitempty"`
-	Image     string   `json:"image,omitempty"`
+	ExtraArgs map[string]string `json:"extraArgs,omitempty"`
+	Image     string            `json:"image,omitempty"`
 }

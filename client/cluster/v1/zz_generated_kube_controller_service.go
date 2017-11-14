@@ -9,8 +9,8 @@ const (
 )
 
 type KubeControllerService struct {
-	ClusterCIDR           string   `json:"clusterCIDR,omitempty"`
-	ExtraArgs             []string `json:"extraArgs,omitempty"`
-	Image                 string   `json:"image,omitempty"`
-	ServiceClusterIPRange string   `json:"serviceClusterIPRange,omitempty"`
+	ClusterCIDR           string            `json:"clusterCIDR,omitempty"`
+	ExtraArgs             map[string]string `json:"extraArgs,omitempty"`
+	Image                 string            `json:"image,omitempty"`
+	ServiceClusterIPRange string            `json:"serviceClusterIPRange,omitempty"`
 }
