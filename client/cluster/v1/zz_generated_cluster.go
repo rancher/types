@@ -9,15 +9,16 @@ const (
 	ClusterFieldAPIVersion                    = "apiVersion"
 	ClusterFieldAnnotations                   = "annotations"
 	ClusterFieldAzureKubernetesServiceConfig  = "azureKubernetesServiceConfig"
-	ClusterFieldCreated                       = "created"
+	ClusterFieldCreationTimestamp             = "creationTimestamp"
+	ClusterFieldDeletionTimestamp             = "deletionTimestamp"
 	ClusterFieldGoogleKubernetesEngineConfig  = "googleKubernetesEngineConfig"
 	ClusterFieldKind                          = "kind"
 	ClusterFieldLabels                        = "labels"
 	ClusterFieldName                          = "name"
 	ClusterFieldNamespace                     = "namespace"
 	ClusterFieldRancherKubernetesEngineConfig = "rancherKubernetesEngineConfig"
-	ClusterFieldRemoved                       = "removed"
-	ClusterFieldUuid                          = "uuid"
+	ClusterFieldStatus                        = "status"
+	ClusterFieldUID                           = "uid"
 )
 
 type Cluster struct {
@@ -25,15 +26,16 @@ type Cluster struct {
 	APIVersion                    string                         `json:"apiVersion,omitempty"`
 	Annotations                   map[string]string              `json:"annotations,omitempty"`
 	AzureKubernetesServiceConfig  *AzureKubernetesServiceConfig  `json:"azureKubernetesServiceConfig,omitempty"`
-	Created                       string                         `json:"created,omitempty"`
+	CreationTimestamp             string                         `json:"creationTimestamp,omitempty"`
+	DeletionTimestamp             string                         `json:"deletionTimestamp,omitempty"`
 	GoogleKubernetesEngineConfig  *GoogleKubernetesEngineConfig  `json:"googleKubernetesEngineConfig,omitempty"`
 	Kind                          string                         `json:"kind,omitempty"`
 	Labels                        map[string]string              `json:"labels,omitempty"`
 	Name                          string                         `json:"name,omitempty"`
 	Namespace                     string                         `json:"namespace,omitempty"`
 	RancherKubernetesEngineConfig *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty"`
-	Removed                       string                         `json:"removed,omitempty"`
-	Uuid                          string                         `json:"uuid,omitempty"`
+	Status                        *ClusterStatus                 `json:"status,omitempty"`
+	UID                           string                         `json:"uid,omitempty"`
 }
 type ClusterCollection struct {
 	types.Collection

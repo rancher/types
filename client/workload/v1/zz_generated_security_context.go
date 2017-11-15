@@ -2,21 +2,21 @@ package client
 
 const (
 	SecurityContextType                          = "securityContext"
+	SecurityContextFieldAdd                      = "add"
 	SecurityContextFieldAllowPrivilegeEscalation = "allowPrivilegeEscalation"
-	SecurityContextFieldCapAdd                   = "capAdd"
-	SecurityContextFieldCapDrop                  = "capDrop"
+	SecurityContextFieldDrop                     = "drop"
 	SecurityContextFieldPrivileged               = "privileged"
-	SecurityContextFieldReadOnly                 = "readOnly"
+	SecurityContextFieldReadOnlyRootFilesystem   = "readOnlyRootFilesystem"
 	SecurityContextFieldRunAsNonRoot             = "runAsNonRoot"
-	SecurityContextFieldUid                      = "uid"
+	SecurityContextFieldRunAsUser                = "runAsUser"
 )
 
 type SecurityContext struct {
+	Add                      []string `json:"add,omitempty"`
 	AllowPrivilegeEscalation *bool    `json:"allowPrivilegeEscalation,omitempty"`
-	CapAdd                   []string `json:"capAdd,omitempty"`
-	CapDrop                  []string `json:"capDrop,omitempty"`
+	Drop                     []string `json:"drop,omitempty"`
 	Privileged               *bool    `json:"privileged,omitempty"`
-	ReadOnly                 *bool    `json:"readOnly,omitempty"`
+	ReadOnlyRootFilesystem   *bool    `json:"readOnlyRootFilesystem,omitempty"`
 	RunAsNonRoot             *bool    `json:"runAsNonRoot,omitempty"`
-	Uid                      *int64   `json:"uid,omitempty"`
+	RunAsUser                *int64   `json:"runAsUser,omitempty"`
 }

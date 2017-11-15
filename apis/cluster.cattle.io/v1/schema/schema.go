@@ -13,13 +13,13 @@ var (
 		Group:   "cluster.cattle.io",
 		Path:    "/v1-cluster",
 		SubContexts: map[string]bool{
-			"projects": true,
+			"clusters": true,
 		},
 	}
 
 	Schemas = commonmappers.Add(&Version, types.NewSchemas()).
-		AddMapperForType(&Version, v1.Cluster{}, m.NewObject(nil)).
-		AddMapperForType(&Version, v1.ClusterNode{}, m.NewObject(nil)).
+		AddMapperForType(&Version, v1.Cluster{}, m.NewObject()).
+		AddMapperForType(&Version, v1.ClusterNode{}, m.NewObject()).
 		MustImport(&Version, v1.Cluster{}).
 		MustImport(&Version, v1.ClusterNode{})
 )
