@@ -34,7 +34,7 @@ type Cluster struct {
 	Name                          string                         `json:"name,omitempty"`
 	Namespace                     string                         `json:"namespace,omitempty"`
 	RancherKubernetesEngineConfig *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty"`
-	Status                        *ClusterStatus                 `json:"status,omitempty"`
+	Status                        ClusterStatus                  `json:"status,omitempty"`
 	UID                           string                         `json:"uid,omitempty"`
 }
 type ClusterCollection struct {
