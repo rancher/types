@@ -5,41 +5,43 @@ import (
 )
 
 const (
-	ClusterNodeType               = "clusterNode"
-	ClusterNodeFieldAPIVersion    = "apiVersion"
-	ClusterNodeFieldAnnotations   = "annotations"
-	ClusterNodeFieldConfigSource  = "configSource"
-	ClusterNodeFieldCreated       = "created"
-	ClusterNodeFieldExternalID    = "externalID"
-	ClusterNodeFieldKind          = "kind"
-	ClusterNodeFieldLabels        = "labels"
-	ClusterNodeFieldName          = "name"
-	ClusterNodeFieldNamespace     = "namespace"
-	ClusterNodeFieldPodCIDR       = "podCIDR"
-	ClusterNodeFieldProviderID    = "providerID"
-	ClusterNodeFieldRemoved       = "removed"
-	ClusterNodeFieldTaints        = "taints"
-	ClusterNodeFieldUnschedulable = "unschedulable"
-	ClusterNodeFieldUuid          = "uuid"
+	ClusterNodeType                   = "clusterNode"
+	ClusterNodeFieldAPIVersion        = "apiVersion"
+	ClusterNodeFieldAnnotations       = "annotations"
+	ClusterNodeFieldConfigSource      = "configSource"
+	ClusterNodeFieldCreationTimestamp = "creationTimestamp"
+	ClusterNodeFieldDeletionTimestamp = "deletionTimestamp"
+	ClusterNodeFieldExternalID        = "externalID"
+	ClusterNodeFieldKind              = "kind"
+	ClusterNodeFieldLabels            = "labels"
+	ClusterNodeFieldName              = "name"
+	ClusterNodeFieldNamespace         = "namespace"
+	ClusterNodeFieldPodCIDR           = "podCIDR"
+	ClusterNodeFieldProviderID        = "providerID"
+	ClusterNodeFieldStatus            = "status"
+	ClusterNodeFieldTaints            = "taints"
+	ClusterNodeFieldUID               = "uid"
+	ClusterNodeFieldUnschedulable     = "unschedulable"
 )
 
 type ClusterNode struct {
 	types.Resource
-	APIVersion    string            `json:"apiVersion,omitempty"`
-	Annotations   map[string]string `json:"annotations,omitempty"`
-	ConfigSource  *NodeConfigSource `json:"configSource,omitempty"`
-	Created       string            `json:"created,omitempty"`
-	ExternalID    string            `json:"externalID,omitempty"`
-	Kind          string            `json:"kind,omitempty"`
-	Labels        map[string]string `json:"labels,omitempty"`
-	Name          string            `json:"name,omitempty"`
-	Namespace     string            `json:"namespace,omitempty"`
-	PodCIDR       string            `json:"podCIDR,omitempty"`
-	ProviderID    string            `json:"providerID,omitempty"`
-	Removed       string            `json:"removed,omitempty"`
-	Taints        []Taint           `json:"taints,omitempty"`
-	Unschedulable bool              `json:"unschedulable,omitempty"`
-	Uuid          string            `json:"uuid,omitempty"`
+	APIVersion        string            `json:"apiVersion,omitempty"`
+	Annotations       map[string]string `json:"annotations,omitempty"`
+	ConfigSource      *NodeConfigSource `json:"configSource,omitempty"`
+	CreationTimestamp string            `json:"creationTimestamp,omitempty"`
+	DeletionTimestamp string            `json:"deletionTimestamp,omitempty"`
+	ExternalID        string            `json:"externalID,omitempty"`
+	Kind              string            `json:"kind,omitempty"`
+	Labels            map[string]string `json:"labels,omitempty"`
+	Name              string            `json:"name,omitempty"`
+	Namespace         string            `json:"namespace,omitempty"`
+	PodCIDR           string            `json:"podCIDR,omitempty"`
+	ProviderID        string            `json:"providerID,omitempty"`
+	Status            NodeStatus        `json:"status,omitempty"`
+	Taints            []Taint           `json:"taints,omitempty"`
+	UID               string            `json:"uid,omitempty"`
+	Unschedulable     bool              `json:"unschedulable,omitempty"`
 }
 type ClusterNodeCollection struct {
 	types.Collection

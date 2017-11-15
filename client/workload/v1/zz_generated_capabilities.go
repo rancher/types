@@ -1,12 +1,12 @@
 package client
 
 const (
-	CapabilitiesType         = "capabilities"
-	CapabilitiesFieldCapAdd  = "capAdd"
-	CapabilitiesFieldCapDrop = "capDrop"
+	CapabilitiesType      = "capabilities"
+	CapabilitiesFieldAdd  = "add"
+	CapabilitiesFieldDrop = "drop"
 )
 
 type Capabilities struct {
-	CapAdd  []string `json:"capAdd,omitempty"`
-	CapDrop []string `json:"capDrop,omitempty"`
+	Add  []string `json:"add,omitempty"`
+	Drop []string `json:"drop,omitempty"`
 }

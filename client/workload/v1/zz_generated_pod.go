@@ -11,14 +11,15 @@ const (
 	PodFieldAnnotations                   = "annotations"
 	PodFieldAutomountServiceAccountToken  = "automountServiceAccountToken"
 	PodFieldContainers                    = "containers"
-	PodFieldCreated                       = "created"
+	PodFieldCreationTimestamp             = "creationTimestamp"
 	PodFieldDNSPolicy                     = "dnsPolicy"
+	PodFieldDeletionTimestamp             = "deletionTimestamp"
 	PodFieldDeprecatedServiceAccount      = "deprecatedServiceAccount"
-	PodFieldFsgid                         = "fsgid"
-	PodFieldGids                          = "gids"
+	PodFieldFSGroup                       = "fsGroup"
 	PodFieldHostAliases                   = "hostAliases"
 	PodFieldHostname                      = "hostname"
 	PodFieldIPC                           = "ipc"
+	PodFieldImagePullSecrets              = "imagePullSecrets"
 	PodFieldKind                          = "kind"
 	PodFieldLabels                        = "labels"
 	PodFieldName                          = "name"
@@ -28,17 +29,16 @@ const (
 	PodFieldPID                           = "pid"
 	PodFieldPriority                      = "priority"
 	PodFieldPriorityClassName             = "priorityClassName"
-	PodFieldPullSecrets                   = "pullSecrets"
-	PodFieldRemoved                       = "removed"
-	PodFieldRestart                       = "restart"
+	PodFieldRestartPolicy                 = "restartPolicy"
 	PodFieldRunAsNonRoot                  = "runAsNonRoot"
+	PodFieldRunAsUser                     = "runAsUser"
 	PodFieldSchedulerName                 = "schedulerName"
 	PodFieldServiceAccountName            = "serviceAccountName"
 	PodFieldSubdomain                     = "subdomain"
+	PodFieldSupplementalGroups            = "supplementalGroups"
 	PodFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
 	PodFieldTolerations                   = "tolerations"
-	PodFieldUid                           = "uid"
-	PodFieldUuid                          = "uuid"
+	PodFieldUID                           = "uid"
 	PodFieldVolumes                       = "volumes"
 )
 
@@ -49,14 +49,15 @@ type Pod struct {
 	Annotations                   map[string]string      `json:"annotations,omitempty"`
 	AutomountServiceAccountToken  *bool                  `json:"automountServiceAccountToken,omitempty"`
 	Containers                    map[string]Container   `json:"containers,omitempty"`
-	Created                       string                 `json:"created,omitempty"`
+	CreationTimestamp             string                 `json:"creationTimestamp,omitempty"`
 	DNSPolicy                     string                 `json:"dnsPolicy,omitempty"`
+	DeletionTimestamp             string                 `json:"deletionTimestamp,omitempty"`
 	DeprecatedServiceAccount      string                 `json:"deprecatedServiceAccount,omitempty"`
-	Fsgid                         *int64                 `json:"fsgid,omitempty"`
-	Gids                          []int64                `json:"gids,omitempty"`
+	FSGroup                       *int64                 `json:"fsGroup,omitempty"`
 	HostAliases                   map[string]HostAlias   `json:"hostAliases,omitempty"`
 	Hostname                      string                 `json:"hostname,omitempty"`
 	IPC                           string                 `json:"ipc,omitempty"`
+	ImagePullSecrets              []LocalObjectReference `json:"imagePullSecrets,omitempty"`
 	Kind                          string                 `json:"kind,omitempty"`
 	Labels                        map[string]string      `json:"labels,omitempty"`
 	Name                          string                 `json:"name,omitempty"`
@@ -66,18 +67,17 @@ type Pod struct {
 	PID                           string                 `json:"pid,omitempty"`
 	Priority                      *int64                 `json:"priority,omitempty"`
 	PriorityClassName             string                 `json:"priorityClassName,omitempty"`
-	PullSecrets                   []LocalObjectReference `json:"pullSecrets,omitempty"`
-	Removed                       string                 `json:"removed,omitempty"`
-	Restart                       string                 `json:"restart,omitempty"`
+	RestartPolicy                 string                 `json:"restartPolicy,omitempty"`
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
+	RunAsUser                     *int64                 `json:"runAsUser,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
+	SupplementalGroups            []int64                `json:"supplementalGroups,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`
 	Tolerations                   []Toleration           `json:"tolerations,omitempty"`
-	Uid                           *int64                 `json:"uid,omitempty"`
-	Uuid                          string                 `json:"uuid,omitempty"`
-	Volumes                       []Volume               `json:"volumes,omitempty"`
+	UID                           string                 `json:"uid,omitempty"`
+	Volumes                       map[string]Volume      `json:"volumes,omitempty"`
 }
 type PodCollection struct {
 	types.Collection
