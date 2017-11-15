@@ -31,7 +31,7 @@ type Cluster struct {
 	Spec ClusterSpec `json:"spec"`
 	// Most recent observed status of the cluster. More info:
 	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
-	Status *ClusterStatus `json:"status"`
+	Status ClusterStatus `json:"status"`
 }
 
 type ClusterSpec struct {
