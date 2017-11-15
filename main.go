@@ -1,3 +1,4 @@
+//go:generate go run generator/cleanup/main.go
 //go:generate go run main.go
 
 package main

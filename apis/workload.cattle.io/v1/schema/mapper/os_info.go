@@ -5,7 +5,7 @@ import (
 
 	"github.com/rancher/norman/types"
 	"github.com/rancher/norman/types/convert"
-	"github.com/rancher/norman/types/mapping/mapper"
+	"github.com/rancher/norman/types/mapper"
 )
 
 type OSInfo struct {
