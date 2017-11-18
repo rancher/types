@@ -114,6 +114,8 @@ type RancherKubernetesEngineConfig struct {
 	Network NetworkConfig `yaml:"network" json:"network,omitempty"`
 	// Authentication configuration used in the cluster (default: x509)
 	Authentication AuthConfig `yaml:"auth" json:"auth,omitempty"`
+	// YAML manifest for user provided addons to be deployed on the cluster
+	Addons string `yaml:"addons" json:"addons,omitempty"`
 }
 
 type RKEConfigHost struct {
