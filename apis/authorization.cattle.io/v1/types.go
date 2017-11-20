@@ -10,16 +10,22 @@ type Project struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	ClusterName string `json:"clusterName,omitempty"`
+	Spec ProjectSpec `json:"spec,omitempty"`
 }
 
-type RoleTemplate struct {
+type ProjectSpec struct {
+	DisplayName string `json:"displayName,omitempty" norman:"required"`
+	//TODO: should be required
+	ClusterName string `json:"clusterName,omitempty" norman:"type=reference[/v1-cluster/schemas/cluster]"`
+}
+
+type ProjectRoleTemplate struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Rules []rbacv1.PolicyRule `json:"rules,omitempty"`
 
-	RoleTemplates []string `json:"roles,omitempty"`
+	ProjectRoleTemplates []string `json:"projectRoleTemplates,omitempty" norman:"type=array[reference[projectRoleTemplate]]"`
 }
 
 type PodSecurityPolicyTemplate struct {
@@ -29,13 +35,31 @@ type PodSecurityPolicyTemplate struct {
 	Spec extv1.PodSecurityPolicySpec `json:"spec,omitempty"`
 }
 
-type ProjectRoleBinding struct {
+type ProjectRoleTemplateBinding struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Subjects []rbacv1.Subject `json:"subjects,omitempty"`
+	Subject rbacv1.Subject `json:"subject,omitempty"`
 
-	ProjectName string `json:"projectRef,omitempty"`
+	ProjectName             string `json:"projectName,omitempty" norman:"type=reference[project]"`
+	ProjectRoleTemplateName string `json:"projectRoleTemplateName,omitempty" norman:"type=reference[projectRoleTemplate]"`
+}
 
-	RoleTemplateName string `json:"roleTemplateName,omitempty"`
+type ClusterRoleTemplate struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Rules []rbacv1.PolicyRule `json:"rules,omitempty"`
+
+	ClusterRoleTemplates []string `json:"clusterRoleTemplates,omitempty" norman:"type=array[reference[clusterRoleTemplate]]"`
+}
+
+type ClusterRoleTemplateBinding struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Subject rbacv1.Subject `json:"subject,omitempty"`
+
+	ClusterName             string `json:"clusterName,omitempty" norman:"type=reference[/v1-cluster/schemas/cluster]"`
+	ClusterRoleTemplateName string `json:"clusterRoleTemplateName,omitempty" norman:"type=reference[clusterRoleTemplate]"`
 }

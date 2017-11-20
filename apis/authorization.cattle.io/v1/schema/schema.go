@@ -14,7 +14,9 @@ var (
 
 	Schemas = types.NewSchemas().
 		MustImport(&Version, v1.Project{}).
-		MustImport(&Version, v1.RoleTemplate{}).
+		MustImport(&Version, v1.ProjectRoleTemplate{}).
 		MustImport(&Version, v1.PodSecurityPolicyTemplate{}).
-		MustImport(&Version, v1.ProjectRoleBinding{})
+		MustImport(&Version, v1.ProjectRoleTemplateBinding{}).
+		MustImport(&Version, v1.ClusterRoleTemplate{}).
+		MustImport(&Version, v1.ClusterRoleTemplateBinding{})
 )
