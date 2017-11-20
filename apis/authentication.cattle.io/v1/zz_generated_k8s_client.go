@@ -21,13 +21,13 @@ type Client struct {
 	tokenControllers map[string]TokenController
 }
 
-func NewForConfig(config *rest.Config) (Interface, error) {
+func NewForConfig(config rest.Config) (Interface, error) {
 	if config.NegotiatedSerializer == nil {
 		configConfig := dynamic.ContentConfig()
 		config.NegotiatedSerializer = configConfig.NegotiatedSerializer
 	}
 
-	restClient, err := rest.UnversionedRESTClientFor(config)
+	restClient, err := rest.UnversionedRESTClientFor(&config)
 	if err != nil {
 		return nil, err
 	}
