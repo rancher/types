@@ -11,10 +11,10 @@ const (
 )
 
 type ReplicaSetStatus struct {
-	AvailableReplicas    int64                 `json:"availableReplicas,omitempty"`
+	AvailableReplicas    *int64                `json:"availableReplicas,omitempty"`
 	Conditions           []ReplicaSetCondition `json:"conditions,omitempty"`
-	FullyLabeledReplicas int64                 `json:"fullyLabeledReplicas,omitempty"`
-	ObservedGeneration   int64                 `json:"observedGeneration,omitempty"`
-	ReadyReplicas        int64                 `json:"readyReplicas,omitempty"`
-	Replicas             int64                 `json:"replicas,omitempty"`
+	FullyLabeledReplicas *int64                `json:"fullyLabeledReplicas,omitempty"`
+	ObservedGeneration   *int64                `json:"observedGeneration,omitempty"`
+	ReadyReplicas        *int64                `json:"readyReplicas,omitempty"`
+	Replicas             *int64                `json:"replicas,omitempty"`
 }

@@ -1,16 +1,16 @@
 package client
 
 const (
-	PodSecurityContextType                    = "podSecurityContext"
-	PodSecurityContextFieldFSGroup            = "fsGroup"
-	PodSecurityContextFieldRunAsNonRoot       = "runAsNonRoot"
-	PodSecurityContextFieldRunAsUser          = "runAsUser"
-	PodSecurityContextFieldSupplementalGroups = "supplementalGroups"
+	PodSecurityContextType              = "podSecurityContext"
+	PodSecurityContextFieldFsgid        = "fsgid"
+	PodSecurityContextFieldGids         = "gids"
+	PodSecurityContextFieldRunAsNonRoot = "runAsNonRoot"
+	PodSecurityContextFieldUid          = "uid"
 )
 
 type PodSecurityContext struct {
-	FSGroup            *int64  `json:"fsGroup,omitempty"`
-	RunAsNonRoot       *bool   `json:"runAsNonRoot,omitempty"`
-	RunAsUser          *int64  `json:"runAsUser,omitempty"`
-	SupplementalGroups []int64 `json:"supplementalGroups,omitempty"`
+	Fsgid        *int64  `json:"fsgid,omitempty"`
+	Gids         []int64 `json:"gids,omitempty"`
+	RunAsNonRoot *bool   `json:"runAsNonRoot,omitempty"`
+	Uid          *int64  `json:"uid,omitempty"`
 }

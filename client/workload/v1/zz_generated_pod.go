@@ -6,78 +6,88 @@ import (
 
 const (
 	PodType                               = "pod"
-	PodFieldAPIVersion                    = "apiVersion"
 	PodFieldActiveDeadlineSeconds         = "activeDeadlineSeconds"
 	PodFieldAnnotations                   = "annotations"
 	PodFieldAutomountServiceAccountToken  = "automountServiceAccountToken"
 	PodFieldContainers                    = "containers"
-	PodFieldCreationTimestamp             = "creationTimestamp"
+	PodFieldCreated                       = "created"
 	PodFieldDNSPolicy                     = "dnsPolicy"
-	PodFieldDeletionTimestamp             = "deletionTimestamp"
-	PodFieldDeprecatedServiceAccount      = "deprecatedServiceAccount"
-	PodFieldFSGroup                       = "fsGroup"
+	PodFieldFsgid                         = "fsgid"
+	PodFieldGids                          = "gids"
 	PodFieldHostAliases                   = "hostAliases"
 	PodFieldHostname                      = "hostname"
 	PodFieldIPC                           = "ipc"
-	PodFieldImagePullSecrets              = "imagePullSecrets"
-	PodFieldKind                          = "kind"
 	PodFieldLabels                        = "labels"
 	PodFieldName                          = "name"
 	PodFieldNamespace                     = "namespace"
 	PodFieldNet                           = "net"
-	PodFieldNodeName                      = "nodeName"
+	PodFieldNodeId                        = "nodeId"
+	PodFieldOwnerReferences               = "ownerReferences"
 	PodFieldPID                           = "pid"
 	PodFieldPriority                      = "priority"
 	PodFieldPriorityClassName             = "priorityClassName"
-	PodFieldRestartPolicy                 = "restartPolicy"
+	PodFieldProjectID                     = "projectId"
+	PodFieldPullSecrets                   = "pullSecrets"
+	PodFieldRemoved                       = "removed"
+	PodFieldResourcePath                  = "resourcePath"
+	PodFieldRestart                       = "restart"
 	PodFieldRunAsNonRoot                  = "runAsNonRoot"
-	PodFieldRunAsUser                     = "runAsUser"
 	PodFieldSchedulerName                 = "schedulerName"
 	PodFieldServiceAccountName            = "serviceAccountName"
+	PodFieldState                         = "state"
+	PodFieldStatus                        = "status"
 	PodFieldSubdomain                     = "subdomain"
-	PodFieldSupplementalGroups            = "supplementalGroups"
 	PodFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
 	PodFieldTolerations                   = "tolerations"
-	PodFieldUID                           = "uid"
+	PodFieldTransitioning                 = "transitioning"
+	PodFieldTransitioningMessage          = "transitioningMessage"
+	PodFieldUid                           = "uid"
+	PodFieldUuid                          = "uuid"
 	PodFieldVolumes                       = "volumes"
+	PodFieldWorkloadID                    = "workloadId"
 )
 
 type Pod struct {
 	types.Resource
-	APIVersion                    string                 `json:"apiVersion,omitempty"`
 	ActiveDeadlineSeconds         *int64                 `json:"activeDeadlineSeconds,omitempty"`
 	Annotations                   map[string]string      `json:"annotations,omitempty"`
 	AutomountServiceAccountToken  *bool                  `json:"automountServiceAccountToken,omitempty"`
 	Containers                    map[string]Container   `json:"containers,omitempty"`
-	CreationTimestamp             string                 `json:"creationTimestamp,omitempty"`
+	Created                       string                 `json:"created,omitempty"`
 	DNSPolicy                     string                 `json:"dnsPolicy,omitempty"`
-	DeletionTimestamp             string                 `json:"deletionTimestamp,omitempty"`
-	DeprecatedServiceAccount      string                 `json:"deprecatedServiceAccount,omitempty"`
-	FSGroup                       *int64                 `json:"fsGroup,omitempty"`
+	Fsgid                         *int64                 `json:"fsgid,omitempty"`
+	Gids                          []int64                `json:"gids,omitempty"`
 	HostAliases                   map[string]HostAlias   `json:"hostAliases,omitempty"`
 	Hostname                      string                 `json:"hostname,omitempty"`
 	IPC                           string                 `json:"ipc,omitempty"`
-	ImagePullSecrets              []LocalObjectReference `json:"imagePullSecrets,omitempty"`
-	Kind                          string                 `json:"kind,omitempty"`
 	Labels                        map[string]string      `json:"labels,omitempty"`
 	Name                          string                 `json:"name,omitempty"`
 	Namespace                     string                 `json:"namespace,omitempty"`
 	Net                           string                 `json:"net,omitempty"`
-	NodeName                      string                 `json:"nodeName,omitempty"`
+	NodeId                        string                 `json:"nodeId,omitempty"`
+	OwnerReferences               []OwnerReference       `json:"ownerReferences,omitempty"`
 	PID                           string                 `json:"pid,omitempty"`
 	Priority                      *int64                 `json:"priority,omitempty"`
 	PriorityClassName             string                 `json:"priorityClassName,omitempty"`
-	RestartPolicy                 string                 `json:"restartPolicy,omitempty"`
+	ProjectID                     string                 `json:"projectId,omitempty"`
+	PullSecrets                   []LocalObjectReference `json:"pullSecrets,omitempty"`
+	Removed                       string                 `json:"removed,omitempty"`
+	ResourcePath                  string                 `json:"resourcePath,omitempty"`
+	Restart                       string                 `json:"restart,omitempty"`
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
-	RunAsUser                     *int64                 `json:"runAsUser,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
+	State                         string                 `json:"state,omitempty"`
+	Status                        *PodStatus             `json:"status,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
-	SupplementalGroups            []int64                `json:"supplementalGroups,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`
 	Tolerations                   []Toleration           `json:"tolerations,omitempty"`
-	UID                           string                 `json:"uid,omitempty"`
+	Transitioning                 string                 `json:"transitioning,omitempty"`
+	TransitioningMessage          string                 `json:"transitioningMessage,omitempty"`
+	Uid                           *int64                 `json:"uid,omitempty"`
+	Uuid                          string                 `json:"uuid,omitempty"`
 	Volumes                       map[string]Volume      `json:"volumes,omitempty"`
+	WorkloadID                    string                 `json:"workloadId,omitempty"`
 }
 type PodCollection struct {
 	types.Collection

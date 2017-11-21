@@ -8,5 +8,5 @@ const (
 
 type ContainerImage struct {
 	Names     []string `json:"names,omitempty"`
-	SizeBytes int64    `json:"sizeBytes,omitempty"`
+	SizeBytes *int64   `json:"sizeBytes,omitempty"`
 }

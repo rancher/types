@@ -4,11 +4,11 @@ const (
 	PodStatusType                       = "podStatus"
 	PodStatusFieldConditions            = "conditions"
 	PodStatusFieldContainerStatuses     = "containerStatuses"
-	PodStatusFieldHostIP                = "hostIP"
 	PodStatusFieldInitContainerStatuses = "initContainerStatuses"
 	PodStatusFieldMessage               = "message"
+	PodStatusFieldNodeIp                = "nodeIp"
 	PodStatusFieldPhase                 = "phase"
-	PodStatusFieldPodIP                 = "podIP"
+	PodStatusFieldPodIp                 = "podIp"
 	PodStatusFieldQOSClass              = "qosClass"
 	PodStatusFieldReason                = "reason"
 	PodStatusFieldStartTime             = "startTime"
@@ -17,11 +17,11 @@ const (
 type PodStatus struct {
 	Conditions            []PodCondition    `json:"conditions,omitempty"`
 	ContainerStatuses     []ContainerStatus `json:"containerStatuses,omitempty"`
-	HostIP                string            `json:"hostIP,omitempty"`
 	InitContainerStatuses []ContainerStatus `json:"initContainerStatuses,omitempty"`
 	Message               string            `json:"message,omitempty"`
+	NodeIp                string            `json:"nodeIp,omitempty"`
 	Phase                 string            `json:"phase,omitempty"`
-	PodIP                 string            `json:"podIP,omitempty"`
+	PodIp                 string            `json:"podIp,omitempty"`
 	QOSClass              string            `json:"qosClass,omitempty"`
 	Reason                string            `json:"reason,omitempty"`
 	StartTime             string            `json:"startTime,omitempty"`

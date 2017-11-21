@@ -38,7 +38,7 @@ type ProjectRoleTemplateBindingController interface {
 	Informer() cache.SharedIndexInformer
 	AddHandler(handler ProjectRoleTemplateBindingHandlerFunc)
 	Enqueue(namespace, name string)
-	Start(threadiness int, ctx context.Context) error
+	Start(ctx context.Context, threadiness int) error
 }
 
 type ProjectRoleTemplateBindingInterface interface {

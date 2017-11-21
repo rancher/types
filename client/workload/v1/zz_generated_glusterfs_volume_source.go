@@ -2,13 +2,13 @@ package client
 
 const (
 	GlusterfsVolumeSourceType               = "glusterfsVolumeSource"
-	GlusterfsVolumeSourceFieldEndpointsName = "endpointsName"
+	GlusterfsVolumeSourceFieldEndpointsName = "endpoints"
 	GlusterfsVolumeSourceFieldPath          = "path"
 	GlusterfsVolumeSourceFieldReadOnly      = "readOnly"
 )
 
 type GlusterfsVolumeSource struct {
-	EndpointsName string `json:"endpointsName,omitempty"`
+	EndpointsName string `json:"endpoints,omitempty"`
 	Path          string `json:"path,omitempty"`
-	ReadOnly      bool   `json:"readOnly,omitempty"`
+	ReadOnly      *bool  `json:"readOnly,omitempty"`
 }

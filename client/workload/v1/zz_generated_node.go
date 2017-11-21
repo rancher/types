@@ -5,43 +5,61 @@ import (
 )
 
 const (
-	NodeType                   = "node"
-	NodeFieldAPIVersion        = "apiVersion"
-	NodeFieldAnnotations       = "annotations"
-	NodeFieldConfigSource      = "configSource"
-	NodeFieldCreationTimestamp = "creationTimestamp"
-	NodeFieldDeletionTimestamp = "deletionTimestamp"
-	NodeFieldExternalID        = "externalID"
-	NodeFieldKind              = "kind"
-	NodeFieldLabels            = "labels"
-	NodeFieldName              = "name"
-	NodeFieldNamespace         = "namespace"
-	NodeFieldPodCIDR           = "podCIDR"
-	NodeFieldProviderID        = "providerID"
-	NodeFieldStatus            = "status"
-	NodeFieldTaints            = "taints"
-	NodeFieldUID               = "uid"
-	NodeFieldUnschedulable     = "unschedulable"
+	NodeType                      = "node"
+	NodeFieldAllocatable          = "allocatable"
+	NodeFieldAnnotations          = "annotations"
+	NodeFieldCapacity             = "capacity"
+	NodeFieldConfigSource         = "configSource"
+	NodeFieldCreated              = "created"
+	NodeFieldExternalID           = "externalID"
+	NodeFieldHostname             = "hostname"
+	NodeFieldIPAddress            = "ipAddress"
+	NodeFieldInfo                 = "info"
+	NodeFieldLabels               = "labels"
+	NodeFieldName                 = "name"
+	NodeFieldOwnerReferences      = "ownerReferences"
+	NodeFieldPhase                = "phase"
+	NodeFieldPodCIDR              = "podCIDR"
+	NodeFieldProviderID           = "providerID"
+	NodeFieldRemoved              = "removed"
+	NodeFieldResourcePath         = "resourcePath"
+	NodeFieldState                = "state"
+	NodeFieldTaints               = "taints"
+	NodeFieldTransitioning        = "transitioning"
+	NodeFieldTransitioningMessage = "transitioningMessage"
+	NodeFieldUnschedulable        = "unschedulable"
+	NodeFieldUuid                 = "uuid"
+	NodeFieldVolumesAttached      = "volumesAttached"
+	NodeFieldVolumesInUse         = "volumesInUse"
 )
 
 type Node struct {
 	types.Resource
-	APIVersion        string            `json:"apiVersion,omitempty"`
-	Annotations       map[string]string `json:"annotations,omitempty"`
-	ConfigSource      *NodeConfigSource `json:"configSource,omitempty"`
-	CreationTimestamp string            `json:"creationTimestamp,omitempty"`
-	DeletionTimestamp string            `json:"deletionTimestamp,omitempty"`
-	ExternalID        string            `json:"externalID,omitempty"`
-	Kind              string            `json:"kind,omitempty"`
-	Labels            map[string]string `json:"labels,omitempty"`
-	Name              string            `json:"name,omitempty"`
-	Namespace         string            `json:"namespace,omitempty"`
-	PodCIDR           string            `json:"podCIDR,omitempty"`
-	ProviderID        string            `json:"providerID,omitempty"`
-	Status            NodeStatus        `json:"status,omitempty"`
-	Taints            []Taint           `json:"taints,omitempty"`
-	UID               string            `json:"uid,omitempty"`
-	Unschedulable     bool              `json:"unschedulable,omitempty"`
+	Allocatable          map[string]string         `json:"allocatable,omitempty"`
+	Annotations          map[string]string         `json:"annotations,omitempty"`
+	Capacity             map[string]string         `json:"capacity,omitempty"`
+	ConfigSource         *NodeConfigSource         `json:"configSource,omitempty"`
+	Created              string                    `json:"created,omitempty"`
+	ExternalID           string                    `json:"externalID,omitempty"`
+	Hostname             string                    `json:"hostname,omitempty"`
+	IPAddress            string                    `json:"ipAddress,omitempty"`
+	Info                 *NodeInfo                 `json:"info,omitempty"`
+	Labels               map[string]string         `json:"labels,omitempty"`
+	Name                 string                    `json:"name,omitempty"`
+	OwnerReferences      []OwnerReference          `json:"ownerReferences,omitempty"`
+	Phase                string                    `json:"phase,omitempty"`
+	PodCIDR              string                    `json:"podCIDR,omitempty"`
+	ProviderID           string                    `json:"providerID,omitempty"`
+	Removed              string                    `json:"removed,omitempty"`
+	ResourcePath         string                    `json:"resourcePath,omitempty"`
+	State                string                    `json:"state,omitempty"`
+	Taints               []Taint                   `json:"taints,omitempty"`
+	Transitioning        string                    `json:"transitioning,omitempty"`
+	TransitioningMessage string                    `json:"transitioningMessage,omitempty"`
+	Unschedulable        *bool                     `json:"unschedulable,omitempty"`
+	Uuid                 string                    `json:"uuid,omitempty"`
+	VolumesAttached      map[string]AttachedVolume `json:"volumesAttached,omitempty"`
+	VolumesInUse         []string                  `json:"volumesInUse,omitempty"`
 }
 type NodeCollection struct {
 	types.Collection

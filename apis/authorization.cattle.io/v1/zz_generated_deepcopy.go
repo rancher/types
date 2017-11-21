@@ -17,8 +17,8 @@ func (in *ClusterRoleTemplate) DeepCopyInto(out *ClusterRoleTemplate) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	if in.ClusterRoleTemplates != nil {
-		in, out := &in.ClusterRoleTemplates, &out.ClusterRoleTemplates
+	if in.ClusterRoleTemplateNames != nil {
+		in, out := &in.ClusterRoleTemplateNames, &out.ClusterRoleTemplateNames
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
@@ -276,8 +276,8 @@ func (in *ProjectRoleTemplate) DeepCopyInto(out *ProjectRoleTemplate) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	if in.ProjectRoleTemplates != nil {
-		in, out := &in.ProjectRoleTemplates, &out.ProjectRoleTemplates
+	if in.ProjectRoleTemplateNames != nil {
+		in, out := &in.ProjectRoleTemplateNames, &out.ProjectRoleTemplateNames
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}

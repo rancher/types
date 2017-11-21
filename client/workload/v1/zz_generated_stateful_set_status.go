@@ -14,11 +14,11 @@ const (
 
 type StatefulSetStatus struct {
 	CollisionCount     *int64 `json:"collisionCount,omitempty"`
-	CurrentReplicas    int64  `json:"currentReplicas,omitempty"`
+	CurrentReplicas    *int64 `json:"currentReplicas,omitempty"`
 	CurrentRevision    string `json:"currentRevision,omitempty"`
-	ObservedGeneration int64  `json:"observedGeneration,omitempty"`
-	ReadyReplicas      int64  `json:"readyReplicas,omitempty"`
-	Replicas           int64  `json:"replicas,omitempty"`
+	ObservedGeneration *int64 `json:"observedGeneration,omitempty"`
+	ReadyReplicas      *int64 `json:"readyReplicas,omitempty"`
+	Replicas           *int64 `json:"replicas,omitempty"`
 	UpdateRevision     string `json:"updateRevision,omitempty"`
-	UpdatedReplicas    int64  `json:"updatedReplicas,omitempty"`
+	UpdatedReplicas    *int64 `json:"updatedReplicas,omitempty"`
 }

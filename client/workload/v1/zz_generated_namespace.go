@@ -5,31 +5,43 @@ import (
 )
 
 const (
-	NamespaceType                   = "namespace"
-	NamespaceFieldAPIVersion        = "apiVersion"
-	NamespaceFieldAnnotations       = "annotations"
-	NamespaceFieldCreationTimestamp = "creationTimestamp"
-	NamespaceFieldDeletionTimestamp = "deletionTimestamp"
-	NamespaceFieldKind              = "kind"
-	NamespaceFieldLabels            = "labels"
-	NamespaceFieldName              = "name"
-	NamespaceFieldNamespace         = "namespace"
-	NamespaceFieldStatus            = "status"
-	NamespaceFieldUID               = "uid"
+	NamespaceType                 = "namespace"
+	NamespaceFieldAnnotations     = "annotations"
+	NamespaceFieldAnswers         = "answers"
+	NamespaceFieldCreated         = "created"
+	NamespaceFieldExternalID      = "externalId"
+	NamespaceFieldLabels          = "labels"
+	NamespaceFieldName            = "name"
+	NamespaceFieldNamespace       = "namespace"
+	NamespaceFieldOwnerReferences = "ownerReferences"
+	NamespaceFieldProjectID       = "projectId"
+	NamespaceFieldPrune           = "prune"
+	NamespaceFieldRemoved         = "removed"
+	NamespaceFieldResourcePath    = "resourcePath"
+	NamespaceFieldStatus          = "status"
+	NamespaceFieldTags            = "tags"
+	NamespaceFieldTemplates       = "templates"
+	NamespaceFieldUuid            = "uuid"
 )
 
 type Namespace struct {
 	types.Resource
-	APIVersion        string            `json:"apiVersion,omitempty"`
-	Annotations       map[string]string `json:"annotations,omitempty"`
-	CreationTimestamp string            `json:"creationTimestamp,omitempty"`
-	DeletionTimestamp string            `json:"deletionTimestamp,omitempty"`
-	Kind              string            `json:"kind,omitempty"`
-	Labels            map[string]string `json:"labels,omitempty"`
-	Name              string            `json:"name,omitempty"`
-	Namespace         string            `json:"namespace,omitempty"`
-	Status            NamespaceStatus   `json:"status,omitempty"`
-	UID               string            `json:"uid,omitempty"`
+	Annotations     map[string]string      `json:"annotations,omitempty"`
+	Answers         map[string]interface{} `json:"answers,omitempty"`
+	Created         string                 `json:"created,omitempty"`
+	ExternalID      string                 `json:"externalId,omitempty"`
+	Labels          map[string]string      `json:"labels,omitempty"`
+	Name            string                 `json:"name,omitempty"`
+	Namespace       string                 `json:"namespace,omitempty"`
+	OwnerReferences []OwnerReference       `json:"ownerReferences,omitempty"`
+	ProjectID       string                 `json:"projectId,omitempty"`
+	Prune           *bool                  `json:"prune,omitempty"`
+	Removed         string                 `json:"removed,omitempty"`
+	ResourcePath    string                 `json:"resourcePath,omitempty"`
+	Status          *NamespaceStatus       `json:"status,omitempty"`
+	Tags            []string               `json:"tags,omitempty"`
+	Templates       map[string]string      `json:"templates,omitempty"`
+	Uuid            string                 `json:"uuid,omitempty"`
 }
 type NamespaceCollection struct {
 	types.Collection

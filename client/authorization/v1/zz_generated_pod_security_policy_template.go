@@ -5,19 +5,61 @@ import (
 )
 
 const (
-	PodSecurityPolicyTemplateType            = "podSecurityPolicyTemplate"
-	PodSecurityPolicyTemplateFieldAPIVersion = "apiVersion"
-	PodSecurityPolicyTemplateFieldKind       = "kind"
-	PodSecurityPolicyTemplateFieldObjectMeta = "objectMeta"
-	PodSecurityPolicyTemplateFieldSpec       = "spec"
+	PodSecurityPolicyTemplateType                                 = "podSecurityPolicyTemplate"
+	PodSecurityPolicyTemplateFieldAllowPrivilegeEscalation        = "allowPrivilegeEscalation"
+	PodSecurityPolicyTemplateFieldAllowedCapabilities             = "allowedCapabilities"
+	PodSecurityPolicyTemplateFieldAllowedHostPaths                = "allowedHostPaths"
+	PodSecurityPolicyTemplateFieldAnnotations                     = "annotations"
+	PodSecurityPolicyTemplateFieldCreated                         = "created"
+	PodSecurityPolicyTemplateFieldDefaultAddCapabilities          = "defaultAddCapabilities"
+	PodSecurityPolicyTemplateFieldDefaultAllowPrivilegeEscalation = "defaultAllowPrivilegeEscalation"
+	PodSecurityPolicyTemplateFieldFSGroup                         = "fsGroup"
+	PodSecurityPolicyTemplateFieldHostIPC                         = "hostIPC"
+	PodSecurityPolicyTemplateFieldHostNetwork                     = "hostNetwork"
+	PodSecurityPolicyTemplateFieldHostPID                         = "hostPID"
+	PodSecurityPolicyTemplateFieldHostPorts                       = "hostPorts"
+	PodSecurityPolicyTemplateFieldLabels                          = "labels"
+	PodSecurityPolicyTemplateFieldName                            = "name"
+	PodSecurityPolicyTemplateFieldOwnerReferences                 = "ownerReferences"
+	PodSecurityPolicyTemplateFieldPrivileged                      = "privileged"
+	PodSecurityPolicyTemplateFieldReadOnlyRootFilesystem          = "readOnlyRootFilesystem"
+	PodSecurityPolicyTemplateFieldRemoved                         = "removed"
+	PodSecurityPolicyTemplateFieldRequiredDropCapabilities        = "requiredDropCapabilities"
+	PodSecurityPolicyTemplateFieldResourcePath                    = "resourcePath"
+	PodSecurityPolicyTemplateFieldRunAsUser                       = "runAsUser"
+	PodSecurityPolicyTemplateFieldSELinux                         = "seLinux"
+	PodSecurityPolicyTemplateFieldSupplementalGroups              = "supplementalGroups"
+	PodSecurityPolicyTemplateFieldUuid                            = "uuid"
+	PodSecurityPolicyTemplateFieldVolumes                         = "volumes"
 )
 
 type PodSecurityPolicyTemplate struct {
 	types.Resource
-	APIVersion string                `json:"apiVersion,omitempty"`
-	Kind       string                `json:"kind,omitempty"`
-	ObjectMeta ObjectMeta            `json:"objectMeta,omitempty"`
-	Spec       PodSecurityPolicySpec `json:"spec,omitempty"`
+	AllowPrivilegeEscalation        *bool                              `json:"allowPrivilegeEscalation,omitempty"`
+	AllowedCapabilities             []string                           `json:"allowedCapabilities,omitempty"`
+	AllowedHostPaths                []AllowedHostPath                  `json:"allowedHostPaths,omitempty"`
+	Annotations                     map[string]string                  `json:"annotations,omitempty"`
+	Created                         string                             `json:"created,omitempty"`
+	DefaultAddCapabilities          []string                           `json:"defaultAddCapabilities,omitempty"`
+	DefaultAllowPrivilegeEscalation *bool                              `json:"defaultAllowPrivilegeEscalation,omitempty"`
+	FSGroup                         *FSGroupStrategyOptions            `json:"fsGroup,omitempty"`
+	HostIPC                         *bool                              `json:"hostIPC,omitempty"`
+	HostNetwork                     *bool                              `json:"hostNetwork,omitempty"`
+	HostPID                         *bool                              `json:"hostPID,omitempty"`
+	HostPorts                       []HostPortRange                    `json:"hostPorts,omitempty"`
+	Labels                          map[string]string                  `json:"labels,omitempty"`
+	Name                            string                             `json:"name,omitempty"`
+	OwnerReferences                 []OwnerReference                   `json:"ownerReferences,omitempty"`
+	Privileged                      *bool                              `json:"privileged,omitempty"`
+	ReadOnlyRootFilesystem          *bool                              `json:"readOnlyRootFilesystem,omitempty"`
+	Removed                         string                             `json:"removed,omitempty"`
+	RequiredDropCapabilities        []string                           `json:"requiredDropCapabilities,omitempty"`
+	ResourcePath                    string                             `json:"resourcePath,omitempty"`
+	RunAsUser                       *RunAsUserStrategyOptions          `json:"runAsUser,omitempty"`
+	SELinux                         *SELinuxStrategyOptions            `json:"seLinux,omitempty"`
+	SupplementalGroups              *SupplementalGroupsStrategyOptions `json:"supplementalGroups,omitempty"`
+	Uuid                            string                             `json:"uuid,omitempty"`
+	Volumes                         []string                           `json:"volumes,omitempty"`
 }
 type PodSecurityPolicyTemplateCollection struct {
 	types.Collection

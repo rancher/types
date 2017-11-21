@@ -5,7 +5,7 @@ const (
 	VolumeFieldAWSElasticBlockStore  = "awsElasticBlockStore"
 	VolumeFieldAzureDisk             = "azureDisk"
 	VolumeFieldAzureFile             = "azureFile"
-	VolumeFieldCephFS                = "cephFS"
+	VolumeFieldCephFS                = "cephfs"
 	VolumeFieldCinder                = "cinder"
 	VolumeFieldConfigMap             = "configMap"
 	VolumeFieldDownwardAPI           = "downwardAPI"
@@ -28,7 +28,7 @@ const (
 	VolumeFieldRBD                   = "rbd"
 	VolumeFieldScaleIO               = "scaleIO"
 	VolumeFieldSecret                = "secret"
-	VolumeFieldStorageOS             = "storageOS"
+	VolumeFieldStorageOS             = "storageos"
 	VolumeFieldVsphereVolume         = "vsphereVolume"
 )
 
@@ -36,7 +36,7 @@ type Volume struct {
 	AWSElasticBlockStore  *AWSElasticBlockStoreVolumeSource  `json:"awsElasticBlockStore,omitempty"`
 	AzureDisk             *AzureDiskVolumeSource             `json:"azureDisk,omitempty"`
 	AzureFile             *AzureFileVolumeSource             `json:"azureFile,omitempty"`
-	CephFS                *CephFSVolumeSource                `json:"cephFS,omitempty"`
+	CephFS                *CephFSVolumeSource                `json:"cephfs,omitempty"`
 	Cinder                *CinderVolumeSource                `json:"cinder,omitempty"`
 	ConfigMap             *ConfigMapVolumeSource             `json:"configMap,omitempty"`
 	DownwardAPI           *DownwardAPIVolumeSource           `json:"downwardAPI,omitempty"`
@@ -59,6 +59,6 @@ type Volume struct {
 	RBD                   *RBDVolumeSource                   `json:"rbd,omitempty"`
 	ScaleIO               *ScaleIOVolumeSource               `json:"scaleIO,omitempty"`
 	Secret                *SecretVolumeSource                `json:"secret,omitempty"`
-	StorageOS             *StorageOSVolumeSource             `json:"storageOS,omitempty"`
+	StorageOS             *StorageOSVolumeSource             `json:"storageos,omitempty"`
 	VsphereVolume         *VsphereVirtualDiskVolumeSource    `json:"vsphereVolume,omitempty"`
 }

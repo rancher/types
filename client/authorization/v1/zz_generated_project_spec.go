@@ -2,11 +2,11 @@ package client
 
 const (
 	ProjectSpecType             = "projectSpec"
-	ProjectSpecFieldClusterName = "clusterName"
+	ProjectSpecFieldClusterId   = "clusterId"
 	ProjectSpecFieldDisplayName = "displayName"
 )
 
 type ProjectSpec struct {
-	ClusterName string `json:"clusterName,omitempty"`
+	ClusterId   string `json:"clusterId,omitempty"`
 	DisplayName string `json:"displayName,omitempty"`
 }

@@ -2,15 +2,15 @@ package client
 
 const (
 	KubeControllerServiceType                       = "kubeControllerService"
-	KubeControllerServiceFieldClusterCIDR           = "clusterCIDR"
+	KubeControllerServiceFieldClusterCIDR           = "clusterCidr"
 	KubeControllerServiceFieldExtraArgs             = "extraArgs"
 	KubeControllerServiceFieldImage                 = "image"
-	KubeControllerServiceFieldServiceClusterIPRange = "serviceClusterIPRange"
+	KubeControllerServiceFieldServiceClusterIPRange = "serviceClusterIpRange"
 )
 
 type KubeControllerService struct {
-	ClusterCIDR           string            `json:"clusterCIDR,omitempty"`
+	ClusterCIDR           string            `json:"clusterCidr,omitempty"`
 	ExtraArgs             map[string]string `json:"extraArgs,omitempty"`
 	Image                 string            `json:"image,omitempty"`
-	ServiceClusterIPRange string            `json:"serviceClusterIPRange,omitempty"`
+	ServiceClusterIPRange string            `json:"serviceClusterIpRange,omitempty"`
 }

@@ -17,10 +17,12 @@ func (s Status) ToInternal(data map[string]interface{}) {
 
 func (s Status) ModifySchema(schema *types.Schema, schemas *types.Schemas) error {
 	schema.ResourceFields["state"] = types.Field{
-		Type: "string",
+		CodeName: "State",
+		Type:     "string",
 	}
 	schema.ResourceFields["transitioning"] = types.Field{
-		Type: "enum",
+		CodeName: "Transitioning",
+		Type:     "enum",
 		Options: []string{
 			"yes",
 			"no",
@@ -28,7 +30,8 @@ func (s Status) ModifySchema(schema *types.Schema, schemas *types.Schemas) error
 		},
 	}
 	schema.ResourceFields["transitioningMessage"] = types.Field{
-		Type: "string",
+		CodeName: "TransitioningMessage",
+		Type:     "string",
 	}
 	return nil
 }

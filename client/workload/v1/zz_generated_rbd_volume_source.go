@@ -2,23 +2,23 @@ package client
 
 const (
 	RBDVolumeSourceType              = "rbdVolumeSource"
-	RBDVolumeSourceFieldCephMonitors = "cephMonitors"
+	RBDVolumeSourceFieldCephMonitors = "monitors"
 	RBDVolumeSourceFieldFSType       = "fsType"
 	RBDVolumeSourceFieldKeyring      = "keyring"
-	RBDVolumeSourceFieldRBDImage     = "rbdImage"
-	RBDVolumeSourceFieldRBDPool      = "rbdPool"
-	RBDVolumeSourceFieldRadosUser    = "radosUser"
+	RBDVolumeSourceFieldRBDImage     = "image"
+	RBDVolumeSourceFieldRBDPool      = "pool"
+	RBDVolumeSourceFieldRadosUser    = "user"
 	RBDVolumeSourceFieldReadOnly     = "readOnly"
 	RBDVolumeSourceFieldSecretRef    = "secretRef"
 )
 
 type RBDVolumeSource struct {
-	CephMonitors []string              `json:"cephMonitors,omitempty"`
+	CephMonitors []string              `json:"monitors,omitempty"`
 	FSType       string                `json:"fsType,omitempty"`
 	Keyring      string                `json:"keyring,omitempty"`
-	RBDImage     string                `json:"rbdImage,omitempty"`
-	RBDPool      string                `json:"rbdPool,omitempty"`
-	RadosUser    string                `json:"radosUser,omitempty"`
-	ReadOnly     bool                  `json:"readOnly,omitempty"`
+	RBDImage     string                `json:"image,omitempty"`
+	RBDPool      string                `json:"pool,omitempty"`
+	RadosUser    string                `json:"user,omitempty"`
+	ReadOnly     *bool                 `json:"readOnly,omitempty"`
 	SecretRef    *LocalObjectReference `json:"secretRef,omitempty"`
 }
