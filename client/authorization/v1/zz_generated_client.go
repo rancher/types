@@ -7,10 +7,12 @@ import (
 type Client struct {
 	clientbase.APIBaseClient
 
-	Project                   ProjectOperations
-	RoleTemplate              RoleTemplateOperations
-	PodSecurityPolicyTemplate PodSecurityPolicyTemplateOperations
-	ProjectRoleBinding        ProjectRoleBindingOperations
+	Project                    ProjectOperations
+	ProjectRoleTemplate        ProjectRoleTemplateOperations
+	PodSecurityPolicyTemplate  PodSecurityPolicyTemplateOperations
+	ProjectRoleTemplateBinding ProjectRoleTemplateBindingOperations
+	ClusterRoleTemplate        ClusterRoleTemplateOperations
+	ClusterRoleTemplateBinding ClusterRoleTemplateBindingOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -24,9 +26,11 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	}
 
 	client.Project = newProjectClient(client)
-	client.RoleTemplate = newRoleTemplateClient(client)
+	client.ProjectRoleTemplate = newProjectRoleTemplateClient(client)
 	client.PodSecurityPolicyTemplate = newPodSecurityPolicyTemplateClient(client)
-	client.ProjectRoleBinding = newProjectRoleBindingClient(client)
+	client.ProjectRoleTemplateBinding = newProjectRoleTemplateBindingClient(client)
+	client.ClusterRoleTemplate = newClusterRoleTemplateClient(client)
+	client.ClusterRoleTemplateBinding = newClusterRoleTemplateBindingClient(client)
 
 	return client, nil
 }

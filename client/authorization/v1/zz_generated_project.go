@@ -5,19 +5,19 @@ import (
 )
 
 const (
-	ProjectType             = "project"
-	ProjectFieldAPIVersion  = "apiVersion"
-	ProjectFieldClusterName = "clusterName"
-	ProjectFieldKind        = "kind"
-	ProjectFieldObjectMeta  = "objectMeta"
+	ProjectType            = "project"
+	ProjectFieldAPIVersion = "apiVersion"
+	ProjectFieldKind       = "kind"
+	ProjectFieldObjectMeta = "objectMeta"
+	ProjectFieldSpec       = "spec"
 )
 
 type Project struct {
 	types.Resource
-	APIVersion  string     `json:"apiVersion,omitempty"`
-	ClusterName string     `json:"clusterName,omitempty"`
-	Kind        string     `json:"kind,omitempty"`
-	ObjectMeta  ObjectMeta `json:"objectMeta,omitempty"`
+	APIVersion string      `json:"apiVersion,omitempty"`
+	Kind       string      `json:"kind,omitempty"`
+	ObjectMeta ObjectMeta  `json:"objectMeta,omitempty"`
+	Spec       ProjectSpec `json:"spec,omitempty"`
 }
 type ProjectCollection struct {
 	types.Collection
