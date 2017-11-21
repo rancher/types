@@ -5,23 +5,37 @@ import (
 )
 
 const (
-	ProjectRoleTemplateBindingType                         = "projectRoleTemplateBinding"
-	ProjectRoleTemplateBindingFieldAPIVersion              = "apiVersion"
-	ProjectRoleTemplateBindingFieldKind                    = "kind"
-	ProjectRoleTemplateBindingFieldObjectMeta              = "objectMeta"
-	ProjectRoleTemplateBindingFieldProjectName             = "projectName"
-	ProjectRoleTemplateBindingFieldProjectRoleTemplateName = "projectRoleTemplateName"
-	ProjectRoleTemplateBindingFieldSubject                 = "subject"
+	ProjectRoleTemplateBindingType                       = "projectRoleTemplateBinding"
+	ProjectRoleTemplateBindingFieldAnnotations           = "annotations"
+	ProjectRoleTemplateBindingFieldCreated               = "created"
+	ProjectRoleTemplateBindingFieldLabels                = "labels"
+	ProjectRoleTemplateBindingFieldName                  = "name"
+	ProjectRoleTemplateBindingFieldOwnerReferences       = "ownerReferences"
+	ProjectRoleTemplateBindingFieldProjectId             = "projectId"
+	ProjectRoleTemplateBindingFieldProjectRoleTemplateId = "projectRoleTemplateId"
+	ProjectRoleTemplateBindingFieldRemoved               = "removed"
+	ProjectRoleTemplateBindingFieldResourcePath          = "resourcePath"
+	ProjectRoleTemplateBindingFieldSubjectKind           = "subjectKind"
+	ProjectRoleTemplateBindingFieldSubjectName           = "subjectName"
+	ProjectRoleTemplateBindingFieldSubjectNamespace      = "subjectNamespace"
+	ProjectRoleTemplateBindingFieldUuid                  = "uuid"
 )
 
 type ProjectRoleTemplateBinding struct {
 	types.Resource
-	APIVersion              string     `json:"apiVersion,omitempty"`
-	Kind                    string     `json:"kind,omitempty"`
-	ObjectMeta              ObjectMeta `json:"objectMeta,omitempty"`
-	ProjectName             string     `json:"projectName,omitempty"`
-	ProjectRoleTemplateName string     `json:"projectRoleTemplateName,omitempty"`
-	Subject                 Subject    `json:"subject,omitempty"`
+	Annotations           map[string]string `json:"annotations,omitempty"`
+	Created               string            `json:"created,omitempty"`
+	Labels                map[string]string `json:"labels,omitempty"`
+	Name                  string            `json:"name,omitempty"`
+	OwnerReferences       []OwnerReference  `json:"ownerReferences,omitempty"`
+	ProjectId             string            `json:"projectId,omitempty"`
+	ProjectRoleTemplateId string            `json:"projectRoleTemplateId,omitempty"`
+	Removed               string            `json:"removed,omitempty"`
+	ResourcePath          string            `json:"resourcePath,omitempty"`
+	SubjectKind           string            `json:"subjectKind,omitempty"`
+	SubjectName           string            `json:"subjectName,omitempty"`
+	SubjectNamespace      string            `json:"subjectNamespace,omitempty"`
+	Uuid                  string            `json:"uuid,omitempty"`
 }
 type ProjectRoleTemplateBindingCollection struct {
 	types.Collection

@@ -15,7 +15,7 @@ const (
 type ClusterStatus struct {
 	APIEndpoint         string                   `json:"apiEndpoint,omitempty"`
 	Allocatable         map[string]string        `json:"allocatable,omitempty"`
-	AppliedSpec         ClusterSpec              `json:"appliedSpec,omitempty"`
+	AppliedSpec         *ClusterSpec             `json:"appliedSpec,omitempty"`
 	CACert              string                   `json:"caCert,omitempty"`
 	Capacity            map[string]string        `json:"capacity,omitempty"`
 	ComponentStatuses   []ClusterComponentStatus `json:"componentStatuses,omitempty"`

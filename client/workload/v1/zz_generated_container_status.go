@@ -5,7 +5,7 @@ const (
 	ContainerStatusFieldContainerID          = "containerID"
 	ContainerStatusFieldImage                = "image"
 	ContainerStatusFieldImageID              = "imageID"
-	ContainerStatusFieldLastTerminationState = "lastTerminationState"
+	ContainerStatusFieldLastTerminationState = "lastState"
 	ContainerStatusFieldName                 = "name"
 	ContainerStatusFieldReady                = "ready"
 	ContainerStatusFieldRestartCount         = "restartCount"
@@ -13,12 +13,12 @@ const (
 )
 
 type ContainerStatus struct {
-	ContainerID          string         `json:"containerID,omitempty"`
-	Image                string         `json:"image,omitempty"`
-	ImageID              string         `json:"imageID,omitempty"`
-	LastTerminationState ContainerState `json:"lastTerminationState,omitempty"`
-	Name                 string         `json:"name,omitempty"`
-	Ready                bool           `json:"ready,omitempty"`
-	RestartCount         int64          `json:"restartCount,omitempty"`
-	State                ContainerState `json:"state,omitempty"`
+	ContainerID          string          `json:"containerID,omitempty"`
+	Image                string          `json:"image,omitempty"`
+	ImageID              string          `json:"imageID,omitempty"`
+	LastTerminationState *ContainerState `json:"lastState,omitempty"`
+	Name                 string          `json:"name,omitempty"`
+	Ready                *bool           `json:"ready,omitempty"`
+	RestartCount         *int64          `json:"restartCount,omitempty"`
+	State                *ContainerState `json:"state,omitempty"`
 }

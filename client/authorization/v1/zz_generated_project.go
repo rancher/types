@@ -5,19 +5,31 @@ import (
 )
 
 const (
-	ProjectType            = "project"
-	ProjectFieldAPIVersion = "apiVersion"
-	ProjectFieldKind       = "kind"
-	ProjectFieldObjectMeta = "objectMeta"
-	ProjectFieldSpec       = "spec"
+	ProjectType                 = "project"
+	ProjectFieldAnnotations     = "annotations"
+	ProjectFieldClusterId       = "clusterId"
+	ProjectFieldCreated         = "created"
+	ProjectFieldId              = "id"
+	ProjectFieldLabels          = "labels"
+	ProjectFieldName            = "name"
+	ProjectFieldOwnerReferences = "ownerReferences"
+	ProjectFieldRemoved         = "removed"
+	ProjectFieldResourcePath    = "resourcePath"
+	ProjectFieldUuid            = "uuid"
 )
 
 type Project struct {
 	types.Resource
-	APIVersion string      `json:"apiVersion,omitempty"`
-	Kind       string      `json:"kind,omitempty"`
-	ObjectMeta ObjectMeta  `json:"objectMeta,omitempty"`
-	Spec       ProjectSpec `json:"spec,omitempty"`
+	Annotations     map[string]string `json:"annotations,omitempty"`
+	ClusterId       string            `json:"clusterId,omitempty"`
+	Created         string            `json:"created,omitempty"`
+	Id              string            `json:"id,omitempty"`
+	Labels          map[string]string `json:"labels,omitempty"`
+	Name            string            `json:"name,omitempty"`
+	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty"`
+	Removed         string            `json:"removed,omitempty"`
+	ResourcePath    string            `json:"resourcePath,omitempty"`
+	Uuid            string            `json:"uuid,omitempty"`
 }
 type ProjectCollection struct {
 	types.Collection

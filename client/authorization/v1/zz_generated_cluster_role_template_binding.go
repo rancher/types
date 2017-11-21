@@ -5,23 +5,33 @@ import (
 )
 
 const (
-	ClusterRoleTemplateBindingType                         = "clusterRoleTemplateBinding"
-	ClusterRoleTemplateBindingFieldAPIVersion              = "apiVersion"
-	ClusterRoleTemplateBindingFieldClusterName             = "clusterName"
-	ClusterRoleTemplateBindingFieldClusterRoleTemplateName = "clusterRoleTemplateName"
-	ClusterRoleTemplateBindingFieldKind                    = "kind"
-	ClusterRoleTemplateBindingFieldObjectMeta              = "objectMeta"
-	ClusterRoleTemplateBindingFieldSubject                 = "subject"
+	ClusterRoleTemplateBindingType                       = "clusterRoleTemplateBinding"
+	ClusterRoleTemplateBindingFieldAnnotations           = "annotations"
+	ClusterRoleTemplateBindingFieldClusterId             = "clusterId"
+	ClusterRoleTemplateBindingFieldClusterRoleTemplateId = "clusterRoleTemplateId"
+	ClusterRoleTemplateBindingFieldCreated               = "created"
+	ClusterRoleTemplateBindingFieldLabels                = "labels"
+	ClusterRoleTemplateBindingFieldName                  = "name"
+	ClusterRoleTemplateBindingFieldOwnerReferences       = "ownerReferences"
+	ClusterRoleTemplateBindingFieldRemoved               = "removed"
+	ClusterRoleTemplateBindingFieldResourcePath          = "resourcePath"
+	ClusterRoleTemplateBindingFieldSubject               = "subject"
+	ClusterRoleTemplateBindingFieldUuid                  = "uuid"
 )
 
 type ClusterRoleTemplateBinding struct {
 	types.Resource
-	APIVersion              string     `json:"apiVersion,omitempty"`
-	ClusterName             string     `json:"clusterName,omitempty"`
-	ClusterRoleTemplateName string     `json:"clusterRoleTemplateName,omitempty"`
-	Kind                    string     `json:"kind,omitempty"`
-	ObjectMeta              ObjectMeta `json:"objectMeta,omitempty"`
-	Subject                 Subject    `json:"subject,omitempty"`
+	Annotations           map[string]string `json:"annotations,omitempty"`
+	ClusterId             string            `json:"clusterId,omitempty"`
+	ClusterRoleTemplateId string            `json:"clusterRoleTemplateId,omitempty"`
+	Created               string            `json:"created,omitempty"`
+	Labels                map[string]string `json:"labels,omitempty"`
+	Name                  string            `json:"name,omitempty"`
+	OwnerReferences       []OwnerReference  `json:"ownerReferences,omitempty"`
+	Removed               string            `json:"removed,omitempty"`
+	ResourcePath          string            `json:"resourcePath,omitempty"`
+	Subject               *Subject          `json:"subject,omitempty"`
+	Uuid                  string            `json:"uuid,omitempty"`
 }
 type ClusterRoleTemplateBindingCollection struct {
 	types.Collection

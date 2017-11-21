@@ -5,21 +5,31 @@ import (
 )
 
 const (
-	ProjectRoleTemplateType                      = "projectRoleTemplate"
-	ProjectRoleTemplateFieldAPIVersion           = "apiVersion"
-	ProjectRoleTemplateFieldKind                 = "kind"
-	ProjectRoleTemplateFieldObjectMeta           = "objectMeta"
-	ProjectRoleTemplateFieldProjectRoleTemplates = "projectRoleTemplates"
-	ProjectRoleTemplateFieldRules                = "rules"
+	ProjectRoleTemplateType                        = "projectRoleTemplate"
+	ProjectRoleTemplateFieldAnnotations            = "annotations"
+	ProjectRoleTemplateFieldCreated                = "created"
+	ProjectRoleTemplateFieldLabels                 = "labels"
+	ProjectRoleTemplateFieldName                   = "name"
+	ProjectRoleTemplateFieldOwnerReferences        = "ownerReferences"
+	ProjectRoleTemplateFieldProjectRoleTemplateIds = "projectRoleTemplateIds"
+	ProjectRoleTemplateFieldRemoved                = "removed"
+	ProjectRoleTemplateFieldResourcePath           = "resourcePath"
+	ProjectRoleTemplateFieldRules                  = "rules"
+	ProjectRoleTemplateFieldUuid                   = "uuid"
 )
 
 type ProjectRoleTemplate struct {
 	types.Resource
-	APIVersion           string       `json:"apiVersion,omitempty"`
-	Kind                 string       `json:"kind,omitempty"`
-	ObjectMeta           ObjectMeta   `json:"objectMeta,omitempty"`
-	ProjectRoleTemplates []string     `json:"projectRoleTemplates,omitempty"`
-	Rules                []PolicyRule `json:"rules,omitempty"`
+	Annotations            map[string]string `json:"annotations,omitempty"`
+	Created                string            `json:"created,omitempty"`
+	Labels                 map[string]string `json:"labels,omitempty"`
+	Name                   string            `json:"name,omitempty"`
+	OwnerReferences        []OwnerReference  `json:"ownerReferences,omitempty"`
+	ProjectRoleTemplateIds []string          `json:"projectRoleTemplateIds,omitempty"`
+	Removed                string            `json:"removed,omitempty"`
+	ResourcePath           string            `json:"resourcePath,omitempty"`
+	Rules                  []PolicyRule      `json:"rules,omitempty"`
+	Uuid                   string            `json:"uuid,omitempty"`
 }
 type ProjectRoleTemplateCollection struct {
 	types.Collection

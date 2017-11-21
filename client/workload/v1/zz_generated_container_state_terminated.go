@@ -13,10 +13,10 @@ const (
 
 type ContainerStateTerminated struct {
 	ContainerID string `json:"containerID,omitempty"`
-	ExitCode    int64  `json:"exitCode,omitempty"`
+	ExitCode    *int64 `json:"exitCode,omitempty"`
 	FinishedAt  string `json:"finishedAt,omitempty"`
 	Message     string `json:"message,omitempty"`
 	Reason      string `json:"reason,omitempty"`
-	Signal      int64  `json:"signal,omitempty"`
+	Signal      *int64 `json:"signal,omitempty"`
 	StartedAt   string `json:"startedAt,omitempty"`
 }

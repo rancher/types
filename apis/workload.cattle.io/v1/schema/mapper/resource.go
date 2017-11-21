@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/rancher/norman/types"
-	m "github.com/rancher/norman/types/mapping/mapper"
+	m "github.com/rancher/norman/types/mapper"
 )
 
 type PivotMapper struct {

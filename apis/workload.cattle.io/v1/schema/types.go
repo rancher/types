@@ -2,28 +2,25 @@ package schema
 
 import (
 	"github.com/rancher/norman/types"
-	m "github.com/rancher/norman/types/mapping/mapper"
+	m "github.com/rancher/norman/types/mapper"
+	"github.com/rancher/types/apis/workload.cattle.io/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 var (
-	handlerMapper = &types.TypeMapper{
-		Mappers: []types.Mapper{
-			&m.UnionEmbed{
-				Fields: []m.UnionMapping{
-					{
-						FieldName:   "exec",
-						CheckFields: []string{"command"},
-					},
-					{
-						FieldName:   "tcpSocket",
-						CheckFields: []string{"tcp", "port"},
-					},
-					{
-						FieldName:   "httpGet",
-						CheckFields: []string{"port"},
-					},
-				},
+	handlerMapper = &m.UnionEmbed{
+		Fields: []m.UnionMapping{
+			{
+				FieldName:   "exec",
+				CheckFields: []string{"command"},
+			},
+			{
+				FieldName:   "tcpSocket",
+				CheckFields: []string{"tcp", "port"},
+			},
+			{
+				FieldName:   "httpGet",
+				CheckFields: []string{"port"},
 			},
 		},
 	}
@@ -76,22 +73,6 @@ type NodeScheduling struct {
 	Preferred  []string
 }
 
-type deployParams struct {
-	BatchSize  int64
-	Scale      int64
-	Global     bool
-	Cron       string
-	Job        bool
-	Ordered    bool
-	QuorumSize int64
-}
-
-type nodeStatusOverride struct {
-	IPAddress string
-	Hostname  string
-	Info      NodeInfo
-}
-
 type NodeInfo struct {
 	CPU        CPUInfo
 	Memory     MemoryInfo
@@ -118,9 +99,11 @@ type KubernetesInfo struct {
 	KubeProxyVersion string
 }
 
-type DeployParams struct {
+type deployOverride struct {
+	v1.DeployConfig
 }
 
-type deployOverride struct {
-	Deploy *DeployParams
+type projectOverride struct {
+	types.Namespaced
+	ProjectID string `norman:"type=reference[/v1-authz/schemas/project]"`
 }

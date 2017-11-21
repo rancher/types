@@ -6,36 +6,34 @@ import (
 
 const (
 	ClusterType                               = "cluster"
-	ClusterFieldAPIVersion                    = "apiVersion"
 	ClusterFieldAnnotations                   = "annotations"
 	ClusterFieldAzureKubernetesServiceConfig  = "azureKubernetesServiceConfig"
-	ClusterFieldCreationTimestamp             = "creationTimestamp"
-	ClusterFieldDeletionTimestamp             = "deletionTimestamp"
+	ClusterFieldCreated                       = "created"
 	ClusterFieldGoogleKubernetesEngineConfig  = "googleKubernetesEngineConfig"
-	ClusterFieldKind                          = "kind"
 	ClusterFieldLabels                        = "labels"
 	ClusterFieldName                          = "name"
-	ClusterFieldNamespace                     = "namespace"
+	ClusterFieldOwnerReferences               = "ownerReferences"
 	ClusterFieldRancherKubernetesEngineConfig = "rancherKubernetesEngineConfig"
+	ClusterFieldRemoved                       = "removed"
+	ClusterFieldResourcePath                  = "resourcePath"
 	ClusterFieldStatus                        = "status"
-	ClusterFieldUID                           = "uid"
+	ClusterFieldUuid                          = "uuid"
 )
 
 type Cluster struct {
 	types.Resource
-	APIVersion                    string                         `json:"apiVersion,omitempty"`
 	Annotations                   map[string]string              `json:"annotations,omitempty"`
 	AzureKubernetesServiceConfig  *AzureKubernetesServiceConfig  `json:"azureKubernetesServiceConfig,omitempty"`
-	CreationTimestamp             string                         `json:"creationTimestamp,omitempty"`
-	DeletionTimestamp             string                         `json:"deletionTimestamp,omitempty"`
+	Created                       string                         `json:"created,omitempty"`
 	GoogleKubernetesEngineConfig  *GoogleKubernetesEngineConfig  `json:"googleKubernetesEngineConfig,omitempty"`
-	Kind                          string                         `json:"kind,omitempty"`
 	Labels                        map[string]string              `json:"labels,omitempty"`
 	Name                          string                         `json:"name,omitempty"`
-	Namespace                     string                         `json:"namespace,omitempty"`
+	OwnerReferences               []OwnerReference               `json:"ownerReferences,omitempty"`
 	RancherKubernetesEngineConfig *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty"`
-	Status                        ClusterStatus                  `json:"status,omitempty"`
-	UID                           string                         `json:"uid,omitempty"`
+	Removed                       string                         `json:"removed,omitempty"`
+	ResourcePath                  string                         `json:"resourcePath,omitempty"`
+	Status                        *ClusterStatus                 `json:"status,omitempty"`
+	Uuid                          string                         `json:"uuid,omitempty"`
 }
 type ClusterCollection struct {
 	types.Collection

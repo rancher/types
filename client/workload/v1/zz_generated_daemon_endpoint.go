@@ -2,9 +2,9 @@ package client
 
 const (
 	DaemonEndpointType      = "daemonEndpoint"
-	DaemonEndpointFieldPort = "port"
+	DaemonEndpointFieldPort = "Port"
 )
 
 type DaemonEndpoint struct {
-	Port int64 `json:"port,omitempty"`
+	Port *int64 `json:"Port,omitempty"`
 }

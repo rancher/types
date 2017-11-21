@@ -10,10 +10,13 @@ type Client struct {
 	Pod                   PodOperations
 	Namespace             NamespaceOperations
 	Node                  NodeOperations
-	ReplicaSet            ReplicaSetOperations
 	Deployment            DeploymentOperations
 	PersistentVolumeClaim PersistentVolumeClaimOperations
 	StatefulSet           StatefulSetOperations
+	ReplicaSet            ReplicaSetOperations
+	ReplicationController ReplicationControllerOperations
+	DaemonSet             DaemonSetOperations
+	Workload              WorkloadOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -29,10 +32,13 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Pod = newPodClient(client)
 	client.Namespace = newNamespaceClient(client)
 	client.Node = newNodeClient(client)
-	client.ReplicaSet = newReplicaSetClient(client)
 	client.Deployment = newDeploymentClient(client)
 	client.PersistentVolumeClaim = newPersistentVolumeClaimClient(client)
 	client.StatefulSet = newStatefulSetClient(client)
+	client.ReplicaSet = newReplicaSetClient(client)
+	client.ReplicationController = newReplicationControllerClient(client)
+	client.DaemonSet = newDaemonSetClient(client)
+	client.Workload = newWorkloadClient(client)
 
 	return client, nil
 }

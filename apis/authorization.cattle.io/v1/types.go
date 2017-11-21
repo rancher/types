@@ -25,7 +25,7 @@ type ProjectRoleTemplate struct {
 
 	Rules []rbacv1.PolicyRule `json:"rules,omitempty"`
 
-	ProjectRoleTemplates []string `json:"projectRoleTemplates,omitempty" norman:"type=array[reference[projectRoleTemplate]]"`
+	ProjectRoleTemplateNames []string `json:"projectRoleTemplateNames,omitempty" norman:"type=array[reference[projectRoleTemplate]]"`
 }
 
 type PodSecurityPolicyTemplate struct {
@@ -51,7 +51,7 @@ type ClusterRoleTemplate struct {
 
 	Rules []rbacv1.PolicyRule `json:"rules,omitempty"`
 
-	ClusterRoleTemplates []string `json:"clusterRoleTemplates,omitempty" norman:"type=array[reference[clusterRoleTemplate]]"`
+	ClusterRoleTemplateNames []string `json:"clusterRoleTemplateNames,omitempty" norman:"type=array[reference[clusterRoleTemplate]]"`
 }
 
 type ClusterRoleTemplateBinding struct {

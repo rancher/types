@@ -10,7 +10,9 @@ import (
 )
 
 type Move struct {
-	From, To string
+	From, To          string
+	DestDefined       bool
+	NoDeleteFromField bool
 }
 
 func (m Move) FromInternal(data map[string]interface{}) {
@@ -26,37 +28,31 @@ func (m Move) ToInternal(data map[string]interface{}) {
 }
 
 func (m Move) ModifySchema(s *types.Schema, schemas *types.Schemas) error {
-	internalSchema, err := getInternal(s)
-	if err != nil {
-		return err
-	}
-
-	_, _, fromInternalField, ok, err := getField(internalSchema, schemas, m.From)
+	fromSchema, _, fromField, ok, err := getField(s, schemas, m.From)
 	if err != nil {
 		return err
 	}
 	if !ok {
-		return fmt.Errorf("missing field %s on internal schema %s", m.From, internalSchema.ID)
+		return fmt.Errorf("failed to find field %s on schema %s", m.From, s.ID)
 	}
 
-	fromSchema, _, _, _, err := getField(s, schemas, m.From)
-	if err != nil {
-		return err
-	}
-
-	toSchema, toFieldName, toField, ok, err := getField(s, schemas, m.To)
+	toSchema, toFieldName, _, ok, err := getField(s, schemas, m.To)
 	if err != nil {
 		return err
 	}
 	_, ok = toSchema.ResourceFields[toFieldName]
-	if ok && !strings.Contains(m.To, "/") {
+	if ok && !strings.Contains(m.To, "/") && !m.DestDefined {
 		return fmt.Errorf("field %s already exists on schema %s", m.To, s.ID)
 	}
 
-	delete(fromSchema.ResourceFields, m.From)
+	if !m.NoDeleteFromField {
+		delete(fromSchema.ResourceFields, m.From)
+	}
 
-	toField.CodeName = convert.Capitalize(toFieldName)
-	toSchema.ResourceFields[toFieldName] = fromInternalField
+	if !m.DestDefined {
+		fromField.CodeName = convert.Capitalize(toFieldName)
+		toSchema.ResourceFields[toFieldName] = fromField
+	}
 
 	return nil
 }

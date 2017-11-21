@@ -5,21 +5,39 @@ import (
 )
 
 const (
-	PersistentVolumeClaimType            = "persistentVolumeClaim"
-	PersistentVolumeClaimFieldAPIVersion = "apiVersion"
-	PersistentVolumeClaimFieldKind       = "kind"
-	PersistentVolumeClaimFieldObjectMeta = "objectMeta"
-	PersistentVolumeClaimFieldSpec       = "spec"
-	PersistentVolumeClaimFieldStatus     = "status"
+	PersistentVolumeClaimType                  = "persistentVolumeClaim"
+	PersistentVolumeClaimFieldAccessModes      = "accessModes"
+	PersistentVolumeClaimFieldAnnotations      = "annotations"
+	PersistentVolumeClaimFieldCreated          = "created"
+	PersistentVolumeClaimFieldLabels           = "labels"
+	PersistentVolumeClaimFieldName             = "name"
+	PersistentVolumeClaimFieldOwnerReferences  = "ownerReferences"
+	PersistentVolumeClaimFieldRemoved          = "removed"
+	PersistentVolumeClaimFieldResourcePath     = "resourcePath"
+	PersistentVolumeClaimFieldResources        = "resources"
+	PersistentVolumeClaimFieldSelector         = "selector"
+	PersistentVolumeClaimFieldStatus           = "status"
+	PersistentVolumeClaimFieldStorageClassName = "storageClassName"
+	PersistentVolumeClaimFieldUuid             = "uuid"
+	PersistentVolumeClaimFieldVolumeName       = "volumeName"
 )
 
 type PersistentVolumeClaim struct {
 	types.Resource
-	APIVersion string                      `json:"apiVersion,omitempty"`
-	Kind       string                      `json:"kind,omitempty"`
-	ObjectMeta ObjectMeta                  `json:"objectMeta,omitempty"`
-	Spec       PersistentVolumeClaimSpec   `json:"spec,omitempty"`
-	Status     PersistentVolumeClaimStatus `json:"status,omitempty"`
+	AccessModes      []string                     `json:"accessModes,omitempty"`
+	Annotations      map[string]string            `json:"annotations,omitempty"`
+	Created          string                       `json:"created,omitempty"`
+	Labels           map[string]string            `json:"labels,omitempty"`
+	Name             string                       `json:"name,omitempty"`
+	OwnerReferences  []OwnerReference             `json:"ownerReferences,omitempty"`
+	Removed          string                       `json:"removed,omitempty"`
+	ResourcePath     string                       `json:"resourcePath,omitempty"`
+	Resources        *ResourceRequirements        `json:"resources,omitempty"`
+	Selector         *LabelSelector               `json:"selector,omitempty"`
+	Status           *PersistentVolumeClaimStatus `json:"status,omitempty"`
+	StorageClassName string                       `json:"storageClassName,omitempty"`
+	Uuid             string                       `json:"uuid,omitempty"`
+	VolumeName       string                       `json:"volumeName,omitempty"`
 }
 type PersistentVolumeClaimCollection struct {
 	types.Collection

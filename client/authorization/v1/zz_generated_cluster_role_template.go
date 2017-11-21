@@ -5,21 +5,31 @@ import (
 )
 
 const (
-	ClusterRoleTemplateType                      = "clusterRoleTemplate"
-	ClusterRoleTemplateFieldAPIVersion           = "apiVersion"
-	ClusterRoleTemplateFieldClusterRoleTemplates = "clusterRoleTemplates"
-	ClusterRoleTemplateFieldKind                 = "kind"
-	ClusterRoleTemplateFieldObjectMeta           = "objectMeta"
-	ClusterRoleTemplateFieldRules                = "rules"
+	ClusterRoleTemplateType                        = "clusterRoleTemplate"
+	ClusterRoleTemplateFieldAnnotations            = "annotations"
+	ClusterRoleTemplateFieldClusterRoleTemplateIds = "clusterRoleTemplateIds"
+	ClusterRoleTemplateFieldCreated                = "created"
+	ClusterRoleTemplateFieldLabels                 = "labels"
+	ClusterRoleTemplateFieldName                   = "name"
+	ClusterRoleTemplateFieldOwnerReferences        = "ownerReferences"
+	ClusterRoleTemplateFieldRemoved                = "removed"
+	ClusterRoleTemplateFieldResourcePath           = "resourcePath"
+	ClusterRoleTemplateFieldRules                  = "rules"
+	ClusterRoleTemplateFieldUuid                   = "uuid"
 )
 
 type ClusterRoleTemplate struct {
 	types.Resource
-	APIVersion           string       `json:"apiVersion,omitempty"`
-	ClusterRoleTemplates []string     `json:"clusterRoleTemplates,omitempty"`
-	Kind                 string       `json:"kind,omitempty"`
-	ObjectMeta           ObjectMeta   `json:"objectMeta,omitempty"`
-	Rules                []PolicyRule `json:"rules,omitempty"`
+	Annotations            map[string]string `json:"annotations,omitempty"`
+	ClusterRoleTemplateIds []string          `json:"clusterRoleTemplateIds,omitempty"`
+	Created                string            `json:"created,omitempty"`
+	Labels                 map[string]string `json:"labels,omitempty"`
+	Name                   string            `json:"name,omitempty"`
+	OwnerReferences        []OwnerReference  `json:"ownerReferences,omitempty"`
+	Removed                string            `json:"removed,omitempty"`
+	ResourcePath           string            `json:"resourcePath,omitempty"`
+	Rules                  []PolicyRule      `json:"rules,omitempty"`
+	Uuid                   string            `json:"uuid,omitempty"`
 }
 type ClusterRoleTemplateCollection struct {
 	types.Collection

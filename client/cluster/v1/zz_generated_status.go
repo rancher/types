@@ -6,7 +6,7 @@ const (
 	StatusFieldCode       = "code"
 	StatusFieldDetails    = "details"
 	StatusFieldKind       = "kind"
-	StatusFieldListMeta   = "listMeta"
+	StatusFieldListMeta   = "metadata"
 	StatusFieldMessage    = "message"
 	StatusFieldReason     = "reason"
 	StatusFieldStatus     = "status"
@@ -14,10 +14,10 @@ const (
 
 type Status struct {
 	APIVersion string         `json:"apiVersion,omitempty"`
-	Code       int64          `json:"code,omitempty"`
+	Code       *int64         `json:"code,omitempty"`
 	Details    *StatusDetails `json:"details,omitempty"`
 	Kind       string         `json:"kind,omitempty"`
-	ListMeta   ListMeta       `json:"listMeta,omitempty"`
+	ListMeta   *ListMeta      `json:"metadata,omitempty"`
 	Message    string         `json:"message,omitempty"`
 	Reason     string         `json:"reason,omitempty"`
 	Status     string         `json:"status,omitempty"`

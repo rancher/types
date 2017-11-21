@@ -2,9 +2,10 @@ package schema
 
 import (
 	"github.com/rancher/norman/types"
-	m "github.com/rancher/norman/types/mapping/mapper"
+	"github.com/rancher/norman/types/factory"
+	m "github.com/rancher/norman/types/mapper"
+	workloadv1 "github.com/rancher/types/apis/workload.cattle.io/v1"
 	"github.com/rancher/types/apis/workload.cattle.io/v1/schema/mapper"
-	"github.com/rancher/types/commonmappers"
 	"k8s.io/api/core/v1"
 	"k8s.io/kubernetes/staging/src/k8s.io/api/apps/v1beta2"
 )
@@ -15,249 +16,283 @@ var (
 		Group:   "workload.cattle.io",
 		Path:    "/v1-workload",
 		SubContexts: map[string]bool{
-			"projects":   true,
-			"namespaces": true,
+			"projects": true,
 		},
 	}
 
-	Schemas = commonmappers.Add(&Version, types.NewSchemas()).
+	Schemas = factory.Schemas(&Version).
 		Init(podTypes).
 		Init(namespaceTypes).
 		Init(nodeTypes).
-		Init(replicaSetTypes).
 		Init(deploymentTypes).
-		Init(statefulSetTypes)
+		Init(statefulSetTypes).
+		Init(replicaSet).
+		Init(replicationController).
+		Init(daemonSet).
+		Init(workloadTypes)
 )
+
+func workloadTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, workloadv1.WorkloadSpec{},
+			&m.Embed{Field: "deployConfig"},
+			&m.Embed{Field: "template"},
+		).
+		AddMapperForType(&Version, workloadv1.Workload{}, mapper.NewWorkloadTypeMapper()).
+		MustImport(&Version, workloadv1.Workload{}, projectOverride{})
+}
 
 func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		AddMapperForType(&Version, v1beta2.StatefulSetUpdateStrategy{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Enum{Field: "type",
-					Values: map[string][]string{
-						"RollingUpdate": {"rollingUpdate"},
-						"OnDelete":      {"onDelete"},
-					},
-				},
-				m.Move{From: "type", To: "kind"},
-				m.Move{From: "rollingUpdate", To: "rollingUpdateConfig"},
+		AddMapperForType(&Version, v1beta2.StatefulSetSpec{},
+			&m.Move{
+				From:        "replicas",
+				To:          "scale",
+				DestDefined: true,
 			},
-		}).
-		AddMapperForType(&Version, v1beta2.StatefulSetSpec{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				&m.Move{
-					From: "replicas",
-					To:   "deploy/scale",
-				},
-				m.Enum{Field: "podManagementPolicy",
-					Values: map[string][]string{
-						"OrderedReady": {"ordered"},
-						"Parallel":     {"parallel"},
-					},
-				},
-				&m.Move{
-					From: "podManagementPolicy",
-					To:   "deploy/strategy",
-				},
-				&m.Move{
-					From: "revisionHistoryLimit",
-					To:   "deploy/maxRevisions",
-				},
-				m.Drop{"selector"},
-				m.SliceToMap{
-					Field: "volumeClaimTemplates",
-					Key:   "name",
-				},
+			&m.Move{
+				From: "updateStrategy/rollingUpdate/partition",
+				To:   "deploymentStrategy/orderedConfig/partition",
 			},
-		}).
-		AddMapperForType(&Version, v1beta2.StatefulSet{}, m.NewObject()).
+			m.SetValue{
+				From:  "updateStrategy/type",
+				IfEq:  "OnDelete",
+				Value: true,
+				To:    "deploymentStrategy/orderedConfig/onDelete",
+			},
+			m.SetValue{
+				From:  "podManagementPolicy",
+				IfEq:  "Parallel",
+				Value: "Parallel",
+				To:    "deploymentStrategy/kind",
+			},
+			m.SetValue{
+				From:  "podManagementPolicy",
+				IfEq:  "OrderedReady",
+				Value: "Ordered",
+				To:    "deploymentStrategy/kind",
+			},
+			m.Drop{Field: "selector"},
+			&m.Embed{Field: "template"},
+		).
+		AddMapperForType(&Version, v1beta2.StatefulSet{}, mapper.NewWorkloadTypeMapper()).
 		MustImport(&Version, v1beta2.StatefulSetSpec{}, deployOverride{}).
-		MustImport(&Version, v1beta2.StatefulSet{})
+		MustImport(&Version, v1beta2.StatefulSet{}, projectOverride{})
+}
+
+func replicaSet(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v1beta2.ReplicaSetSpec{},
+			&m.Move{
+				From:        "replicas",
+				To:          "scale",
+				DestDefined: true,
+			},
+			&m.Move{
+				From: "minReadySeconds",
+				To:   "deploymentStrategy/parallelConfig/minReadySeconds",
+			},
+			m.Drop{Field: "selector"},
+			&m.Embed{Field: "template"},
+		).
+		AddMapperForType(&Version, v1beta2.ReplicaSet{}, mapper.NewWorkloadTypeMapper()).
+		MustImport(&Version, v1beta2.ReplicaSetSpec{}, deployOverride{}).
+		MustImportAndCustomize(&Version, v1beta2.ReplicaSet{}, func(schema *types.Schema) {
+			schema.BaseType = "workload"
+		}, projectOverride{})
+}
+
+func replicationController(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v1.ReplicationControllerSpec{},
+			&m.Move{
+				From:        "replicas",
+				To:          "scale",
+				DestDefined: true,
+			},
+			&m.Move{
+				From: "minReadySeconds",
+				To:   "deploymentStrategy/parallelConfig/minReadySeconds",
+			},
+			m.Drop{Field: "selector"},
+			&m.Embed{Field: "template"},
+		).
+		AddMapperForType(&Version, v1.ReplicationController{}, mapper.NewWorkloadTypeMapper()).
+		MustImport(&Version, v1.ReplicationControllerSpec{}, deployOverride{}).
+		MustImportAndCustomize(&Version, v1.ReplicationController{}, func(schema *types.Schema) {
+			schema.BaseType = "workload"
+		}, projectOverride{})
+}
+
+func daemonSet(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v1beta2.DaemonSetSpec{},
+			m.SetValue{
+				From:  "updateStrategy/type",
+				IfEq:  "OnDelete",
+				Value: true,
+				To:    "deploymentStrategy/globalConfig/onDelete",
+			},
+			&m.Move{
+				From: "minReadySeconds",
+				To:   "deploymentStrategy/globalConfig/minReadySeconds",
+			},
+			m.Drop{Field: "selector"},
+			&m.Embed{Field: "template"},
+		).
+		AddMapperForType(&Version, v1beta2.DaemonSet{}, mapper.NewWorkloadTypeMapper()).
+		MustImport(&Version, v1beta2.DaemonSetSpec{}, deployOverride{}).
+		MustImportAndCustomize(&Version, v1beta2.DaemonSet{}, func(schema *types.Schema) {
+			schema.BaseType = "workload"
+		}, projectOverride{})
 }
 
 func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		AddMapperForType(&Version, v1beta2.DeploymentStrategy{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Enum{Field: "type",
-					Values: map[string][]string{
-						"RollingUpdate": {"rollingUpdate"},
-						"Recreate":      {"recreate"},
-					},
-				},
-				m.Move{From: "type", To: "kind"},
-				m.Move{From: "rollingUpdate", To: "rollingUpdateConfig"},
+		AddMapperForType(&Version, v1beta2.DeploymentSpec{},
+			&m.Move{
+				From:        "replicas",
+				To:          "scale",
+				DestDefined: true,
 			},
-		}).
-		AddMapperForType(&Version, v1beta2.DeploymentSpec{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				&m.Move{
-					From: "replicas",
-					To:   "deploy/scale",
-				},
-				&m.Move{
-					From: "minReadySeconds",
-					To:   "deploy/minReadySeconds",
-				},
-				&m.Move{
-					From: "progressDeadlineSeconds",
-					To:   "deploy/progressDeadlineSeconds",
-				},
-				&m.Move{
-					From: "revisionHistoryLimit",
-					To:   "deploy/maxRevisions",
-				},
-				m.Drop{"selector"},
-				m.Move{From: "strategy", To: "updateStrategy"},
+			&m.Move{
+				From: "minReadySeconds",
+				To:   "deploymentStrategy/parallelConfig/minReadySeconds",
 			},
-		}).
-		AddMapperForType(&Version, v1beta2.Deployment{}, m.NewObject()).
+			&m.Move{
+				From: "progressDeadlineSeconds",
+				To:   "deploymentStrategy/parallelConfig/progressDeadlineSeconds",
+			},
+			mapper.DeploymentStrategyMapper{},
+			m.Drop{Field: "selector"},
+			m.Drop{Field: "strategy"},
+			&m.Embed{Field: "template"},
+		).
+		AddMapperForType(&Version, v1beta2.Deployment{}, mapper.NewWorkloadTypeMapper()).
 		MustImport(&Version, v1beta2.DeploymentSpec{}, deployOverride{}).
-		MustImport(&Version, v1beta2.Deployment{})
-}
-
-func replicaSetTypes(schemas *types.Schemas) *types.Schemas {
-	return schemas.
-		AddMapperForType(&Version, v1beta2.ReplicaSetSpec{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				&m.Move{
-					From: "replicas",
-					To:   "deploy/scale",
-				},
-				&m.Move{
-					From: "minReadySeconds",
-					To:   "deploy/minReadySeconds",
-				},
-				m.Drop{"selector"},
-			},
-		}).
-		AddMapperForType(&Version, v1beta2.ReplicaSet{}, m.NewObject()).
-		MustImport(&Version, v1beta2.ReplicaSetSpec{}, deployOverride{}).
-		MustImport(&Version, v1beta2.ReplicaSet{})
+		MustImportAndCustomize(&Version, v1beta2.Deployment{}, func(schema *types.Schema) {
+			schema.BaseType = "workload"
+		}, projectOverride{})
 }
 
 func nodeTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		AddMapperForType(&Version, v1.NodeStatus{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				&mapper.NodeAddressMapper{},
-				&mapper.OSInfo{},
-				&m.Drop{"addresses"},
-				&m.Drop{"conditions"},
-				&m.Drop{"daemonEndpoints"},
-				&m.Drop{"images"},
-				&m.Drop{"nodeInfo"},
-				&m.SliceToMap{Field: "volumesAttached", Key: "devicePath"},
-			},
-		}).
-		AddMapperForType(&Version, v1.Node{}, m.NewObject()).
-		MustImport(&Version, v1.NodeStatus{}, nodeStatusOverride{}).
+		AddMapperForType(&Version, v1.NodeStatus{},
+			&mapper.NodeAddressMapper{},
+			&mapper.OSInfo{},
+			&m.Drop{Field: "addresses"},
+			&m.Drop{Field: "daemonEndpoints"},
+			&m.Drop{Field: "images"},
+			&m.Drop{Field: "nodeInfo"},
+			&m.SliceToMap{Field: "volumesAttached", Key: "devicePath"},
+		).
+		AddMapperForType(&Version, v1.Node{},
+			mapper.Status{},
+			&m.Embed{Field: "status"},
+			&m.Drop{Field: "conditions"},
+		).
+		MustImport(&Version, v1.NodeStatus{}, struct {
+			IPAddress string
+			Hostname  string
+			Info      NodeInfo
+		}{}).
 		MustImport(&Version, v1.Node{})
 }
+
 func namespaceTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		AddMapperForType(&Version, v1.NamespaceStatus{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				&m.Drop{"phase"},
-			},
-		}).
-		AddMapperForType(&Version, v1.NamespaceSpec{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				&m.Drop{"finalizers"},
-			},
-		}).
-		AddMapperForType(&Version, v1.Namespace{}, m.NewObject()).
-		MustImport(&Version, v1.Namespace{})
+		AddMapperForType(&Version, v1.NamespaceStatus{},
+			&m.Drop{Field: "phase"},
+		).
+		AddMapperForType(&Version, v1.NamespaceSpec{},
+			&m.Drop{Field: "finalizers"},
+		).
+		AddMapperForType(&Version, v1.Namespace{},
+			&m.LabelField{Field: "projectId"},
+		).
+		MustImport(&Version, v1.Namespace{}, projectOverride{}, struct {
+			Templates  map[string]string
+			Answers    map[string]interface{}
+			Prune      bool
+			ExternalID string
+			Tags       []string
+		}{})
 }
 
 func podTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		AddMapperForType(&Version, v1.Capabilities{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Move{From: "add", To: "capAdd"},
-				m.Move{From: "drop", To: "capDrop"},
-			},
-		}).
-		AddMapperForType(&Version, v1.PodSecurityContext{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Drop{"seLinuxOptions"},
-				m.Move{From: "runAsUser", To: "uid"},
-				m.Move{From: "supplementalGroups", To: "gids"},
-				m.Move{From: "fsGroup", To: "fsgid"},
-			},
-		}).
-		AddMapperForType(&Version, v1.SecurityContext{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				&m.Embed{Field: "capabilities"},
-				m.Drop{"seLinuxOptions"},
-				m.Move{From: "readOnlyRootFilesystem", To: "readOnly"},
-				m.Move{From: "runAsUser", To: "uid"},
-			},
-		}).
-		AddMapperForType(&Version, v1.Container{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Move{"command", "entrypoint"},
-				m.Move{"args", "command"},
-				m.Move{"livenessProbe", "healthcheck"},
-				m.Move{"readinessProbe", "readycheck"},
-				m.Move{"imagePullPolicy", "pullPolicy"},
-				mapper.EnvironmentMapper{},
-				&m.Embed{Field: "securityContext"},
-				&m.Embed{Field: "lifecycle"},
-			},
-		}).
-		AddMapperForType(&Version, v1.ContainerPort{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Drop{"name"},
-			},
-		}).
-		AddMapperForType(&Version, v1.VolumeMount{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Enum{
-					Field: "mountPropagation",
-					Values: map[string][]string{
-						"HostToContainer": []string{"rslave"},
-						"Bidirectional":   []string{"rshared", "shared"},
-					},
+		AddMapperForType(&Version, v1.PodTemplateSpec{},
+			&m.Embed{Field: "spec"},
+		).
+		AddMapperForType(&Version, v1.Capabilities{},
+			m.Move{From: "add", To: "capAdd"},
+			m.Move{From: "drop", To: "capDrop"},
+		).
+		AddMapperForType(&Version, v1.PodSecurityContext{},
+			m.Drop{Field: "seLinuxOptions"},
+			m.Move{From: "runAsUser", To: "uid"},
+			m.Move{From: "supplementalGroups", To: "gids"},
+			m.Move{From: "fsGroup", To: "fsgid"},
+		).
+		AddMapperForType(&Version, v1.SecurityContext{},
+			&m.Embed{Field: "capabilities"},
+			m.Drop{Field: "seLinuxOptions"},
+			m.Move{From: "readOnlyRootFilesystem", To: "readOnly"},
+			m.Move{From: "runAsUser", To: "uid"},
+		).
+		AddMapperForType(&Version, v1.Container{},
+			m.Move{From: "command", To: "entrypoint"},
+			m.Move{From: "args", To: "command"},
+			m.Move{From: "livenessProbe", To: "healthcheck"},
+			m.Move{From: "readinessProbe", To: "readycheck"},
+			m.Move{From: "imagePullPolicy", To: "pullPolicy"},
+			mapper.EnvironmentMapper{},
+			&m.Embed{Field: "securityContext"},
+			&m.Embed{Field: "lifecycle"},
+		).
+		AddMapperForType(&Version, v1.ContainerPort{},
+			m.Drop{Field: "name"},
+		).
+		AddMapperForType(&Version, v1.VolumeMount{},
+			m.Enum{
+				Field: "mountPropagation",
+				Values: map[string][]string{
+					"HostToContainer": {"rslave"},
+					"Bidirectional":   {"rshared", "shared"},
 				},
 			},
-		}).
+		).
 		AddMapperForType(&Version, v1.Handler{}, handlerMapper).
 		AddMapperForType(&Version, v1.Probe{}, handlerMapper).
-		AddMapperForType(&Version, v1.PodSpec{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				m.Move{From: "restartPolicy", To: "restart"},
-				m.Move{From: "imagePullSecrets", To: "pullSecrets"},
-				mapper.NamespaceMapper{},
-				mapper.InitContainerMapper{},
-				mapper.SchedulingMapper{},
-				&m.Embed{Field: "securityContext"},
-				&m.SliceToMap{
-					Field: "volumes",
-					Key:   "name",
-				},
-				&m.SliceToMap{
-					Field: "containers",
-					Key:   "name",
-				},
-				&m.SliceToMap{
-					Field: "hostAliases",
-					Key:   "ip",
-				},
+		AddMapperForType(&Version, v1.PodStatus{},
+			m.Move{From: "hostIP", To: "nodeIp"},
+			m.Move{From: "podIP", To: "podIp"},
+		).
+		AddMapperForType(&Version, v1.PodSpec{},
+			m.Move{From: "restartPolicy", To: "restart"},
+			m.Move{From: "imagePullSecrets", To: "pullSecrets"},
+			mapper.NamespaceMapper{},
+			mapper.InitContainerMapper{},
+			mapper.SchedulingMapper{},
+			&m.Embed{Field: "securityContext"},
+			&m.Drop{Field: "serviceAccount"},
+			&m.SliceToMap{
+				Field: "volumes",
+				Key:   "name",
 			},
-		}).
-		AddMapperForType(&Version, v1.Pod{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				&m.Drop{"status"},
-				&m.Embed{Field: "metadata"},
-				&m.Embed{Field: "spec"},
+			&m.SliceToMap{
+				Field: "containers",
+				Key:   "name",
 			},
-		}).
-		AddMapperForType(&Version, v1.ResourceRequirements{}, &types.TypeMapper{
-			Mappers: []types.Mapper{
-				mapper.PivotMapper{Plural: true},
+			&m.SliceToMap{
+				Field: "hostAliases",
+				Key:   "ip",
 			},
-		}).
+		).
+		AddMapperForType(&Version, v1.ResourceRequirements{},
+			mapper.PivotMapper{Plural: true},
+		).
+		AddMapperForType(&Version, v1.Pod{}, mapper.Status{}).
 		// Must import handlers before Container
 		MustImport(&Version, v1.Handler{}, handlerOverride{}).
 		MustImport(&Version, v1.Probe{}, handlerOverride{}).
@@ -269,9 +304,12 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 			InitContainer   bool
 		}{}).
 		MustImport(&Version, v1.PodSpec{}, struct {
-			Net string
-			PID string
-			IPC string
+			NodeName string `norman:"type=reference[node]"`
+			Net      string
+			PID      string
+			IPC      string
 		}{}).
-		MustImport(&Version, v1.Pod{})
+		MustImport(&Version, v1.Pod{}, projectOverride{}, struct {
+			WorkloadID string `norman:"type=reference[workload]"`
+		}{})
 }

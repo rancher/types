@@ -38,7 +38,7 @@ type ClusterRoleTemplateBindingController interface {
 	Informer() cache.SharedIndexInformer
 	AddHandler(handler ClusterRoleTemplateBindingHandlerFunc)
 	Enqueue(namespace, name string)
-	Start(threadiness int, ctx context.Context) error
+	Start(ctx context.Context, threadiness int) error
 }
 
 type ClusterRoleTemplateBindingInterface interface {

@@ -38,7 +38,7 @@ type PodSecurityPolicyTemplateController interface {
 	Informer() cache.SharedIndexInformer
 	AddHandler(handler PodSecurityPolicyTemplateHandlerFunc)
 	Enqueue(namespace, name string)
-	Start(threadiness int, ctx context.Context) error
+	Start(ctx context.Context, threadiness int) error
 }
 
 type PodSecurityPolicyTemplateInterface interface {
