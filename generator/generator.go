@@ -1,8 +1,9 @@
 package generator
 
 import (
+	"fmt"
 	"path"
-
+	"reflect"
 	"strings"
 
 	"github.com/rancher/norman/generator"
@@ -23,6 +24,27 @@ func Generate(schemas *types.Schemas) {
 	k8sOutputPackage := path.Join(basePackage, baseK8s, version.Group, version.Version)
 
 	if err := generator.Generate(schemas, cattleOutputPackage, k8sOutputPackage); err != nil {
+		panic(err)
+	}
+}
+
+func GenerateNativeTypes(objs ...interface{}) {
+	pkgNamePaths := strings.Split(reflect.TypeOf(objs[0]).PkgPath(), "/")
+	version := pkgNamePaths[len(pkgNamePaths)-1]
+	group := pkgNamePaths[len(pkgNamePaths)-2]
+	groupPath := group
+
+	if group == "core" {
+		group = ""
+	}
+
+	k8sOutputPackage := path.Join(basePackage, baseK8s, groupPath, version)
+
+	if err := generator.GenerateControllerForTypes(&types.APIVersion{
+		Version: version,
+		Group:   group,
+		Path:    fmt.Sprintf("/k8s/%s-%s", groupPath, version),
+	}, k8sOutputPackage, objs...); err != nil {
 		panic(err)
 	}
 }
