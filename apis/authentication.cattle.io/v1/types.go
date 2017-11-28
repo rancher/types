@@ -8,8 +8,9 @@ type Token struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	TokenKey   string `json:"tokenKey,omitempty"`
-	TokenValue string `json:"tokenValue,omitempty"`
-	User       string `json:"user,omitempty"`
-	IsCLI      bool   `json:"isCLI,omitempty"`
+	TokenKey     string `json:"tokenKey,omitempty"`
+	TokenValue   string `json:"tokenValue,omitempty"`
+	User         string `json:"user,omitempty"`
+	AuthProvider string `json:"authProvider,omitempty"`
+	IsCLI        bool   `json:"isCLI,omitempty"`
 }
