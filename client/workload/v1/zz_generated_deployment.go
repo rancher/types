@@ -21,7 +21,7 @@ const (
 	DeploymentFieldIPC                           = "ipc"
 	DeploymentFieldLabels                        = "labels"
 	DeploymentFieldName                          = "name"
-	DeploymentFieldNamespace                     = "namespace"
+	DeploymentFieldNamespaceId                   = "namespaceId"
 	DeploymentFieldNet                           = "net"
 	DeploymentFieldNodeId                        = "nodeId"
 	DeploymentFieldOwnerReferences               = "ownerReferences"
@@ -67,7 +67,7 @@ type Deployment struct {
 	IPC                           string                 `json:"ipc,omitempty"`
 	Labels                        map[string]string      `json:"labels,omitempty"`
 	Name                          string                 `json:"name,omitempty"`
-	Namespace                     string                 `json:"namespace,omitempty"`
+	NamespaceId                   string                 `json:"namespaceId,omitempty"`
 	Net                           string                 `json:"net,omitempty"`
 	NodeId                        string                 `json:"nodeId,omitempty"`
 	OwnerReferences               []OwnerReference       `json:"ownerReferences,omitempty"`

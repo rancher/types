@@ -7,8 +7,8 @@ import (
 type Client struct {
 	clientbase.APIBaseClient
 
-	Pod                   PodOperations
 	Namespace             NamespaceOperations
+	Pod                   PodOperations
 	Node                  NodeOperations
 	Deployment            DeploymentOperations
 	PersistentVolumeClaim PersistentVolumeClaimOperations
@@ -29,8 +29,8 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 		APIBaseClient: baseClient,
 	}
 
-	client.Pod = newPodClient(client)
 	client.Namespace = newNamespaceClient(client)
+	client.Pod = newPodClient(client)
 	client.Node = newNodeClient(client)
 	client.Deployment = newDeploymentClient(client)
 	client.PersistentVolumeClaim = newPersistentVolumeClaimClient(client)

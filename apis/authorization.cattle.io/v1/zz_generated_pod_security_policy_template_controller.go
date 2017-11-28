@@ -5,7 +5,9 @@ import (
 
 	"github.com/rancher/norman/clientbase"
 	"github.com/rancher/norman/controller"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
@@ -34,14 +36,22 @@ type PodSecurityPolicyTemplateList struct {
 
 type PodSecurityPolicyTemplateHandlerFunc func(key string, obj *PodSecurityPolicyTemplate) error
 
+type PodSecurityPolicyTemplateLister interface {
+	List(namespace string, selector labels.Selector) (ret []*PodSecurityPolicyTemplate, err error)
+	Get(namespace, name string) (*PodSecurityPolicyTemplate, error)
+}
+
 type PodSecurityPolicyTemplateController interface {
 	Informer() cache.SharedIndexInformer
+	Lister() PodSecurityPolicyTemplateLister
 	AddHandler(handler PodSecurityPolicyTemplateHandlerFunc)
 	Enqueue(namespace, name string)
+	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
 }
 
 type PodSecurityPolicyTemplateInterface interface {
+	ObjectClient() *clientbase.ObjectClient
 	Create(*PodSecurityPolicyTemplate) (*PodSecurityPolicyTemplate, error)
 	Get(name string, opts metav1.GetOptions) (*PodSecurityPolicyTemplate, error)
 	Update(*PodSecurityPolicyTemplate) (*PodSecurityPolicyTemplate, error)
@@ -52,8 +62,39 @@ type PodSecurityPolicyTemplateInterface interface {
 	Controller() PodSecurityPolicyTemplateController
 }
 
+type podSecurityPolicyTemplateLister struct {
+	controller *podSecurityPolicyTemplateController
+}
+
+func (l *podSecurityPolicyTemplateLister) List(namespace string, selector labels.Selector) (ret []*PodSecurityPolicyTemplate, err error) {
+	err = cache.ListAllByNamespace(l.controller.Informer().GetIndexer(), namespace, selector, func(obj interface{}) {
+		ret = append(ret, obj.(*PodSecurityPolicyTemplate))
+	})
+	return
+}
+
+func (l *podSecurityPolicyTemplateLister) Get(namespace, name string) (*PodSecurityPolicyTemplate, error) {
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.NewNotFound(schema.GroupResource{
+			Group:    PodSecurityPolicyTemplateGroupVersionKind.Group,
+			Resource: "podSecurityPolicyTemplate",
+		}, name)
+	}
+	return obj.(*PodSecurityPolicyTemplate), nil
+}
+
 type podSecurityPolicyTemplateController struct {
 	controller.GenericController
+}
+
+func (c *podSecurityPolicyTemplateController) Lister() PodSecurityPolicyTemplateLister {
+	return &podSecurityPolicyTemplateLister{
+		controller: c,
+	}
 }
 
 func (c *podSecurityPolicyTemplateController) AddHandler(handler PodSecurityPolicyTemplateHandlerFunc) {
@@ -97,6 +138,7 @@ func (s *podSecurityPolicyTemplateClient) Controller() PodSecurityPolicyTemplate
 	}
 
 	s.client.podSecurityPolicyTemplateControllers[s.ns] = c
+	s.client.starters = append(s.client.starters, c)
 
 	return c
 }
@@ -106,6 +148,10 @@ type podSecurityPolicyTemplateClient struct {
 	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   PodSecurityPolicyTemplateController
+}
+
+func (s *podSecurityPolicyTemplateClient) ObjectClient() *clientbase.ObjectClient {
+	return s.objectClient
 }
 
 func (s *podSecurityPolicyTemplateClient) Create(o *PodSecurityPolicyTemplate) (*PodSecurityPolicyTemplate, error) {

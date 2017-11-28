@@ -1,4 +1,4 @@
-package v1
+package v1beta2
 
 import (
 	"context"
@@ -14,7 +14,7 @@ type Interface interface {
 	RESTClient() rest.Interface
 	controller.Starter
 
-	WorkloadsGetter
+	DeploymentsGetter
 }
 
 type Client struct {
@@ -22,7 +22,7 @@ type Client struct {
 	restClient rest.Interface
 	starters   []controller.Starter
 
-	workloadControllers map[string]WorkloadController
+	deploymentControllers map[string]DeploymentController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -39,7 +39,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 	return &Client{
 		restClient: restClient,
 
-		workloadControllers: map[string]WorkloadController{},
+		deploymentControllers: map[string]DeploymentController{},
 	}, nil
 }
 
@@ -55,13 +55,13 @@ func (c *Client) Start(ctx context.Context, threadiness int) error {
 	return controller.Start(ctx, threadiness, c.starters...)
 }
 
-type WorkloadsGetter interface {
-	Workloads(namespace string) WorkloadInterface
+type DeploymentsGetter interface {
+	Deployments(namespace string) DeploymentInterface
 }
 
-func (c *Client) Workloads(namespace string) WorkloadInterface {
-	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &WorkloadResource, WorkloadGroupVersionKind, workloadFactory{})
-	return &workloadClient{
+func (c *Client) Deployments(namespace string) DeploymentInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &DeploymentResource, DeploymentGroupVersionKind, deploymentFactory{})
+	return &deploymentClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

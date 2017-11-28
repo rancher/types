@@ -5,7 +5,9 @@ import (
 
 	"github.com/rancher/norman/clientbase"
 	"github.com/rancher/norman/controller"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
@@ -34,14 +36,22 @@ type ProjectRoleTemplateList struct {
 
 type ProjectRoleTemplateHandlerFunc func(key string, obj *ProjectRoleTemplate) error
 
+type ProjectRoleTemplateLister interface {
+	List(namespace string, selector labels.Selector) (ret []*ProjectRoleTemplate, err error)
+	Get(namespace, name string) (*ProjectRoleTemplate, error)
+}
+
 type ProjectRoleTemplateController interface {
 	Informer() cache.SharedIndexInformer
+	Lister() ProjectRoleTemplateLister
 	AddHandler(handler ProjectRoleTemplateHandlerFunc)
 	Enqueue(namespace, name string)
+	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
 }
 
 type ProjectRoleTemplateInterface interface {
+	ObjectClient() *clientbase.ObjectClient
 	Create(*ProjectRoleTemplate) (*ProjectRoleTemplate, error)
 	Get(name string, opts metav1.GetOptions) (*ProjectRoleTemplate, error)
 	Update(*ProjectRoleTemplate) (*ProjectRoleTemplate, error)
@@ -52,8 +62,39 @@ type ProjectRoleTemplateInterface interface {
 	Controller() ProjectRoleTemplateController
 }
 
+type projectRoleTemplateLister struct {
+	controller *projectRoleTemplateController
+}
+
+func (l *projectRoleTemplateLister) List(namespace string, selector labels.Selector) (ret []*ProjectRoleTemplate, err error) {
+	err = cache.ListAllByNamespace(l.controller.Informer().GetIndexer(), namespace, selector, func(obj interface{}) {
+		ret = append(ret, obj.(*ProjectRoleTemplate))
+	})
+	return
+}
+
+func (l *projectRoleTemplateLister) Get(namespace, name string) (*ProjectRoleTemplate, error) {
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.NewNotFound(schema.GroupResource{
+			Group:    ProjectRoleTemplateGroupVersionKind.Group,
+			Resource: "projectRoleTemplate",
+		}, name)
+	}
+	return obj.(*ProjectRoleTemplate), nil
+}
+
 type projectRoleTemplateController struct {
 	controller.GenericController
+}
+
+func (c *projectRoleTemplateController) Lister() ProjectRoleTemplateLister {
+	return &projectRoleTemplateLister{
+		controller: c,
+	}
 }
 
 func (c *projectRoleTemplateController) AddHandler(handler ProjectRoleTemplateHandlerFunc) {
@@ -97,6 +138,7 @@ func (s *projectRoleTemplateClient) Controller() ProjectRoleTemplateController {
 	}
 
 	s.client.projectRoleTemplateControllers[s.ns] = c
+	s.client.starters = append(s.client.starters, c)
 
 	return c
 }
@@ -106,6 +148,10 @@ type projectRoleTemplateClient struct {
 	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   ProjectRoleTemplateController
+}
+
+func (s *projectRoleTemplateClient) ObjectClient() *clientbase.ObjectClient {
+	return s.objectClient
 }
 
 func (s *projectRoleTemplateClient) Create(o *ProjectRoleTemplate) (*ProjectRoleTemplate, error) {

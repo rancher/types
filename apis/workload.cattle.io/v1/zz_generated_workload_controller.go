@@ -5,7 +5,9 @@ import (
 
 	"github.com/rancher/norman/clientbase"
 	"github.com/rancher/norman/controller"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
@@ -21,8 +23,9 @@ var (
 	WorkloadResource = metav1.APIResource{
 		Name:         "workloads",
 		SingularName: "workload",
-		Namespaced:   false,
-		Kind:         WorkloadGroupVersionKind.Kind,
+		Namespaced:   true,
+
+		Kind: WorkloadGroupVersionKind.Kind,
 	}
 )
 
@@ -34,14 +37,22 @@ type WorkloadList struct {
 
 type WorkloadHandlerFunc func(key string, obj *Workload) error
 
+type WorkloadLister interface {
+	List(namespace string, selector labels.Selector) (ret []*Workload, err error)
+	Get(namespace, name string) (*Workload, error)
+}
+
 type WorkloadController interface {
 	Informer() cache.SharedIndexInformer
+	Lister() WorkloadLister
 	AddHandler(handler WorkloadHandlerFunc)
 	Enqueue(namespace, name string)
+	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
 }
 
 type WorkloadInterface interface {
+	ObjectClient() *clientbase.ObjectClient
 	Create(*Workload) (*Workload, error)
 	Get(name string, opts metav1.GetOptions) (*Workload, error)
 	Update(*Workload) (*Workload, error)
@@ -52,8 +63,39 @@ type WorkloadInterface interface {
 	Controller() WorkloadController
 }
 
+type workloadLister struct {
+	controller *workloadController
+}
+
+func (l *workloadLister) List(namespace string, selector labels.Selector) (ret []*Workload, err error) {
+	err = cache.ListAllByNamespace(l.controller.Informer().GetIndexer(), namespace, selector, func(obj interface{}) {
+		ret = append(ret, obj.(*Workload))
+	})
+	return
+}
+
+func (l *workloadLister) Get(namespace, name string) (*Workload, error) {
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.NewNotFound(schema.GroupResource{
+			Group:    WorkloadGroupVersionKind.Group,
+			Resource: "workload",
+		}, name)
+	}
+	return obj.(*Workload), nil
+}
+
 type workloadController struct {
 	controller.GenericController
+}
+
+func (c *workloadController) Lister() WorkloadLister {
+	return &workloadLister{
+		controller: c,
+	}
 }
 
 func (c *workloadController) AddHandler(handler WorkloadHandlerFunc) {
@@ -97,6 +139,7 @@ func (s *workloadClient) Controller() WorkloadController {
 	}
 
 	s.client.workloadControllers[s.ns] = c
+	s.client.starters = append(s.client.starters, c)
 
 	return c
 }
@@ -106,6 +149,10 @@ type workloadClient struct {
 	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   WorkloadController
+}
+
+func (s *workloadClient) ObjectClient() *clientbase.ObjectClient {
+	return s.objectClient
 }
 
 func (s *workloadClient) Create(o *Workload) (*Workload, error) {

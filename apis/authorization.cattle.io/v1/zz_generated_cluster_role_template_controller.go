@@ -5,7 +5,9 @@ import (
 
 	"github.com/rancher/norman/clientbase"
 	"github.com/rancher/norman/controller"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
@@ -34,14 +36,22 @@ type ClusterRoleTemplateList struct {
 
 type ClusterRoleTemplateHandlerFunc func(key string, obj *ClusterRoleTemplate) error
 
+type ClusterRoleTemplateLister interface {
+	List(namespace string, selector labels.Selector) (ret []*ClusterRoleTemplate, err error)
+	Get(namespace, name string) (*ClusterRoleTemplate, error)
+}
+
 type ClusterRoleTemplateController interface {
 	Informer() cache.SharedIndexInformer
+	Lister() ClusterRoleTemplateLister
 	AddHandler(handler ClusterRoleTemplateHandlerFunc)
 	Enqueue(namespace, name string)
+	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
 }
 
 type ClusterRoleTemplateInterface interface {
+	ObjectClient() *clientbase.ObjectClient
 	Create(*ClusterRoleTemplate) (*ClusterRoleTemplate, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterRoleTemplate, error)
 	Update(*ClusterRoleTemplate) (*ClusterRoleTemplate, error)
@@ -52,8 +62,39 @@ type ClusterRoleTemplateInterface interface {
 	Controller() ClusterRoleTemplateController
 }
 
+type clusterRoleTemplateLister struct {
+	controller *clusterRoleTemplateController
+}
+
+func (l *clusterRoleTemplateLister) List(namespace string, selector labels.Selector) (ret []*ClusterRoleTemplate, err error) {
+	err = cache.ListAllByNamespace(l.controller.Informer().GetIndexer(), namespace, selector, func(obj interface{}) {
+		ret = append(ret, obj.(*ClusterRoleTemplate))
+	})
+	return
+}
+
+func (l *clusterRoleTemplateLister) Get(namespace, name string) (*ClusterRoleTemplate, error) {
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.NewNotFound(schema.GroupResource{
+			Group:    ClusterRoleTemplateGroupVersionKind.Group,
+			Resource: "clusterRoleTemplate",
+		}, name)
+	}
+	return obj.(*ClusterRoleTemplate), nil
+}
+
 type clusterRoleTemplateController struct {
 	controller.GenericController
+}
+
+func (c *clusterRoleTemplateController) Lister() ClusterRoleTemplateLister {
+	return &clusterRoleTemplateLister{
+		controller: c,
+	}
 }
 
 func (c *clusterRoleTemplateController) AddHandler(handler ClusterRoleTemplateHandlerFunc) {
@@ -97,6 +138,7 @@ func (s *clusterRoleTemplateClient) Controller() ClusterRoleTemplateController {
 	}
 
 	s.client.clusterRoleTemplateControllers[s.ns] = c
+	s.client.starters = append(s.client.starters, c)
 
 	return c
 }
@@ -106,6 +148,10 @@ type clusterRoleTemplateClient struct {
 	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   ClusterRoleTemplateController
+}
+
+func (s *clusterRoleTemplateClient) ObjectClient() *clientbase.ObjectClient {
+	return s.objectClient
 }
 
 func (s *clusterRoleTemplateClient) Create(o *ClusterRoleTemplate) (*ClusterRoleTemplate, error) {

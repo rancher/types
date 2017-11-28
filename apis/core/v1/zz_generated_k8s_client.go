@@ -14,7 +14,7 @@ type Interface interface {
 	RESTClient() rest.Interface
 	controller.Starter
 
-	WorkloadsGetter
+	PodsGetter
 }
 
 type Client struct {
@@ -22,7 +22,7 @@ type Client struct {
 	restClient rest.Interface
 	starters   []controller.Starter
 
-	workloadControllers map[string]WorkloadController
+	podControllers map[string]PodController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -39,7 +39,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 	return &Client{
 		restClient: restClient,
 
-		workloadControllers: map[string]WorkloadController{},
+		podControllers: map[string]PodController{},
 	}, nil
 }
 
@@ -55,13 +55,13 @@ func (c *Client) Start(ctx context.Context, threadiness int) error {
 	return controller.Start(ctx, threadiness, c.starters...)
 }
 
-type WorkloadsGetter interface {
-	Workloads(namespace string) WorkloadInterface
+type PodsGetter interface {
+	Pods(namespace string) PodInterface
 }
 
-func (c *Client) Workloads(namespace string) WorkloadInterface {
-	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &WorkloadResource, WorkloadGroupVersionKind, workloadFactory{})
-	return &workloadClient{
+func (c *Client) Pods(namespace string) PodInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &PodResource, PodGroupVersionKind, podFactory{})
+	return &podClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
