@@ -21,7 +21,7 @@ const (
 	StatefulSetFieldIPC                           = "ipc"
 	StatefulSetFieldLabels                        = "labels"
 	StatefulSetFieldName                          = "name"
-	StatefulSetFieldNamespace                     = "namespace"
+	StatefulSetFieldNamespaceId                   = "namespaceId"
 	StatefulSetFieldNet                           = "net"
 	StatefulSetFieldNodeId                        = "nodeId"
 	StatefulSetFieldOwnerReferences               = "ownerReferences"
@@ -70,7 +70,7 @@ type StatefulSet struct {
 	IPC                           string                     `json:"ipc,omitempty"`
 	Labels                        map[string]string          `json:"labels,omitempty"`
 	Name                          string                     `json:"name,omitempty"`
-	Namespace                     string                     `json:"namespace,omitempty"`
+	NamespaceId                   string                     `json:"namespaceId,omitempty"`
 	Net                           string                     `json:"net,omitempty"`
 	NodeId                        string                     `json:"nodeId,omitempty"`
 	OwnerReferences               []OwnerReference           `json:"ownerReferences,omitempty"`

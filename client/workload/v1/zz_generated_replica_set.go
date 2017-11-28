@@ -21,7 +21,7 @@ const (
 	ReplicaSetFieldIPC                           = "ipc"
 	ReplicaSetFieldLabels                        = "labels"
 	ReplicaSetFieldName                          = "name"
-	ReplicaSetFieldNamespace                     = "namespace"
+	ReplicaSetFieldNamespaceId                   = "namespaceId"
 	ReplicaSetFieldNet                           = "net"
 	ReplicaSetFieldNodeId                        = "nodeId"
 	ReplicaSetFieldOwnerReferences               = "ownerReferences"
@@ -65,7 +65,7 @@ type ReplicaSet struct {
 	IPC                           string                 `json:"ipc,omitempty"`
 	Labels                        map[string]string      `json:"labels,omitempty"`
 	Name                          string                 `json:"name,omitempty"`
-	Namespace                     string                 `json:"namespace,omitempty"`
+	NamespaceId                   string                 `json:"namespaceId,omitempty"`
 	Net                           string                 `json:"net,omitempty"`
 	NodeId                        string                 `json:"nodeId,omitempty"`
 	OwnerReferences               []OwnerReference       `json:"ownerReferences,omitempty"`

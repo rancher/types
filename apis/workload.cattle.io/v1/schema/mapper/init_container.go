@@ -19,14 +19,16 @@ func (e InitContainerMapper) FromInternal(data map[string]interface{}) {
 		containers = append(containers, initContainer)
 	}
 
-	data["containers"] = containers
+	if data != nil {
+		data["containers"] = containers
+	}
 }
 
 func (e InitContainerMapper) ToInternal(data map[string]interface{}) {
 	newContainers := []interface{}{}
 	newInitContainers := []interface{}{}
 
-	for _, container := range convert.ToMapSlice(data["container"]) {
+	for _, container := range convert.ToMapSlice(data["containers"]) {
 		if convert.ToBool(container["initContainer"]) {
 			newInitContainers = append(newInitContainers, container)
 		} else {
@@ -35,8 +37,10 @@ func (e InitContainerMapper) ToInternal(data map[string]interface{}) {
 		delete(container, "initContainer")
 	}
 
-	data["containers"] = newContainers
-	data["initContainers"] = newInitContainers
+	if data != nil {
+		data["containers"] = newContainers
+		data["initContainers"] = newInitContainers
+	}
 }
 
 func (e InitContainerMapper) ModifySchema(schema *types.Schema, schemas *types.Schemas) error {

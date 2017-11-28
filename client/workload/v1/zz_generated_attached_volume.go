@@ -1,12 +1,10 @@
 package client
 
 const (
-	AttachedVolumeType            = "attachedVolume"
-	AttachedVolumeFieldDevicePath = "devicePath"
-	AttachedVolumeFieldName       = "name"
+	AttachedVolumeType      = "attachedVolume"
+	AttachedVolumeFieldName = "name"
 )
 
 type AttachedVolume struct {
-	DevicePath string `json:"devicePath,omitempty"`
-	Name       string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
 }

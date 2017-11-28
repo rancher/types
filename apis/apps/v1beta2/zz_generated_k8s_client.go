@@ -1,10 +1,8 @@
-package generator
-
-var k8sClientTemplate = `package {{.version.Version}}
+package v1beta2
 
 import (
-	"sync"
 	"context"
+	"sync"
 
 	"github.com/rancher/norman/clientbase"
 	"github.com/rancher/norman/controller"
@@ -15,16 +13,16 @@ import (
 type Interface interface {
 	RESTClient() rest.Interface
 	controller.Starter
-	{{range .schemas}}
-	{{.CodeNamePlural}}Getter{{end}}
+
+	DeploymentsGetter
 }
 
 type Client struct {
 	sync.Mutex
-	restClient         rest.Interface
-	starters           []controller.Starter
-	{{range .schemas}}
-	{{.ID}}Controllers map[string]{{.CodeName}}Controller{{end}}
+	restClient rest.Interface
+	starters   []controller.Starter
+
+	deploymentControllers map[string]DeploymentController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -39,9 +37,9 @@ func NewForConfig(config rest.Config) (Interface, error) {
 	}
 
 	return &Client{
-		restClient:         restClient,
-	{{range .schemas}}
-		{{.ID}}Controllers: map[string]{{.CodeName}}Controller{},{{end}}
+		restClient: restClient,
+
+		deploymentControllers: map[string]DeploymentController{},
 	}, nil
 }
 
@@ -57,18 +55,15 @@ func (c *Client) Start(ctx context.Context, threadiness int) error {
 	return controller.Start(ctx, threadiness, c.starters...)
 }
 
-{{range .schemas}}
-type {{.CodeNamePlural}}Getter interface {
-	{{.CodeNamePlural}}(namespace string) {{.CodeName}}Interface
+type DeploymentsGetter interface {
+	Deployments(namespace string) DeploymentInterface
 }
 
-func (c *Client) {{.CodeNamePlural}}(namespace string) {{.CodeName}}Interface {
-	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &{{.CodeName}}Resource, {{.CodeName}}GroupVersionKind, {{.ID}}Factory{})
-	return &{{.ID}}Client{
+func (c *Client) Deployments(namespace string) DeploymentInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &DeploymentResource, DeploymentGroupVersionKind, deploymentFactory{})
+	return &deploymentClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
 	}
 }
-{{end}}
-`

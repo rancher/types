@@ -5,7 +5,9 @@ import (
 
 	"github.com/rancher/norman/clientbase"
 	"github.com/rancher/norman/controller"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
@@ -34,14 +36,22 @@ type ProjectList struct {
 
 type ProjectHandlerFunc func(key string, obj *Project) error
 
+type ProjectLister interface {
+	List(namespace string, selector labels.Selector) (ret []*Project, err error)
+	Get(namespace, name string) (*Project, error)
+}
+
 type ProjectController interface {
 	Informer() cache.SharedIndexInformer
+	Lister() ProjectLister
 	AddHandler(handler ProjectHandlerFunc)
 	Enqueue(namespace, name string)
+	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
 }
 
 type ProjectInterface interface {
+	ObjectClient() *clientbase.ObjectClient
 	Create(*Project) (*Project, error)
 	Get(name string, opts metav1.GetOptions) (*Project, error)
 	Update(*Project) (*Project, error)
@@ -52,8 +62,39 @@ type ProjectInterface interface {
 	Controller() ProjectController
 }
 
+type projectLister struct {
+	controller *projectController
+}
+
+func (l *projectLister) List(namespace string, selector labels.Selector) (ret []*Project, err error) {
+	err = cache.ListAllByNamespace(l.controller.Informer().GetIndexer(), namespace, selector, func(obj interface{}) {
+		ret = append(ret, obj.(*Project))
+	})
+	return
+}
+
+func (l *projectLister) Get(namespace, name string) (*Project, error) {
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.NewNotFound(schema.GroupResource{
+			Group:    ProjectGroupVersionKind.Group,
+			Resource: "project",
+		}, name)
+	}
+	return obj.(*Project), nil
+}
+
 type projectController struct {
 	controller.GenericController
+}
+
+func (c *projectController) Lister() ProjectLister {
+	return &projectLister{
+		controller: c,
+	}
 }
 
 func (c *projectController) AddHandler(handler ProjectHandlerFunc) {
@@ -97,6 +138,7 @@ func (s *projectClient) Controller() ProjectController {
 	}
 
 	s.client.projectControllers[s.ns] = c
+	s.client.starters = append(s.client.starters, c)
 
 	return c
 }
@@ -106,6 +148,10 @@ type projectClient struct {
 	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   ProjectController
+}
+
+func (s *projectClient) ObjectClient() *clientbase.ObjectClient {
+	return s.objectClient
 }
 
 func (s *projectClient) Create(o *Project) (*Project, error) {

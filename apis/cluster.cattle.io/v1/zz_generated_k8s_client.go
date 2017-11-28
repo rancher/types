@@ -1,15 +1,18 @@
 package v1
 
 import (
+	"context"
 	"sync"
 
 	"github.com/rancher/norman/clientbase"
+	"github.com/rancher/norman/controller"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/rest"
 )
 
 type Interface interface {
 	RESTClient() rest.Interface
+	controller.Starter
 
 	ClustersGetter
 	ClusterNodesGetter
@@ -18,6 +21,7 @@ type Interface interface {
 type Client struct {
 	sync.Mutex
 	restClient rest.Interface
+	starters   []controller.Starter
 
 	clusterControllers     map[string]ClusterController
 	clusterNodeControllers map[string]ClusterNodeController
@@ -44,6 +48,14 @@ func NewForConfig(config rest.Config) (Interface, error) {
 
 func (c *Client) RESTClient() rest.Interface {
 	return c.restClient
+}
+
+func (c *Client) Sync(ctx context.Context) error {
+	return controller.Sync(ctx, c.starters...)
+}
+
+func (c *Client) Start(ctx context.Context, threadiness int) error {
+	return controller.Start(ctx, threadiness, c.starters...)
 }
 
 type ClustersGetter interface {
