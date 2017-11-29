@@ -3,7 +3,7 @@ package client
 const (
 	GoogleKubernetesEngineConfigType                    = "googleKubernetesEngineConfig"
 	GoogleKubernetesEngineConfigFieldClusterIpv4Cidr    = "clusterIpv4Cidr"
-	GoogleKubernetesEngineConfigFieldCredentialPath     = "credentialPath"
+	GoogleKubernetesEngineConfigFieldCredential         = "credential"
 	GoogleKubernetesEngineConfigFieldDescription        = "description"
 	GoogleKubernetesEngineConfigFieldDiskSizeGb         = "diskSizeGb"
 	GoogleKubernetesEngineConfigFieldEnableAlphaFeature = "enableAlphaFeature"
@@ -18,7 +18,7 @@ const (
 
 type GoogleKubernetesEngineConfig struct {
 	ClusterIpv4Cidr    string            `json:"clusterIpv4Cidr,omitempty"`
-	CredentialPath     string            `json:"credentialPath,omitempty"`
+	Credential         string            `json:"credential,omitempty"`
 	Description        string            `json:"description,omitempty"`
 	DiskSizeGb         *int64            `json:"diskSizeGb,omitempty"`
 	EnableAlphaFeature *bool             `json:"enableAlphaFeature,omitempty"`
