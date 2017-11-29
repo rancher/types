@@ -28,7 +28,6 @@ var (
 			schema.SubContext = "projects"
 		}).
 		MustImport(&Version, v1.ProjectRoleTemplate{}).
-		MustImport(&Version, v1.ProjectRoleTemplateBinding{}).
 		MustImport(&Version, v1.PodSecurityPolicyTemplate{}).
 		MustImport(&Version, v1.ClusterRoleTemplate{}).
 		MustImport(&Version, v1.ClusterRoleTemplateBinding{}).
