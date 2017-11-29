@@ -12,6 +12,7 @@ import (
 	workloadv1 "github.com/rancher/types/apis/workload.cattle.io/v1"
 	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/dynamic"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )
 
@@ -35,6 +36,7 @@ type WorkloadContext struct {
 	ClusterName       string
 	RESTConfig        rest.Config
 	UnversionedClient rest.Interface
+	K8sClient         kubernetes.Interface
 
 	Apps     appsv1beta2.Interface
 	Workload workloadv1.Interface
@@ -100,6 +102,11 @@ func NewWorkloadContext(clusterConfig, config rest.Config, clusterName string) (
 	}
 
 	context.Cluster, err = NewClusterContext(clusterConfig)
+	if err != nil {
+		return nil, err
+	}
+
+	context.K8sClient, err = kubernetes.NewForConfig(&config)
 	if err != nil {
 		return nil, err
 	}
