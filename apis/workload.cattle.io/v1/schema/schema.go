@@ -2,10 +2,10 @@ package schema
 
 import (
 	"github.com/rancher/norman/types"
-	"github.com/rancher/norman/types/factory"
 	m "github.com/rancher/norman/types/mapper"
 	workloadv1 "github.com/rancher/types/apis/workload.cattle.io/v1"
-	"github.com/rancher/types/apis/workload.cattle.io/v1/schema/mapper"
+	"github.com/rancher/types/factory"
+	"github.com/rancher/types/mapper"
 	"k8s.io/api/core/v1"
 	"k8s.io/kubernetes/staging/src/k8s.io/api/apps/v1beta2"
 )
@@ -188,7 +188,6 @@ func nodeTypes(schemas *types.Schemas) *types.Schemas {
 			&m.SliceToMap{Field: "volumesAttached", Key: "devicePath"},
 		).
 		AddMapperForType(&Version, v1.Node{},
-			mapper.Status{},
 			&m.Embed{Field: "status"},
 			&m.Drop{Field: "conditions"},
 		).
@@ -294,7 +293,6 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 			mapper.PivotMapper{Plural: true},
 		).
 		AddMapperForType(&Version, v1.Pod{},
-			mapper.Status{},
 			&mapper.NamespaceIDMapper{},
 		).
 		// Must import handlers before Container
