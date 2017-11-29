@@ -15,15 +15,15 @@ type Project struct {
 
 type ProjectSpec struct {
 	DisplayName string `json:"displayName,omitempty" norman:"required"`
-	//TODO: should be required
-	ClusterName string `json:"clusterName,omitempty" norman:"type=reference[/v1-cluster/schemas/cluster]"`
+	ClusterName string `json:"clusterName,omitempty" norman:"required,type=reference[/v1-cluster/schemas/cluster]"`
 }
 
 type ProjectRoleTemplate struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Rules []rbacv1.PolicyRule `json:"rules,omitempty"`
+	Rules   []rbacv1.PolicyRule `json:"rules,omitempty"`
+	Builtin bool                `json:"builtin"`
 
 	ProjectRoleTemplateNames []string `json:"projectRoleTemplateNames,omitempty" norman:"type=array[reference[projectRoleTemplate]]"`
 }
@@ -49,7 +49,8 @@ type ClusterRoleTemplate struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Rules []rbacv1.PolicyRule `json:"rules,omitempty"`
+	Rules   []rbacv1.PolicyRule `json:"rules,omitempty"`
+	Builtin bool                `json:"builtin"`
 
 	ClusterRoleTemplateNames []string `json:"clusterRoleTemplateNames,omitempty" norman:"type=array[reference[clusterRoleTemplate]]"`
 }

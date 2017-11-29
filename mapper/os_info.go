@@ -5,7 +5,7 @@ import (
 
 	"github.com/rancher/norman/types"
 	"github.com/rancher/norman/types/convert"
-	"github.com/rancher/norman/types/mapper"
+	"github.com/rancher/norman/types/values"
 )
 
 type OSInfo struct {
@@ -13,10 +13,10 @@ type OSInfo struct {
 
 func (o OSInfo) FromInternal(data map[string]interface{}) {
 	cpuInfo := map[string]interface{}{
-		"count": mapper.GetValueN(data, "capacity", "cpu"),
+		"count": values.GetValueN(data, "capacity", "cpu"),
 	}
 
-	kib := strings.TrimSuffix(convert.ToString(mapper.GetValueN(data, "capacity", "memory")), "Ki")
+	kib := strings.TrimSuffix(convert.ToString(values.GetValueN(data, "capacity", "memory")), "Ki")
 	memoryInfo := map[string]interface{}{}
 
 	kibNum, err := convert.ToNumber(kib)
@@ -25,9 +25,9 @@ func (o OSInfo) FromInternal(data map[string]interface{}) {
 	}
 
 	osInfo := map[string]interface{}{
-		"dockerVersion":   strings.TrimPrefix(convert.ToString(mapper.GetValueN(data, "nodeInfo", "containerRuntimeVersion")), "docker://"),
-		"kernelVersion":   mapper.GetValueN(data, "nodeInfo", "kernelVersion"),
-		"operatingSystem": mapper.GetValueN(data, "nodeInfo", "osImage"),
+		"dockerVersion":   strings.TrimPrefix(convert.ToString(values.GetValueN(data, "nodeInfo", "containerRuntimeVersion")), "docker://"),
+		"kernelVersion":   values.GetValueN(data, "nodeInfo", "kernelVersion"),
+		"operatingSystem": values.GetValueN(data, "nodeInfo", "osImage"),
 	}
 
 	data["info"] = map[string]interface{}{
@@ -35,8 +35,8 @@ func (o OSInfo) FromInternal(data map[string]interface{}) {
 		"memory": memoryInfo,
 		"os":     osInfo,
 		"kubernetes": map[string]interface{}{
-			"kubeletVersion":   mapper.GetValueN(data, "nodeInfo", "kubeletVersion"),
-			"kubeProxyVersion": mapper.GetValueN(data, "nodeInfo", "kubeletVersion"),
+			"kubeletVersion":   values.GetValueN(data, "nodeInfo", "kubeletVersion"),
+			"kubeProxyVersion": values.GetValueN(data, "nodeInfo", "kubeletVersion"),
 		},
 	}
 }

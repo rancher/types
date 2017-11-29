@@ -5,31 +5,37 @@ import (
 )
 
 const (
-	ProjectType                 = "project"
-	ProjectFieldAnnotations     = "annotations"
-	ProjectFieldClusterId       = "clusterId"
-	ProjectFieldCreated         = "created"
-	ProjectFieldId              = "id"
-	ProjectFieldLabels          = "labels"
-	ProjectFieldName            = "name"
-	ProjectFieldOwnerReferences = "ownerReferences"
-	ProjectFieldRemoved         = "removed"
-	ProjectFieldResourcePath    = "resourcePath"
-	ProjectFieldUuid            = "uuid"
+	ProjectType                      = "project"
+	ProjectFieldAnnotations          = "annotations"
+	ProjectFieldClusterId            = "clusterId"
+	ProjectFieldCreated              = "created"
+	ProjectFieldId                   = "id"
+	ProjectFieldLabels               = "labels"
+	ProjectFieldName                 = "name"
+	ProjectFieldOwnerReferences      = "ownerReferences"
+	ProjectFieldRemoved              = "removed"
+	ProjectFieldResourcePath         = "resourcePath"
+	ProjectFieldState                = "state"
+	ProjectFieldTransitioning        = "transitioning"
+	ProjectFieldTransitioningMessage = "transitioningMessage"
+	ProjectFieldUuid                 = "uuid"
 )
 
 type Project struct {
 	types.Resource
-	Annotations     map[string]string `json:"annotations,omitempty"`
-	ClusterId       string            `json:"clusterId,omitempty"`
-	Created         string            `json:"created,omitempty"`
-	Id              string            `json:"id,omitempty"`
-	Labels          map[string]string `json:"labels,omitempty"`
-	Name            string            `json:"name,omitempty"`
-	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty"`
-	Removed         string            `json:"removed,omitempty"`
-	ResourcePath    string            `json:"resourcePath,omitempty"`
-	Uuid            string            `json:"uuid,omitempty"`
+	Annotations          map[string]string `json:"annotations,omitempty"`
+	ClusterId            string            `json:"clusterId,omitempty"`
+	Created              string            `json:"created,omitempty"`
+	Id                   string            `json:"id,omitempty"`
+	Labels               map[string]string `json:"labels,omitempty"`
+	Name                 string            `json:"name,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty"`
+	Removed              string            `json:"removed,omitempty"`
+	ResourcePath         string            `json:"resourcePath,omitempty"`
+	State                string            `json:"state,omitempty"`
+	Transitioning        string            `json:"transitioning,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty"`
+	Uuid                 string            `json:"uuid,omitempty"`
 }
 type ProjectCollection struct {
 	types.Collection

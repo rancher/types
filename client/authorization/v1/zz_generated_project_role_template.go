@@ -7,6 +7,7 @@ import (
 const (
 	ProjectRoleTemplateType                        = "projectRoleTemplate"
 	ProjectRoleTemplateFieldAnnotations            = "annotations"
+	ProjectRoleTemplateFieldBuiltin                = "builtin"
 	ProjectRoleTemplateFieldCreated                = "created"
 	ProjectRoleTemplateFieldLabels                 = "labels"
 	ProjectRoleTemplateFieldName                   = "name"
@@ -15,12 +16,16 @@ const (
 	ProjectRoleTemplateFieldRemoved                = "removed"
 	ProjectRoleTemplateFieldResourcePath           = "resourcePath"
 	ProjectRoleTemplateFieldRules                  = "rules"
+	ProjectRoleTemplateFieldState                  = "state"
+	ProjectRoleTemplateFieldTransitioning          = "transitioning"
+	ProjectRoleTemplateFieldTransitioningMessage   = "transitioningMessage"
 	ProjectRoleTemplateFieldUuid                   = "uuid"
 )
 
 type ProjectRoleTemplate struct {
 	types.Resource
 	Annotations            map[string]string `json:"annotations,omitempty"`
+	Builtin                *bool             `json:"builtin,omitempty"`
 	Created                string            `json:"created,omitempty"`
 	Labels                 map[string]string `json:"labels,omitempty"`
 	Name                   string            `json:"name,omitempty"`
@@ -29,6 +34,9 @@ type ProjectRoleTemplate struct {
 	Removed                string            `json:"removed,omitempty"`
 	ResourcePath           string            `json:"resourcePath,omitempty"`
 	Rules                  []PolicyRule      `json:"rules,omitempty"`
+	State                  string            `json:"state,omitempty"`
+	Transitioning          string            `json:"transitioning,omitempty"`
+	TransitioningMessage   string            `json:"transitioningMessage,omitempty"`
 	Uuid                   string            `json:"uuid,omitempty"`
 }
 type ProjectRoleTemplateCollection struct {

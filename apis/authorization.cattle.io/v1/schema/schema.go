@@ -2,9 +2,9 @@ package schema
 
 import (
 	"github.com/rancher/norman/types"
-	"github.com/rancher/norman/types/factory"
 	"github.com/rancher/norman/types/mapper"
 	"github.com/rancher/types/apis/authorization.cattle.io/v1"
+	"github.com/rancher/types/factory"
 )
 
 var (

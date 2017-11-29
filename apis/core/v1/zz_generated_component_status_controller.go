@@ -57,7 +57,7 @@ type ComponentStatusInterface interface {
 	Get(name string, opts metav1.GetOptions) (*v1.ComponentStatus, error)
 	Update(*v1.ComponentStatus) (*v1.ComponentStatus, error)
 	Delete(name string, options *metav1.DeleteOptions) error
-	List(opts metav1.ListOptions) (*v1.ComponentStatusList, error)
+	List(opts metav1.ListOptions) (*ComponentStatusList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
 	Controller() ComponentStatusController
@@ -174,9 +174,9 @@ func (s *componentStatusClient) Delete(name string, options *metav1.DeleteOption
 	return s.objectClient.Delete(name, options)
 }
 
-func (s *componentStatusClient) List(opts metav1.ListOptions) (*v1.ComponentStatusList, error) {
+func (s *componentStatusClient) List(opts metav1.ListOptions) (*ComponentStatusList, error) {
 	obj, err := s.objectClient.List(opts)
-	return obj.(*v1.ComponentStatusList), err
+	return obj.(*ComponentStatusList), err
 }
 
 func (s *componentStatusClient) Watch(opts metav1.ListOptions) (watch.Interface, error) {

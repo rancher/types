@@ -57,7 +57,7 @@ type DeploymentInterface interface {
 	Get(name string, opts metav1.GetOptions) (*v1beta2.Deployment, error)
 	Update(*v1beta2.Deployment) (*v1beta2.Deployment, error)
 	Delete(name string, options *metav1.DeleteOptions) error
-	List(opts metav1.ListOptions) (*v1beta2.DeploymentList, error)
+	List(opts metav1.ListOptions) (*DeploymentList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
 	Controller() DeploymentController
@@ -174,9 +174,9 @@ func (s *deploymentClient) Delete(name string, options *metav1.DeleteOptions) er
 	return s.objectClient.Delete(name, options)
 }
 
-func (s *deploymentClient) List(opts metav1.ListOptions) (*v1beta2.DeploymentList, error) {
+func (s *deploymentClient) List(opts metav1.ListOptions) (*DeploymentList, error) {
 	obj, err := s.objectClient.List(opts)
-	return obj.(*v1beta2.DeploymentList), err
+	return obj.(*DeploymentList), err
 }
 
 func (s *deploymentClient) Watch(opts metav1.ListOptions) (watch.Interface, error) {

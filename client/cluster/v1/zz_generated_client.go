@@ -7,8 +7,11 @@ import (
 type Client struct {
 	clientbase.APIBaseClient
 
-	Cluster     ClusterOperations
-	ClusterNode ClusterNodeOperations
+	Cluster         ClusterOperations
+	ClusterNode     ClusterNodeOperations
+	Machine         MachineOperations
+	MachineDriver   MachineDriverOperations
+	MachineTemplate MachineTemplateOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -23,6 +26,9 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 
 	client.Cluster = newClusterClient(client)
 	client.ClusterNode = newClusterNodeClient(client)
+	client.Machine = newMachineClient(client)
+	client.MachineDriver = newMachineDriverClient(client)
+	client.MachineTemplate = newMachineTemplateClient(client)
 
 	return client, nil
 }

@@ -7,6 +7,7 @@ import (
 const (
 	ClusterRoleTemplateType                        = "clusterRoleTemplate"
 	ClusterRoleTemplateFieldAnnotations            = "annotations"
+	ClusterRoleTemplateFieldBuiltin                = "builtin"
 	ClusterRoleTemplateFieldClusterRoleTemplateIds = "clusterRoleTemplateIds"
 	ClusterRoleTemplateFieldCreated                = "created"
 	ClusterRoleTemplateFieldLabels                 = "labels"
@@ -15,12 +16,16 @@ const (
 	ClusterRoleTemplateFieldRemoved                = "removed"
 	ClusterRoleTemplateFieldResourcePath           = "resourcePath"
 	ClusterRoleTemplateFieldRules                  = "rules"
+	ClusterRoleTemplateFieldState                  = "state"
+	ClusterRoleTemplateFieldTransitioning          = "transitioning"
+	ClusterRoleTemplateFieldTransitioningMessage   = "transitioningMessage"
 	ClusterRoleTemplateFieldUuid                   = "uuid"
 )
 
 type ClusterRoleTemplate struct {
 	types.Resource
 	Annotations            map[string]string `json:"annotations,omitempty"`
+	Builtin                *bool             `json:"builtin,omitempty"`
 	ClusterRoleTemplateIds []string          `json:"clusterRoleTemplateIds,omitempty"`
 	Created                string            `json:"created,omitempty"`
 	Labels                 map[string]string `json:"labels,omitempty"`
@@ -29,6 +34,9 @@ type ClusterRoleTemplate struct {
 	Removed                string            `json:"removed,omitempty"`
 	ResourcePath           string            `json:"resourcePath,omitempty"`
 	Rules                  []PolicyRule      `json:"rules,omitempty"`
+	State                  string            `json:"state,omitempty"`
+	Transitioning          string            `json:"transitioning,omitempty"`
+	TransitioningMessage   string            `json:"transitioningMessage,omitempty"`
 	Uuid                   string            `json:"uuid,omitempty"`
 }
 type ClusterRoleTemplateCollection struct {

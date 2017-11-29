@@ -15,7 +15,10 @@ const (
 	ClusterRoleTemplateBindingFieldOwnerReferences       = "ownerReferences"
 	ClusterRoleTemplateBindingFieldRemoved               = "removed"
 	ClusterRoleTemplateBindingFieldResourcePath          = "resourcePath"
+	ClusterRoleTemplateBindingFieldState                 = "state"
 	ClusterRoleTemplateBindingFieldSubject               = "subject"
+	ClusterRoleTemplateBindingFieldTransitioning         = "transitioning"
+	ClusterRoleTemplateBindingFieldTransitioningMessage  = "transitioningMessage"
 	ClusterRoleTemplateBindingFieldUuid                  = "uuid"
 )
 
@@ -30,7 +33,10 @@ type ClusterRoleTemplateBinding struct {
 	OwnerReferences       []OwnerReference  `json:"ownerReferences,omitempty"`
 	Removed               string            `json:"removed,omitempty"`
 	ResourcePath          string            `json:"resourcePath,omitempty"`
+	State                 string            `json:"state,omitempty"`
 	Subject               *Subject          `json:"subject,omitempty"`
+	Transitioning         string            `json:"transitioning,omitempty"`
+	TransitioningMessage  string            `json:"transitioningMessage,omitempty"`
 	Uuid                  string            `json:"uuid,omitempty"`
 }
 type ClusterRoleTemplateBindingCollection struct {

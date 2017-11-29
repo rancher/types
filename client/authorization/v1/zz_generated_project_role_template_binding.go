@@ -15,9 +15,12 @@ const (
 	ProjectRoleTemplateBindingFieldProjectRoleTemplateId = "projectRoleTemplateId"
 	ProjectRoleTemplateBindingFieldRemoved               = "removed"
 	ProjectRoleTemplateBindingFieldResourcePath          = "resourcePath"
+	ProjectRoleTemplateBindingFieldState                 = "state"
 	ProjectRoleTemplateBindingFieldSubjectKind           = "subjectKind"
 	ProjectRoleTemplateBindingFieldSubjectName           = "subjectName"
 	ProjectRoleTemplateBindingFieldSubjectNamespace      = "subjectNamespace"
+	ProjectRoleTemplateBindingFieldTransitioning         = "transitioning"
+	ProjectRoleTemplateBindingFieldTransitioningMessage  = "transitioningMessage"
 	ProjectRoleTemplateBindingFieldUuid                  = "uuid"
 )
 
@@ -32,9 +35,12 @@ type ProjectRoleTemplateBinding struct {
 	ProjectRoleTemplateId string            `json:"projectRoleTemplateId,omitempty"`
 	Removed               string            `json:"removed,omitempty"`
 	ResourcePath          string            `json:"resourcePath,omitempty"`
+	State                 string            `json:"state,omitempty"`
 	SubjectKind           string            `json:"subjectKind,omitempty"`
 	SubjectName           string            `json:"subjectName,omitempty"`
 	SubjectNamespace      string            `json:"subjectNamespace,omitempty"`
+	Transitioning         string            `json:"transitioning,omitempty"`
+	TransitioningMessage  string            `json:"transitioningMessage,omitempty"`
 	Uuid                  string            `json:"uuid,omitempty"`
 }
 type ProjectRoleTemplateBindingCollection struct {

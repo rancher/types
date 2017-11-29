@@ -39,10 +39,13 @@ const (
 	DeploymentFieldScale                         = "scale"
 	DeploymentFieldSchedulerName                 = "schedulerName"
 	DeploymentFieldServiceAccountName            = "serviceAccountName"
+	DeploymentFieldState                         = "state"
 	DeploymentFieldStatus                        = "status"
 	DeploymentFieldSubdomain                     = "subdomain"
 	DeploymentFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
 	DeploymentFieldTolerations                   = "tolerations"
+	DeploymentFieldTransitioning                 = "transitioning"
+	DeploymentFieldTransitioningMessage          = "transitioningMessage"
 	DeploymentFieldUid                           = "uid"
 	DeploymentFieldUuid                          = "uuid"
 	DeploymentFieldVolumes                       = "volumes"
@@ -85,10 +88,13 @@ type Deployment struct {
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
+	State                         string                 `json:"state,omitempty"`
 	Status                        *DeploymentStatus      `json:"status,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`
 	Tolerations                   []Toleration           `json:"tolerations,omitempty"`
+	Transitioning                 string                 `json:"transitioning,omitempty"`
+	TransitioningMessage          string                 `json:"transitioningMessage,omitempty"`
 	Uid                           *int64                 `json:"uid,omitempty"`
 	Uuid                          string                 `json:"uuid,omitempty"`
 	Volumes                       map[string]Volume      `json:"volumes,omitempty"`

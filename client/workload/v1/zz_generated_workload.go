@@ -37,10 +37,13 @@ const (
 	WorkloadFieldScale                         = "scale"
 	WorkloadFieldSchedulerName                 = "schedulerName"
 	WorkloadFieldServiceAccountName            = "serviceAccountName"
+	WorkloadFieldState                         = "state"
 	WorkloadFieldStatus                        = "status"
 	WorkloadFieldSubdomain                     = "subdomain"
 	WorkloadFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
 	WorkloadFieldTolerations                   = "tolerations"
+	WorkloadFieldTransitioning                 = "transitioning"
+	WorkloadFieldTransitioningMessage          = "transitioningMessage"
 	WorkloadFieldUid                           = "uid"
 	WorkloadFieldUuid                          = "uuid"
 	WorkloadFieldVolumes                       = "volumes"
@@ -81,10 +84,13 @@ type Workload struct {
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
+	State                         string                 `json:"state,omitempty"`
 	Status                        *WorkloadStatus        `json:"status,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`
 	Tolerations                   []Toleration           `json:"tolerations,omitempty"`
+	Transitioning                 string                 `json:"transitioning,omitempty"`
+	TransitioningMessage          string                 `json:"transitioningMessage,omitempty"`
 	Uid                           *int64                 `json:"uid,omitempty"`
 	Uuid                          string                 `json:"uuid,omitempty"`
 	Volumes                       map[string]Volume      `json:"volumes,omitempty"`

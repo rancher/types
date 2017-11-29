@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/rancher/norman/types/convert"
-	"github.com/rancher/norman/types/mapper"
+	"github.com/rancher/norman/types/values"
 )
 
 type conditionMapping struct {
@@ -93,8 +93,10 @@ var conditionMappings = []conditionMapping{
 }
 
 func Set(data map[string]interface{}) {
-	val, ok := mapper.GetValue(data, "status", "conditions")
+	val, ok := values.GetValue(data, "status", "conditions")
 	if !ok || val == nil {
+		// TODO: remove
+		data["state"] = "active"
 		return
 	}
 
@@ -149,7 +151,7 @@ func Set(data map[string]interface{}) {
 	}
 
 	if state == "" {
-		val, _ := mapper.GetValueN(data, "status", "phase").(string)
+		val, _ := values.GetValueN(data, "status", "phase").(string)
 		if val != "" {
 			state = val
 		}
