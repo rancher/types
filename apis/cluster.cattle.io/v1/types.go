@@ -95,8 +95,8 @@ type GoogleKubernetesEngineConfig struct {
 	// The map of Kubernetes labels (key/value pairs) to be applied
 	// to each node.
 	Labels map[string]string `json:"labels,omitempty"`
-	// The path to the credential file(key.json)
-	CredentialPath string `json:"credentialPath,omitempty"`
+	// The content of the credential file(key.json)
+	Credential string `json:"credential,omitempty"`
 	// Enable alpha feature
 	EnableAlphaFeature bool `json:"enableAlphaFeature,omitempty"`
 }
