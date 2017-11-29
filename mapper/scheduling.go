@@ -9,7 +9,7 @@ import (
 
 	"github.com/rancher/norman/types"
 	"github.com/rancher/norman/types/convert"
-	"github.com/rancher/norman/types/mapper"
+	"github.com/rancher/norman/types/values"
 	"k8s.io/api/core/v1"
 )
 
@@ -36,7 +36,7 @@ func (s SchedulingMapper) FromInternal(data map[string]interface{}) {
 	}
 
 	if len(requireAll) > 0 {
-		mapper.PutValue(data, requireAll, "scheduling", "node", "requireAll")
+		values.PutValue(data, requireAll, "scheduling", "node", "requireAll")
 	}
 
 	v, ok := data["affinity"]
@@ -89,13 +89,13 @@ func (s SchedulingMapper) nodeAffinity(data map[string]interface{}, nodeAffinity
 	}
 
 	if len(requireAll) > 0 {
-		mapper.PutValue(data, requireAll, "scheduling", "node", "requireAll")
+		values.PutValue(data, requireAll, "scheduling", "node", "requireAll")
 	}
 	if len(requireAny) > 0 {
-		mapper.PutValue(data, requireAny, "scheduling", "node", "requireAny")
+		values.PutValue(data, requireAny, "scheduling", "node", "requireAny")
 	}
 	if len(preferred) > 0 {
-		mapper.PutValue(data, requireAny, "scheduling", "node", "preferred")
+		values.PutValue(data, requireAny, "scheduling", "node", "preferred")
 	}
 }
 
@@ -197,14 +197,14 @@ func (s SchedulingMapper) ToInternal(data map[string]interface{}) {
 		delete(data, "scheduling")
 	}()
 
-	nodeName := convert.ToString(mapper.GetValueN(data, "scheduling", "node", "name"))
+	nodeName := convert.ToString(values.GetValueN(data, "scheduling", "node", "name"))
 	if nodeName != "" {
 		data["nodeName"] = nodeName
 	}
 
-	requireAll := convert.ToStringSlice(mapper.GetValueN(data, "scheduling", "node", "requireAll"))
-	requireAny := convert.ToStringSlice(mapper.GetValueN(data, "scheduling", "node", "requireAny"))
-	preferred := convert.ToStringSlice(mapper.GetValueN(data, "scheduling", "node", "preferred"))
+	requireAll := convert.ToStringSlice(values.GetValueN(data, "scheduling", "node", "requireAll"))
+	requireAny := convert.ToStringSlice(values.GetValueN(data, "scheduling", "node", "requireAny"))
+	preferred := convert.ToStringSlice(values.GetValueN(data, "scheduling", "node", "preferred"))
 
 	if len(requireAll) == 0 && len(requireAny) == 0 && len(preferred) == 0 {
 		return

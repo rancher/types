@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/rancher/norman/types"
-	m "github.com/rancher/norman/types/mapper"
+	"github.com/rancher/norman/types/values"
 )
 
 type PivotMapper struct {
@@ -19,9 +19,9 @@ func (r PivotMapper) FromInternal(data map[string]interface{}) {
 		}
 		for subKey, subValue := range mapValue {
 			if r.Plural {
-				m.PutValue(data, subValue, subKey, strings.TrimSuffix(key, "s"))
+				values.PutValue(data, subValue, subKey, strings.TrimSuffix(key, "s"))
 			} else {
-				m.PutValue(data, subValue, subKey, key)
+				values.PutValue(data, subValue, subKey, key)
 
 			}
 
@@ -38,9 +38,9 @@ func (r PivotMapper) ToInternal(data map[string]interface{}) {
 		}
 		for subKey, subValue := range mapValue {
 			if r.Plural {
-				m.PutValue(data, subValue, subKey, key+"s")
+				values.PutValue(data, subValue, subKey, key+"s")
 			} else {
-				m.PutValue(data, subValue, subKey, key)
+				values.PutValue(data, subValue, subKey, key)
 			}
 		}
 		delete(data, key)
