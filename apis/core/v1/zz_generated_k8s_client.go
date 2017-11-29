@@ -15,6 +15,7 @@ type Interface interface {
 	controller.Starter
 
 	PodsGetter
+	NodesGetter
 }
 
 type Client struct {
@@ -22,7 +23,8 @@ type Client struct {
 	restClient rest.Interface
 	starters   []controller.Starter
 
-	podControllers map[string]PodController
+	podControllers  map[string]PodController
+	nodeControllers map[string]NodeController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -39,7 +41,8 @@ func NewForConfig(config rest.Config) (Interface, error) {
 	return &Client{
 		restClient: restClient,
 
-		podControllers: map[string]PodController{},
+		podControllers:  map[string]PodController{},
+		nodeControllers: map[string]NodeController{},
 	}, nil
 }
 
@@ -62,6 +65,19 @@ type PodsGetter interface {
 func (c *Client) Pods(namespace string) PodInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &PodResource, PodGroupVersionKind, podFactory{})
 	return &podClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type NodesGetter interface {
+	Nodes(namespace string) NodeInterface
+}
+
+func (c *Client) Nodes(namespace string) NodeInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &NodeResource, NodeGroupVersionKind, nodeFactory{})
+	return &nodeClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

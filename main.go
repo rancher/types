@@ -17,6 +17,6 @@ func main() {
 	generator.Generate(workloadSchema.Schemas)
 	generator.Generate(authzSchema.Schemas)
 	// Group by API group
-	generator.GenerateNativeTypes(v1.Pod{})
+	generator.GenerateNativeTypes(v1.Pod{}, v1.Node{})
 	generator.GenerateNativeTypes(v1beta2.Deployment{})
 }
