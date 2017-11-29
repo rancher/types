@@ -217,6 +217,8 @@ type AuthConfig struct {
 
 type ClusterNode struct {
 	v1.Node
+	NodeName    string
+	ClusterName string
 }
 
 type MachineTemplate struct {
