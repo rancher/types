@@ -16,10 +16,10 @@ type Interface interface {
 
 	ProjectsGetter
 	ProjectRoleTemplatesGetter
-	ProjectRoleTemplateBindingsGetter
 	PodSecurityPolicyTemplatesGetter
 	ClusterRoleTemplatesGetter
 	ClusterRoleTemplateBindingsGetter
+	ProjectRoleTemplateBindingsGetter
 }
 
 type Client struct {
@@ -29,10 +29,10 @@ type Client struct {
 
 	projectControllers                    map[string]ProjectController
 	projectRoleTemplateControllers        map[string]ProjectRoleTemplateController
-	projectRoleTemplateBindingControllers map[string]ProjectRoleTemplateBindingController
 	podSecurityPolicyTemplateControllers  map[string]PodSecurityPolicyTemplateController
 	clusterRoleTemplateControllers        map[string]ClusterRoleTemplateController
 	clusterRoleTemplateBindingControllers map[string]ClusterRoleTemplateBindingController
+	projectRoleTemplateBindingControllers map[string]ProjectRoleTemplateBindingController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -51,10 +51,10 @@ func NewForConfig(config rest.Config) (Interface, error) {
 
 		projectControllers:                    map[string]ProjectController{},
 		projectRoleTemplateControllers:        map[string]ProjectRoleTemplateController{},
-		projectRoleTemplateBindingControllers: map[string]ProjectRoleTemplateBindingController{},
 		podSecurityPolicyTemplateControllers:  map[string]PodSecurityPolicyTemplateController{},
 		clusterRoleTemplateControllers:        map[string]ClusterRoleTemplateController{},
 		clusterRoleTemplateBindingControllers: map[string]ClusterRoleTemplateBindingController{},
+		projectRoleTemplateBindingControllers: map[string]ProjectRoleTemplateBindingController{},
 	}, nil
 }
 
@@ -96,19 +96,6 @@ func (c *Client) ProjectRoleTemplates(namespace string) ProjectRoleTemplateInter
 	}
 }
 
-type ProjectRoleTemplateBindingsGetter interface {
-	ProjectRoleTemplateBindings(namespace string) ProjectRoleTemplateBindingInterface
-}
-
-func (c *Client) ProjectRoleTemplateBindings(namespace string) ProjectRoleTemplateBindingInterface {
-	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ProjectRoleTemplateBindingResource, ProjectRoleTemplateBindingGroupVersionKind, projectRoleTemplateBindingFactory{})
-	return &projectRoleTemplateBindingClient{
-		ns:           namespace,
-		client:       c,
-		objectClient: objectClient,
-	}
-}
-
 type PodSecurityPolicyTemplatesGetter interface {
 	PodSecurityPolicyTemplates(namespace string) PodSecurityPolicyTemplateInterface
 }
@@ -142,6 +129,19 @@ type ClusterRoleTemplateBindingsGetter interface {
 func (c *Client) ClusterRoleTemplateBindings(namespace string) ClusterRoleTemplateBindingInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ClusterRoleTemplateBindingResource, ClusterRoleTemplateBindingGroupVersionKind, clusterRoleTemplateBindingFactory{})
 	return &clusterRoleTemplateBindingClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type ProjectRoleTemplateBindingsGetter interface {
+	ProjectRoleTemplateBindings(namespace string) ProjectRoleTemplateBindingInterface
+}
+
+func (c *Client) ProjectRoleTemplateBindings(namespace string) ProjectRoleTemplateBindingInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ProjectRoleTemplateBindingResource, ProjectRoleTemplateBindingGroupVersionKind, projectRoleTemplateBindingFactory{})
+	return &projectRoleTemplateBindingClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
