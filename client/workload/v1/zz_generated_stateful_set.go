@@ -40,10 +40,13 @@ const (
 	StatefulSetFieldSchedulerName                 = "schedulerName"
 	StatefulSetFieldServiceAccountName            = "serviceAccountName"
 	StatefulSetFieldServiceName                   = "serviceName"
+	StatefulSetFieldState                         = "state"
 	StatefulSetFieldStatus                        = "status"
 	StatefulSetFieldSubdomain                     = "subdomain"
 	StatefulSetFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
 	StatefulSetFieldTolerations                   = "tolerations"
+	StatefulSetFieldTransitioning                 = "transitioning"
+	StatefulSetFieldTransitioningMessage          = "transitioningMessage"
 	StatefulSetFieldUid                           = "uid"
 	StatefulSetFieldUpdateStrategy                = "updateStrategy"
 	StatefulSetFieldUuid                          = "uuid"
@@ -89,10 +92,13 @@ type StatefulSet struct {
 	SchedulerName                 string                     `json:"schedulerName,omitempty"`
 	ServiceAccountName            string                     `json:"serviceAccountName,omitempty"`
 	ServiceName                   string                     `json:"serviceName,omitempty"`
+	State                         string                     `json:"state,omitempty"`
 	Status                        *StatefulSetStatus         `json:"status,omitempty"`
 	Subdomain                     string                     `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                     `json:"terminationGracePeriodSeconds,omitempty"`
 	Tolerations                   []Toleration               `json:"tolerations,omitempty"`
+	Transitioning                 string                     `json:"transitioning,omitempty"`
+	TransitioningMessage          string                     `json:"transitioningMessage,omitempty"`
 	Uid                           *int64                     `json:"uid,omitempty"`
 	UpdateStrategy                *StatefulSetUpdateStrategy `json:"updateStrategy,omitempty"`
 	Uuid                          string                     `json:"uuid,omitempty"`

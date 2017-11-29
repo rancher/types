@@ -9,14 +9,19 @@ const (
 	ClusterFieldAnnotations                   = "annotations"
 	ClusterFieldAzureKubernetesServiceConfig  = "azureKubernetesServiceConfig"
 	ClusterFieldCreated                       = "created"
+	ClusterFieldDescription                   = "description"
 	ClusterFieldGoogleKubernetesEngineConfig  = "googleKubernetesEngineConfig"
+	ClusterFieldId                            = "id"
 	ClusterFieldLabels                        = "labels"
 	ClusterFieldName                          = "name"
 	ClusterFieldOwnerReferences               = "ownerReferences"
 	ClusterFieldRancherKubernetesEngineConfig = "rancherKubernetesEngineConfig"
 	ClusterFieldRemoved                       = "removed"
 	ClusterFieldResourcePath                  = "resourcePath"
+	ClusterFieldState                         = "state"
 	ClusterFieldStatus                        = "status"
+	ClusterFieldTransitioning                 = "transitioning"
+	ClusterFieldTransitioningMessage          = "transitioningMessage"
 	ClusterFieldUuid                          = "uuid"
 )
 
@@ -25,14 +30,19 @@ type Cluster struct {
 	Annotations                   map[string]string              `json:"annotations,omitempty"`
 	AzureKubernetesServiceConfig  *AzureKubernetesServiceConfig  `json:"azureKubernetesServiceConfig,omitempty"`
 	Created                       string                         `json:"created,omitempty"`
+	Description                   string                         `json:"description,omitempty"`
 	GoogleKubernetesEngineConfig  *GoogleKubernetesEngineConfig  `json:"googleKubernetesEngineConfig,omitempty"`
+	Id                            string                         `json:"id,omitempty"`
 	Labels                        map[string]string              `json:"labels,omitempty"`
 	Name                          string                         `json:"name,omitempty"`
 	OwnerReferences               []OwnerReference               `json:"ownerReferences,omitempty"`
 	RancherKubernetesEngineConfig *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty"`
 	Removed                       string                         `json:"removed,omitempty"`
 	ResourcePath                  string                         `json:"resourcePath,omitempty"`
+	State                         string                         `json:"state,omitempty"`
 	Status                        *ClusterStatus                 `json:"status,omitempty"`
+	Transitioning                 string                         `json:"transitioning,omitempty"`
+	TransitioningMessage          string                         `json:"transitioningMessage,omitempty"`
 	Uuid                          string                         `json:"uuid,omitempty"`
 }
 type ClusterCollection struct {

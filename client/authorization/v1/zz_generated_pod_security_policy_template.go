@@ -28,7 +28,10 @@ const (
 	PodSecurityPolicyTemplateFieldResourcePath                    = "resourcePath"
 	PodSecurityPolicyTemplateFieldRunAsUser                       = "runAsUser"
 	PodSecurityPolicyTemplateFieldSELinux                         = "seLinux"
+	PodSecurityPolicyTemplateFieldState                           = "state"
 	PodSecurityPolicyTemplateFieldSupplementalGroups              = "supplementalGroups"
+	PodSecurityPolicyTemplateFieldTransitioning                   = "transitioning"
+	PodSecurityPolicyTemplateFieldTransitioningMessage            = "transitioningMessage"
 	PodSecurityPolicyTemplateFieldUuid                            = "uuid"
 	PodSecurityPolicyTemplateFieldVolumes                         = "volumes"
 )
@@ -57,7 +60,10 @@ type PodSecurityPolicyTemplate struct {
 	ResourcePath                    string                             `json:"resourcePath,omitempty"`
 	RunAsUser                       *RunAsUserStrategyOptions          `json:"runAsUser,omitempty"`
 	SELinux                         *SELinuxStrategyOptions            `json:"seLinux,omitempty"`
+	State                           string                             `json:"state,omitempty"`
 	SupplementalGroups              *SupplementalGroupsStrategyOptions `json:"supplementalGroups,omitempty"`
+	Transitioning                   string                             `json:"transitioning,omitempty"`
+	TransitioningMessage            string                             `json:"transitioningMessage,omitempty"`
 	Uuid                            string                             `json:"uuid,omitempty"`
 	Volumes                         []string                           `json:"volumes,omitempty"`
 }

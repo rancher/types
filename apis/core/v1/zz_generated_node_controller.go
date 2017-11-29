@@ -57,7 +57,7 @@ type NodeInterface interface {
 	Get(name string, opts metav1.GetOptions) (*v1.Node, error)
 	Update(*v1.Node) (*v1.Node, error)
 	Delete(name string, options *metav1.DeleteOptions) error
-	List(opts metav1.ListOptions) (*v1.NodeList, error)
+	List(opts metav1.ListOptions) (*NodeList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
 	Controller() NodeController
@@ -174,9 +174,9 @@ func (s *nodeClient) Delete(name string, options *metav1.DeleteOptions) error {
 	return s.objectClient.Delete(name, options)
 }
 
-func (s *nodeClient) List(opts metav1.ListOptions) (*v1.NodeList, error) {
+func (s *nodeClient) List(opts metav1.ListOptions) (*NodeList, error) {
 	obj, err := s.objectClient.List(opts)
-	return obj.(*v1.NodeList), err
+	return obj.(*NodeList), err
 }
 
 func (s *nodeClient) Watch(opts metav1.ListOptions) (watch.Interface, error) {

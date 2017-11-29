@@ -57,7 +57,7 @@ type PodInterface interface {
 	Get(name string, opts metav1.GetOptions) (*v1.Pod, error)
 	Update(*v1.Pod) (*v1.Pod, error)
 	Delete(name string, options *metav1.DeleteOptions) error
-	List(opts metav1.ListOptions) (*v1.PodList, error)
+	List(opts metav1.ListOptions) (*PodList, error)
 	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
 	Controller() PodController
@@ -174,9 +174,9 @@ func (s *podClient) Delete(name string, options *metav1.DeleteOptions) error {
 	return s.objectClient.Delete(name, options)
 }
 
-func (s *podClient) List(opts metav1.ListOptions) (*v1.PodList, error) {
+func (s *podClient) List(opts metav1.ListOptions) (*PodList, error) {
 	obj, err := s.objectClient.List(opts)
-	return obj.(*v1.PodList), err
+	return obj.(*PodList), err
 }
 
 func (s *podClient) Watch(opts metav1.ListOptions) (watch.Interface, error) {

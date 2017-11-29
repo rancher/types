@@ -5,39 +5,45 @@ import (
 )
 
 const (
-	PersistentVolumeClaimType                  = "persistentVolumeClaim"
-	PersistentVolumeClaimFieldAccessModes      = "accessModes"
-	PersistentVolumeClaimFieldAnnotations      = "annotations"
-	PersistentVolumeClaimFieldCreated          = "created"
-	PersistentVolumeClaimFieldLabels           = "labels"
-	PersistentVolumeClaimFieldName             = "name"
-	PersistentVolumeClaimFieldOwnerReferences  = "ownerReferences"
-	PersistentVolumeClaimFieldRemoved          = "removed"
-	PersistentVolumeClaimFieldResourcePath     = "resourcePath"
-	PersistentVolumeClaimFieldResources        = "resources"
-	PersistentVolumeClaimFieldSelector         = "selector"
-	PersistentVolumeClaimFieldStatus           = "status"
-	PersistentVolumeClaimFieldStorageClassName = "storageClassName"
-	PersistentVolumeClaimFieldUuid             = "uuid"
-	PersistentVolumeClaimFieldVolumeName       = "volumeName"
+	PersistentVolumeClaimType                      = "persistentVolumeClaim"
+	PersistentVolumeClaimFieldAccessModes          = "accessModes"
+	PersistentVolumeClaimFieldAnnotations          = "annotations"
+	PersistentVolumeClaimFieldCreated              = "created"
+	PersistentVolumeClaimFieldLabels               = "labels"
+	PersistentVolumeClaimFieldName                 = "name"
+	PersistentVolumeClaimFieldOwnerReferences      = "ownerReferences"
+	PersistentVolumeClaimFieldRemoved              = "removed"
+	PersistentVolumeClaimFieldResourcePath         = "resourcePath"
+	PersistentVolumeClaimFieldResources            = "resources"
+	PersistentVolumeClaimFieldSelector             = "selector"
+	PersistentVolumeClaimFieldState                = "state"
+	PersistentVolumeClaimFieldStatus               = "status"
+	PersistentVolumeClaimFieldStorageClassName     = "storageClassName"
+	PersistentVolumeClaimFieldTransitioning        = "transitioning"
+	PersistentVolumeClaimFieldTransitioningMessage = "transitioningMessage"
+	PersistentVolumeClaimFieldUuid                 = "uuid"
+	PersistentVolumeClaimFieldVolumeName           = "volumeName"
 )
 
 type PersistentVolumeClaim struct {
 	types.Resource
-	AccessModes      []string                     `json:"accessModes,omitempty"`
-	Annotations      map[string]string            `json:"annotations,omitempty"`
-	Created          string                       `json:"created,omitempty"`
-	Labels           map[string]string            `json:"labels,omitempty"`
-	Name             string                       `json:"name,omitempty"`
-	OwnerReferences  []OwnerReference             `json:"ownerReferences,omitempty"`
-	Removed          string                       `json:"removed,omitempty"`
-	ResourcePath     string                       `json:"resourcePath,omitempty"`
-	Resources        *ResourceRequirements        `json:"resources,omitempty"`
-	Selector         *LabelSelector               `json:"selector,omitempty"`
-	Status           *PersistentVolumeClaimStatus `json:"status,omitempty"`
-	StorageClassName string                       `json:"storageClassName,omitempty"`
-	Uuid             string                       `json:"uuid,omitempty"`
-	VolumeName       string                       `json:"volumeName,omitempty"`
+	AccessModes          []string                     `json:"accessModes,omitempty"`
+	Annotations          map[string]string            `json:"annotations,omitempty"`
+	Created              string                       `json:"created,omitempty"`
+	Labels               map[string]string            `json:"labels,omitempty"`
+	Name                 string                       `json:"name,omitempty"`
+	OwnerReferences      []OwnerReference             `json:"ownerReferences,omitempty"`
+	Removed              string                       `json:"removed,omitempty"`
+	ResourcePath         string                       `json:"resourcePath,omitempty"`
+	Resources            *ResourceRequirements        `json:"resources,omitempty"`
+	Selector             *LabelSelector               `json:"selector,omitempty"`
+	State                string                       `json:"state,omitempty"`
+	Status               *PersistentVolumeClaimStatus `json:"status,omitempty"`
+	StorageClassName     string                       `json:"storageClassName,omitempty"`
+	Transitioning        string                       `json:"transitioning,omitempty"`
+	TransitioningMessage string                       `json:"transitioningMessage,omitempty"`
+	Uuid                 string                       `json:"uuid,omitempty"`
+	VolumeName           string                       `json:"volumeName,omitempty"`
 }
 type PersistentVolumeClaimCollection struct {
 	types.Collection

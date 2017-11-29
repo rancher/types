@@ -37,10 +37,13 @@ const (
 	ReplicationControllerFieldScale                         = "scale"
 	ReplicationControllerFieldSchedulerName                 = "schedulerName"
 	ReplicationControllerFieldServiceAccountName            = "serviceAccountName"
+	ReplicationControllerFieldState                         = "state"
 	ReplicationControllerFieldStatus                        = "status"
 	ReplicationControllerFieldSubdomain                     = "subdomain"
 	ReplicationControllerFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
 	ReplicationControllerFieldTolerations                   = "tolerations"
+	ReplicationControllerFieldTransitioning                 = "transitioning"
+	ReplicationControllerFieldTransitioningMessage          = "transitioningMessage"
 	ReplicationControllerFieldUid                           = "uid"
 	ReplicationControllerFieldUuid                          = "uuid"
 	ReplicationControllerFieldVolumes                       = "volumes"
@@ -81,10 +84,13 @@ type ReplicationController struct {
 	Scale                         *int64                       `json:"scale,omitempty"`
 	SchedulerName                 string                       `json:"schedulerName,omitempty"`
 	ServiceAccountName            string                       `json:"serviceAccountName,omitempty"`
+	State                         string                       `json:"state,omitempty"`
 	Status                        *ReplicationControllerStatus `json:"status,omitempty"`
 	Subdomain                     string                       `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                       `json:"terminationGracePeriodSeconds,omitempty"`
 	Tolerations                   []Toleration                 `json:"tolerations,omitempty"`
+	Transitioning                 string                       `json:"transitioning,omitempty"`
+	TransitioningMessage          string                       `json:"transitioningMessage,omitempty"`
 	Uid                           *int64                       `json:"uid,omitempty"`
 	Uuid                          string                       `json:"uuid,omitempty"`
 	Volumes                       map[string]Volume            `json:"volumes,omitempty"`
