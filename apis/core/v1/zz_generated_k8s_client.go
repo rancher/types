@@ -16,6 +16,7 @@ type Interface interface {
 
 	PodsGetter
 	NodesGetter
+	ComponentStatusesGetter
 }
 
 type Client struct {
@@ -23,8 +24,9 @@ type Client struct {
 	restClient rest.Interface
 	starters   []controller.Starter
 
-	podControllers  map[string]PodController
-	nodeControllers map[string]NodeController
+	podControllers             map[string]PodController
+	nodeControllers            map[string]NodeController
+	componentStatusControllers map[string]ComponentStatusController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -41,8 +43,9 @@ func NewForConfig(config rest.Config) (Interface, error) {
 	return &Client{
 		restClient: restClient,
 
-		podControllers:  map[string]PodController{},
-		nodeControllers: map[string]NodeController{},
+		podControllers:             map[string]PodController{},
+		nodeControllers:            map[string]NodeController{},
+		componentStatusControllers: map[string]ComponentStatusController{},
 	}, nil
 }
 
@@ -78,6 +81,19 @@ type NodesGetter interface {
 func (c *Client) Nodes(namespace string) NodeInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &NodeResource, NodeGroupVersionKind, nodeFactory{})
 	return &nodeClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type ComponentStatusesGetter interface {
+	ComponentStatuses(namespace string) ComponentStatusInterface
+}
+
+func (c *Client) ComponentStatuses(namespace string) ComponentStatusInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ComponentStatusResource, ComponentStatusGroupVersionKind, componentStatusFactory{})
+	return &componentStatusClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
