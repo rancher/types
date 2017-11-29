@@ -95,7 +95,8 @@ func (c *ClusterContext) StartAndWait() error {
 func NewWorkloadContext(clusterConfig, config rest.Config, clusterName string) (*WorkloadContext, error) {
 	var err error
 	context := &WorkloadContext{
-		RESTConfig: config,
+		RESTConfig:  config,
+		ClusterName: clusterName,
 	}
 
 	context.Cluster, err = NewClusterContext(clusterConfig)
