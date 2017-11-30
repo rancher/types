@@ -369,3 +369,8 @@ type MachineDriverSpec struct {
 	Checksum         string `json:"checksum"`
 	UIURL            string `json:"uiUrl"`
 }
+
+type ClusterEvent struct {
+	v1.Event
+	ClusterName string
+}

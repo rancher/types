@@ -19,6 +19,7 @@ type Interface interface {
 	MachinesGetter
 	MachineDriversGetter
 	MachineTemplatesGetter
+	ClusterEventsGetter
 }
 
 type Client struct {
@@ -31,6 +32,7 @@ type Client struct {
 	machineControllers         map[string]MachineController
 	machineDriverControllers   map[string]MachineDriverController
 	machineTemplateControllers map[string]MachineTemplateController
+	clusterEventControllers    map[string]ClusterEventController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -52,6 +54,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		machineControllers:         map[string]MachineController{},
 		machineDriverControllers:   map[string]MachineDriverController{},
 		machineTemplateControllers: map[string]MachineTemplateController{},
+		clusterEventControllers:    map[string]ClusterEventController{},
 	}, nil
 }
 
@@ -126,6 +129,19 @@ type MachineTemplatesGetter interface {
 func (c *Client) MachineTemplates(namespace string) MachineTemplateInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &MachineTemplateResource, MachineTemplateGroupVersionKind, machineTemplateFactory{})
 	return &machineTemplateClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type ClusterEventsGetter interface {
+	ClusterEvents(namespace string) ClusterEventInterface
+}
+
+func (c *Client) ClusterEvents(namespace string) ClusterEventInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ClusterEventResource, ClusterEventGroupVersionKind, clusterEventFactory{})
+	return &clusterEventClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
