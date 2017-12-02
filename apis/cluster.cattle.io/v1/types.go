@@ -120,6 +120,8 @@ type RancherKubernetesEngineConfig struct {
 	Addons string `yaml:"addons" json:"addons,omitempty"`
 	// SSH Private Key Path
 	SSHKeyPath string `yaml:"ssh_key_path" json:"sshKeyPath,omitempty"`
+	// List of images used internally for proxy, cert downlaod and kubedns
+	RKEImages map[string]string `yaml:"rke_images" json:"rke_images,omitempty"`
 }
 
 type RKEConfigNode struct {
