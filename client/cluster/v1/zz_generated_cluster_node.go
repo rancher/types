@@ -30,26 +30,26 @@ const (
 
 type ClusterNode struct {
 	types.Resource
-	Annotations          map[string]string `json:"annotations,omitempty"`
-	ClusterName          string            `json:"clusterName,omitempty"`
-	ConfigSource         *NodeConfigSource `json:"configSource,omitempty"`
-	Created              string            `json:"created,omitempty"`
-	ExternalID           string            `json:"externalID,omitempty"`
-	Labels               map[string]string `json:"labels,omitempty"`
-	Name                 string            `json:"name,omitempty"`
-	NodeName             string            `json:"nodeName,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty"`
-	PodCIDR              string            `json:"podCIDR,omitempty"`
-	ProviderID           string            `json:"providerID,omitempty"`
-	Removed              string            `json:"removed,omitempty"`
-	ResourcePath         string            `json:"resourcePath,omitempty"`
-	State                string            `json:"state,omitempty"`
-	Status               *NodeStatus       `json:"status,omitempty"`
-	Taints               []Taint           `json:"taints,omitempty"`
-	Transitioning        string            `json:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty"`
-	Unschedulable        *bool             `json:"unschedulable,omitempty"`
-	Uuid                 string            `json:"uuid,omitempty"`
+	Annotations          map[string]string  `json:"annotations,omitempty"`
+	ClusterName          string             `json:"clusterName,omitempty"`
+	ConfigSource         *NodeConfigSource  `json:"configSource,omitempty"`
+	Created              string             `json:"created,omitempty"`
+	ExternalID           string             `json:"externalID,omitempty"`
+	Labels               map[string]string  `json:"labels,omitempty"`
+	Name                 string             `json:"name,omitempty"`
+	NodeName             string             `json:"nodeName,omitempty"`
+	OwnerReferences      []OwnerReference   `json:"ownerReferences,omitempty"`
+	PodCIDR              string             `json:"podCIDR,omitempty"`
+	ProviderID           string             `json:"providerID,omitempty"`
+	Removed              string             `json:"removed,omitempty"`
+	ResourcePath         string             `json:"resourcePath,omitempty"`
+	State                string             `json:"state,omitempty"`
+	Status               *ClusterNodeStatus `json:"status,omitempty"`
+	Taints               []Taint            `json:"taints,omitempty"`
+	Transitioning        string             `json:"transitioning,omitempty"`
+	TransitioningMessage string             `json:"transitioningMessage,omitempty"`
+	Unschedulable        *bool              `json:"unschedulable,omitempty"`
+	Uuid                 string             `json:"uuid,omitempty"`
 }
 type ClusterNodeCollection struct {
 	types.Collection
