@@ -216,9 +216,24 @@ type AuthConfig struct {
 }
 
 type ClusterNode struct {
-	v1.Node
+	metav1.TypeMeta `json:",inline"`
+	// Standard object’s metadata. More info:
+	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#metadata
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	// Specification of the desired behavior of the cluster node. More info:
+	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
+	v1.NodeSpec `json:"spec,omitempty"`
+	// Most recent observed status of the cluster. More info:
+	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
+	Status      ClusterNodeStatus `json:"status"`
 	NodeName    string
 	ClusterName string
+}
+
+type ClusterNodeStatus struct {
+	v1.NodeStatus
+	Requested v1.ResourceList `json:"requested,omitempty"`
+	Limits    v1.ResourceList `json:"limits,omitempty"`
 }
 
 type MachineTemplate struct {
