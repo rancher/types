@@ -3,7 +3,7 @@ package schema
 import (
 	"github.com/rancher/norman/types"
 	m "github.com/rancher/norman/types/mapper"
-	"github.com/rancher/types/apis/workload.cattle.io/v1"
+	"github.com/rancher/types/apis/project.cattle.io/v3"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -73,37 +73,11 @@ type NodeScheduling struct {
 	Preferred  []string
 }
 
-type NodeInfo struct {
-	CPU        CPUInfo
-	Memory     MemoryInfo
-	OS         OSInfo
-	Kubernetes KubernetesInfo
-}
-
-type CPUInfo struct {
-	Count int64
-}
-
-type MemoryInfo struct {
-	MemTotalKiB int64
-}
-
-type OSInfo struct {
-	DockerVersion   string
-	KernelVersion   string
-	OperatingSystem string
-}
-
-type KubernetesInfo struct {
-	KubeletVersion   string
-	KubeProxyVersion string
-}
-
 type deployOverride struct {
-	v1.DeployConfig
+	v3.DeployConfig
 }
 
 type projectOverride struct {
 	types.Namespaced
-	ProjectID string `norman:"type=reference[/v1-authz/schemas/project]"`
+	ProjectID string `norman:"type=reference[/v3/schemas/project]"`
 }

@@ -16,6 +16,13 @@ func (s Status) ToInternal(data map[string]interface{}) {
 }
 
 func (s Status) ModifySchema(schema *types.Schema, schemas *types.Schemas) error {
+	_, hasSpec := schema.ResourceFields["spec"]
+	_, hasStatus := schema.ResourceFields["status"]
+
+	if !hasSpec || !hasStatus {
+		return nil
+	}
+
 	schema.ResourceFields["state"] = types.Field{
 		CodeName: "State",
 		Type:     "string",

@@ -1,4 +1,4 @@
-package v1
+package v3
 
 import (
 	extv1 "k8s.io/api/extensions/v1beta1"
@@ -15,7 +15,7 @@ type Project struct {
 
 type ProjectSpec struct {
 	DisplayName string `json:"displayName,omitempty" norman:"required"`
-	ClusterName string `json:"clusterName,omitempty" norman:"required,type=reference[/v1-cluster/schemas/cluster]"`
+	ClusterName string `json:"clusterName,omitempty" norman:"required,type=reference[cluster]"`
 }
 
 type ProjectRoleTemplate struct {
@@ -61,6 +61,6 @@ type ClusterRoleTemplateBinding struct {
 
 	Subject rbacv1.Subject `json:"subject,omitempty"`
 
-	ClusterName             string `json:"clusterName,omitempty" norman:"type=reference[/v1-cluster/schemas/cluster]"`
+	ClusterName             string `json:"clusterName,omitempty" norman:"type=reference[cluster]"`
 	ClusterRoleTemplateName string `json:"clusterRoleTemplateName,omitempty" norman:"type=reference[clusterRoleTemplate]"`
 }

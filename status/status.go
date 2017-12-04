@@ -3,6 +3,8 @@ package status
 import (
 	"strings"
 
+	"time"
+
 	"github.com/rancher/norman/types/convert"
 	"github.com/rancher/norman/types/values"
 )
@@ -36,6 +38,11 @@ var conditionMappings = []conditionMapping{
 		Name:       "Available",
 		Transition: true,
 		State:      "activating",
+	},
+	{
+		Name:        "Updating",
+		Transition:  true,
+		FalseIsGood: true,
 	},
 	{
 		Name:       "Progressing",
@@ -93,10 +100,28 @@ var conditionMappings = []conditionMapping{
 }
 
 func Set(data map[string]interface{}) {
-	val, ok := values.GetValue(data, "status", "conditions")
+	val, ok := values.GetValue(data, "metadata", "removed")
+	if ok && val != "" && val != nil {
+		data["state"] = "removing"
+		data["transitioning"] = "yes"
+
+		finalizers, ok := values.GetStringSlice(data, "metadata", "finalizers")
+		if ok && len(finalizers) > 0 {
+			data["transitioningMessage"] = "Waiting on " + finalizers[0]
+			if i, err := convert.ToTimestamp(val); err == nil {
+				if time.Unix(i/1000, 0).Add(5 * time.Minute).Before(time.Now()) {
+					data["transitioning"] = "error"
+				}
+			}
+		}
+
+		return
+	}
+
+	val, ok = values.GetValue(data, "status", "conditions")
 	if !ok || val == nil {
-		// TODO: remove
-		data["state"] = "active"
+		data["state"] = "initializing"
+		data["transitioning"] = "yes"
 		return
 	}
 

@@ -3,7 +3,7 @@ package schema
 import (
 	"github.com/rancher/norman/types"
 	m "github.com/rancher/norman/types/mapper"
-	workloadv1 "github.com/rancher/types/apis/workload.cattle.io/v1"
+	"github.com/rancher/types/apis/project.cattle.io/v3"
 	"github.com/rancher/types/factory"
 	"github.com/rancher/types/mapper"
 	"k8s.io/api/core/v1"
@@ -12,9 +12,9 @@ import (
 
 var (
 	Version = types.APIVersion{
-		Version: "v1",
-		Group:   "workload.cattle.io",
-		Path:    "/v1-workload",
+		Version: "v3",
+		Group:   "project.cattle.io",
+		Path:    "/v3/projects",
 		SubContexts: map[string]bool{
 			"projects": true,
 		},
@@ -24,7 +24,6 @@ var (
 		// Namespace must be first
 		Init(namespaceTypes).
 		Init(podTypes).
-		Init(nodeTypes).
 		Init(deploymentTypes).
 		Init(statefulSetTypes).
 		Init(replicaSet).
@@ -33,14 +32,35 @@ var (
 		Init(workloadTypes)
 )
 
+func namespaceTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v1.NamespaceStatus{},
+			&m.Drop{Field: "phase"},
+		).
+		AddMapperForType(&Version, v1.NamespaceSpec{},
+			&m.Drop{Field: "finalizers"},
+		).
+		AddMapperForType(&Version, v1.Namespace{},
+			&m.LabelField{Field: "projectId"},
+		).
+		MustImport(&Version, v1.Namespace{}, struct {
+			ProjectID  string `norman:"type=reference[/v3/schemas/project]"`
+			Templates  map[string]string
+			Answers    map[string]interface{}
+			Prune      bool
+			ExternalID string
+			Tags       []string
+		}{})
+}
+
 func workloadTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		AddMapperForType(&Version, workloadv1.WorkloadSpec{},
+		AddMapperForType(&Version, v3.WorkloadSpec{},
 			&m.Embed{Field: "deployConfig"},
 			&m.Embed{Field: "template"},
 		).
-		AddMapperForType(&Version, workloadv1.Workload{}, mapper.NewWorkloadTypeMapper()).
-		MustImport(&Version, workloadv1.Workload{}, projectOverride{})
+		AddMapperForType(&Version, v3.Workload{}, mapper.NewWorkloadTypeMapper()).
+		MustImport(&Version, v3.Workload{}, projectOverride{})
 }
 
 func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
@@ -174,49 +194,6 @@ func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 		MustImportAndCustomize(&Version, v1beta2.Deployment{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
 		}, projectOverride{})
-}
-
-func nodeTypes(schemas *types.Schemas) *types.Schemas {
-	return schemas.
-		AddMapperForType(&Version, v1.NodeStatus{},
-			&mapper.NodeAddressMapper{},
-			&mapper.OSInfo{},
-			&m.Drop{Field: "addresses"},
-			&m.Drop{Field: "daemonEndpoints"},
-			&m.Drop{Field: "images"},
-			&m.Drop{Field: "nodeInfo"},
-			&m.SliceToMap{Field: "volumesAttached", Key: "devicePath"},
-		).
-		AddMapperForType(&Version, v1.Node{},
-			&m.Embed{Field: "status"},
-			&m.Drop{Field: "conditions"},
-		).
-		MustImport(&Version, v1.NodeStatus{}, struct {
-			IPAddress string
-			Hostname  string
-			Info      NodeInfo
-		}{}).
-		MustImport(&Version, v1.Node{})
-}
-
-func namespaceTypes(schemas *types.Schemas) *types.Schemas {
-	return schemas.
-		AddMapperForType(&Version, v1.NamespaceStatus{},
-			&m.Drop{Field: "phase"},
-		).
-		AddMapperForType(&Version, v1.NamespaceSpec{},
-			&m.Drop{Field: "finalizers"},
-		).
-		AddMapperForType(&Version, v1.Namespace{},
-			&m.LabelField{Field: "projectId"},
-		).
-		MustImport(&Version, v1.Namespace{}, projectOverride{}, struct {
-			Templates  map[string]string
-			Answers    map[string]interface{}
-			Prune      bool
-			ExternalID string
-			Tags       []string
-		}{})
 }
 
 func podTypes(schemas *types.Schemas) *types.Schemas {
