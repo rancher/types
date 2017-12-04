@@ -7,6 +7,7 @@ const (
 	RancherKubernetesEngineConfigFieldNetwork        = "network"
 	RancherKubernetesEngineConfigFieldNodes          = "nodes"
 	RancherKubernetesEngineConfigFieldRKEImages      = "rke_images"
+	RancherKubernetesEngineConfigFieldSSHKeyPath     = "sshKeyPath"
 	RancherKubernetesEngineConfigFieldServices       = "services"
 )
 
@@ -16,5 +17,6 @@ type RancherKubernetesEngineConfig struct {
 	Network        *NetworkConfig     `json:"network,omitempty"`
 	Nodes          []RKEConfigNode    `json:"nodes,omitempty"`
 	RKEImages      map[string]string  `json:"rke_images,omitempty"`
+	SSHKeyPath     string             `json:"sshKeyPath,omitempty"`
 	Services       *RKEConfigServices `json:"services,omitempty"`
 }
