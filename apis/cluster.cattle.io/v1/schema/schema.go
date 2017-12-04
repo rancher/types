@@ -23,5 +23,6 @@ var (
 		MustImport(&Version, v1.ClusterNode{}).
 		MustImport(&Version, v1.Machine{}).
 		MustImport(&Version, v1.MachineDriver{}).
-		MustImport(&Version, v1.MachineTemplate{})
+		MustImport(&Version, v1.MachineTemplate{}).
+		MustImport(&Version, v1.ClusterEvent{})
 )

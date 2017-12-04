@@ -12,6 +12,7 @@ type Client struct {
 	Machine         MachineOperations
 	MachineDriver   MachineDriverOperations
 	MachineTemplate MachineTemplateOperations
+	ClusterEvent    ClusterEventOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -29,6 +30,7 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Machine = newMachineClient(client)
 	client.MachineDriver = newMachineDriverClient(client)
 	client.MachineTemplate = newMachineTemplateClient(client)
+	client.ClusterEvent = newClusterEventClient(client)
 
 	return client, nil
 }
