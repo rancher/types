@@ -5,7 +5,9 @@ import (
 
 	"github.com/rancher/norman/clientbase"
 	"github.com/rancher/norman/controller"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/watch"
@@ -34,14 +36,22 @@ type TokenList struct {
 
 type TokenHandlerFunc func(key string, obj *Token) error
 
+type TokenLister interface {
+	List(namespace string, selector labels.Selector) (ret []*Token, err error)
+	Get(namespace, name string) (*Token, error)
+}
+
 type TokenController interface {
 	Informer() cache.SharedIndexInformer
+	Lister() TokenLister
 	AddHandler(handler TokenHandlerFunc)
 	Enqueue(namespace, name string)
-	Start(threadiness int, ctx context.Context) error
+	Sync(ctx context.Context) error
+	Start(ctx context.Context, threadiness int) error
 }
 
 type TokenInterface interface {
+	ObjectClient() *clientbase.ObjectClient
 	Create(*Token) (*Token, error)
 	Get(name string, opts metav1.GetOptions) (*Token, error)
 	Update(*Token) (*Token, error)
@@ -52,8 +62,39 @@ type TokenInterface interface {
 	Controller() TokenController
 }
 
+type tokenLister struct {
+	controller *tokenController
+}
+
+func (l *tokenLister) List(namespace string, selector labels.Selector) (ret []*Token, err error) {
+	err = cache.ListAllByNamespace(l.controller.Informer().GetIndexer(), namespace, selector, func(obj interface{}) {
+		ret = append(ret, obj.(*Token))
+	})
+	return
+}
+
+func (l *tokenLister) Get(namespace, name string) (*Token, error) {
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.NewNotFound(schema.GroupResource{
+			Group:    TokenGroupVersionKind.Group,
+			Resource: "token",
+		}, name)
+	}
+	return obj.(*Token), nil
+}
+
 type tokenController struct {
 	controller.GenericController
+}
+
+func (c *tokenController) Lister() TokenLister {
+	return &tokenLister{
+		controller: c,
+	}
 }
 
 func (c *tokenController) AddHandler(handler TokenHandlerFunc) {
@@ -97,6 +138,7 @@ func (s *tokenClient) Controller() TokenController {
 	}
 
 	s.client.tokenControllers[s.ns] = c
+	s.client.starters = append(s.client.starters, c)
 
 	return c
 }
@@ -106,6 +148,10 @@ type tokenClient struct {
 	ns           string
 	objectClient *clientbase.ObjectClient
 	controller   TokenController
+}
+
+func (s *tokenClient) ObjectClient() *clientbase.ObjectClient {
+	return s.objectClient
 }
 
 func (s *tokenClient) Create(o *Token) (*Token, error) {

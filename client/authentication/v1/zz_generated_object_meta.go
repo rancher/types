@@ -28,7 +28,7 @@ type ObjectMeta struct {
 	DeletionTimestamp          string            `json:"deletionTimestamp,omitempty"`
 	Finalizers                 []string          `json:"finalizers,omitempty"`
 	GenerateName               string            `json:"generateName,omitempty"`
-	Generation                 int64             `json:"generation,omitempty"`
+	Generation                 *int64            `json:"generation,omitempty"`
 	Initializers               *Initializers     `json:"initializers,omitempty"`
 	Labels                     map[string]string `json:"labels,omitempty"`
 	Name                       string            `json:"name,omitempty"`

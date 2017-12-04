@@ -5,25 +5,33 @@ import (
 )
 
 const (
-	TokenType            = "token"
-	TokenFieldAPIVersion = "apiVersion"
-	TokenFieldIsCLI      = "isCLI"
-	TokenFieldKind       = "kind"
-	TokenFieldObjectMeta = "objectMeta"
-	TokenFieldTokenKey   = "tokenKey"
-	TokenFieldTokenValue = "tokenValue"
-	TokenFieldUser       = "user"
+	TokenType                  = "token"
+	TokenFieldAPIVersion       = "apiVersion"
+	TokenFieldAuthProvider     = "authProvider"
+	TokenFieldExternalID       = "externalID"
+	TokenFieldIsDerived        = "IsDerived"
+	TokenFieldKind             = "kind"
+	TokenFieldObjectMeta       = "metadata"
+	TokenFieldRefreshTTLMillis = "refreshTTL"
+	TokenFieldTTLMillis        = "ttl"
+	TokenFieldTokenID          = "tokenID"
+	TokenFieldTokenValue       = "tokenValue"
+	TokenFieldUser             = "user"
 )
 
 type Token struct {
 	types.Resource
-	APIVersion string     `json:"apiVersion,omitempty"`
-	IsCLI      bool       `json:"isCLI,omitempty"`
-	Kind       string     `json:"kind,omitempty"`
-	ObjectMeta ObjectMeta `json:"objectMeta,omitempty"`
-	TokenKey   string     `json:"tokenKey,omitempty"`
-	TokenValue string     `json:"tokenValue,omitempty"`
-	User       string     `json:"user,omitempty"`
+	APIVersion       string      `json:"apiVersion,omitempty"`
+	AuthProvider     string      `json:"authProvider,omitempty"`
+	ExternalID       string      `json:"externalID,omitempty"`
+	IsDerived        *bool       `json:"IsDerived,omitempty"`
+	Kind             string      `json:"kind,omitempty"`
+	ObjectMeta       *ObjectMeta `json:"metadata,omitempty"`
+	RefreshTTLMillis string      `json:"refreshTTL,omitempty"`
+	TTLMillis        string      `json:"ttl,omitempty"`
+	TokenID          string      `json:"tokenID,omitempty"`
+	TokenValue       string      `json:"tokenValue,omitempty"`
+	User             string      `json:"user,omitempty"`
 }
 type TokenCollection struct {
 	types.Collection

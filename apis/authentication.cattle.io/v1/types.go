@@ -8,9 +8,12 @@ type Token struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	TokenKey     string `json:"tokenKey,omitempty"`
-	TokenValue   string `json:"tokenValue,omitempty"`
-	User         string `json:"user,omitempty"`
-	AuthProvider string `json:"authProvider,omitempty"`
-	IsCLI        bool   `json:"isCLI,omitempty"`
+	TokenID          string `json:"tokenID,omitempty"`
+	TokenValue       string `json:"tokenValue,omitempty"`
+	User             string `json:"user,omitempty"`
+	ExternalID       string `json:"externalID,omitempty"`
+	AuthProvider     string `json:"authProvider,omitempty"`
+	TTLMillis        string `json:"ttl,omitempty"`
+	RefreshTTLMillis string `json:"refreshTTL,omitempty"`
+	IsDerived        bool   `json:"IsDerived,omitempty"`
 }
