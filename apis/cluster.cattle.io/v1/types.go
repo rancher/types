@@ -121,7 +121,7 @@ type RancherKubernetesEngineConfig struct {
 	// YAML manifest for user provided addons to be deployed on the cluster
 	Addons string `yaml:"addons" json:"addons,omitempty"`
 	// List of images used internally for proxy, cert downlaod and kubedns
-	RKEImages map[string]string `yaml:"rke_images" json:"rke_images,omitempty"`
+	SystemImages map[string]string `yaml:"system_images" json:"systemImages,omitempty"`
 	// SSH Private Key Path
 	SSHKeyPath string `yaml:"ssh_key_path" json:"sshKeyPath,omitempty"`
 }
