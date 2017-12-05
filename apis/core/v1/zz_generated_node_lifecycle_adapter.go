@@ -7,7 +7,7 @@ import (
 )
 
 type NodeLifecycle interface {
-	Initialize(obj *v1.Node) error
+	Create(obj *v1.Node) error
 	Remove(obj *v1.Node) error
 	Updated(obj *v1.Node) error
 }
@@ -16,8 +16,8 @@ type nodeLifecycleAdapter struct {
 	lifecycle NodeLifecycle
 }
 
-func (w *nodeLifecycleAdapter) Initialize(obj runtime.Object) error {
-	return w.lifecycle.Initialize(obj.(*v1.Node))
+func (w *nodeLifecycleAdapter) Create(obj runtime.Object) error {
+	return w.lifecycle.Create(obj.(*v1.Node))
 }
 
 func (w *nodeLifecycleAdapter) Finalize(obj runtime.Object) error {

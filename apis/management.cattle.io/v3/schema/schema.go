@@ -20,8 +20,16 @@ var (
 		Init(nodeTypes).
 		Init(machineTypes).
 		Init(authTypes).
-		Init(clusterTypes)
+		Init(clusterTypes).
+		Init(catalogTypes)
 )
+
+func catalogTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		MustImport(&Version, v3.Catalog{}).
+		MustImport(&Version, v3.Template{}).
+		MustImport(&Version, v3.TemplateVersion{})
+}
 
 func nodeTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.

@@ -6,7 +6,7 @@ import (
 )
 
 type WorkloadLifecycle interface {
-	Initialize(obj *Workload) error
+	Create(obj *Workload) error
 	Remove(obj *Workload) error
 	Updated(obj *Workload) error
 }
@@ -15,8 +15,8 @@ type workloadLifecycleAdapter struct {
 	lifecycle WorkloadLifecycle
 }
 
-func (w *workloadLifecycleAdapter) Initialize(obj runtime.Object) error {
-	return w.lifecycle.Initialize(obj.(*Workload))
+func (w *workloadLifecycleAdapter) Create(obj runtime.Object) error {
+	return w.lifecycle.Create(obj.(*Workload))
 }
 
 func (w *workloadLifecycleAdapter) Finalize(obj runtime.Object) error {

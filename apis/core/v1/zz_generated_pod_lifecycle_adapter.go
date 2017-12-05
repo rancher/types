@@ -7,7 +7,7 @@ import (
 )
 
 type PodLifecycle interface {
-	Initialize(obj *v1.Pod) error
+	Create(obj *v1.Pod) error
 	Remove(obj *v1.Pod) error
 	Updated(obj *v1.Pod) error
 }
@@ -16,8 +16,8 @@ type podLifecycleAdapter struct {
 	lifecycle PodLifecycle
 }
 
-func (w *podLifecycleAdapter) Initialize(obj runtime.Object) error {
-	return w.lifecycle.Initialize(obj.(*v1.Pod))
+func (w *podLifecycleAdapter) Create(obj runtime.Object) error {
+	return w.lifecycle.Create(obj.(*v1.Pod))
 }
 
 func (w *podLifecycleAdapter) Finalize(obj runtime.Object) error {
