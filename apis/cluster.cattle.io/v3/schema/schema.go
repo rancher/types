@@ -30,6 +30,8 @@ func nodeTypes(schemas *types.Schemas) *types.Schemas {
 			&m.Drop{Field: "nodeInfo"},
 			&m.SliceToMap{Field: "volumesAttached", Key: "devicePath"},
 		).
+		AddMapperForType(&Version, v1.NodeSpec{},
+			&m.Move{From: "externalID", To: "externalId"}).
 		AddMapperForType(&Version, v1.Node{},
 			&m.Embed{Field: "status"},
 			&m.Drop{Field: "conditions"},

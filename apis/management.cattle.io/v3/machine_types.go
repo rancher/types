@@ -59,12 +59,11 @@ type Machine struct {
 }
 
 type MachineStatus struct {
-	Conditions  []MachineCondition `json:"conditions"`
-	Node        v1.Node            `json:"node"`
-	NodeName    string             `json:"nodeName"`
-	ClusterName string             `json:"clusterName" norman:"reference[cluster]"`
-	Requested   v1.ResourceList    `json:"requested,omitempty"`
-	Limits      v1.ResourceList    `json:"limits,omitempty"`
+	Conditions []MachineCondition `json:"conditions"`
+	NodeStatus v1.NodeStatus      `json:"nodeStatus"`
+	NodeName   string             `json:"nodeName"`
+	Requested  v1.ResourceList    `json:"requested,omitempty"`
+	Limits     v1.ResourceList    `json:"limits,omitempty"`
 }
 
 type MachineCondition struct {
@@ -81,13 +80,11 @@ type MachineCondition struct {
 }
 
 type MachineSpec struct {
-	ClusterName         string `norman:"type=reference[cluster]"`
-	ExternalID          string `json:"externalId"`
-	MachineTemplateName string `norman:"type=reference[machineTemplate]"`
-	DisplayName         string `json:"displayName"`
-	Description         string `json:"description"`
-	Hostname            string `json:"hostname"`
-	Driver              string `json:"driver"`
+	NodeSpec            v1.NodeSpec `json:"nodeSpec"`
+	ClusterName         string      `json:"clusterName" norman:"type=reference[cluster]"`
+	MachineTemplateName string      `json:"machineTemplateName" norman:"type=reference[machineTemplate]"`
+	Description         string      `json:"description"`
+	Driver              string      `json:"driver"`
 
 	MachineCommonParams `json:",inline"`
 	AmazonEC2Config     AmazonEC2Config    `json:"amazonEc2Config"`
