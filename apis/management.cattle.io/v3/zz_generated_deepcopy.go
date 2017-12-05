@@ -589,6 +589,11 @@ func (in *GoogleKubernetesEngineConfig) DeepCopyInto(out *GoogleKubernetesEngine
 			(*out)[key] = val
 		}
 	}
+	if in.Locations != nil {
+		in, out := &in.Locations, &out.Locations
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 
