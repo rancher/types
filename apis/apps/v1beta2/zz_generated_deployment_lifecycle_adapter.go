@@ -7,7 +7,7 @@ import (
 )
 
 type DeploymentLifecycle interface {
-	Initialize(obj *v1beta2.Deployment) error
+	Create(obj *v1beta2.Deployment) error
 	Remove(obj *v1beta2.Deployment) error
 	Updated(obj *v1beta2.Deployment) error
 }
@@ -16,8 +16,8 @@ type deploymentLifecycleAdapter struct {
 	lifecycle DeploymentLifecycle
 }
 
-func (w *deploymentLifecycleAdapter) Initialize(obj runtime.Object) error {
-	return w.lifecycle.Initialize(obj.(*v1beta2.Deployment))
+func (w *deploymentLifecycleAdapter) Create(obj runtime.Object) error {
+	return w.lifecycle.Create(obj.(*v1beta2.Deployment))
 }
 
 func (w *deploymentLifecycleAdapter) Finalize(obj runtime.Object) error {

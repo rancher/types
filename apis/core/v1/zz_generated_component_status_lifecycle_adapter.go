@@ -7,7 +7,7 @@ import (
 )
 
 type ComponentStatusLifecycle interface {
-	Initialize(obj *v1.ComponentStatus) error
+	Create(obj *v1.ComponentStatus) error
 	Remove(obj *v1.ComponentStatus) error
 	Updated(obj *v1.ComponentStatus) error
 }
@@ -16,8 +16,8 @@ type componentStatusLifecycleAdapter struct {
 	lifecycle ComponentStatusLifecycle
 }
 
-func (w *componentStatusLifecycleAdapter) Initialize(obj runtime.Object) error {
-	return w.lifecycle.Initialize(obj.(*v1.ComponentStatus))
+func (w *componentStatusLifecycleAdapter) Create(obj runtime.Object) error {
+	return w.lifecycle.Create(obj.(*v1.ComponentStatus))
 }
 
 func (w *componentStatusLifecycleAdapter) Finalize(obj runtime.Object) error {
