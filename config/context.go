@@ -6,64 +6,56 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/signal"
 	appsv1beta2 "github.com/rancher/types/apis/apps/v1beta2"
-	authzv1 "github.com/rancher/types/apis/authorization.cattle.io/v1"
-	clusterv1 "github.com/rancher/types/apis/cluster.cattle.io/v1"
 	corev1 "github.com/rancher/types/apis/core/v1"
-	workloadv1 "github.com/rancher/types/apis/workload.cattle.io/v1"
+	managementv3 "github.com/rancher/types/apis/management.cattle.io/v3"
+	projectv3 "github.com/rancher/types/apis/project.cattle.io/v3"
 	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )
 
-type ClusterContext struct {
+type ManagementContext struct {
 	RESTConfig        rest.Config
 	UnversionedClient rest.Interface
 
-	Cluster       clusterv1.Interface
-	Authorization authzv1.Interface
+	Management managementv3.Interface
 }
 
-func (c *ClusterContext) controllers() []controller.Starter {
+func (c *ManagementContext) controllers() []controller.Starter {
 	return []controller.Starter{
-		c.Cluster,
-		c.Authorization,
+		c.Management,
 	}
 }
 
-type WorkloadContext struct {
-	Cluster           *ClusterContext
+type ClusterContext struct {
+	Management        *ManagementContext
 	ClusterName       string
 	RESTConfig        rest.Config
 	UnversionedClient rest.Interface
 	K8sClient         kubernetes.Interface
 
-	Apps     appsv1beta2.Interface
-	Workload workloadv1.Interface
-	Core     corev1.Interface
+	Apps    appsv1beta2.Interface
+	Project projectv3.Interface
+	Core    corev1.Interface
 }
 
-func (w *WorkloadContext) controllers() []controller.Starter {
+func (w *ClusterContext) controllers() []controller.Starter {
 	return []controller.Starter{
 		w.Apps,
-		w.Workload,
+		w.Project,
 		w.Core,
 	}
 }
 
-func NewClusterContext(config rest.Config) (*ClusterContext, error) {
+func NewManagementContext(config rest.Config) (*ManagementContext, error) {
 	var err error
 
-	context := &ClusterContext{
+	context := &ManagementContext{
 		RESTConfig: config,
 	}
 
-	context.Cluster, err = clusterv1.NewForConfig(config)
-	if err != nil {
-		return nil, err
-	}
-
-	context.Authorization, err = authzv1.NewForConfig(config)
+	context.Management, err = managementv3.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
@@ -82,26 +74,26 @@ func NewClusterContext(config rest.Config) (*ClusterContext, error) {
 	return context, err
 }
 
-func (c *ClusterContext) Start(ctx context.Context) error {
-	logrus.Info("Starting cluster controllers")
+func (c *ManagementContext) Start(ctx context.Context) error {
+	logrus.Info("Starting management controllers")
 	return controller.SyncThenSync(ctx, 5, c.controllers()...)
 }
 
-func (c *ClusterContext) StartAndWait() error {
+func (c *ManagementContext) StartAndWait() error {
 	ctx := signal.SigTermCancelContext(context.Background())
 	c.Start(ctx)
 	<-ctx.Done()
 	return ctx.Err()
 }
 
-func NewWorkloadContext(clusterConfig, config rest.Config, clusterName string) (*WorkloadContext, error) {
+func NewClusterContext(clusterConfig, config rest.Config, clusterName string) (*ClusterContext, error) {
 	var err error
-	context := &WorkloadContext{
+	context := &ClusterContext{
 		RESTConfig:  config,
 		ClusterName: clusterName,
 	}
 
-	context.Cluster, err = NewClusterContext(clusterConfig)
+	context.Management, err = NewManagementContext(clusterConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -116,12 +108,12 @@ func NewWorkloadContext(clusterConfig, config rest.Config, clusterName string) (
 		return nil, err
 	}
 
-	context.Workload, err = workloadv1.NewForConfig(config)
+	context.Core, err = corev1.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Core, err = corev1.NewForConfig(config)
+	context.Project, err = projectv3.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
@@ -140,14 +132,14 @@ func NewWorkloadContext(clusterConfig, config rest.Config, clusterName string) (
 	return context, err
 }
 
-func (w *WorkloadContext) Start(ctx context.Context) error {
-	logrus.Info("Starting workload controllers")
-	controllers := w.Cluster.controllers()
+func (w *ClusterContext) Start(ctx context.Context) error {
+	logrus.Info("Starting cluster controllers")
+	controllers := w.Management.controllers()
 	controllers = append(controllers, w.controllers()...)
 	return controller.SyncThenSync(ctx, 5, controllers...)
 }
 
-func (w *WorkloadContext) StartAndWait() error {
+func (w *ClusterContext) StartAndWait() error {
 	ctx := signal.SigTermCancelContext(context.Background())
 	w.Start(ctx)
 	<-ctx.Done()
