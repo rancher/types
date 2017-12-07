@@ -29,6 +29,7 @@ const (
 	MachineFieldEngineRegistryMirror     = "engineRegistryMirror"
 	MachineFieldEngineStorageDriver      = "engineStorageDriver"
 	MachineFieldExternalId               = "externalId"
+	MachineFieldExtractedConfig          = "extractedConfig"
 	MachineFieldFinalizers               = "finalizers"
 	MachineFieldHostname                 = "hostname"
 	MachineFieldIPAddress                = "ipAddress"
@@ -42,9 +43,11 @@ const (
 	MachineFieldPhase                    = "phase"
 	MachineFieldPodCIDR                  = "podCIDR"
 	MachineFieldProviderID               = "providerID"
+	MachineFieldProvisioned              = "provisioned"
 	MachineFieldRemoved                  = "removed"
 	MachineFieldRequested                = "requested"
 	MachineFieldResourcePath             = "resourcePath"
+	MachineFieldSSHPrivateKey            = "sshPrivateKey"
 	MachineFieldState                    = "state"
 	MachineFieldTaints                   = "taints"
 	MachineFieldTransitioning            = "transitioning"
@@ -80,6 +83,7 @@ type Machine struct {
 	EngineRegistryMirror     []string                  `json:"engineRegistryMirror,omitempty"`
 	EngineStorageDriver      string                    `json:"engineStorageDriver,omitempty"`
 	ExternalId               string                    `json:"externalId,omitempty"`
+	ExtractedConfig          string                    `json:"extractedConfig,omitempty"`
 	Finalizers               []string                  `json:"finalizers,omitempty"`
 	Hostname                 string                    `json:"hostname,omitempty"`
 	IPAddress                string                    `json:"ipAddress,omitempty"`
@@ -93,9 +97,11 @@ type Machine struct {
 	Phase                    string                    `json:"phase,omitempty"`
 	PodCIDR                  string                    `json:"podCIDR,omitempty"`
 	ProviderID               string                    `json:"providerID,omitempty"`
+	Provisioned              *bool                     `json:"provisioned,omitempty"`
 	Removed                  string                    `json:"removed,omitempty"`
 	Requested                map[string]string         `json:"requested,omitempty"`
 	ResourcePath             string                    `json:"resourcePath,omitempty"`
+	SSHPrivateKey            string                    `json:"sshPrivateKey,omitempty"`
 	State                    string                    `json:"state,omitempty"`
 	Taints                   []Taint                   `json:"taints,omitempty"`
 	Transitioning            string                    `json:"transitioning,omitempty"`
