@@ -82,9 +82,8 @@ func authTypes(schemas *types.Schemas) *types.Schemas {
 		MustImportAndCustomize(&Version, v3.Project{}, func(schema *types.Schema) {
 			schema.SubContext = "projects"
 		}).
-		MustImport(&Version, v3.ProjectRoleTemplate{}).
+		MustImport(&Version, v3.RoleTemplate{}).
 		MustImport(&Version, v3.PodSecurityPolicyTemplate{}).
-		MustImport(&Version, v3.ClusterRoleTemplate{}).
 		MustImport(&Version, v3.ClusterRoleTemplateBinding{}).
 		MustImportAndCustomize(&Version, v3.ProjectRoleTemplateBinding{}, func(schema *types.Schema) {
 			schema.MustCustomizeField("subjectKind", func(field types.Field) types.Field {

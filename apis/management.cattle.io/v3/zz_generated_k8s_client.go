@@ -18,9 +18,8 @@ type Interface interface {
 	MachineDriversGetter
 	MachineTemplatesGetter
 	ProjectsGetter
-	ProjectRoleTemplatesGetter
+	RoleTemplatesGetter
 	PodSecurityPolicyTemplatesGetter
-	ClusterRoleTemplatesGetter
 	ClusterRoleTemplateBindingsGetter
 	ProjectRoleTemplateBindingsGetter
 	ClustersGetter
@@ -38,9 +37,8 @@ type Client struct {
 	machineDriverControllers              map[string]MachineDriverController
 	machineTemplateControllers            map[string]MachineTemplateController
 	projectControllers                    map[string]ProjectController
-	projectRoleTemplateControllers        map[string]ProjectRoleTemplateController
+	roleTemplateControllers               map[string]RoleTemplateController
 	podSecurityPolicyTemplateControllers  map[string]PodSecurityPolicyTemplateController
-	clusterRoleTemplateControllers        map[string]ClusterRoleTemplateController
 	clusterRoleTemplateBindingControllers map[string]ClusterRoleTemplateBindingController
 	projectRoleTemplateBindingControllers map[string]ProjectRoleTemplateBindingController
 	clusterControllers                    map[string]ClusterController
@@ -67,9 +65,8 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		machineDriverControllers:              map[string]MachineDriverController{},
 		machineTemplateControllers:            map[string]MachineTemplateController{},
 		projectControllers:                    map[string]ProjectController{},
-		projectRoleTemplateControllers:        map[string]ProjectRoleTemplateController{},
+		roleTemplateControllers:               map[string]RoleTemplateController{},
 		podSecurityPolicyTemplateControllers:  map[string]PodSecurityPolicyTemplateController{},
-		clusterRoleTemplateControllers:        map[string]ClusterRoleTemplateController{},
 		clusterRoleTemplateBindingControllers: map[string]ClusterRoleTemplateBindingController{},
 		projectRoleTemplateBindingControllers: map[string]ProjectRoleTemplateBindingController{},
 		clusterControllers:                    map[string]ClusterController{},
@@ -143,13 +140,13 @@ func (c *Client) Projects(namespace string) ProjectInterface {
 	}
 }
 
-type ProjectRoleTemplatesGetter interface {
-	ProjectRoleTemplates(namespace string) ProjectRoleTemplateInterface
+type RoleTemplatesGetter interface {
+	RoleTemplates(namespace string) RoleTemplateInterface
 }
 
-func (c *Client) ProjectRoleTemplates(namespace string) ProjectRoleTemplateInterface {
-	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ProjectRoleTemplateResource, ProjectRoleTemplateGroupVersionKind, projectRoleTemplateFactory{})
-	return &projectRoleTemplateClient{
+func (c *Client) RoleTemplates(namespace string) RoleTemplateInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &RoleTemplateResource, RoleTemplateGroupVersionKind, roleTemplateFactory{})
+	return &roleTemplateClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
@@ -163,19 +160,6 @@ type PodSecurityPolicyTemplatesGetter interface {
 func (c *Client) PodSecurityPolicyTemplates(namespace string) PodSecurityPolicyTemplateInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &PodSecurityPolicyTemplateResource, PodSecurityPolicyTemplateGroupVersionKind, podSecurityPolicyTemplateFactory{})
 	return &podSecurityPolicyTemplateClient{
-		ns:           namespace,
-		client:       c,
-		objectClient: objectClient,
-	}
-}
-
-type ClusterRoleTemplatesGetter interface {
-	ClusterRoleTemplates(namespace string) ClusterRoleTemplateInterface
-}
-
-func (c *Client) ClusterRoleTemplates(namespace string) ClusterRoleTemplateInterface {
-	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ClusterRoleTemplateResource, ClusterRoleTemplateGroupVersionKind, clusterRoleTemplateFactory{})
-	return &clusterRoleTemplateClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
