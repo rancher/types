@@ -31,6 +31,7 @@ type Interface interface {
 	GroupsGetter
 	GroupMembersGetter
 	IdentitiesGetter
+	DynamicSchemasGetter
 }
 
 type Client struct {
@@ -55,6 +56,7 @@ type Client struct {
 	groupControllers                      map[string]GroupController
 	groupMemberControllers                map[string]GroupMemberController
 	identityControllers                   map[string]IdentityController
+	dynamicSchemaControllers              map[string]DynamicSchemaController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -88,6 +90,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		groupControllers:                      map[string]GroupController{},
 		groupMemberControllers:                map[string]GroupMemberController{},
 		identityControllers:                   map[string]IdentityController{},
+		dynamicSchemaControllers:              map[string]DynamicSchemaController{},
 	}, nil
 }
 
@@ -318,6 +321,19 @@ type IdentitiesGetter interface {
 func (c *Client) Identities(namespace string) IdentityInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &IdentityResource, IdentityGroupVersionKind, identityFactory{})
 	return &identityClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type DynamicSchemasGetter interface {
+	DynamicSchemas(namespace string) DynamicSchemaInterface
+}
+
+func (c *Client) DynamicSchemas(namespace string) DynamicSchemaInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &DynamicSchemaResource, DynamicSchemaGroupVersionKind, dynamicSchemaFactory{})
+	return &dynamicSchemaClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
