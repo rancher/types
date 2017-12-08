@@ -22,8 +22,14 @@ var (
 		Init(authzTypes).
 		Init(clusterTypes).
 		Init(catalogTypes).
-		Init(authnTypes)
+		Init(authnTypes).
+		Init(schemaTypes)
 )
+
+func schemaTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		MustImport(&Version, v3.DynamicSchema{})
+}
 
 func catalogTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
