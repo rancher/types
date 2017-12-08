@@ -12,9 +12,8 @@ type Client struct {
 	MachineDriver              MachineDriverOperations
 	MachineTemplate            MachineTemplateOperations
 	Project                    ProjectOperations
-	ProjectRoleTemplate        ProjectRoleTemplateOperations
+	RoleTemplate               RoleTemplateOperations
 	PodSecurityPolicyTemplate  PodSecurityPolicyTemplateOperations
-	ClusterRoleTemplate        ClusterRoleTemplateOperations
 	ClusterRoleTemplateBinding ClusterRoleTemplateBindingOperations
 	ProjectRoleTemplateBinding ProjectRoleTemplateBindingOperations
 	Cluster                    ClusterOperations
@@ -38,9 +37,8 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.MachineDriver = newMachineDriverClient(client)
 	client.MachineTemplate = newMachineTemplateClient(client)
 	client.Project = newProjectClient(client)
-	client.ProjectRoleTemplate = newProjectRoleTemplateClient(client)
+	client.RoleTemplate = newRoleTemplateClient(client)
 	client.PodSecurityPolicyTemplate = newPodSecurityPolicyTemplateClient(client)
-	client.ClusterRoleTemplate = newClusterRoleTemplateClient(client)
 	client.ClusterRoleTemplateBinding = newClusterRoleTemplateBindingClient(client)
 	client.ProjectRoleTemplateBinding = newProjectRoleTemplateBindingClient(client)
 	client.Cluster = newClusterClient(client)

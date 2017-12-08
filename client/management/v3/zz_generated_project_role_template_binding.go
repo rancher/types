@@ -5,39 +5,39 @@ import (
 )
 
 const (
-	ProjectRoleTemplateBindingType                       = "projectRoleTemplateBinding"
-	ProjectRoleTemplateBindingFieldAnnotations           = "annotations"
-	ProjectRoleTemplateBindingFieldCreated               = "created"
-	ProjectRoleTemplateBindingFieldFinalizers            = "finalizers"
-	ProjectRoleTemplateBindingFieldLabels                = "labels"
-	ProjectRoleTemplateBindingFieldName                  = "name"
-	ProjectRoleTemplateBindingFieldOwnerReferences       = "ownerReferences"
-	ProjectRoleTemplateBindingFieldProjectId             = "projectId"
-	ProjectRoleTemplateBindingFieldProjectRoleTemplateId = "projectRoleTemplateId"
-	ProjectRoleTemplateBindingFieldRemoved               = "removed"
-	ProjectRoleTemplateBindingFieldResourcePath          = "resourcePath"
-	ProjectRoleTemplateBindingFieldSubjectKind           = "subjectKind"
-	ProjectRoleTemplateBindingFieldSubjectName           = "subjectName"
-	ProjectRoleTemplateBindingFieldSubjectNamespace      = "subjectNamespace"
-	ProjectRoleTemplateBindingFieldUuid                  = "uuid"
+	ProjectRoleTemplateBindingType                  = "projectRoleTemplateBinding"
+	ProjectRoleTemplateBindingFieldAnnotations      = "annotations"
+	ProjectRoleTemplateBindingFieldCreated          = "created"
+	ProjectRoleTemplateBindingFieldFinalizers       = "finalizers"
+	ProjectRoleTemplateBindingFieldLabels           = "labels"
+	ProjectRoleTemplateBindingFieldName             = "name"
+	ProjectRoleTemplateBindingFieldOwnerReferences  = "ownerReferences"
+	ProjectRoleTemplateBindingFieldProjectId        = "projectId"
+	ProjectRoleTemplateBindingFieldRemoved          = "removed"
+	ProjectRoleTemplateBindingFieldResourcePath     = "resourcePath"
+	ProjectRoleTemplateBindingFieldRoleTemplateId   = "roleTemplateId"
+	ProjectRoleTemplateBindingFieldSubjectKind      = "subjectKind"
+	ProjectRoleTemplateBindingFieldSubjectName      = "subjectName"
+	ProjectRoleTemplateBindingFieldSubjectNamespace = "subjectNamespace"
+	ProjectRoleTemplateBindingFieldUuid             = "uuid"
 )
 
 type ProjectRoleTemplateBinding struct {
 	types.Resource
-	Annotations           map[string]string `json:"annotations,omitempty"`
-	Created               string            `json:"created,omitempty"`
-	Finalizers            []string          `json:"finalizers,omitempty"`
-	Labels                map[string]string `json:"labels,omitempty"`
-	Name                  string            `json:"name,omitempty"`
-	OwnerReferences       []OwnerReference  `json:"ownerReferences,omitempty"`
-	ProjectId             string            `json:"projectId,omitempty"`
-	ProjectRoleTemplateId string            `json:"projectRoleTemplateId,omitempty"`
-	Removed               string            `json:"removed,omitempty"`
-	ResourcePath          string            `json:"resourcePath,omitempty"`
-	SubjectKind           string            `json:"subjectKind,omitempty"`
-	SubjectName           string            `json:"subjectName,omitempty"`
-	SubjectNamespace      string            `json:"subjectNamespace,omitempty"`
-	Uuid                  string            `json:"uuid,omitempty"`
+	Annotations      map[string]string `json:"annotations,omitempty"`
+	Created          string            `json:"created,omitempty"`
+	Finalizers       []string          `json:"finalizers,omitempty"`
+	Labels           map[string]string `json:"labels,omitempty"`
+	Name             string            `json:"name,omitempty"`
+	OwnerReferences  []OwnerReference  `json:"ownerReferences,omitempty"`
+	ProjectId        string            `json:"projectId,omitempty"`
+	Removed          string            `json:"removed,omitempty"`
+	ResourcePath     string            `json:"resourcePath,omitempty"`
+	RoleTemplateId   string            `json:"roleTemplateId,omitempty"`
+	SubjectKind      string            `json:"subjectKind,omitempty"`
+	SubjectName      string            `json:"subjectName,omitempty"`
+	SubjectNamespace string            `json:"subjectNamespace,omitempty"`
+	Uuid             string            `json:"uuid,omitempty"`
 }
 type ProjectRoleTemplateBindingCollection struct {
 	types.Collection

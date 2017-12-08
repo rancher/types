@@ -18,14 +18,15 @@ type ProjectSpec struct {
 	ClusterName string `json:"clusterName,omitempty" norman:"required,type=reference[cluster]"`
 }
 
-type ProjectRoleTemplate struct {
+type RoleTemplate struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Rules   []rbacv1.PolicyRule `json:"rules,omitempty"`
 	Builtin bool                `json:"builtin"`
 
-	ProjectRoleTemplateNames []string `json:"projectRoleTemplateNames,omitempty" norman:"type=array[reference[projectRoleTemplate]]"`
+	RoleTemplateNames              []string `json:"roleTemplateNames,omitempty" norman:"type=array[reference[roleTemplate]]"`
+	PodSecurityPolicyTemplateNames []string `json:"podSecurityPolicyTemplateNames,omitempty" norman:"type=array[reference[podSecurityPolicyTemplate]]"`
 }
 
 type PodSecurityPolicyTemplate struct {
@@ -41,18 +42,8 @@ type ProjectRoleTemplateBinding struct {
 
 	Subject rbacv1.Subject `json:"subject,omitempty"`
 
-	ProjectName             string `json:"projectName,omitempty" norman:"type=reference[project]"`
-	ProjectRoleTemplateName string `json:"projectRoleTemplateName,omitempty" norman:"type=reference[projectRoleTemplate]"`
-}
-
-type ClusterRoleTemplate struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Rules   []rbacv1.PolicyRule `json:"rules,omitempty"`
-	Builtin bool                `json:"builtin"`
-
-	ClusterRoleTemplateNames []string `json:"clusterRoleTemplateNames,omitempty" norman:"type=array[reference[clusterRoleTemplate]]"`
+	ProjectName      string `json:"projectName,omitempty" norman:"type=reference[project]"`
+	RoleTemplateName string `json:"roleTemplateName,omitempty" norman:"type=reference[roleTemplate]"`
 }
 
 type ClusterRoleTemplateBinding struct {
@@ -61,6 +52,6 @@ type ClusterRoleTemplateBinding struct {
 
 	Subject rbacv1.Subject `json:"subject,omitempty"`
 
-	ClusterName             string `json:"clusterName,omitempty" norman:"type=reference[cluster]"`
-	ClusterRoleTemplateName string `json:"clusterRoleTemplateName,omitempty" norman:"type=reference[clusterRoleTemplate]"`
+	ClusterName      string `json:"clusterName,omitempty" norman:"type=reference[cluster]"`
+	RoleTemplateName string `json:"roleTemplateName,omitempty" norman:"type=reference[roleTemplate]"`
 }
