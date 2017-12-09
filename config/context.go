@@ -7,8 +7,10 @@ import (
 	"github.com/rancher/norman/signal"
 	appsv1beta2 "github.com/rancher/types/apis/apps/v1beta2"
 	corev1 "github.com/rancher/types/apis/core/v1"
+	extv1beta1 "github.com/rancher/types/apis/extensions/v1beta1"
 	managementv3 "github.com/rancher/types/apis/management.cattle.io/v3"
 	projectv3 "github.com/rancher/types/apis/project.cattle.io/v3"
+	rbacv1 "github.com/rancher/types/apis/rbac/v1"
 	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
@@ -35,9 +37,11 @@ type ClusterContext struct {
 	UnversionedClient rest.Interface
 	K8sClient         kubernetes.Interface
 
-	Apps    appsv1beta2.Interface
-	Project projectv3.Interface
-	Core    corev1.Interface
+	Apps       appsv1beta2.Interface
+	Project    projectv3.Interface
+	Core       corev1.Interface
+	RBAC       rbacv1.Interface
+	Extensions extv1beta1.Interface
 }
 
 func (w *ClusterContext) controllers() []controller.Starter {
@@ -45,6 +49,8 @@ func (w *ClusterContext) controllers() []controller.Starter {
 		w.Apps,
 		w.Project,
 		w.Core,
+		w.RBAC,
+		w.Extensions,
 	}
 }
 
@@ -114,6 +120,16 @@ func NewClusterContext(clusterConfig, config rest.Config, clusterName string) (*
 	}
 
 	context.Project, err = projectv3.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	context.RBAC, err = rbacv1.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	context.Extensions, err = extv1beta1.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
