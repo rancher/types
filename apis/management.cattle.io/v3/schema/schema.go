@@ -19,9 +19,10 @@ var (
 	Schemas = factory.Schemas(&Version).
 		Init(nodeTypes).
 		Init(machineTypes).
-		Init(authTypes).
+		Init(authzTypes).
 		Init(clusterTypes).
-		Init(catalogTypes)
+		Init(catalogTypes).
+		Init(authnTypes)
 )
 
 func catalogTypes(schemas *types.Schemas) *types.Schemas {
@@ -68,7 +69,7 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.Cluster{})
 }
 
-func authTypes(schemas *types.Schemas) *types.Schemas {
+func authzTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		AddMapperForType(&Version, v3.Project{},
 			m.DisplayName{},
@@ -110,4 +111,13 @@ func machineTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.Machine{}).
 		MustImport(&Version, v3.MachineDriver{}).
 		MustImport(&Version, v3.MachineTemplate{})
+}
+
+func authnTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		MustImport(&Version, v3.Token{}).
+		MustImport(&Version, v3.User{}).
+		MustImport(&Version, v3.Group{}).
+		MustImport(&Version, v3.GroupMember{}).
+		MustImport(&Version, v3.Identity{})
 }
