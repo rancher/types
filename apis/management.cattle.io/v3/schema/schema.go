@@ -72,7 +72,8 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 		AddMapperForType(&Version, v3.ClusterStatus{},
 			m.Drop{"appliedSpec"},
 		).
-		MustImport(&Version, v3.Cluster{})
+		MustImport(&Version, v3.Cluster{}).
+		MustImport(&Version, v3.ClusterEvent{})
 }
 
 func authzTypes(schemas *types.Schemas) *types.Schemas {
