@@ -66,14 +66,14 @@ func nodeTypes(schemas *types.Schemas) *types.Schemas {
 func clusterTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		AddMapperForType(&Version, v3.Cluster{},
-			m.DisplayName{},
 			&m.Embed{Field: "status"},
 		).
 		AddMapperForType(&Version, v3.ClusterStatus{},
 			m.Drop{"appliedSpec"},
 		).
 		MustImport(&Version, v3.Cluster{}).
-		MustImport(&Version, v3.ClusterEvent{})
+		MustImport(&Version, v3.ClusterEvent{}).
+		MustImport(&Version, v3.ClusterRegistrationToken{})
 }
 
 func authzTypes(schemas *types.Schemas) *types.Schemas {

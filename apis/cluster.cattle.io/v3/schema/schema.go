@@ -17,21 +17,12 @@ var (
 	}
 
 	Schemas = factory.Schemas(&Version).
-		Init(nodeTypes).
-		Init(copyNamespace)
+		Init(namespaceTypes).
+		Init(nodeTypes)
 )
 
-func copyNamespace(schemas *types.Schemas) *types.Schemas {
-	cloneProjectSchema("namespaceStatus", schemas)
-	cloneProjectSchema("namespace", schemas)
-	return schemas
-}
-
-func cloneProjectSchema(name string, schemas *types.Schemas) {
-	schema := schema.Schemas.Schema(&schema.Version, name)
-	copy := *schema
-	copy.Version = Version
-	schemas.AddSchema(copy)
+func namespaceTypes(schemas *types.Schemas) *types.Schemas {
+	return schema.NamespaceTypes(&Version, schemas)
 }
 
 func nodeTypes(schemas *types.Schemas) *types.Schemas {
