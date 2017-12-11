@@ -33,17 +33,21 @@ var (
 )
 
 func namespaceTypes(schemas *types.Schemas) *types.Schemas {
+	return NamespaceTypes(&Version, schemas)
+}
+
+func NamespaceTypes(version *types.APIVersion, schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		AddMapperForType(&Version, v1.NamespaceStatus{},
+		AddMapperForType(version, v1.NamespaceStatus{},
 			&m.Drop{Field: "phase"},
 		).
-		AddMapperForType(&Version, v1.NamespaceSpec{},
+		AddMapperForType(version, v1.NamespaceSpec{},
 			&m.Drop{Field: "finalizers"},
 		).
-		AddMapperForType(&Version, v1.Namespace{},
+		AddMapperForType(version, v1.Namespace{},
 			&m.LabelField{Field: "projectId"},
 		).
-		MustImport(&Version, v1.Namespace{}, struct {
+		MustImport(version, v1.Namespace{}, struct {
 			ProjectID  string `norman:"type=reference[/v3/schemas/project]"`
 			Templates  map[string]string
 			Answers    map[string]interface{}

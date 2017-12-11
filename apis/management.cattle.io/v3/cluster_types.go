@@ -35,8 +35,8 @@ type Cluster struct {
 }
 
 type ClusterSpec struct {
-	DisplayName                   string                         `json:"displayName"`
 	Description                   string                         `json:"description"`
+	Internal                      bool                           `json:"internal" norman:"nocreate,noupdate"`
 	GoogleKubernetesEngineConfig  *GoogleKubernetesEngineConfig  `json:"googleKubernetesEngineConfig,omitempty"`
 	AzureKubernetesServiceConfig  *AzureKubernetesServiceConfig  `json:"azureKubernetesServiceConfig,omitempty"`
 	RancherKubernetesEngineConfig *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty"`
@@ -130,4 +130,26 @@ type AzureKubernetesServiceConfig struct {
 type ClusterEvent struct {
 	v1.Event
 	ClusterName string
+}
+
+type ClusterRegistrationToken struct {
+	metav1.TypeMeta `json:",inline"`
+	// Standard object’s metadata. More info:
+	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#metadata
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	// Specification of the desired behavior of the the cluster. More info:
+	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
+	Spec ClusterRegistrationTokenSpec `json:"spec"`
+	// Most recent observed status of the cluster. More info:
+	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
+	Status ClusterRegistrationTokenStatus `json:"status"`
+}
+
+type ClusterRegistrationTokenSpec struct {
+}
+
+type ClusterRegistrationTokenStatus struct {
+	Command     string `json:"command"`
+	ManifestURL string `json:"manifestUrl"`
+	Token       string `json:"token"`
 }
