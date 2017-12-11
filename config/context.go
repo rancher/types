@@ -18,6 +18,7 @@ import (
 )
 
 type ManagementContext struct {
+	LocalConfig       *rest.Config
 	RESTConfig        rest.Config
 	UnversionedClient rest.Interface
 
@@ -92,14 +93,14 @@ func (c *ManagementContext) StartAndWait() error {
 	return ctx.Err()
 }
 
-func NewClusterContext(clusterConfig, config rest.Config, clusterName string) (*ClusterContext, error) {
+func NewClusterContext(managementConfig, config rest.Config, clusterName string) (*ClusterContext, error) {
 	var err error
 	context := &ClusterContext{
 		RESTConfig:  config,
 		ClusterName: clusterName,
 	}
 
-	context.Management, err = NewManagementContext(clusterConfig)
+	context.Management, err = NewManagementContext(managementConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -155,8 +156,8 @@ func (w *ClusterContext) Start(ctx context.Context) error {
 	return controller.SyncThenSync(ctx, 5, controllers...)
 }
 
-func (w *ClusterContext) StartAndWait() error {
-	ctx := signal.SigTermCancelContext(context.Background())
+func (w *ClusterContext) StartAndWait(ctx context.Context) error {
+	ctx = signal.SigTermCancelContext(ctx)
 	w.Start(ctx)
 	<-ctx.Done()
 	return ctx.Err()

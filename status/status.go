@@ -30,24 +30,25 @@ var conditionMappings = []conditionMapping{
 		State:      "initializing",
 	},
 	{
-		Name:       "Ready",
-		Transition: true,
-		State:      "activating",
-	},
-	{
 		Name:       "Available",
 		Transition: true,
 		State:      "activating",
 	},
 	{
-		Name:        "Updating",
-		Transition:  true,
-		FalseIsGood: true,
-	},
-	{
 		Name:       "Progressing",
 		Transition: true,
 		State:      "updating",
+	},
+	{
+		Name:       "Provisioned",
+		Transition: true,
+		State:      "provisioning",
+	},
+	{
+		Name:        "Updating",
+		Transition:  true,
+		FalseIsGood: true,
+		State:       "updating",
 	},
 	{
 		Name:       "ConfigOK",
@@ -84,8 +85,14 @@ var conditionMappings = []conditionMapping{
 		FalseIsGood: true,
 	},
 	{
-		Name:  "NetworkUnavailable",
-		Error: true,
+		Name:        "NetworkUnavailable",
+		FalseIsGood: true,
+		Error:       true,
+	},
+	{
+		Name:        "KernelHasNoDeadlock",
+		FalseIsGood: true,
+		Error:       true,
 	},
 	{
 		Name:        "Unschedulable",
@@ -96,6 +103,11 @@ var conditionMappings = []conditionMapping{
 		Name:        "ReplicaFailure",
 		Error:       true,
 		FalseIsGood: true,
+	},
+	{
+		Name:       "Ready",
+		Transition: true,
+		State:      "activating",
 	},
 }
 
@@ -120,6 +132,15 @@ func Set(data map[string]interface{}) {
 
 	val, ok = values.GetValue(data, "status", "conditions")
 	if !ok || val == nil {
+		if val, ok := values.GetValue(data, "metadata", "created"); ok {
+			if i, err := convert.ToTimestamp(val); err == nil {
+				if time.Unix(i/1000, 0).Add(5 * time.Second).Before(time.Now()) {
+					data["state"] = "active"
+					return
+				}
+			}
+		}
+
 		data["state"] = "initializing"
 		data["transitioning"] = "yes"
 		return
@@ -154,6 +175,8 @@ func Set(data map[string]interface{}) {
 		if conditionMapping.FalseIsGood && condition.Status == "True" {
 			good = false
 		} else if !conditionMapping.FalseIsGood && condition.Status == "False" {
+			good = false
+		} else if conditionMapping.Transition && !conditionMapping.FalseIsGood && condition.Status == "Unknown" {
 			good = false
 		}
 
