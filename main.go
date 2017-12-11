@@ -19,7 +19,7 @@ func main() {
 	generator.Generate(clusterSchema.Schemas)
 	generator.Generate(projectSchema.Schemas)
 	// Group by API group
-	generator.GenerateNativeTypes(v1.Pod{}, v1.Node{}, v1.ComponentStatus{}, v1.Namespace{})
+	generator.GenerateNativeTypes(v1.Pod{}, v1.Node{}, v1.ComponentStatus{}, v1.Namespace{}, v1.Event{})
 	generator.GenerateNativeTypes(v1beta2.Deployment{})
 	generator.GenerateNativeTypes(rbacv1.RoleBinding{}, rbacv1.ClusterRoleBinding{}, rbacv1.ClusterRole{})
 	generator.GenerateNativeTypes(extv1beta1.PodSecurityPolicy{})

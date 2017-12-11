@@ -126,3 +126,8 @@ type GoogleKubernetesEngineConfig struct {
 type AzureKubernetesServiceConfig struct {
 	//TBD
 }
+
+type ClusterEvent struct {
+	v1.Event
+	ClusterName string
+}
