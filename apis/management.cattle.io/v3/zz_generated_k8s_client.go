@@ -24,6 +24,7 @@ type Interface interface {
 	ProjectRoleTemplateBindingsGetter
 	ClustersGetter
 	ClusterEventsGetter
+	ClusterRegistrationTokensGetter
 	CatalogsGetter
 	TemplatesGetter
 	TemplateVersionsGetter
@@ -53,6 +54,7 @@ type Client struct {
 	projectRoleTemplateBindingControllers map[string]ProjectRoleTemplateBindingController
 	clusterControllers                    map[string]ClusterController
 	clusterEventControllers               map[string]ClusterEventController
+	clusterRegistrationTokenControllers   map[string]ClusterRegistrationTokenController
 	catalogControllers                    map[string]CatalogController
 	templateControllers                   map[string]TemplateController
 	templateVersionControllers            map[string]TemplateVersionController
@@ -91,6 +93,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		projectRoleTemplateBindingControllers: map[string]ProjectRoleTemplateBindingController{},
 		clusterControllers:                    map[string]ClusterController{},
 		clusterEventControllers:               map[string]ClusterEventController{},
+		clusterRegistrationTokenControllers:   map[string]ClusterRegistrationTokenController{},
 		catalogControllers:                    map[string]CatalogController{},
 		templateControllers:                   map[string]TemplateController{},
 		templateVersionControllers:            map[string]TemplateVersionController{},
@@ -242,6 +245,19 @@ type ClusterEventsGetter interface {
 func (c *Client) ClusterEvents(namespace string) ClusterEventInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ClusterEventResource, ClusterEventGroupVersionKind, clusterEventFactory{})
 	return &clusterEventClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type ClusterRegistrationTokensGetter interface {
+	ClusterRegistrationTokens(namespace string) ClusterRegistrationTokenInterface
+}
+
+func (c *Client) ClusterRegistrationTokens(namespace string) ClusterRegistrationTokenInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ClusterRegistrationTokenResource, ClusterRegistrationTokenGroupVersionKind, clusterRegistrationTokenFactory{})
+	return &clusterRegistrationTokenClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
