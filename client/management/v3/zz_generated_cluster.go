@@ -18,7 +18,7 @@ const (
 	ClusterFieldDescription                   = "description"
 	ClusterFieldFinalizers                    = "finalizers"
 	ClusterFieldGoogleKubernetesEngineConfig  = "googleKubernetesEngineConfig"
-	ClusterFieldId                            = "id"
+	ClusterFieldInternal                      = "internal"
 	ClusterFieldLabels                        = "labels"
 	ClusterFieldLimits                        = "limits"
 	ClusterFieldName                          = "name"
@@ -48,7 +48,7 @@ type Cluster struct {
 	Description                   string                         `json:"description,omitempty"`
 	Finalizers                    []string                       `json:"finalizers,omitempty"`
 	GoogleKubernetesEngineConfig  *GoogleKubernetesEngineConfig  `json:"googleKubernetesEngineConfig,omitempty"`
-	Id                            string                         `json:"id,omitempty"`
+	Internal                      *bool                          `json:"internal,omitempty"`
 	Labels                        map[string]string              `json:"labels,omitempty"`
 	Limits                        map[string]string              `json:"limits,omitempty"`
 	Name                          string                         `json:"name,omitempty"`

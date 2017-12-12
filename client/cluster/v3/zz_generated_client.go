@@ -7,8 +7,8 @@ import (
 type Client struct {
 	clientbase.APIBaseClient
 
-	Node      NodeOperations
 	Namespace NamespaceOperations
+	Node      NodeOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -21,8 +21,8 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 		APIBaseClient: baseClient,
 	}
 
-	client.Node = newNodeClient(client)
 	client.Namespace = newNamespaceClient(client)
+	client.Node = newNodeClient(client)
 
 	return client, nil
 }
