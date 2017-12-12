@@ -126,5 +126,8 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.User{}).
 		MustImport(&Version, v3.Group{}).
 		MustImport(&Version, v3.GroupMember{}).
-		MustImport(&Version, v3.Identity{})
+		MustImport(&Version, v3.Identity{}).
+		MustImport(&Version, v3.LoginInput{}).
+		MustImport(&Version, v3.LocalCredential{}).
+		MustImport(&Version, v3.GithubCredential{})
 }

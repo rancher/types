@@ -32,6 +32,9 @@ type Interface interface {
 	GroupsGetter
 	GroupMembersGetter
 	IdentitiesGetter
+	LocalCredentialsGetter
+	GithubCredentialsGetter
+	LoginInputsGetter
 	DynamicSchemasGetter
 }
 
@@ -58,6 +61,9 @@ type Client struct {
 	groupControllers                      map[string]GroupController
 	groupMemberControllers                map[string]GroupMemberController
 	identityControllers                   map[string]IdentityController
+	localCredentialControllers            map[string]LocalCredentialController
+	githubCredentialControllers           map[string]GithubCredentialController
+	loginInputControllers                 map[string]LoginInputController
 	dynamicSchemaControllers              map[string]DynamicSchemaController
 }
 
@@ -93,6 +99,9 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		groupControllers:                      map[string]GroupController{},
 		groupMemberControllers:                map[string]GroupMemberController{},
 		identityControllers:                   map[string]IdentityController{},
+		localCredentialControllers:            map[string]LocalCredentialController{},
+		githubCredentialControllers:           map[string]GithubCredentialController{},
+		loginInputControllers:                 map[string]LoginInputController{},
 		dynamicSchemaControllers:              map[string]DynamicSchemaController{},
 	}, nil
 }
@@ -337,6 +346,45 @@ type IdentitiesGetter interface {
 func (c *Client) Identities(namespace string) IdentityInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &IdentityResource, IdentityGroupVersionKind, identityFactory{})
 	return &identityClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type LocalCredentialsGetter interface {
+	LocalCredentials(namespace string) LocalCredentialInterface
+}
+
+func (c *Client) LocalCredentials(namespace string) LocalCredentialInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &LocalCredentialResource, LocalCredentialGroupVersionKind, localCredentialFactory{})
+	return &localCredentialClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type GithubCredentialsGetter interface {
+	GithubCredentials(namespace string) GithubCredentialInterface
+}
+
+func (c *Client) GithubCredentials(namespace string) GithubCredentialInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &GithubCredentialResource, GithubCredentialGroupVersionKind, githubCredentialFactory{})
+	return &githubCredentialClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type LoginInputsGetter interface {
+	LoginInputs(namespace string) LoginInputInterface
+}
+
+func (c *Client) LoginInputs(namespace string) LoginInputInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &LoginInputResource, LoginInputGroupVersionKind, loginInputFactory{})
+	return &loginInputClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

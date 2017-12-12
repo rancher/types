@@ -8,8 +8,7 @@ const (
 	UserType                 = "user"
 	UserFieldAnnotations     = "annotations"
 	UserFieldCreated         = "created"
-	UserFieldDisplayName     = "displayName"
-	UserFieldExternalID      = "externalID"
+	UserFieldExternalID      = "externalId"
 	UserFieldFinalizers      = "finalizers"
 	UserFieldLabels          = "labels"
 	UserFieldName            = "name"
@@ -17,7 +16,6 @@ const (
 	UserFieldRemoved         = "removed"
 	UserFieldResourcePath    = "resourcePath"
 	UserFieldSecret          = "secret"
-	UserFieldUserName        = "userName"
 	UserFieldUuid            = "uuid"
 )
 
@@ -25,8 +23,7 @@ type User struct {
 	types.Resource
 	Annotations     map[string]string `json:"annotations,omitempty"`
 	Created         string            `json:"created,omitempty"`
-	DisplayName     string            `json:"displayName,omitempty"`
-	ExternalID      string            `json:"externalID,omitempty"`
+	ExternalID      string            `json:"externalId,omitempty"`
 	Finalizers      []string          `json:"finalizers,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty"`
 	Name            string            `json:"name,omitempty"`
@@ -34,7 +31,6 @@ type User struct {
 	Removed         string            `json:"removed,omitempty"`
 	ResourcePath    string            `json:"resourcePath,omitempty"`
 	Secret          string            `json:"secret,omitempty"`
-	UserName        string            `json:"userName,omitempty"`
 	Uuid            string            `json:"uuid,omitempty"`
 }
 type UserCollection struct {

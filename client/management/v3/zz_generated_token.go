@@ -5,49 +5,49 @@ import (
 )
 
 const (
-	TokenType                  = "token"
-	TokenFieldAnnotations      = "annotations"
-	TokenFieldAuthProvider     = "authProvider"
-	TokenFieldCreated          = "created"
-	TokenFieldDescription      = "description"
-	TokenFieldExternalID       = "externalID"
-	TokenFieldFinalizers       = "finalizers"
-	TokenFieldIsDerived        = "isDerived"
-	TokenFieldLabels           = "labels"
-	TokenFieldLastUpdateTime   = "lastUpdateTime"
-	TokenFieldName             = "name"
-	TokenFieldOwnerReferences  = "ownerReferences"
-	TokenFieldRefreshTTLMillis = "refreshTTL"
-	TokenFieldRemoved          = "removed"
-	TokenFieldResourcePath     = "resourcePath"
-	TokenFieldTTLMillis        = "ttl"
-	TokenFieldTokenID          = "tokenID"
-	TokenFieldTokenValue       = "tokenValue"
-	TokenFieldUser             = "user"
-	TokenFieldUuid             = "uuid"
+	TokenType                          = "token"
+	TokenFieldAnnotations              = "annotations"
+	TokenFieldAuthProvider             = "authProvider"
+	TokenFieldCreated                  = "created"
+	TokenFieldDescription              = "description"
+	TokenFieldExternalID               = "externalId"
+	TokenFieldFinalizers               = "finalizers"
+	TokenFieldIdentityRefreshTTLMillis = "identityRefreshTTL"
+	TokenFieldIsDerived                = "isDerived"
+	TokenFieldLabels                   = "labels"
+	TokenFieldLastUpdateTime           = "lastUpdateTime"
+	TokenFieldName                     = "name"
+	TokenFieldOwnerReferences          = "ownerReferences"
+	TokenFieldRemoved                  = "removed"
+	TokenFieldResourcePath             = "resourcePath"
+	TokenFieldTTLMillis                = "ttl"
+	TokenFieldTokenID                  = "tokenId"
+	TokenFieldTokenValue               = "tokenValue"
+	TokenFieldUser                     = "user"
+	TokenFieldUuid                     = "uuid"
 )
 
 type Token struct {
 	types.Resource
-	Annotations      map[string]string `json:"annotations,omitempty"`
-	AuthProvider     string            `json:"authProvider,omitempty"`
-	Created          string            `json:"created,omitempty"`
-	Description      string            `json:"description,omitempty"`
-	ExternalID       string            `json:"externalID,omitempty"`
-	Finalizers       []string          `json:"finalizers,omitempty"`
-	IsDerived        *bool             `json:"isDerived,omitempty"`
-	Labels           map[string]string `json:"labels,omitempty"`
-	LastUpdateTime   string            `json:"lastUpdateTime,omitempty"`
-	Name             string            `json:"name,omitempty"`
-	OwnerReferences  []OwnerReference  `json:"ownerReferences,omitempty"`
-	RefreshTTLMillis string            `json:"refreshTTL,omitempty"`
-	Removed          string            `json:"removed,omitempty"`
-	ResourcePath     string            `json:"resourcePath,omitempty"`
-	TTLMillis        string            `json:"ttl,omitempty"`
-	TokenID          string            `json:"tokenID,omitempty"`
-	TokenValue       string            `json:"tokenValue,omitempty"`
-	User             string            `json:"user,omitempty"`
-	Uuid             string            `json:"uuid,omitempty"`
+	Annotations              map[string]string `json:"annotations,omitempty"`
+	AuthProvider             string            `json:"authProvider,omitempty"`
+	Created                  string            `json:"created,omitempty"`
+	Description              string            `json:"description,omitempty"`
+	ExternalID               string            `json:"externalId,omitempty"`
+	Finalizers               []string          `json:"finalizers,omitempty"`
+	IdentityRefreshTTLMillis string            `json:"identityRefreshTTL,omitempty"`
+	IsDerived                *bool             `json:"isDerived,omitempty"`
+	Labels                   map[string]string `json:"labels,omitempty"`
+	LastUpdateTime           string            `json:"lastUpdateTime,omitempty"`
+	Name                     string            `json:"name,omitempty"`
+	OwnerReferences          []OwnerReference  `json:"ownerReferences,omitempty"`
+	Removed                  string            `json:"removed,omitempty"`
+	ResourcePath             string            `json:"resourcePath,omitempty"`
+	TTLMillis                string            `json:"ttl,omitempty"`
+	TokenID                  string            `json:"tokenId,omitempty"`
+	TokenValue               string            `json:"tokenValue,omitempty"`
+	User                     string            `json:"user,omitempty"`
+	Uuid                     string            `json:"uuid,omitempty"`
 }
 type TokenCollection struct {
 	types.Collection

@@ -26,6 +26,9 @@ type Client struct {
 	Group                      GroupOperations
 	GroupMember                GroupMemberOperations
 	Identity                   IdentityOperations
+	LocalCredential            LocalCredentialOperations
+	GithubCredential           GithubCredentialOperations
+	LoginInput                 LoginInputOperations
 	DynamicSchema              DynamicSchemaOperations
 }
 
@@ -58,6 +61,9 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Group = newGroupClient(client)
 	client.GroupMember = newGroupMemberClient(client)
 	client.Identity = newIdentityClient(client)
+	client.LocalCredential = newLocalCredentialClient(client)
+	client.GithubCredential = newGithubCredentialClient(client)
+	client.LoginInput = newLoginInputClient(client)
 	client.DynamicSchema = newDynamicSchemaClient(client)
 
 	return client, nil
