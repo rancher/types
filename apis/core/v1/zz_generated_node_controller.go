@@ -75,7 +75,13 @@ func (l *nodeLister) List(namespace string, selector labels.Selector) (ret []*v1
 }
 
 func (l *nodeLister) Get(namespace, name string) (*v1.Node, error) {
-	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	var key string
+	if namespace != "" {
+		key = namespace + "/" + name
+	} else {
+		key = name
+	}
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(key)
 	if err != nil {
 		return nil, err
 	}

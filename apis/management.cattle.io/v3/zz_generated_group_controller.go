@@ -74,7 +74,13 @@ func (l *groupLister) List(namespace string, selector labels.Selector) (ret []*G
 }
 
 func (l *groupLister) Get(namespace, name string) (*Group, error) {
-	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	var key string
+	if namespace != "" {
+		key = namespace + "/" + name
+	} else {
+		key = name
+	}
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(key)
 	if err != nil {
 		return nil, err
 	}

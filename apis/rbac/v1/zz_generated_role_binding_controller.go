@@ -75,7 +75,13 @@ func (l *roleBindingLister) List(namespace string, selector labels.Selector) (re
 }
 
 func (l *roleBindingLister) Get(namespace, name string) (*v1.RoleBinding, error) {
-	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	var key string
+	if namespace != "" {
+		key = namespace + "/" + name
+	} else {
+		key = name
+	}
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(key)
 	if err != nil {
 		return nil, err
 	}

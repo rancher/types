@@ -75,7 +75,13 @@ func (l *clusterRoleLister) List(namespace string, selector labels.Selector) (re
 }
 
 func (l *clusterRoleLister) Get(namespace, name string) (*v1.ClusterRole, error) {
-	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	var key string
+	if namespace != "" {
+		key = namespace + "/" + name
+	} else {
+		key = name
+	}
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(key)
 	if err != nil {
 		return nil, err
 	}
