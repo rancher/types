@@ -9,11 +9,10 @@ const (
 	IdentityFieldAnnotations     = "annotations"
 	IdentityFieldCreated         = "created"
 	IdentityFieldDisplayName     = "displayName"
-	IdentityFieldExternalID      = "externalID"
 	IdentityFieldExtraInfo       = "extraInfo"
 	IdentityFieldFinalizers      = "finalizers"
-	IdentityFieldIdentityName    = "identityName"
 	IdentityFieldLabels          = "labels"
+	IdentityFieldLoginName       = "loginName"
 	IdentityFieldMe              = "me"
 	IdentityFieldMemberOf        = "memberOf"
 	IdentityFieldName            = "name"
@@ -30,11 +29,10 @@ type Identity struct {
 	Annotations     map[string]string `json:"annotations,omitempty"`
 	Created         string            `json:"created,omitempty"`
 	DisplayName     string            `json:"displayName,omitempty"`
-	ExternalID      string            `json:"externalID,omitempty"`
 	ExtraInfo       map[string]string `json:"extraInfo,omitempty"`
 	Finalizers      []string          `json:"finalizers,omitempty"`
-	IdentityName    string            `json:"identityName,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty"`
+	LoginName       string            `json:"loginName,omitempty"`
 	Me              *bool             `json:"me,omitempty"`
 	MemberOf        *bool             `json:"memberOf,omitempty"`
 	Name            string            `json:"name,omitempty"`

@@ -8,10 +8,7 @@ const (
 	GroupType                 = "group"
 	GroupFieldAnnotations     = "annotations"
 	GroupFieldCreated         = "created"
-	GroupFieldDisplayName     = "displayName"
-	GroupFieldExternalID      = "externalID"
 	GroupFieldFinalizers      = "finalizers"
-	GroupFieldGroupName       = "groupName"
 	GroupFieldLabels          = "labels"
 	GroupFieldName            = "name"
 	GroupFieldOwnerReferences = "ownerReferences"
@@ -24,10 +21,7 @@ type Group struct {
 	types.Resource
 	Annotations     map[string]string `json:"annotations,omitempty"`
 	Created         string            `json:"created,omitempty"`
-	DisplayName     string            `json:"displayName,omitempty"`
-	ExternalID      string            `json:"externalID,omitempty"`
 	Finalizers      []string          `json:"finalizers,omitempty"`
-	GroupName       string            `json:"groupName,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty"`
 	Name            string            `json:"name,omitempty"`
 	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty"`
