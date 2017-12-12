@@ -3,11 +3,11 @@ package generator
 import (
 	"fmt"
 	"path"
-	"reflect"
 	"strings"
 
 	"github.com/rancher/norman/generator"
 	"github.com/rancher/norman/types"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 var (
@@ -28,14 +28,13 @@ func Generate(schemas *types.Schemas) {
 	}
 }
 
-func GenerateNativeTypes(objs ...interface{}) {
-	pkgNamePaths := strings.Split(reflect.TypeOf(objs[0]).PkgPath(), "/")
-	version := pkgNamePaths[len(pkgNamePaths)-1]
-	group := pkgNamePaths[len(pkgNamePaths)-2]
+func GenerateNativeTypes(gv schema.GroupVersion, objs ...interface{}) {
+	version := gv.Version
+	group := gv.Group
 	groupPath := group
 
-	if group == "core" {
-		group = ""
+	if groupPath == "" {
+		groupPath = "core"
 	}
 
 	k8sOutputPackage := path.Join(basePackage, baseK8s, groupPath, version)
