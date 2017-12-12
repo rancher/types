@@ -75,7 +75,13 @@ func (l *podSecurityPolicyLister) List(namespace string, selector labels.Selecto
 }
 
 func (l *podSecurityPolicyLister) Get(namespace, name string) (*v1beta1.PodSecurityPolicy, error) {
-	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	var key string
+	if namespace != "" {
+		key = namespace + "/" + name
+	} else {
+		key = name
+	}
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(key)
 	if err != nil {
 		return nil, err
 	}

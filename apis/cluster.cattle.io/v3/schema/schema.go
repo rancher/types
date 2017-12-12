@@ -31,7 +31,7 @@ func cloneProjectSchema(name string, schemas *types.Schemas) {
 	schema := schema.Schemas.Schema(&schema.Version, name)
 	copy := *schema
 	copy.Version = Version
-	schemas.AddSchema(&copy)
+	schemas.AddSchema(copy)
 }
 
 func nodeTypes(schemas *types.Schemas) *types.Schemas {

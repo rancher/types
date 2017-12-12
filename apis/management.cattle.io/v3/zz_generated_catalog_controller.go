@@ -74,7 +74,13 @@ func (l *catalogLister) List(namespace string, selector labels.Selector) (ret []
 }
 
 func (l *catalogLister) Get(namespace, name string) (*Catalog, error) {
-	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	var key string
+	if namespace != "" {
+		key = namespace + "/" + name
+	} else {
+		key = name
+	}
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(key)
 	if err != nil {
 		return nil, err
 	}

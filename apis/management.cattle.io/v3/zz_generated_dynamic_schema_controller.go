@@ -74,7 +74,13 @@ func (l *dynamicSchemaLister) List(namespace string, selector labels.Selector) (
 }
 
 func (l *dynamicSchemaLister) Get(namespace, name string) (*DynamicSchema, error) {
-	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(namespace + "/" + name)
+	var key string
+	if namespace != "" {
+		key = namespace + "/" + name
+	} else {
+		key = name
+	}
+	obj, exists, err := l.controller.Informer().GetIndexer().GetByKey(key)
 	if err != nil {
 		return nil, err
 	}
