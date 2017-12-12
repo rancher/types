@@ -18,7 +18,7 @@ import (
 var (
 	RoleBindingGroupVersionKind = schema.GroupVersionKind{
 		Version: "v1",
-		Group:   "rbac",
+		Group:   "rbac.authorization.k8s.io",
 		Kind:    "RoleBinding",
 	}
 	RoleBindingResource = metav1.APIResource{
