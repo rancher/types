@@ -2142,11 +2142,6 @@ func (in *RoleTemplate) DeepCopyInto(out *RoleTemplate) {
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
-	if in.PodSecurityPolicyTemplateNames != nil {
-		in, out := &in.PodSecurityPolicyTemplateNames, &out.PodSecurityPolicyTemplateNames
-		*out = make([]string, len(*in))
-		copy(*out, *in)
-	}
 	return
 }
 
