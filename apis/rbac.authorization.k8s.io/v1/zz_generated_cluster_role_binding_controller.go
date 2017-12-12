@@ -18,7 +18,7 @@ import (
 var (
 	ClusterRoleBindingGroupVersionKind = schema.GroupVersionKind{
 		Version: "v1",
-		Group:   "rbac",
+		Group:   "rbac.authorization.k8s.io",
 		Kind:    "ClusterRoleBinding",
 	}
 	ClusterRoleBindingResource = metav1.APIResource{
