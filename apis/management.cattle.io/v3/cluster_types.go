@@ -130,7 +130,7 @@ type AzureKubernetesServiceConfig struct {
 
 type ClusterEvent struct {
 	v1.Event
-	ClusterName string
+	ClusterName string `json:"clusterName" norman:"type=reference[cluster]"`
 }
 
 type ClusterRegistrationToken struct {
