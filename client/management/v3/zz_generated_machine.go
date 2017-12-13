@@ -48,6 +48,7 @@ const (
 	MachineFieldRequested                = "requested"
 	MachineFieldResourcePath             = "resourcePath"
 	MachineFieldSSHPrivateKey            = "sshPrivateKey"
+	MachineFieldSSHUser                  = "sshUser"
 	MachineFieldState                    = "state"
 	MachineFieldTaints                   = "taints"
 	MachineFieldTransitioning            = "transitioning"
@@ -102,6 +103,7 @@ type Machine struct {
 	Requested                map[string]string         `json:"requested,omitempty"`
 	ResourcePath             string                    `json:"resourcePath,omitempty"`
 	SSHPrivateKey            string                    `json:"sshPrivateKey,omitempty"`
+	SSHUser                  string                    `json:"sshUser,omitempty"`
 	State                    string                    `json:"state,omitempty"`
 	Taints                   []Taint                   `json:"taints,omitempty"`
 	Transitioning            string                    `json:"transitioning,omitempty"`

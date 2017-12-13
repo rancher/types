@@ -15,6 +15,7 @@ const (
 	MachineStatusFieldProvisioned     = "provisioned"
 	MachineStatusFieldRequested       = "requested"
 	MachineStatusFieldSSHPrivateKey   = "sshPrivateKey"
+	MachineStatusFieldSSHUser         = "sshUser"
 	MachineStatusFieldVolumesAttached = "volumesAttached"
 	MachineStatusFieldVolumesInUse    = "volumesInUse"
 )
@@ -33,6 +34,7 @@ type MachineStatus struct {
 	Provisioned     *bool                     `json:"provisioned,omitempty"`
 	Requested       map[string]string         `json:"requested,omitempty"`
 	SSHPrivateKey   string                    `json:"sshPrivateKey,omitempty"`
+	SSHUser         string                    `json:"sshUser,omitempty"`
 	VolumesAttached map[string]AttachedVolume `json:"volumesAttached,omitempty"`
 	VolumesInUse    []string                  `json:"volumesInUse,omitempty"`
 }
