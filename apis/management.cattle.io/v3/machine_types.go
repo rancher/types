@@ -65,6 +65,7 @@ type MachineStatus struct {
 	Requested       v1.ResourceList    `json:"requested,omitempty"`
 	Limits          v1.ResourceList    `json:"limits,omitempty"`
 	Provisioned     bool               `json:"provisioned,omitempty"`
+	SSHUser         string             `json:"sshUser,omitempty"`
 	SSHPrivateKey   string             `json:"sshPrivateKey,omitempty"`
 	ExtractedConfig string             `json:"extractedConfig,omitempty"`
 }
