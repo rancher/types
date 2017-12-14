@@ -23,10 +23,11 @@ type RoleTemplate struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Rules   []rbacv1.PolicyRule `json:"rules,omitempty"`
-	Builtin bool                `json:"builtin"`
-
-	RoleTemplateNames []string `json:"roleTemplateNames,omitempty" norman:"type=array[reference[roleTemplate]]"`
+	Rules             []rbacv1.PolicyRule `json:"rules,omitempty"`
+	Builtin           bool                `json:"builtin"`
+	External          bool                `json:"builtin"`
+	Hidden            bool                `json:"builtin"`
+	RoleTemplateNames []string            `json:"roleTemplateNames,omitempty" norman:"type=array[reference[roleTemplate]]"`
 }
 
 type PodSecurityPolicyTemplate struct {
