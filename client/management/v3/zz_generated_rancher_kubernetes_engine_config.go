@@ -4,6 +4,7 @@ const (
 	RancherKubernetesEngineConfigType                = "rancherKubernetesEngineConfig"
 	RancherKubernetesEngineConfigFieldAddons         = "addons"
 	RancherKubernetesEngineConfigFieldAuthentication = "auth"
+	RancherKubernetesEngineConfigFieldAuthorization  = "authorization"
 	RancherKubernetesEngineConfigFieldNetwork        = "network"
 	RancherKubernetesEngineConfigFieldNodes          = "nodes"
 	RancherKubernetesEngineConfigFieldSSHKeyPath     = "sshKeyPath"
@@ -14,6 +15,7 @@ const (
 type RancherKubernetesEngineConfig struct {
 	Addons         string             `json:"addons,omitempty"`
 	Authentication *AuthConfig        `json:"auth,omitempty"`
+	Authorization  *AuthzConfig       `json:"authorization,omitempty"`
 	Network        *NetworkConfig     `json:"network,omitempty"`
 	Nodes          []RKEConfigNode    `json:"nodes,omitempty"`
 	SSHKeyPath     string             `json:"sshKeyPath,omitempty"`

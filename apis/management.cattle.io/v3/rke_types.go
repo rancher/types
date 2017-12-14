@@ -15,6 +15,8 @@ type RancherKubernetesEngineConfig struct {
 	SystemImages map[string]string `yaml:"system_images" json:"systemImages,omitempty"`
 	// SSH Private Key Path
 	SSHKeyPath string `yaml:"ssh_key_path" json:"sshKeyPath,omitempty"`
+	// Authorization mode configuration used in the cluster
+	Authorization AuthzConfig `yaml:"authorization" json:"authorization,omitempty"`
 }
 
 type RKEConfigNode struct {
@@ -113,5 +115,12 @@ type AuthConfig struct {
 	// Authentication strategy that will be used in kubernetes cluster
 	Strategy string `yaml:"strategy" json:"strategy,omitempty"`
 	// Authentication options
+	Options map[string]string `yaml:"options" json:"options,omitempty"`
+}
+
+type AuthzConfig struct {
+	// Authorization mode used by kubernetes
+	Mode string `yaml:"mode" json:"mode,omitempty"`
+	// Authorization mode options
 	Options map[string]string `yaml:"options" json:"options,omitempty"`
 }
