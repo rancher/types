@@ -8,7 +8,7 @@ type RancherKubernetesEngineConfig struct {
 	// Network configuration used in the kubernetes cluster (flannel, calico)
 	Network NetworkConfig `yaml:"network" json:"network,omitempty"`
 	// Authentication configuration used in the cluster (default: x509)
-	Authentication AuthConfig `yaml:"auth" json:"auth,omitempty"`
+	Authentication AuthnConfig `yaml:"authentication" json:"authentication,omitempty"`
 	// YAML manifest for user provided addons to be deployed on the cluster
 	Addons string `yaml:"addons" json:"addons,omitempty"`
 	// List of images used internally for proxy, cert downlaod and kubedns
@@ -111,7 +111,7 @@ type NetworkConfig struct {
 	Options map[string]string `yaml:"options" json:"options,omitempty"`
 }
 
-type AuthConfig struct {
+type AuthnConfig struct {
 	// Authentication strategy that will be used in kubernetes cluster
 	Strategy string `yaml:"strategy" json:"strategy,omitempty"`
 	// Authentication options
