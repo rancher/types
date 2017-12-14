@@ -2308,6 +2308,21 @@ func (in *Token) DeepCopyInto(out *Token) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
 	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	in.UserIdentity.DeepCopyInto(&out.UserIdentity)
+	if in.GroupIdentities != nil {
+		in, out := &in.GroupIdentities, &out.GroupIdentities
+		*out = make([]Identity, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.ProviderInfo != nil {
+		in, out := &in.ProviderInfo, &out.ProviderInfo
+		*out = make(map[string]string, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
+	}
 	return
 }
 

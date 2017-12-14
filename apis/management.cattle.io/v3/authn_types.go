@@ -8,16 +8,18 @@ type Token struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	TokenID                  string `json:"tokenId,omitempty"`
-	TokenValue               string `json:"tokenValue,omitempty"`
-	User                     string `json:"user,omitempty"`
-	ExternalID               string `json:"externalId,omitempty"`
-	AuthProvider             string `json:"authProvider,omitempty"`
-	TTLMillis                string `json:"ttl,omitempty"`
-	IdentityRefreshTTLMillis string `json:"identityRefreshTTL,omitempty"`
-	LastUpdateTime           string `json:"lastUpdateTime,omitempty"`
-	IsDerived                bool   `json:"isDerived,omitempty"`
-	Description              string `json:"description,omitempty"`
+	TokenID                  string            `json:"tokenId,omitempty"`
+	UserIdentity             Identity          `json:"userIdentity,omitempty"`
+	GroupIdentities          []Identity        `json:"groupIdentities,omitempty"`
+	ProviderInfo             map[string]string `json:"providerInfo,omitempty"`
+	User                     string            `json:"user,omitempty"`
+	ExternalID               string            `json:"externalId,omitempty"`
+	AuthProvider             string            `json:"authProvider,omitempty"`
+	TTLMillis                string            `json:"ttl,omitempty"`
+	IdentityRefreshTTLMillis string            `json:"identityRefreshTTL,omitempty"`
+	LastUpdateTime           string            `json:"lastUpdateTime,omitempty"`
+	IsDerived                bool              `json:"isDerived,omitempty"`
+	Description              string            `json:"description,omitempty"`
 }
 
 type User struct {
