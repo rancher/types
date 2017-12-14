@@ -106,8 +106,8 @@ var conditionMappings = []conditionMapping{
 	},
 	{
 		Name:       "Ready",
-		Transition: true,
-		State:      "activating",
+		Transition: false,
+		State:      "unavailable",
 	},
 }
 
@@ -202,6 +202,17 @@ func Set(data map[string]interface{}) {
 		val, _ := values.GetValueN(data, "status", "phase").(string)
 		if val != "" {
 			state = val
+		}
+	}
+
+	if state == "" {
+		val, ok := values.GetValue(data, "spec", "active")
+		if ok {
+			if convert.ToBool(val) {
+				state = "active"
+			} else {
+				state = "inactive"
+			}
 		}
 	}
 
