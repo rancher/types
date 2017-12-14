@@ -1548,6 +1548,15 @@ func (in *MachineStatus) DeepCopyInto(out *MachineStatus) {
 			(*out)[key] = val.DeepCopy()
 		}
 	}
+	if in.NodeConfig != nil {
+		in, out := &in.NodeConfig, &out.NodeConfig
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(RKEConfigNode)
+			(*in).DeepCopyInto(*out)
+		}
+	}
 	return
 }
 
