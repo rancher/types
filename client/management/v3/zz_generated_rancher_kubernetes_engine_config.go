@@ -3,7 +3,7 @@ package client
 const (
 	RancherKubernetesEngineConfigType                = "rancherKubernetesEngineConfig"
 	RancherKubernetesEngineConfigFieldAddons         = "addons"
-	RancherKubernetesEngineConfigFieldAuthentication = "auth"
+	RancherKubernetesEngineConfigFieldAuthentication = "authentication"
 	RancherKubernetesEngineConfigFieldAuthorization  = "authorization"
 	RancherKubernetesEngineConfigFieldNetwork        = "network"
 	RancherKubernetesEngineConfigFieldNodes          = "nodes"
@@ -14,7 +14,7 @@ const (
 
 type RancherKubernetesEngineConfig struct {
 	Addons         string             `json:"addons,omitempty"`
-	Authentication *AuthConfig        `json:"auth,omitempty"`
+	Authentication *AuthnConfig       `json:"authentication,omitempty"`
 	Authorization  *AuthzConfig       `json:"authorization,omitempty"`
 	Network        *NetworkConfig     `json:"network,omitempty"`
 	Nodes          []RKEConfigNode    `json:"nodes,omitempty"`
