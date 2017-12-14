@@ -7,9 +7,9 @@ import (
 const (
 	RoleTemplateType                 = "roleTemplate"
 	RoleTemplateFieldAnnotations     = "annotations"
-	RoleTemplateFieldBuiltin         = "builtin"
 	RoleTemplateFieldCreated         = "created"
 	RoleTemplateFieldFinalizers      = "finalizers"
+	RoleTemplateFieldHidden          = "builtin"
 	RoleTemplateFieldLabels          = "labels"
 	RoleTemplateFieldName            = "name"
 	RoleTemplateFieldOwnerReferences = "ownerReferences"
@@ -23,9 +23,9 @@ const (
 type RoleTemplate struct {
 	types.Resource
 	Annotations     map[string]string `json:"annotations,omitempty"`
-	Builtin         *bool             `json:"builtin,omitempty"`
 	Created         string            `json:"created,omitempty"`
 	Finalizers      []string          `json:"finalizers,omitempty"`
+	Hidden          *bool             `json:"builtin,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty"`
 	Name            string            `json:"name,omitempty"`
 	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty"`
