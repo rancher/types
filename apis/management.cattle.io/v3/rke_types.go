@@ -17,6 +17,8 @@ type RancherKubernetesEngineConfig struct {
 	SSHKeyPath string `yaml:"ssh_key_path" json:"sshKeyPath,omitempty"`
 	// Authorization mode configuration used in the cluster
 	Authorization AuthzConfig `yaml:"authorization" json:"authorization,omitempty"`
+	// Enable/disable strict docker version checking
+	StrictDockerVersion bool `yaml:"strict_docker_version" json:"strictDockerVersion"`
 }
 
 type RKEConfigNode struct {
