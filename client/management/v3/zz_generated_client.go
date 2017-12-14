@@ -22,11 +22,11 @@ type Client struct {
 	Catalog                    CatalogOperations
 	Template                   TemplateOperations
 	TemplateVersion            TemplateVersionOperations
+	Identity                   IdentityOperations
 	Token                      TokenOperations
 	User                       UserOperations
 	Group                      GroupOperations
 	GroupMember                GroupMemberOperations
-	Identity                   IdentityOperations
 	DynamicSchema              DynamicSchemaOperations
 }
 
@@ -55,11 +55,11 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Catalog = newCatalogClient(client)
 	client.Template = newTemplateClient(client)
 	client.TemplateVersion = newTemplateVersionClient(client)
+	client.Identity = newIdentityClient(client)
 	client.Token = newTokenClient(client)
 	client.User = newUserClient(client)
 	client.Group = newGroupClient(client)
 	client.GroupMember = newGroupMemberClient(client)
-	client.Identity = newIdentityClient(client)
 	client.DynamicSchema = newDynamicSchemaClient(client)
 
 	return client, nil

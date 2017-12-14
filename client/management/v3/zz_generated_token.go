@@ -12,18 +12,20 @@ const (
 	TokenFieldDescription              = "description"
 	TokenFieldExternalID               = "externalId"
 	TokenFieldFinalizers               = "finalizers"
+	TokenFieldGroupIdentities          = "groupIdentities"
 	TokenFieldIdentityRefreshTTLMillis = "identityRefreshTTL"
 	TokenFieldIsDerived                = "isDerived"
 	TokenFieldLabels                   = "labels"
 	TokenFieldLastUpdateTime           = "lastUpdateTime"
 	TokenFieldName                     = "name"
 	TokenFieldOwnerReferences          = "ownerReferences"
+	TokenFieldProviderInfo             = "providerInfo"
 	TokenFieldRemoved                  = "removed"
 	TokenFieldResourcePath             = "resourcePath"
 	TokenFieldTTLMillis                = "ttl"
 	TokenFieldTokenID                  = "tokenId"
-	TokenFieldTokenValue               = "tokenValue"
 	TokenFieldUser                     = "user"
+	TokenFieldUserIdentity             = "userIdentity"
 	TokenFieldUuid                     = "uuid"
 )
 
@@ -35,18 +37,20 @@ type Token struct {
 	Description              string            `json:"description,omitempty"`
 	ExternalID               string            `json:"externalId,omitempty"`
 	Finalizers               []string          `json:"finalizers,omitempty"`
+	GroupIdentities          []Identity        `json:"groupIdentities,omitempty"`
 	IdentityRefreshTTLMillis string            `json:"identityRefreshTTL,omitempty"`
 	IsDerived                *bool             `json:"isDerived,omitempty"`
 	Labels                   map[string]string `json:"labels,omitempty"`
 	LastUpdateTime           string            `json:"lastUpdateTime,omitempty"`
 	Name                     string            `json:"name,omitempty"`
 	OwnerReferences          []OwnerReference  `json:"ownerReferences,omitempty"`
+	ProviderInfo             map[string]string `json:"providerInfo,omitempty"`
 	Removed                  string            `json:"removed,omitempty"`
 	ResourcePath             string            `json:"resourcePath,omitempty"`
 	TTLMillis                string            `json:"ttl,omitempty"`
 	TokenID                  string            `json:"tokenId,omitempty"`
-	TokenValue               string            `json:"tokenValue,omitempty"`
 	User                     string            `json:"user,omitempty"`
+	UserIdentity             *Identity         `json:"userIdentity,omitempty"`
 	Uuid                     string            `json:"uuid,omitempty"`
 }
 type TokenCollection struct {
