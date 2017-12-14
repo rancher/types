@@ -2,6 +2,7 @@ package client
 
 const (
 	MachineStatusType                 = "machineStatus"
+	MachineStatusFieldAddress         = "address"
 	MachineStatusFieldAllocatable     = "allocatable"
 	MachineStatusFieldCapacity        = "capacity"
 	MachineStatusFieldConditions      = "conditions"
@@ -21,6 +22,7 @@ const (
 )
 
 type MachineStatus struct {
+	Address         string                    `json:"address,omitempty"`
 	Allocatable     map[string]string         `json:"allocatable,omitempty"`
 	Capacity        map[string]string         `json:"capacity,omitempty"`
 	Conditions      []NodeCondition           `json:"conditions,omitempty"`

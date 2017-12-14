@@ -6,6 +6,7 @@ import (
 
 const (
 	MachineType                          = "machine"
+	MachineFieldAddress                  = "address"
 	MachineFieldAllocatable              = "allocatable"
 	MachineFieldAmazonEC2Config          = "amazonEc2Config"
 	MachineFieldAnnotations              = "annotations"
@@ -61,6 +62,7 @@ const (
 
 type Machine struct {
 	types.Resource
+	Address                  string                    `json:"address,omitempty"`
 	Allocatable              map[string]string         `json:"allocatable,omitempty"`
 	AmazonEC2Config          *AmazonEC2Config          `json:"amazonEc2Config,omitempty"`
 	Annotations              map[string]string         `json:"annotations,omitempty"`

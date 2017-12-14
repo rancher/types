@@ -68,6 +68,7 @@ type MachineStatus struct {
 	SSHUser         string             `json:"sshUser,omitempty"`
 	SSHPrivateKey   string             `json:"sshPrivateKey,omitempty"`
 	ExtractedConfig string             `json:"extractedConfig,omitempty"`
+	Address         string             `json:"address,omitempty"`
 }
 
 type MachineCondition struct {
