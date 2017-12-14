@@ -40,6 +40,7 @@ const (
 	MachineFieldLimits                   = "limits"
 	MachineFieldMachineTemplateId        = "machineTemplateId"
 	MachineFieldName                     = "name"
+	MachineFieldNodeConfig               = "nodeConfig"
 	MachineFieldOwnerReferences          = "ownerReferences"
 	MachineFieldPhase                    = "phase"
 	MachineFieldPodCIDR                  = "podCIDR"
@@ -96,6 +97,7 @@ type Machine struct {
 	Limits                   map[string]string         `json:"limits,omitempty"`
 	MachineTemplateId        string                    `json:"machineTemplateId,omitempty"`
 	Name                     string                    `json:"name,omitempty"`
+	NodeConfig               *RKEConfigNode            `json:"nodeConfig,omitempty"`
 	OwnerReferences          []OwnerReference          `json:"ownerReferences,omitempty"`
 	Phase                    string                    `json:"phase,omitempty"`
 	PodCIDR                  string                    `json:"podCIDR,omitempty"`
