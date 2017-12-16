@@ -28,11 +28,11 @@ type Interface interface {
 	CatalogsGetter
 	TemplatesGetter
 	TemplateVersionsGetter
-	IdentitiesGetter
 	TokensGetter
 	UsersGetter
 	GroupsGetter
 	GroupMembersGetter
+	PrincipalsGetter
 	DynamicSchemasGetter
 }
 
@@ -55,11 +55,11 @@ type Client struct {
 	catalogControllers                    map[string]CatalogController
 	templateControllers                   map[string]TemplateController
 	templateVersionControllers            map[string]TemplateVersionController
-	identityControllers                   map[string]IdentityController
 	tokenControllers                      map[string]TokenController
 	userControllers                       map[string]UserController
 	groupControllers                      map[string]GroupController
 	groupMemberControllers                map[string]GroupMemberController
+	principalControllers                  map[string]PrincipalController
 	dynamicSchemaControllers              map[string]DynamicSchemaController
 }
 
@@ -91,11 +91,11 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		catalogControllers:                    map[string]CatalogController{},
 		templateControllers:                   map[string]TemplateController{},
 		templateVersionControllers:            map[string]TemplateVersionController{},
-		identityControllers:                   map[string]IdentityController{},
 		tokenControllers:                      map[string]TokenController{},
 		userControllers:                       map[string]UserController{},
 		groupControllers:                      map[string]GroupController{},
 		groupMemberControllers:                map[string]GroupMemberController{},
+		principalControllers:                  map[string]PrincipalController{},
 		dynamicSchemaControllers:              map[string]DynamicSchemaController{},
 	}, nil
 }
@@ -294,19 +294,6 @@ func (c *Client) TemplateVersions(namespace string) TemplateVersionInterface {
 	}
 }
 
-type IdentitiesGetter interface {
-	Identities(namespace string) IdentityInterface
-}
-
-func (c *Client) Identities(namespace string) IdentityInterface {
-	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &IdentityResource, IdentityGroupVersionKind, identityFactory{})
-	return &identityClient{
-		ns:           namespace,
-		client:       c,
-		objectClient: objectClient,
-	}
-}
-
 type TokensGetter interface {
 	Tokens(namespace string) TokenInterface
 }
@@ -353,6 +340,19 @@ type GroupMembersGetter interface {
 func (c *Client) GroupMembers(namespace string) GroupMemberInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &GroupMemberResource, GroupMemberGroupVersionKind, groupMemberFactory{})
 	return &groupMemberClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type PrincipalsGetter interface {
+	Principals(namespace string) PrincipalInterface
+}
+
+func (c *Client) Principals(namespace string) PrincipalInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &PrincipalResource, PrincipalGroupVersionKind, principalFactory{})
+	return &principalClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
