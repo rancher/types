@@ -49,6 +49,7 @@ const (
 	MachineFieldRemoved                  = "removed"
 	MachineFieldRequested                = "requested"
 	MachineFieldResourcePath             = "resourcePath"
+	MachineFieldRole                     = "role"
 	MachineFieldSSHPrivateKey            = "sshPrivateKey"
 	MachineFieldSSHUser                  = "sshUser"
 	MachineFieldState                    = "state"
@@ -106,6 +107,7 @@ type Machine struct {
 	Removed                  string                    `json:"removed,omitempty"`
 	Requested                map[string]string         `json:"requested,omitempty"`
 	ResourcePath             string                    `json:"resourcePath,omitempty"`
+	Role                     string                    `json:"role,omitempty"`
 	SSHPrivateKey            string                    `json:"sshPrivateKey,omitempty"`
 	SSHUser                  string                    `json:"sshUser,omitempty"`
 	State                    string                    `json:"state,omitempty"`

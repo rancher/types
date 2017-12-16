@@ -91,6 +91,7 @@ type MachineSpec struct {
 	MachineTemplateName string      `json:"machineTemplateName" norman:"type=reference[machineTemplate]"`
 	Description         string      `json:"description"`
 	Driver              string      `json:"driver"`
+	Role                string      `json:"role"`
 
 	MachineCommonParams `json:",inline"`
 	AmazonEC2Config     AmazonEC2Config    `json:"amazonEc2Config"`
