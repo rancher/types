@@ -1,6 +1,7 @@
 package v3
 
 import (
+	"github.com/rancher/norman/condition"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -36,13 +37,10 @@ type MachineTemplateCondition struct {
 }
 
 type MachineTemplateSpec struct {
-	DisplayName  string            `json:"displayName"`
-	Description  string            `json:"description"`
-	FlavorPrefix string            `json:"flavorPrefix"`
-	Driver       string            `json:"driver"`
-	SecretValues map[string]string `json:"secretValues"`
-	SecretName   string            `json:"secretName"`
-	PublicValues map[string]string `json:"publicValues"`
+	DisplayName         string `json:"displayName"`
+	Description         string `json:"description"`
+	Driver              string `json:"driver"`
+	MachineCommonParams `json:",inline"`
 }
 
 type Machine struct {
@@ -59,22 +57,27 @@ type Machine struct {
 }
 
 type MachineStatus struct {
-	Conditions      []MachineCondition `json:"conditions"`
-	NodeStatus      v1.NodeStatus      `json:"nodeStatus"`
-	NodeName        string             `json:"nodeName"`
-	Requested       v1.ResourceList    `json:"requested,omitempty"`
-	Limits          v1.ResourceList    `json:"limits,omitempty"`
-	Provisioned     bool               `json:"provisioned,omitempty"`
-	SSHUser         string             `json:"sshUser,omitempty"`
-	SSHPrivateKey   string             `json:"sshPrivateKey,omitempty"`
-	ExtractedConfig string             `json:"extractedConfig,omitempty"`
-	Address         string             `json:"address,omitempty"`
-	NodeConfig      *RKEConfigNode     `json:"nodeConfig,omitempty"`
+	Conditions          []MachineCondition   `json:"conditions"`
+	NodeStatus          v1.NodeStatus        `json:"nodeStatus"`
+	NodeName            string               `json:"nodeName"`
+	Requested           v1.ResourceList      `json:"requested,omitempty"`
+	Limits              v1.ResourceList      `json:"limits,omitempty"`
+	MachineTemplateSpec *MachineTemplateSpec `json:"machineTemplateSpec"`
+	NodeConfig          *RKEConfigNode       `json:"rkeNode"`
+	SSHUser             string               `json:"sshUser"`
+	MachineDriverConfig string               `json:"machineDriverConfig"`
 }
+
+var (
+	MachineConditionInitialized condition.Cond = "Initialized"
+	MachineConditionProvisioned condition.Cond = "Provisioned"
+	MachineConditionConfigSaved condition.Cond = "Saved"
+	MachineConditionConfigReady condition.Cond = "Ready"
+)
 
 type MachineCondition struct {
 	// Type of cluster condition.
-	Type string `json:"type"`
+	Type condition.Cond `json:"type"`
 	// Status of the condition, one of True, False, Unknown.
 	Status v1.ConditionStatus `json:"status"`
 	// The last time this condition was updated.
@@ -87,13 +90,11 @@ type MachineCondition struct {
 
 type MachineSpec struct {
 	NodeSpec            v1.NodeSpec `json:"nodeSpec"`
+	DisplayName         string      `json:"displayName"`
 	ClusterName         string      `json:"clusterName" norman:"type=reference[cluster]"`
+	Roles               []string    `json:"roles"`
 	MachineTemplateName string      `json:"machineTemplateName" norman:"type=reference[machineTemplate]"`
 	Description         string      `json:"description"`
-	Driver              string      `json:"driver"`
-	Role                string      `json:"role"`
-
-	MachineCommonParams `json:",inline"`
 }
 
 type MachineCommonParams struct {
