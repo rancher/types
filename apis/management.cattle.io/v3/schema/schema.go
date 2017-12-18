@@ -148,12 +148,27 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		AddMapperForType(&Version, v3.User{}, m.DisplayName{}).
 		AddMapperForType(&Version, v3.Group{}, m.DisplayName{}).
-		MustImport(&Version, v3.Token{}).
-		MustImport(&Version, v3.User{}).
 		MustImport(&Version, v3.Group{}).
 		MustImport(&Version, v3.GroupMember{}).
 		MustImport(&Version, v3.Principal{}).
 		MustImport(&Version, v3.LoginInput{}).
 		MustImport(&Version, v3.LocalCredential{}).
-		MustImport(&Version, v3.GithubCredential{})
+		MustImport(&Version, v3.GithubCredential{}).
+		MustImportAndCustomize(&Version, v3.Token{}, func(schema *types.Schema) {
+			schema.CollectionActions = map[string]types.Action{
+				"login": {
+					Input:  "loginInput",
+					Output: "token",
+				},
+				"logout": {},
+			}
+		}).
+		MustImportAndCustomize(&Version, v3.User{}, func(schema *types.Schema) {
+			schema.ResourceActions = map[string]types.Action{
+				"changepassword": {
+					Input:  "changePasswordInput",
+					Output: "user",
+				},
+			}
+		})
 }
