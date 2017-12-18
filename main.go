@@ -21,6 +21,7 @@ func main() {
 	// Group by API group
 	generator.GenerateNativeTypes(v1.SchemeGroupVersion, v1.Pod{}, v1.Node{}, v1.ComponentStatus{}, v1.Namespace{}, v1.Event{})
 	generator.GenerateNativeTypes(v1beta2.SchemeGroupVersion, v1beta2.Deployment{})
-	generator.GenerateNativeTypes(rbacv1.SchemeGroupVersion, rbacv1.RoleBinding{}, rbacv1.ClusterRoleBinding{}, rbacv1.ClusterRole{})
+	generator.GenerateNativeTypes(rbacv1.SchemeGroupVersion, rbacv1.RoleBinding{}, rbacv1.ClusterRoleBinding{}, rbacv1.ClusterRole{},
+		rbacv1.Role{})
 	generator.GenerateNativeTypes(extv1beta1.SchemeGroupVersion, extv1beta1.PodSecurityPolicy{})
 }
