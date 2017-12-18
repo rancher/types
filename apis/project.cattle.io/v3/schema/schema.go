@@ -46,14 +46,18 @@ func NamespaceTypes(version *types.APIVersion, schemas *types.Schemas) *types.Sc
 		).
 		AddMapperForType(version, v1.Namespace{},
 			&m.LabelField{Field: "projectId"},
+			&m.AnnotationField{Field: "externalId"},
+			&m.AnnotationField{Field: "templates", Object: true},
+			&m.AnnotationField{Field: "prune"},
+			&m.AnnotationField{Field: "answers", Object: true},
 		).
 		MustImport(version, v1.Namespace{}, struct {
-			ProjectID  string `norman:"type=reference[/v3/schemas/project]"`
-			Templates  map[string]string
-			Answers    map[string]interface{}
-			Prune      bool
-			ExternalID string
-			Tags       []string
+			ProjectID  string                 `norman:"type=reference[/v3/schemas/project]"`
+			Templates  map[string]string      `json:"templates"`
+			Answers    map[string]interface{} `json:"answers"`
+			Prune      bool                   `json:"prune"`
+			ExternalID string                 `json:"externalId"`
+			Tags       []string               `json:"tags"`
 		}{})
 }
 
