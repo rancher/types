@@ -18,6 +18,8 @@ type Interface interface {
 	MachineDriversGetter
 	MachineTemplatesGetter
 	ProjectsGetter
+	GlobalRolesGetter
+	GlobalRoleBindingsGetter
 	RoleTemplatesGetter
 	PodSecurityPolicyTemplatesGetter
 	ClusterRoleTemplateBindingsGetter
@@ -45,6 +47,8 @@ type Client struct {
 	machineDriverControllers              map[string]MachineDriverController
 	machineTemplateControllers            map[string]MachineTemplateController
 	projectControllers                    map[string]ProjectController
+	globalRoleControllers                 map[string]GlobalRoleController
+	globalRoleBindingControllers          map[string]GlobalRoleBindingController
 	roleTemplateControllers               map[string]RoleTemplateController
 	podSecurityPolicyTemplateControllers  map[string]PodSecurityPolicyTemplateController
 	clusterRoleTemplateBindingControllers map[string]ClusterRoleTemplateBindingController
@@ -81,6 +85,8 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		machineDriverControllers:              map[string]MachineDriverController{},
 		machineTemplateControllers:            map[string]MachineTemplateController{},
 		projectControllers:                    map[string]ProjectController{},
+		globalRoleControllers:                 map[string]GlobalRoleController{},
+		globalRoleBindingControllers:          map[string]GlobalRoleBindingController{},
 		roleTemplateControllers:               map[string]RoleTemplateController{},
 		podSecurityPolicyTemplateControllers:  map[string]PodSecurityPolicyTemplateController{},
 		clusterRoleTemplateBindingControllers: map[string]ClusterRoleTemplateBindingController{},
@@ -158,6 +164,32 @@ type ProjectsGetter interface {
 func (c *Client) Projects(namespace string) ProjectInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ProjectResource, ProjectGroupVersionKind, projectFactory{})
 	return &projectClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type GlobalRolesGetter interface {
+	GlobalRoles(namespace string) GlobalRoleInterface
+}
+
+func (c *Client) GlobalRoles(namespace string) GlobalRoleInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &GlobalRoleResource, GlobalRoleGroupVersionKind, globalRoleFactory{})
+	return &globalRoleClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type GlobalRoleBindingsGetter interface {
+	GlobalRoleBindings(namespace string) GlobalRoleBindingInterface
+}
+
+func (c *Client) GlobalRoleBindings(namespace string) GlobalRoleBindingInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &GlobalRoleBindingResource, GlobalRoleBindingGroupVersionKind, globalRoleBindingFactory{})
+	return &globalRoleBindingClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

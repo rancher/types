@@ -12,6 +12,8 @@ type Client struct {
 	MachineDriver              MachineDriverOperations
 	MachineTemplate            MachineTemplateOperations
 	Project                    ProjectOperations
+	GlobalRole                 GlobalRoleOperations
+	GlobalRoleBinding          GlobalRoleBindingOperations
 	RoleTemplate               RoleTemplateOperations
 	PodSecurityPolicyTemplate  PodSecurityPolicyTemplateOperations
 	ClusterRoleTemplateBinding ClusterRoleTemplateBindingOperations
@@ -45,6 +47,8 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.MachineDriver = newMachineDriverClient(client)
 	client.MachineTemplate = newMachineTemplateClient(client)
 	client.Project = newProjectClient(client)
+	client.GlobalRole = newGlobalRoleClient(client)
+	client.GlobalRoleBinding = newGlobalRoleBindingClient(client)
 	client.RoleTemplate = newRoleTemplateClient(client)
 	client.PodSecurityPolicyTemplate = newPodSecurityPolicyTemplateClient(client)
 	client.ClusterRoleTemplateBinding = newClusterRoleTemplateBindingClient(client)
