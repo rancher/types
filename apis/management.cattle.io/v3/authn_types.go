@@ -78,3 +78,7 @@ type LocalCredential struct {
 type GithubCredential struct {
 	Code string `json:"code"`
 }
+
+type ChangePasswordInput struct {
+	NewPassword string `json:"newPassword"`
+}
