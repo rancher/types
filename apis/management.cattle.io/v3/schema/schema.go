@@ -105,6 +105,8 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 		MustImportAndCustomize(&Version, v3.Project{}, func(schema *types.Schema) {
 			schema.SubContext = "projects"
 		}).
+		MustImport(&Version, v3.GlobalRole{}).
+		MustImport(&Version, v3.GlobalRoleBinding{}).
 		MustImport(&Version, v3.RoleTemplate{}).
 		MustImport(&Version, v3.PodSecurityPolicyTemplate{}).
 		MustImportAndCustomize(&Version, v3.ClusterRoleTemplateBinding{}, func(schema *types.Schema) {
