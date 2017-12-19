@@ -288,17 +288,17 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v1.Handler{}, handlerOverride{}).
 		MustImport(&Version, v1.Probe{}, handlerOverride{}).
 		MustImport(&Version, v1.Container{}, struct {
-			Scheduling      *Scheduling
 			Resources       *Resources
 			Environment     map[string]string
 			EnvironmentFrom []EnvironmentFrom
 			InitContainer   bool
 		}{}).
 		MustImport(&Version, v1.PodSpec{}, struct {
-			NodeName string `norman:"type=reference[node]"`
-			Net      string
-			PID      string
-			IPC      string
+			Scheduling *Scheduling
+			NodeName   string `norman:"type=reference[node]"`
+			Net        string
+			PID        string
+			IPC        string
 		}{}).
 		MustImport(&Version, v1.Pod{}, projectOverride{}, struct {
 			WorkloadID string `norman:"type=reference[workload]"`
