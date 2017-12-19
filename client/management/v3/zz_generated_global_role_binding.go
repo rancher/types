@@ -15,7 +15,8 @@ const (
 	GlobalRoleBindingFieldOwnerReferences = "ownerReferences"
 	GlobalRoleBindingFieldRemoved         = "removed"
 	GlobalRoleBindingFieldResourcePath    = "resourcePath"
-	GlobalRoleBindingFieldSubject         = "subject"
+	GlobalRoleBindingFieldSubjectKind     = "subjectKind"
+	GlobalRoleBindingFieldSubjectName     = "subjectName"
 	GlobalRoleBindingFieldUuid            = "uuid"
 )
 
@@ -30,7 +31,8 @@ type GlobalRoleBinding struct {
 	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty"`
 	Removed         string            `json:"removed,omitempty"`
 	ResourcePath    string            `json:"resourcePath,omitempty"`
-	Subject         *Subject          `json:"subject,omitempty"`
+	SubjectKind     string            `json:"subjectKind,omitempty"`
+	SubjectName     string            `json:"subjectName,omitempty"`
 	Uuid            string            `json:"uuid,omitempty"`
 }
 type GlobalRoleBindingCollection struct {
