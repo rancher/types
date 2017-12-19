@@ -102,6 +102,11 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 			&m.Move{From: "subject/namespace", To: "subjectNamespace"},
 			&m.Drop{Field: "subject"},
 		).
+		AddMapperForType(&Version, v3.GlobalRoleBinding{},
+			&m.Move{From: "subject/name", To: "subjectName"},
+			&m.Move{From: "subject/kind", To: "subjectKind"},
+			&m.Drop{Field: "subject"},
+		).
 		MustImportAndCustomize(&Version, v3.Project{}, func(schema *types.Schema) {
 			schema.SubContext = "projects"
 		}).
@@ -121,6 +126,14 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 			schema.MustCustomizeField("subjectKind", func(field types.Field) types.Field {
 				field.Type = "enum"
 				field.Options = []string{"User", "Group", "ServiceAccount", "Principal"}
+				field.Nullable = false
+				return field
+			})
+		}).
+		MustImportAndCustomize(&Version, v3.GlobalRoleBinding{}, func(schema *types.Schema) {
+			schema.MustCustomizeField("subjectKind", func(field types.Field) types.Field {
+				field.Type = "enum"
+				field.Options = []string{"User", "Group", "Principal"}
 				field.Nullable = false
 				return field
 			})
