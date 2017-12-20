@@ -28,7 +28,7 @@ func Generate(schemas *types.Schemas) {
 	}
 }
 
-func GenerateNativeTypes(gv schema.GroupVersion, objs ...interface{}) {
+func GenerateNativeTypes(gv schema.GroupVersion, nsObjs []interface{}, objs []interface{}) {
 	version := gv.Version
 	group := gv.Group
 	groupPath := group
@@ -43,7 +43,7 @@ func GenerateNativeTypes(gv schema.GroupVersion, objs ...interface{}) {
 		Version: version,
 		Group:   group,
 		Path:    fmt.Sprintf("/k8s/%s-%s", groupPath, version),
-	}, k8sOutputPackage, objs...); err != nil {
+	}, k8sOutputPackage, nsObjs, objs); err != nil {
 		panic(err)
 	}
 }
