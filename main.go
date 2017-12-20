@@ -18,10 +18,26 @@ func main() {
 	generator.Generate(managementSchema.Schemas)
 	generator.Generate(clusterSchema.Schemas)
 	generator.Generate(projectSchema.Schemas)
-	// Group by API group
-	generator.GenerateNativeTypes(v1.SchemeGroupVersion, v1.Pod{}, v1.Node{}, v1.ComponentStatus{}, v1.Namespace{}, v1.Event{})
-	generator.GenerateNativeTypes(v1beta2.SchemeGroupVersion, v1beta2.Deployment{})
-	generator.GenerateNativeTypes(rbacv1.SchemeGroupVersion, rbacv1.RoleBinding{}, rbacv1.ClusterRoleBinding{}, rbacv1.ClusterRole{},
-		rbacv1.Role{})
-	generator.GenerateNativeTypes(extv1beta1.SchemeGroupVersion, extv1beta1.PodSecurityPolicy{})
+	generator.GenerateNativeTypes(v1.SchemeGroupVersion, []interface{}{
+		v1.Pod{},
+	}, []interface{}{
+		v1.Node{},
+		v1.ComponentStatus{},
+		v1.Namespace{},
+		v1.Event{},
+	})
+	generator.GenerateNativeTypes(v1beta2.SchemeGroupVersion, []interface{}{
+		v1beta2.Deployment{},
+	}, nil)
+	generator.GenerateNativeTypes(rbacv1.SchemeGroupVersion, []interface{}{
+		rbacv1.RoleBinding{},
+		rbacv1.Role{},
+	}, []interface{}{
+		rbacv1.ClusterRoleBinding{},
+		rbacv1.ClusterRole{},
+	})
+	generator.GenerateNativeTypes(extv1beta1.SchemeGroupVersion, nil,
+		[]interface{}{
+			extv1beta1.PodSecurityPolicy{},
+		})
 }
