@@ -31,7 +31,7 @@ const (
 type PodSpec struct {
 	ActiveDeadlineSeconds         *int64                 `json:"activeDeadlineSeconds,omitempty"`
 	AutomountServiceAccountToken  *bool                  `json:"automountServiceAccountToken,omitempty"`
-	Containers                    map[string]Container   `json:"containers,omitempty"`
+	Containers                    []Container            `json:"containers,omitempty"`
 	DNSPolicy                     string                 `json:"dnsPolicy,omitempty"`
 	Fsgid                         *int64                 `json:"fsgid,omitempty"`
 	Gids                          []int64                `json:"gids,omitempty"`

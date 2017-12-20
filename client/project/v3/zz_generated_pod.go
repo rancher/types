@@ -53,7 +53,7 @@ type Pod struct {
 	ActiveDeadlineSeconds         *int64                 `json:"activeDeadlineSeconds,omitempty"`
 	Annotations                   map[string]string      `json:"annotations,omitempty"`
 	AutomountServiceAccountToken  *bool                  `json:"automountServiceAccountToken,omitempty"`
-	Containers                    map[string]Container   `json:"containers,omitempty"`
+	Containers                    []Container            `json:"containers,omitempty"`
 	Created                       string                 `json:"created,omitempty"`
 	DNSPolicy                     string                 `json:"dnsPolicy,omitempty"`
 	Finalizers                    []string               `json:"finalizers,omitempty"`
