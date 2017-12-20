@@ -22,7 +22,6 @@ const (
 	ContainerFieldReadycheck               = "readycheck"
 	ContainerFieldResources                = "resources"
 	ContainerFieldRunAsNonRoot             = "runAsNonRoot"
-	ContainerFieldScheduling               = "scheduling"
 	ContainerFieldStdin                    = "stdin"
 	ContainerFieldStdinOnce                = "stdinOnce"
 	ContainerFieldTTY                      = "tty"
@@ -54,7 +53,6 @@ type Container struct {
 	Readycheck               *Probe            `json:"readycheck,omitempty"`
 	Resources                *Resources        `json:"resources,omitempty"`
 	RunAsNonRoot             *bool             `json:"runAsNonRoot,omitempty"`
-	Scheduling               *Scheduling       `json:"scheduling,omitempty"`
 	Stdin                    *bool             `json:"stdin,omitempty"`
 	StdinOnce                *bool             `json:"stdinOnce,omitempty"`
 	TTY                      *bool             `json:"tty,omitempty"`

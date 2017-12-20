@@ -34,6 +34,7 @@ const (
 	PodFieldRestart                       = "restart"
 	PodFieldRunAsNonRoot                  = "runAsNonRoot"
 	PodFieldSchedulerName                 = "schedulerName"
+	PodFieldScheduling                    = "scheduling"
 	PodFieldServiceAccountName            = "serviceAccountName"
 	PodFieldState                         = "state"
 	PodFieldStatus                        = "status"
@@ -78,6 +79,7 @@ type Pod struct {
 	Restart                       string                 `json:"restart,omitempty"`
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	State                         string                 `json:"state,omitempty"`
 	Status                        *PodStatus             `json:"status,omitempty"`

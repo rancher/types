@@ -39,6 +39,7 @@ const (
 	DeploymentFieldRunAsNonRoot                  = "runAsNonRoot"
 	DeploymentFieldScale                         = "scale"
 	DeploymentFieldSchedulerName                 = "schedulerName"
+	DeploymentFieldScheduling                    = "scheduling"
 	DeploymentFieldServiceAccountName            = "serviceAccountName"
 	DeploymentFieldState                         = "state"
 	DeploymentFieldStatus                        = "status"
@@ -89,6 +90,7 @@ type Deployment struct {
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	State                         string                 `json:"state,omitempty"`
 	Status                        *DeploymentStatus      `json:"status,omitempty"`

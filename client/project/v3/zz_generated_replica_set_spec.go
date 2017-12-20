@@ -24,6 +24,7 @@ const (
 	ReplicaSetSpecFieldRunAsNonRoot                  = "runAsNonRoot"
 	ReplicaSetSpecFieldScale                         = "scale"
 	ReplicaSetSpecFieldSchedulerName                 = "schedulerName"
+	ReplicaSetSpecFieldScheduling                    = "scheduling"
 	ReplicaSetSpecFieldServiceAccountName            = "serviceAccountName"
 	ReplicaSetSpecFieldSubdomain                     = "subdomain"
 	ReplicaSetSpecFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
@@ -55,6 +56,7 @@ type ReplicaSetSpec struct {
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`

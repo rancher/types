@@ -24,6 +24,7 @@ const (
 	WorkloadSpecFieldRunAsNonRoot                  = "runAsNonRoot"
 	WorkloadSpecFieldScale                         = "scale"
 	WorkloadSpecFieldSchedulerName                 = "schedulerName"
+	WorkloadSpecFieldScheduling                    = "scheduling"
 	WorkloadSpecFieldServiceAccountName            = "serviceAccountName"
 	WorkloadSpecFieldServiceLinks                  = "serviceLinks"
 	WorkloadSpecFieldSubdomain                     = "subdomain"
@@ -56,6 +57,7 @@ type WorkloadSpec struct {
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	ServiceLinks                  []Link                 `json:"serviceLinks,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`

@@ -38,6 +38,7 @@ const (
 	DaemonSetFieldRunAsNonRoot                  = "runAsNonRoot"
 	DaemonSetFieldScale                         = "scale"
 	DaemonSetFieldSchedulerName                 = "schedulerName"
+	DaemonSetFieldScheduling                    = "scheduling"
 	DaemonSetFieldServiceAccountName            = "serviceAccountName"
 	DaemonSetFieldState                         = "state"
 	DaemonSetFieldStatus                        = "status"
@@ -88,6 +89,7 @@ type DaemonSet struct {
 	RunAsNonRoot                  *bool                    `json:"runAsNonRoot,omitempty"`
 	Scale                         *int64                   `json:"scale,omitempty"`
 	SchedulerName                 string                   `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling              `json:"scheduling,omitempty"`
 	ServiceAccountName            string                   `json:"serviceAccountName,omitempty"`
 	State                         string                   `json:"state,omitempty"`
 	Status                        *DaemonSetStatus         `json:"status,omitempty"`

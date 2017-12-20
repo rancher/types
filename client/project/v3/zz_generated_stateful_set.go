@@ -39,6 +39,7 @@ const (
 	StatefulSetFieldRunAsNonRoot                  = "runAsNonRoot"
 	StatefulSetFieldScale                         = "scale"
 	StatefulSetFieldSchedulerName                 = "schedulerName"
+	StatefulSetFieldScheduling                    = "scheduling"
 	StatefulSetFieldServiceAccountName            = "serviceAccountName"
 	StatefulSetFieldServiceName                   = "serviceName"
 	StatefulSetFieldState                         = "state"
@@ -92,6 +93,7 @@ type StatefulSet struct {
 	RunAsNonRoot                  *bool                      `json:"runAsNonRoot,omitempty"`
 	Scale                         *int64                     `json:"scale,omitempty"`
 	SchedulerName                 string                     `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling                `json:"scheduling,omitempty"`
 	ServiceAccountName            string                     `json:"serviceAccountName,omitempty"`
 	ServiceName                   string                     `json:"serviceName,omitempty"`
 	State                         string                     `json:"state,omitempty"`

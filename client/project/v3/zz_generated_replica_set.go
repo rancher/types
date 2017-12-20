@@ -37,6 +37,7 @@ const (
 	ReplicaSetFieldRunAsNonRoot                  = "runAsNonRoot"
 	ReplicaSetFieldScale                         = "scale"
 	ReplicaSetFieldSchedulerName                 = "schedulerName"
+	ReplicaSetFieldScheduling                    = "scheduling"
 	ReplicaSetFieldServiceAccountName            = "serviceAccountName"
 	ReplicaSetFieldState                         = "state"
 	ReplicaSetFieldStatus                        = "status"
@@ -85,6 +86,7 @@ type ReplicaSet struct {
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	State                         string                 `json:"state,omitempty"`
 	Status                        *ReplicaSetStatus      `json:"status,omitempty"`
