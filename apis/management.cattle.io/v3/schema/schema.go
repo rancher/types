@@ -72,7 +72,7 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 			&m.Embed{Field: "status"},
 		).
 		AddMapperForType(&Version, v3.ClusterStatus{},
-			m.Drop{"appliedSpec"},
+			m.Drop{Field: "appliedSpec"},
 		).
 		AddMapperForType(&Version, v3.ClusterEvent{}, &m.Move{
 			From: "type",
