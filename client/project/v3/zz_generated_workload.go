@@ -37,6 +37,7 @@ const (
 	WorkloadFieldRunAsNonRoot                  = "runAsNonRoot"
 	WorkloadFieldScale                         = "scale"
 	WorkloadFieldSchedulerName                 = "schedulerName"
+	WorkloadFieldScheduling                    = "scheduling"
 	WorkloadFieldServiceAccountName            = "serviceAccountName"
 	WorkloadFieldServiceLinks                  = "serviceLinks"
 	WorkloadFieldState                         = "state"
@@ -86,6 +87,7 @@ type Workload struct {
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	ServiceLinks                  []Link                 `json:"serviceLinks,omitempty"`
 	State                         string                 `json:"state,omitempty"`

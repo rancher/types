@@ -26,6 +26,7 @@ const (
 	DeploymentSpecFieldRunAsNonRoot                  = "runAsNonRoot"
 	DeploymentSpecFieldScale                         = "scale"
 	DeploymentSpecFieldSchedulerName                 = "schedulerName"
+	DeploymentSpecFieldScheduling                    = "scheduling"
 	DeploymentSpecFieldServiceAccountName            = "serviceAccountName"
 	DeploymentSpecFieldSubdomain                     = "subdomain"
 	DeploymentSpecFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
@@ -59,6 +60,7 @@ type DeploymentSpec struct {
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`

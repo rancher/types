@@ -20,6 +20,7 @@ const (
 	PodSpecFieldRestart                       = "restart"
 	PodSpecFieldRunAsNonRoot                  = "runAsNonRoot"
 	PodSpecFieldSchedulerName                 = "schedulerName"
+	PodSpecFieldScheduling                    = "scheduling"
 	PodSpecFieldServiceAccountName            = "serviceAccountName"
 	PodSpecFieldSubdomain                     = "subdomain"
 	PodSpecFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
@@ -47,6 +48,7 @@ type PodSpec struct {
 	Restart                       string                 `json:"restart,omitempty"`
 	RunAsNonRoot                  *bool                  `json:"runAsNonRoot,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
+	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`
