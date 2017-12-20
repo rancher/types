@@ -12,6 +12,7 @@ const (
 	ContainerFieldHealthcheck              = "healthcheck"
 	ContainerFieldImage                    = "image"
 	ContainerFieldInitContainer            = "initContainer"
+	ContainerFieldName                     = "name"
 	ContainerFieldPorts                    = "ports"
 	ContainerFieldPostStart                = "postStart"
 	ContainerFieldPreStop                  = "preStop"
@@ -43,6 +44,7 @@ type Container struct {
 	Healthcheck              *Probe            `json:"healthcheck,omitempty"`
 	Image                    string            `json:"image,omitempty"`
 	InitContainer            *bool             `json:"initContainer,omitempty"`
+	Name                     string            `json:"name,omitempty"`
 	Ports                    []ContainerPort   `json:"ports,omitempty"`
 	PostStart                *Handler          `json:"postStart,omitempty"`
 	PreStop                  *Handler          `json:"preStop,omitempty"`

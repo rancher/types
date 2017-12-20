@@ -60,7 +60,7 @@ type DaemonSet struct {
 	Annotations                   map[string]string        `json:"annotations,omitempty"`
 	AutomountServiceAccountToken  *bool                    `json:"automountServiceAccountToken,omitempty"`
 	BatchSize                     string                   `json:"batchSize,omitempty"`
-	Containers                    map[string]Container     `json:"containers,omitempty"`
+	Containers                    []Container              `json:"containers,omitempty"`
 	Created                       string                   `json:"created,omitempty"`
 	DNSPolicy                     string                   `json:"dnsPolicy,omitempty"`
 	DeploymentStrategy            *DeployStrategy          `json:"deploymentStrategy,omitempty"`

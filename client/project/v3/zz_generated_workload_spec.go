@@ -25,6 +25,7 @@ const (
 	WorkloadSpecFieldScale                         = "scale"
 	WorkloadSpecFieldSchedulerName                 = "schedulerName"
 	WorkloadSpecFieldServiceAccountName            = "serviceAccountName"
+	WorkloadSpecFieldServiceLinks                  = "serviceLinks"
 	WorkloadSpecFieldSubdomain                     = "subdomain"
 	WorkloadSpecFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
 	WorkloadSpecFieldTolerations                   = "tolerations"
@@ -36,7 +37,7 @@ type WorkloadSpec struct {
 	ActiveDeadlineSeconds         *int64                 `json:"activeDeadlineSeconds,omitempty"`
 	AutomountServiceAccountToken  *bool                  `json:"automountServiceAccountToken,omitempty"`
 	BatchSize                     string                 `json:"batchSize,omitempty"`
-	Containers                    map[string]Container   `json:"containers,omitempty"`
+	Containers                    []Container            `json:"containers,omitempty"`
 	DNSPolicy                     string                 `json:"dnsPolicy,omitempty"`
 	DeploymentStrategy            *DeployStrategy        `json:"deploymentStrategy,omitempty"`
 	Fsgid                         *int64                 `json:"fsgid,omitempty"`
@@ -56,6 +57,7 @@ type WorkloadSpec struct {
 	Scale                         *int64                 `json:"scale,omitempty"`
 	SchedulerName                 string                 `json:"schedulerName,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
+	ServiceLinks                  []Link                 `json:"serviceLinks,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`
 	Tolerations                   []Toleration           `json:"tolerations,omitempty"`
