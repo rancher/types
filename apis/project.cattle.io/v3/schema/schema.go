@@ -266,10 +266,6 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 				Key:   "name",
 			},
 			&m.SliceToMap{
-				Field: "containers",
-				Key:   "name",
-			},
-			&m.SliceToMap{
 				Field: "hostAliases",
 				Key:   "ip",
 			},
