@@ -11,6 +11,7 @@ const (
 	UserFieldFinalizers         = "finalizers"
 	UserFieldId                 = "id"
 	UserFieldLabels             = "labels"
+	UserFieldMe                 = "me"
 	UserFieldMustChangePassword = "mustChangePassword"
 	UserFieldName               = "name"
 	UserFieldOwnerReferences    = "ownerReferences"
@@ -29,6 +30,7 @@ type User struct {
 	Finalizers         []string          `json:"finalizers,omitempty"`
 	Id                 string            `json:"id,omitempty"`
 	Labels             map[string]string `json:"labels,omitempty"`
+	Me                 *bool             `json:"me,omitempty"`
 	MustChangePassword *bool             `json:"mustChangePassword,omitempty"`
 	Name               string            `json:"name,omitempty"`
 	OwnerReferences    []OwnerReference  `json:"ownerReferences,omitempty"`
