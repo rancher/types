@@ -18,7 +18,6 @@ const (
 	UserFieldPassword           = "password"
 	UserFieldPrincipalIDs       = "principalIds"
 	UserFieldRemoved            = "removed"
-	UserFieldResourcePath       = "resourcePath"
 	UserFieldUserName           = "userName"
 	UserFieldUuid               = "uuid"
 )
@@ -37,7 +36,6 @@ type User struct {
 	Password           string            `json:"password,omitempty"`
 	PrincipalIDs       []string          `json:"principalIds,omitempty"`
 	Removed            string            `json:"removed,omitempty"`
-	ResourcePath       string            `json:"resourcePath,omitempty"`
 	UserName           string            `json:"userName,omitempty"`
 	Uuid               string            `json:"uuid,omitempty"`
 }
