@@ -51,12 +51,14 @@ type ManagementContext struct {
 
 	Management managementv3.Interface
 	RBAC       rbacv1.Interface
+	Core       corev1.Interface
 }
 
 func (c *ManagementContext) controllers() []controller.Starter {
 	return []controller.Starter{
 		c.Management,
 		c.RBAC,
+		c.Core,
 	}
 }
 
@@ -130,6 +132,11 @@ func NewManagementContext(config rest.Config) (*ManagementContext, error) {
 	}
 
 	context.Management, err = managementv3.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	context.Core, err = corev1.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
