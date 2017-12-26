@@ -1,6 +1,7 @@
 package v3
 
 import (
+	"github.com/rancher/norman/types"
 	extv1 "k8s.io/api/extensions/v1beta1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -56,6 +57,7 @@ type PodSecurityPolicyTemplate struct {
 }
 
 type ProjectRoleTemplateBinding struct {
+	types.Namespaced
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
@@ -66,6 +68,7 @@ type ProjectRoleTemplateBinding struct {
 }
 
 type ClusterRoleTemplateBinding struct {
+	types.Namespaced
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 

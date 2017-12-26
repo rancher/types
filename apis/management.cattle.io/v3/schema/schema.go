@@ -95,12 +95,14 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 			&m.Move{From: "subject/kind", To: "subjectKind"},
 			&m.Move{From: "subject/namespace", To: "subjectNamespace"},
 			&m.Drop{Field: "subject"},
+			&mapper.NamespaceIDMapper{},
 		).
 		AddMapperForType(&Version, v3.ClusterRoleTemplateBinding{},
 			&m.Move{From: "subject/name", To: "subjectName"},
 			&m.Move{From: "subject/kind", To: "subjectKind"},
 			&m.Move{From: "subject/namespace", To: "subjectNamespace"},
 			&m.Drop{Field: "subject"},
+			&mapper.NamespaceIDMapper{},
 		).
 		AddMapperForType(&Version, v3.GlobalRoleBinding{},
 			&m.Move{From: "subject/name", To: "subjectName"},
