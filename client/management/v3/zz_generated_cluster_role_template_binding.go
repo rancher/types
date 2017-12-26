@@ -12,6 +12,7 @@ const (
 	ClusterRoleTemplateBindingFieldFinalizers       = "finalizers"
 	ClusterRoleTemplateBindingFieldLabels           = "labels"
 	ClusterRoleTemplateBindingFieldName             = "name"
+	ClusterRoleTemplateBindingFieldNamespaceId      = "namespaceId"
 	ClusterRoleTemplateBindingFieldOwnerReferences  = "ownerReferences"
 	ClusterRoleTemplateBindingFieldRemoved          = "removed"
 	ClusterRoleTemplateBindingFieldRoleTemplateId   = "roleTemplateId"
@@ -29,6 +30,7 @@ type ClusterRoleTemplateBinding struct {
 	Finalizers       []string          `json:"finalizers,omitempty"`
 	Labels           map[string]string `json:"labels,omitempty"`
 	Name             string            `json:"name,omitempty"`
+	NamespaceId      string            `json:"namespaceId,omitempty"`
 	OwnerReferences  []OwnerReference  `json:"ownerReferences,omitempty"`
 	Removed          string            `json:"removed,omitempty"`
 	RoleTemplateId   string            `json:"roleTemplateId,omitempty"`

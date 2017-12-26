@@ -11,6 +11,7 @@ const (
 	ProjectRoleTemplateBindingFieldFinalizers       = "finalizers"
 	ProjectRoleTemplateBindingFieldLabels           = "labels"
 	ProjectRoleTemplateBindingFieldName             = "name"
+	ProjectRoleTemplateBindingFieldNamespaceId      = "namespaceId"
 	ProjectRoleTemplateBindingFieldOwnerReferences  = "ownerReferences"
 	ProjectRoleTemplateBindingFieldProjectId        = "projectId"
 	ProjectRoleTemplateBindingFieldRemoved          = "removed"
@@ -28,6 +29,7 @@ type ProjectRoleTemplateBinding struct {
 	Finalizers       []string          `json:"finalizers,omitempty"`
 	Labels           map[string]string `json:"labels,omitempty"`
 	Name             string            `json:"name,omitempty"`
+	NamespaceId      string            `json:"namespaceId,omitempty"`
 	OwnerReferences  []OwnerReference  `json:"ownerReferences,omitempty"`
 	ProjectId        string            `json:"projectId,omitempty"`
 	Removed          string            `json:"removed,omitempty"`
