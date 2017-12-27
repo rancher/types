@@ -36,7 +36,7 @@ type ProjectCondition struct {
 	LastTransitionTime string `json:"lastTransitionTime,omitempty"`
 	// The reason for the condition's last transition.
 	Reason string `json:"reason,omitempty"`
-	// Human-readable, longer explanation of the last transition
+	// Human-readable message indicating details about last transition
 	Message string `json:"message,omitempty"`
 }
 
