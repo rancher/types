@@ -43,6 +43,7 @@ var conditionMappings = []conditionMapping{
 	{Name: "Unschedulable", Error: true, FalseIsGood: true},
 	{Name: "ReplicaFailure", Error: true, FalseIsGood: true},
 	{Name: "Ready", Transition: false, State: "activating"},
+	{Name: "BackingNamespaceCreated", Transition: true, State: "activating"},
 }
 
 func Set(data map[string]interface{}) {
@@ -120,6 +121,11 @@ func Set(data map[string]interface{}) {
 
 		if !good && conditionMapping.Transition {
 			transitioning = true
+			if len(message) > 0 {
+				message = strings.Join([]string{message, condition.Message}, ",")
+			} else {
+				message = condition.Message
+			}
 		}
 
 		if !good && state == "" && conditionMapping.State != "" {
