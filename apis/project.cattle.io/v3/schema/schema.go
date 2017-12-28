@@ -24,6 +24,8 @@ var (
 	Schemas = factory.Schemas(&Version).
 		// Namespace must be first
 		Init(namespaceTypes).
+		// volume before pod types.  pod types uses volume things, so need to register mapper
+		Init(volumeTypes).
 		Init(ingressTypes).
 		Init(secretTypes).
 		Init(serviceTypes).
@@ -369,4 +371,8 @@ func ingressTypes(schemas *types.Schemas) *types.Schemas {
 		}{}).
 		MustImport(&Version, v1beta1.Ingress{}, projectOverride{})
 }
+
+func volumeTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		MustImport(&Version, v1.PersistentVolumeClaim{}, projectOverride{})
 }
