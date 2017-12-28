@@ -3,6 +3,7 @@ package factory
 import (
 	"github.com/rancher/norman/types"
 	"github.com/rancher/norman/types/factory"
+	m "github.com/rancher/norman/types/mapper"
 	"github.com/rancher/types/mapper"
 )
 
@@ -21,6 +22,9 @@ func Schemas(version *types.APIVersion) *types.Schemas {
 		})
 		return mappers
 	}
+	basePostFunc := schemas.DefaultPostMappers
+	schemas.DefaultPostMappers = func() []types.Mapper {
+		return append(basePostFunc(), &mapper.Creator{})
 	}
 	return schemas
 }
