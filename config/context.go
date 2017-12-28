@@ -28,6 +28,7 @@ import (
 
 var (
 	ProjectTypes = []string{
+		projectClient.RegistryCredentialType,
 		projectClient.BasicAuthType,
 		projectClient.CertificateType,
 		projectClient.DockerCredentialType,

@@ -75,6 +75,7 @@ func Set(data map[string]interface{}) {
 			if i, err := convert.ToTimestamp(val); err == nil {
 				if time.Unix(i/1000, 0).Add(5 * time.Second).Before(time.Now()) {
 					data["state"] = "active"
+					data["transitioning"] = "no"
 					return
 				}
 			}
