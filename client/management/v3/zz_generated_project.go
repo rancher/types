@@ -6,6 +6,7 @@ import (
 
 const (
 	ProjectType                             = "project"
+	ProjectField                            = "creatorId"
 	ProjectFieldAnnotations                 = "annotations"
 	ProjectFieldClusterId                   = "clusterId"
 	ProjectFieldConditions                  = "conditions"
@@ -25,6 +26,7 @@ const (
 
 type Project struct {
 	types.Resource
+	string                      `json:"creatorId,omitempty"`
 	Annotations                 map[string]string  `json:"annotations,omitempty"`
 	ClusterId                   string             `json:"clusterId,omitempty"`
 	Conditions                  []ProjectCondition `json:"conditions,omitempty"`
