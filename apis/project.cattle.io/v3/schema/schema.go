@@ -342,14 +342,23 @@ func serviceTypes(schemas *types.Schemas) *types.Schemas {
 
 func ingressTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
+		AddMapperForType(&Version, v1beta1.HTTPIngressRuleValue{},
+			&m.SliceToMap{Field: "paths", Key: "path"},
+		).
 		AddMapperForType(&Version, v1beta1.HTTPIngressPath{},
 			&m.Embed{Field: "backend"},
+		).
+		AddMapperForType(&Version, v1beta1.IngressRule{},
+			&m.Embed{Field: "http"},
 		).
 		AddMapperForType(&Version, v1beta1.Ingress{},
 			&m.Move{From: "backend", To: "defaultBackend"},
 		).
 		AddMapperForType(&Version, v1beta1.IngressTLS{},
 			&m.Move{From: "secretName", To: "certificateName"},
+		).
+		AddMapperForType(&Version, v1beta1.IngressBackend{},
+			&m.Move{From: "servicePort", To: "targetPort"},
 		).
 		MustImport(&Version, v1beta1.IngressBackend{}, struct {
 			WorkloadIDs string `json:"workloadIds" norman:"type=array[reference[workload]]"`
@@ -358,6 +367,6 @@ func ingressTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v1beta1.IngressTLS{}, struct {
 			SecretName string `norman:"type=reference[certificate]"`
 		}{}).
-		MustImport(&Version, v1beta1.Ingress{}, projectOverride{}, struct {
-		}{})
+		MustImport(&Version, v1beta1.Ingress{}, projectOverride{})
+}
 }
