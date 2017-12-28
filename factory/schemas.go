@@ -10,9 +10,17 @@ func Schemas(version *types.APIVersion) *types.Schemas {
 	schemas := factory.Schemas(version)
 	baseFunc := schemas.DefaultMappers
 	schemas.DefaultMappers = func() []types.Mapper {
-		return append([]types.Mapper{
-			mapper.Status{},
+		mappers := append([]types.Mapper{
+			&mapper.Status{},
 		}, baseFunc()...)
+		mappers = append(mappers, &m.Scope{
+			If: types.NamespaceScope,
+			Mappers: []types.Mapper{
+				&mapper.NamespaceIDMapper{},
+			},
+		})
+		return mappers
+	}
 	}
 	return schemas
 }

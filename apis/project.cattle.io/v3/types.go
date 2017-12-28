@@ -69,7 +69,6 @@ type ServiceAccountToken struct {
 	AccountUID  string `json:"accountUid"`
 	Token       string `json:"token" norman:"writeOnly"`
 	CACRT       string `json:"caCrt"`
-	NamespaceID string `json:"namespaceId" norman:"type=reference[namespace]"`
 }
 
 type DockerCredential struct {
