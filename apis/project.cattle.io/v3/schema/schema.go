@@ -311,34 +311,45 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 
 func serviceTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		TypeName("endpoint", v1.Endpoints{}).
+		TypeName("dnsRecord", v1.Service{}).
 		AddMapperForType(&Version, v1.ServiceSpec{},
-			&m.Move{From: "type", To: "serviceKind"},
 			&m.Move{From: "externalName", To: "hostname"},
+			&ServiceSpecMapper{},
+			&m.Drop{Field: "type"},
+			&m.SetValue{
+				Field: "clusterIP",
+				IfEq:  "None",
+				Value: nil,
+			},
 			&m.Move{From: "clusterIP", To: "clusterIp"},
-			ServiceKindMapper{},
 		).
 		AddMapperForType(&Version, v1.Service{},
-			&m.LabelField{Field: "workloadId"},
+			&m.Drop{Field: "externalIPs"},
+			&m.Drop{Field: "externalTrafficPolicy"},
+			&m.Drop{Field: "healthCheckNodePort"},
+			&m.Drop{Field: "loadBalancerIP"},
+			&m.Drop{Field: "loadBalancerSourceRanges"},
+			&m.Drop{Field: "ports"},
+			&m.Drop{Field: "publishNotReadyAddresses"},
+			&m.Drop{Field: "sessionAffinity"},
+			&m.Drop{Field: "sessionAffinityConfig"},
 			&m.Drop{Field: "status"},
-			&m.Move{From: "serviceKind", To: "kind"},
-			&m.AnnotationField{Field: "targetWorkloadIds", Object: true},
-			&m.AnnotationField{Field: "targetServiceIds", Object: true},
+			&m.LabelField{Field: "workloadId"},
+			&m.AnnotationField{Field: "ipAddresses", List: true},
+			&m.AnnotationField{Field: "targetWorkloadIds", List: true},
+			&m.AnnotationField{Field: "targetDnsRecordIds", List: true},
 		).
-		AddMapperForType(&Version, v1.Endpoints{},
-			&EndpointAddressMapper{},
-		).
-		MustImport(&Version, v1.Service{}, projectOverride{}, struct {
-			WorkloadID        string `json:"workloadId" norman:"type=reference[workload]"`
-			TargetWorkloadIDs string `json:"targetWorkloadIds" norman:"type=array[reference[workload]]"`
-			TargetServiceIDs  string `json:"targetServiceIds" norman:"type=array[reference[service]]"`
-			Kind              string `json:"kind" norman:"type=enum,options=Alias|ARecord|CName|ClusterIP|NodeIP|LoadBalancer"`
-		}{}).
-		MustImportAndCustomize(&Version, v1.Endpoints{}, func(schema *types.Schema) {
-			schema.CodeName = "Endpoint"
+		MustImportAndCustomize(&Version, v1.Service{}, func(schema *types.Schema) {
+			schema.MustCustomizeField("clusterIp", func(f types.Field) types.Field {
+				f.Create = false
+				f.Update = false
+				return f
+			})
 		}, projectOverride{}, struct {
-			Targets []Target `json:"targets"`
-			PodIDs  []string `json:"podIds" norman:"type=array[reference[pod]]"`
+			IPAddresses        []string `json:"ipAddresses"`
+			WorkloadID         string   `json:"workloadId" norman:"type=reference[workload],nocreate,noupdate"`
+			TargetWorkloadIDs  string   `json:"targetWorkloadIds" norman:"type=array[reference[workload]]"`
+			TargetDNSRecordIDs string   `json:"targetDnsRecordIds" norman:"type=array[reference[dnsRecord]]"`
 		}{})
 }
 
