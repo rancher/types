@@ -104,7 +104,6 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 			&m.Move{From: "subject/kind", To: "subjectKind"},
 			&m.Move{From: "subject/namespace", To: "subjectNamespace"},
 			&m.Drop{Field: "subject"},
-			&mapper.NamespaceIDMapper{},
 		).
 		AddMapperForType(&Version, v3.GlobalRoleBinding{},
 			&m.Move{From: "subject/name", To: "subjectName"},
@@ -156,7 +155,12 @@ func machineTypes(schemas *types.Schemas) *types.Schemas {
 			&m.Move{From: "nodeName", To: "name"}).
 		AddMapperForType(&Version, v3.MachineDriver{}).
 		AddMapperForType(&Version, v3.MachineTemplate{}, m.DisplayName{}).
-		MustImport(&Version, v3.Machine{}).
+		MustImportAndCustomize(&Version, v3.Machine{}, func(schema *types.Schema) {
+			schema.MustCustomizeField("name", func(f types.Field) types.Field {
+				f.Create = true
+				return f
+			})
+		}).
 		MustImport(&Version, v3.MachineDriver{}).
 		MustImport(&Version, v3.MachineTemplate{})
 }
