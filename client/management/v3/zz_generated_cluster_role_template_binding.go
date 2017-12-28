@@ -6,6 +6,7 @@ import (
 
 const (
 	ClusterRoleTemplateBindingType                  = "clusterRoleTemplateBinding"
+	ClusterRoleTemplateBindingField                 = "creatorId"
 	ClusterRoleTemplateBindingFieldAnnotations      = "annotations"
 	ClusterRoleTemplateBindingFieldClusterId        = "clusterId"
 	ClusterRoleTemplateBindingFieldCreated          = "created"
@@ -24,6 +25,7 @@ const (
 
 type ClusterRoleTemplateBinding struct {
 	types.Resource
+	string           `json:"creatorId,omitempty"`
 	Annotations      map[string]string `json:"annotations,omitempty"`
 	ClusterId        string            `json:"clusterId,omitempty"`
 	Created          string            `json:"created,omitempty"`

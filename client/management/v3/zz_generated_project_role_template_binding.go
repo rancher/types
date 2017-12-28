@@ -6,6 +6,7 @@ import (
 
 const (
 	ProjectRoleTemplateBindingType                  = "projectRoleTemplateBinding"
+	ProjectRoleTemplateBindingField                 = "creatorId"
 	ProjectRoleTemplateBindingFieldAnnotations      = "annotations"
 	ProjectRoleTemplateBindingFieldCreated          = "created"
 	ProjectRoleTemplateBindingFieldFinalizers       = "finalizers"
@@ -24,6 +25,7 @@ const (
 
 type ProjectRoleTemplateBinding struct {
 	types.Resource
+	string           `json:"creatorId,omitempty"`
 	Annotations      map[string]string `json:"annotations,omitempty"`
 	Created          string            `json:"created,omitempty"`
 	Finalizers       []string          `json:"finalizers,omitempty"`
