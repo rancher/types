@@ -92,7 +92,6 @@ type MachineCondition struct {
 
 type MachineSpec struct {
 	NodeSpec            v1.NodeSpec `json:"nodeSpec"`
-	DisplayName         string      `json:"displayName"`
 	ClusterName         string      `json:"clusterName" norman:"type=reference[cluster]"`
 	Roles               []string    `json:"roles"`
 	MachineTemplateName string      `json:"machineTemplateName" norman:"type=reference[machineTemplate]"`
