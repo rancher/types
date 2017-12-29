@@ -11,6 +11,7 @@ import (
 
 var (
 	NamespaceBackedResource condition.Cond = "BackingNamespaceCreated"
+	CreatorMadeOwner        condition.Cond = "CreatorMadeOwner"
 )
 
 type Project struct {
