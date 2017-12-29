@@ -311,46 +311,81 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 
 func serviceTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		TypeName("dnsRecord", v1.Service{}).
-		AddMapperForType(&Version, v1.ServiceSpec{},
-			&m.Move{From: "externalName", To: "hostname"},
-			&ServiceSpecMapper{},
-			&m.Drop{Field: "type"},
-			&m.SetValue{
-				Field: "clusterIP",
-				IfEq:  "None",
-				Value: nil,
-			},
-			&m.Move{From: "clusterIP", To: "clusterIp"},
-		).
-		AddMapperForType(&Version, v1.Service{},
-			&m.Drop{Field: "externalIPs"},
-			&m.Drop{Field: "externalTrafficPolicy"},
-			&m.Drop{Field: "healthCheckNodePort"},
-			&m.Drop{Field: "loadBalancerIP"},
-			&m.Drop{Field: "loadBalancerSourceRanges"},
-			&m.Drop{Field: "ports"},
-			&m.Drop{Field: "publishNotReadyAddresses"},
-			&m.Drop{Field: "sessionAffinity"},
-			&m.Drop{Field: "sessionAffinityConfig"},
-			&m.Drop{Field: "status"},
-			&m.LabelField{Field: "workloadId"},
-			&m.AnnotationField{Field: "ipAddresses", List: true},
-			&m.AnnotationField{Field: "targetWorkloadIds", List: true},
-			&m.AnnotationField{Field: "targetDnsRecordIds", List: true},
-		).
-		MustImportAndCustomize(&Version, v1.Service{}, func(schema *types.Schema) {
-			schema.MustCustomizeField("clusterIp", func(f types.Field) types.Field {
-				f.Create = false
-				f.Update = false
-				return f
-			})
+		Init(addServiceType).
+		Init(addDNSRecord)
+}
+
+func addServiceType(schemas *types.Schemas) *types.Schemas {
+	return schemas.AddSchema(*factory.Schemas(&Version).
+		Init(addServiceOrDNSRecord(false)).
+		Schema(&Version, "service"))
+}
+
+func addDNSRecord(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		Init(addServiceOrDNSRecord(true))
+}
+
+func addServiceOrDNSRecord(dns bool) types.SchemasInitFunc {
+	return func(schemas *types.Schemas) *types.Schemas {
+		if dns {
+			schemas = schemas.
+				TypeName("dnsRecord", v1.Service{})
+		}
+
+		schemas = schemas.
+			AddMapperForType(&Version, v1.ServiceSpec{},
+				&m.Move{From: "externalName", To: "hostname"},
+				&ServiceSpecMapper{},
+				&m.Move{From: "type", To: "serviceKind"},
+				&m.SetValue{
+					Field: "clusterIP",
+					IfEq:  "None",
+					Value: nil,
+				},
+				&m.Move{From: "clusterIP", To: "clusterIp"},
+			).
+			AddMapperForType(&Version, v1.Service{},
+				&m.Drop{Field: "status"},
+				&m.LabelField{Field: "workloadId"},
+				&m.AnnotationField{Field: "ipAddresses", List: true},
+				&m.AnnotationField{Field: "targetWorkloadIds", List: true},
+				&m.AnnotationField{Field: "targetDnsRecordIds", List: true},
+				&m.Move{From: "serviceKind", To: "kind"},
+			)
+
+		if dns {
+			schemas = schemas.
+				AddMapperForType(&Version, v1.Service{},
+					&m.Drop{Field: "kind"},
+					&m.Drop{Field: "externalIPs"},
+					&m.Drop{Field: "externalTrafficPolicy"},
+					&m.Drop{Field: "healthCheckNodePort"},
+					&m.Drop{Field: "loadBalancerIP"},
+					&m.Drop{Field: "loadBalancerSourceRanges"},
+					&m.Drop{Field: "ports"},
+					&m.Drop{Field: "publishNotReadyAddresses"},
+					&m.Drop{Field: "sessionAffinity"},
+					&m.Drop{Field: "sessionAffinityConfig"},
+				)
+		}
+
+		return schemas.MustImportAndCustomize(&Version, v1.Service{}, func(schema *types.Schema) {
+			if dns {
+				schema.CodeName = "DNSRecord"
+				schema.MustCustomizeField("clusterIp", func(f types.Field) types.Field {
+					f.Create = false
+					f.Update = false
+					return f
+				})
+			}
 		}, projectOverride{}, struct {
 			IPAddresses        []string `json:"ipAddresses"`
 			WorkloadID         string   `json:"workloadId" norman:"type=reference[workload],nocreate,noupdate"`
 			TargetWorkloadIDs  string   `json:"targetWorkloadIds" norman:"type=array[reference[workload]]"`
 			TargetDNSRecordIDs string   `json:"targetDnsRecordIds" norman:"type=array[reference[dnsRecord]]"`
 		}{})
+	}
 }
 
 func ingressTypes(schemas *types.Schemas) *types.Schemas {
@@ -377,6 +412,12 @@ func ingressTypes(schemas *types.Schemas) *types.Schemas {
 			WorkloadIDs string `json:"workloadIds" norman:"type=array[reference[workload]]"`
 			ServiceName string `norman:"type=reference[service]"`
 		}{}).
+		MustImportAndCustomize(&Version, v1beta1.IngressRule{}, func(schema *types.Schema) {
+			schema.MustCustomizeField("paths", func(f types.Field) types.Field {
+				f.Type = "map[ingressBackend]"
+				return f
+			})
+		}).
 		MustImport(&Version, v1beta1.IngressTLS{}, struct {
 			SecretName string `norman:"type=reference[certificate]"`
 		}{}).
