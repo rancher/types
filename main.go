@@ -20,6 +20,7 @@ func main() {
 	generator.Generate(projectSchema.Schemas)
 	generator.GenerateNativeTypes(v1.SchemeGroupVersion, []interface{}{
 		v1.Pod{},
+		v1.Service{},
 	}, []interface{}{
 		v1.Node{},
 		v1.ComponentStatus{},
