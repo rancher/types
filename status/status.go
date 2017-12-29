@@ -44,6 +44,7 @@ var conditionMappings = []conditionMapping{
 	{Name: "ReplicaFailure", Error: true, FalseIsGood: true},
 	{Name: "Ready", Transition: false, State: "activating"},
 	{Name: "BackingNamespaceCreated", Transition: true, State: "activating"},
+	{Name: "CreatorMadeOwner", Transition: true, State: "activating"},
 }
 
 func Set(data map[string]interface{}) {
