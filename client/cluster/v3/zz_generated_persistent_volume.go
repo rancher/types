@@ -6,7 +6,6 @@ import (
 
 const (
 	PersistentVolumeType                               = "persistentVolume"
-	PersistentVolumeField                              = "creatorId"
 	PersistentVolumeFieldAWSElasticBlockStore          = "awsElasticBlockStore"
 	PersistentVolumeFieldAccessModes                   = "accessModes"
 	PersistentVolumeFieldAnnotations                   = "annotations"
@@ -17,6 +16,7 @@ const (
 	PersistentVolumeFieldCinder                        = "cinder"
 	PersistentVolumeFieldClaimRef                      = "claimRef"
 	PersistentVolumeFieldCreated                       = "created"
+	PersistentVolumeFieldCreatorID                     = "creatorId"
 	PersistentVolumeFieldFC                            = "fc"
 	PersistentVolumeFieldFinalizers                    = "finalizers"
 	PersistentVolumeFieldFlexVolume                    = "flexVolume"
@@ -50,7 +50,6 @@ const (
 
 type PersistentVolume struct {
 	types.Resource
-	string                        `json:"creatorId,omitempty"`
 	AWSElasticBlockStore          *AWSElasticBlockStoreVolumeSource `json:"awsElasticBlockStore,omitempty"`
 	AccessModes                   []string                          `json:"accessModes,omitempty"`
 	Annotations                   map[string]string                 `json:"annotations,omitempty"`
@@ -61,6 +60,7 @@ type PersistentVolume struct {
 	Cinder                        *CinderVolumeSource               `json:"cinder,omitempty"`
 	ClaimRef                      *ObjectReference                  `json:"claimRef,omitempty"`
 	Created                       string                            `json:"created,omitempty"`
+	CreatorID                     string                            `json:"creatorId,omitempty"`
 	FC                            *FCVolumeSource                   `json:"fc,omitempty"`
 	Finalizers                    []string                          `json:"finalizers,omitempty"`
 	FlexVolume                    *FlexVolumeSource                 `json:"flexVolume,omitempty"`
