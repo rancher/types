@@ -1,8 +1,6 @@
 package client
 
-import (
-	"github.com/rancher/norman/types"
-)
+import "github.com/rancher/norman/types"
 
 const (
 	RoleTemplateType                 = "roleTemplate"
