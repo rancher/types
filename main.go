@@ -19,6 +19,7 @@ func main() {
 	generator.Generate(clusterSchema.Schemas)
 	generator.Generate(projectSchema.Schemas)
 	generator.GenerateNativeTypes(v1.SchemeGroupVersion, []interface{}{
+		v1.Endpoints{},
 		v1.Pod{},
 		v1.Service{},
 		v1.Secret{},
