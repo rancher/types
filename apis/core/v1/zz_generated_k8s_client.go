@@ -20,6 +20,7 @@ type Interface interface {
 	EventsGetter
 	PodsGetter
 	ServicesGetter
+	EndpointsGetter
 }
 
 type Client struct {
@@ -33,6 +34,7 @@ type Client struct {
 	eventControllers           map[string]EventController
 	podControllers             map[string]PodController
 	serviceControllers         map[string]ServiceController
+	endpointsControllers       map[string]EndpointsController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -55,6 +57,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		eventControllers:           map[string]EventController{},
 		podControllers:             map[string]PodController{},
 		serviceControllers:         map[string]ServiceController{},
+		endpointsControllers:       map[string]EndpointsController{},
 	}, nil
 }
 
@@ -142,6 +145,19 @@ type ServicesGetter interface {
 func (c *Client) Services(namespace string) ServiceInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ServiceResource, ServiceGroupVersionKind, serviceFactory{})
 	return &serviceClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type EndpointsGetter interface {
+	Endpoints(namespace string) EndpointsInterface
+}
+
+func (c *Client) Endpoints(namespace string) EndpointsInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &EndpointsResource, EndpointsGroupVersionKind, endpointsFactory{})
+	return &endpointsClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
