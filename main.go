@@ -21,6 +21,7 @@ func main() {
 	generator.GenerateNativeTypes(v1.SchemeGroupVersion, []interface{}{
 		v1.Pod{},
 		v1.Service{},
+		v1.Secret{},
 	}, []interface{}{
 		v1.Node{},
 		v1.ComponentStatus{},
