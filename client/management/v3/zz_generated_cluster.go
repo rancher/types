@@ -10,7 +10,6 @@ const (
 	ClusterFieldAllocatable                         = "allocatable"
 	ClusterFieldAnnotations                         = "annotations"
 	ClusterFieldAzureKubernetesServiceConfig        = "azureKubernetesServiceConfig"
-	ClusterFieldCACert                              = "caCert"
 	ClusterFieldCapacity                            = "capacity"
 	ClusterFieldComponentStatuses                   = "componentStatuses"
 	ClusterFieldConditions                          = "conditions"
@@ -29,7 +28,7 @@ const (
 	ClusterFieldRancherKubernetesEngineConfig       = "rancherKubernetesEngineConfig"
 	ClusterFieldRemoved                             = "removed"
 	ClusterFieldRequested                           = "requested"
-	ClusterFieldServiceAccountToken                 = "serviceAccountToken"
+	ClusterFieldServiceAccountSecretName            = "serviceAccountSecretName"
 	ClusterFieldState                               = "state"
 	ClusterFieldTransitioning                       = "transitioning"
 	ClusterFieldTransitioningMessage                = "transitioningMessage"
@@ -42,7 +41,6 @@ type Cluster struct {
 	Allocatable                         map[string]string              `json:"allocatable,omitempty"`
 	Annotations                         map[string]string              `json:"annotations,omitempty"`
 	AzureKubernetesServiceConfig        *AzureKubernetesServiceConfig  `json:"azureKubernetesServiceConfig,omitempty"`
-	CACert                              string                         `json:"caCert,omitempty"`
 	Capacity                            map[string]string              `json:"capacity,omitempty"`
 	ComponentStatuses                   []ClusterComponentStatus       `json:"componentStatuses,omitempty"`
 	Conditions                          []ClusterCondition             `json:"conditions,omitempty"`
@@ -61,7 +59,7 @@ type Cluster struct {
 	RancherKubernetesEngineConfig       *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty"`
 	Removed                             string                         `json:"removed,omitempty"`
 	Requested                           map[string]string              `json:"requested,omitempty"`
-	ServiceAccountToken                 string                         `json:"serviceAccountToken,omitempty"`
+	ServiceAccountSecretName            string                         `json:"serviceAccountSecretName,omitempty"`
 	State                               string                         `json:"state,omitempty"`
 	Transitioning                       string                         `json:"transitioning,omitempty"`
 	TransitioningMessage                string                         `json:"transitioningMessage,omitempty"`
