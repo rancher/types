@@ -53,15 +53,14 @@ type ClusterStatus struct {
 	Conditions []ClusterCondition `json:"conditions,omitempty"`
 	//Component statuses will represent cluster's components (etcd/controller/scheduler) health
 	// https://kubernetes.io/docs/api-reference/v1.8/#componentstatus-v1-core
-	ComponentStatuses   []ClusterComponentStatus `json:"componentStatuses,omitempty"`
-	APIEndpoint         string                   `json:"apiEndpoint,omitempty"`
-	ServiceAccountToken string                   `json:"serviceAccountToken,omitempty"`
-	CACert              string                   `json:"caCert,omitempty"`
-	Capacity            v1.ResourceList          `json:"capacity,omitempty"`
-	Allocatable         v1.ResourceList          `json:"allocatable,omitempty"`
-	AppliedSpec         ClusterSpec              `json:"appliedSpec,omitempty"`
-	Requested           v1.ResourceList          `json:"requested,omitempty"`
-	Limits              v1.ResourceList          `json:"limits,omitempty"`
+	ComponentStatuses        []ClusterComponentStatus `json:"componentStatuses,omitempty"`
+	APIEndpoint              string                   `json:"apiEndpoint,omitempty"`
+	ServiceAccountSecretName string                   `json:"serviceAccountSecretName,omitempty"`
+	Capacity                 v1.ResourceList          `json:"capacity,omitempty"`
+	Allocatable              v1.ResourceList          `json:"allocatable,omitempty"`
+	AppliedSpec              ClusterSpec              `json:"appliedSpec,omitempty"`
+	Requested                v1.ResourceList          `json:"requested,omitempty"`
+	Limits                   v1.ResourceList          `json:"limits,omitempty"`
 }
 
 type ClusterComponentStatus struct {
