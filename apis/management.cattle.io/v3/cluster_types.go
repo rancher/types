@@ -19,7 +19,7 @@ const (
 	ClusterConditionNoMemoryPressure condition.Cond = "NoMemoryPressure"
 	// ClusterConditionconditionDefautlProjectCreated true when default project has been created
 	ClusterConditionconditionDefautlProjectCreated condition.Cond = "DefaultProjectCreated"
-	// ClusterCondictionDefaultNamespaceAssigned true when cluster's default namespace has been initially assigned
+	// ClusterConditionDefaultNamespaceAssigned true when cluster's default namespace has been initially assigned
 	ClusterConditionDefaultNamespaceAssigned condition.Cond = "DefaultNamespaceAssigned"
 	// More conditions can be added if unredlying controllers request it
 )
