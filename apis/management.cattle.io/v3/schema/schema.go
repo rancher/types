@@ -26,7 +26,8 @@ var (
 		Init(clusterTypes).
 		Init(catalogTypes).
 		Init(authnTypes).
-		Init(schemaTypes)
+		Init(schemaTypes).
+		Init(stackTypes)
 )
 
 func schemaTypes(schemas *types.Schemas) *types.Schemas {
@@ -196,6 +197,20 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 				"changepassword": {
 					Input:  "changePasswordInput",
 					Output: "user",
+				},
+			}
+		})
+}
+
+func stackTypes(schema *types.Schemas) *types.Schemas {
+	return schema.
+		MustImportAndCustomize(&Version, v3.Stack{}, func(schema *types.Schema) {
+			schema.ResourceActions = map[string]types.Action{
+				"upgrade": {
+					Input: "templateVersionId",
+				},
+				"rollback": {
+					Input: "revision",
 				},
 			}
 		})
