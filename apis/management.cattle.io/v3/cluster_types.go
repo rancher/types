@@ -135,6 +135,7 @@ type AzureKubernetesServiceConfig struct {
 }
 
 type ClusterEvent struct {
+	types.Namespaced
 	v1.Event
 	ClusterName string `json:"clusterName" norman:"type=reference[cluster]"`
 }
