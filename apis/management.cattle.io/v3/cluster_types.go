@@ -10,10 +10,13 @@ import (
 type ClusterConditionType string
 
 const (
-	// ClusterConditionReady Cluster ready to serve API (healthy when true, unehalthy when false)
-	ClusterConditionReady condition.Cond = "Ready"
+	// ClusterConditionReady Cluster ready to serve API (healthy when true, unhealthy when false)
+	ClusterConditionReady           condition.Cond = "Ready"
+	ClusterConditionMachinesCreated condition.Cond = "MachinesCreated"
 	// ClusterConditionProvisioned Cluster is provisioned
 	ClusterConditionProvisioned condition.Cond = "Provisioned"
+	ClusterConditionUpdated     condition.Cond = "Updated"
+	ClusterConditionRemoved     condition.Cond = "Removed"
 	// ClusterConditionNoDiskPressure true when all cluster nodes have sufficient disk
 	ClusterConditionNoDiskPressure condition.Cond = "NoDiskPressure"
 	// ClusterConditionNoMemoryPressure true when all cluster nodes have sufficient memory
@@ -39,6 +42,7 @@ type Cluster struct {
 }
 
 type ClusterSpec struct {
+	Nodes                                []MachineConfig                `json:"nodes"`
 	Description                          string                         `json:"description"`
 	Internal                             bool                           `json:"internal" norman:"nocreate,noupdate"`
 	GoogleKubernetesEngineConfig         *GoogleKubernetesEngineConfig  `json:"googleKubernetesEngineConfig,omitempty"`
@@ -54,6 +58,7 @@ type ClusterStatus struct {
 	Conditions []ClusterCondition `json:"conditions,omitempty"`
 	//Component statuses will represent cluster's components (etcd/controller/scheduler) health
 	// https://kubernetes.io/docs/api-reference/v1.8/#componentstatus-v1-core
+	Driver              string                   `json:"driver"`
 	ComponentStatuses   []ClusterComponentStatus `json:"componentStatuses,omitempty"`
 	APIEndpoint         string                   `json:"apiEndpoint,omitempty"`
 	ServiceAccountToken string                   `json:"serviceAccountToken,omitempty"`
