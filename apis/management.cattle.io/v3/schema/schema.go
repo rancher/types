@@ -229,6 +229,36 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 					Input: "changePasswordInput",
 				},
 			}
+		}).
+		AddMapperForType(&Version, v3.AuthConfig{}, &m.Move{From: "type", To: "kind"}).
+		MustImport(&Version, v3.GithubConfigTestInput{}).
+		MustImport(&Version, v3.GithubConfigApplyInput{}).
+		MustImportAndCustomize(&Version, v3.AuthConfig{}, func(schema *types.Schema) {
+			schema.MustCustomizeField("kind", func(field types.Field) types.Field {
+				field.Options = []string{
+					"localConfig",
+					"githubConfig",
+				}
+				return field
+			})
+		}).
+		MustImportAndCustomize(&Version, v3.GithubConfig{}, func(schema *types.Schema) {
+			schema.BaseType = "AuthConfig"
+			schema.Mapper = schemas.Schema(&Version, "AuthConfig").Mapper
+			schema.ResourceActions = map[string]types.Action{
+				"configureTest": {
+					Input:  "githubConfigTestInput",
+					Output: "githubConfig",
+				},
+				"testAndApply": {
+					Input:  "githubConfigApplyInput",
+					Output: "githubConfig",
+				},
+			}
+		}).
+		MustImportAndCustomize(&Version, v3.LocalConfig{}, func(schema *types.Schema) {
+			schema.BaseType = "AuthConfig"
+			schema.Mapper = schemas.Schema(&Version, "AuthConfig").Mapper
 		})
 }
 
