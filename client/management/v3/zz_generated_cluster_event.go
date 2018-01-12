@@ -12,7 +12,6 @@ const (
 	ClusterEventFieldCreated         = "created"
 	ClusterEventFieldCreatorID       = "creatorId"
 	ClusterEventFieldEventType       = "eventType"
-	ClusterEventFieldFinalizers      = "finalizers"
 	ClusterEventFieldFirstTimestamp  = "firstTimestamp"
 	ClusterEventFieldInvolvedObject  = "involvedObject"
 	ClusterEventFieldLabels          = "labels"
@@ -35,7 +34,6 @@ type ClusterEvent struct {
 	Created         string            `json:"created,omitempty"`
 	CreatorID       string            `json:"creatorId,omitempty"`
 	EventType       string            `json:"eventType,omitempty"`
-	Finalizers      []string          `json:"finalizers,omitempty"`
 	FirstTimestamp  string            `json:"firstTimestamp,omitempty"`
 	InvolvedObject  *ObjectReference  `json:"involvedObject,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty"`
