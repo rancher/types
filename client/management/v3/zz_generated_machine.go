@@ -23,6 +23,8 @@ const (
 	MachineFieldMachineTemplateId    = "machineTemplateId"
 	MachineFieldName                 = "name"
 	MachineFieldNamespaceId          = "namespaceId"
+	MachineFieldNodeAnnotations      = "nodeAnnotations"
+	MachineFieldNodeLabels           = "nodeLabels"
 	MachineFieldNodeName             = "nodeName"
 	MachineFieldOwnerReferences      = "ownerReferences"
 	MachineFieldPodCidr              = "podCidr"
@@ -61,6 +63,8 @@ type Machine struct {
 	MachineTemplateId    string                    `json:"machineTemplateId,omitempty"`
 	Name                 string                    `json:"name,omitempty"`
 	NamespaceId          string                    `json:"namespaceId,omitempty"`
+	NodeAnnotations      map[string]string         `json:"nodeAnnotations,omitempty"`
+	NodeLabels           map[string]string         `json:"nodeLabels,omitempty"`
 	NodeName             string                    `json:"nodeName,omitempty"`
 	OwnerReferences      []OwnerReference          `json:"ownerReferences,omitempty"`
 	PodCidr              string                    `json:"podCidr,omitempty"`
