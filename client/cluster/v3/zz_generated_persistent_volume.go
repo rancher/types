@@ -18,7 +18,6 @@ const (
 	PersistentVolumeFieldCreated                       = "created"
 	PersistentVolumeFieldCreatorID                     = "creatorId"
 	PersistentVolumeFieldFC                            = "fc"
-	PersistentVolumeFieldFinalizers                    = "finalizers"
 	PersistentVolumeFieldFlexVolume                    = "flexVolume"
 	PersistentVolumeFieldFlocker                       = "flocker"
 	PersistentVolumeFieldGCEPersistentDisk             = "gcePersistentDisk"
@@ -62,7 +61,6 @@ type PersistentVolume struct {
 	Created                       string                            `json:"created,omitempty"`
 	CreatorID                     string                            `json:"creatorId,omitempty"`
 	FC                            *FCVolumeSource                   `json:"fc,omitempty"`
-	Finalizers                    []string                          `json:"finalizers,omitempty"`
 	FlexVolume                    *FlexVolumeSource                 `json:"flexVolume,omitempty"`
 	Flocker                       *FlockerVolumeSource              `json:"flocker,omitempty"`
 	GCEPersistentDisk             *GCEPersistentDiskVolumeSource    `json:"gcePersistentDisk,omitempty"`
