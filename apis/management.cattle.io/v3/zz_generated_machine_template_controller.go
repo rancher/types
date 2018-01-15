@@ -45,6 +45,7 @@ type MachineTemplateController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() MachineTemplateLister
 	AddHandler(handler MachineTemplateHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler MachineTemplateHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -64,6 +65,8 @@ type MachineTemplateInterface interface {
 	Controller() MachineTemplateController
 	AddSyncHandler(sync MachineTemplateHandlerFunc)
 	AddLifecycle(name string, lifecycle MachineTemplateLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync MachineTemplateHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle MachineTemplateLifecycle)
 }
 
 type machineTemplateLister struct {
@@ -116,6 +119,24 @@ func (c *machineTemplateController) AddHandler(handler MachineTemplateHandlerFun
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*MachineTemplate))
+	})
+}
+
+func (c *machineTemplateController) AddClusterScopedHandler(cluster string, handler MachineTemplateHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*MachineTemplate))
 	})
 }
@@ -216,6 +237,15 @@ func (s *machineTemplateClient) AddSyncHandler(sync MachineTemplateHandlerFunc) 
 }
 
 func (s *machineTemplateClient) AddLifecycle(name string, lifecycle MachineTemplateLifecycle) {
-	sync := NewMachineTemplateLifecycleAdapter(name, s, lifecycle)
+	sync := NewMachineTemplateLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *machineTemplateClient) AddClusterScopedSyncHandler(clusterName string, sync MachineTemplateHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *machineTemplateClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle MachineTemplateLifecycle) {
+	sync := NewMachineTemplateLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

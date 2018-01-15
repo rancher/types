@@ -47,6 +47,7 @@ type ServiceController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() ServiceLister
 	AddHandler(handler ServiceHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler ServiceHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -66,6 +67,8 @@ type ServiceInterface interface {
 	Controller() ServiceController
 	AddSyncHandler(sync ServiceHandlerFunc)
 	AddLifecycle(name string, lifecycle ServiceLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync ServiceHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle ServiceLifecycle)
 }
 
 type serviceLister struct {
@@ -118,6 +121,24 @@ func (c *serviceController) AddHandler(handler ServiceHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*v1.Service))
+	})
+}
+
+func (c *serviceController) AddClusterScopedHandler(cluster string, handler ServiceHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*v1.Service))
 	})
 }
@@ -218,6 +239,15 @@ func (s *serviceClient) AddSyncHandler(sync ServiceHandlerFunc) {
 }
 
 func (s *serviceClient) AddLifecycle(name string, lifecycle ServiceLifecycle) {
-	sync := NewServiceLifecycleAdapter(name, s, lifecycle)
+	sync := NewServiceLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *serviceClient) AddClusterScopedSyncHandler(clusterName string, sync ServiceHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *serviceClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle ServiceLifecycle) {
+	sync := NewServiceLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

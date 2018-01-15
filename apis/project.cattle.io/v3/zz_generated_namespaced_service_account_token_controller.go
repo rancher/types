@@ -46,6 +46,7 @@ type NamespacedServiceAccountTokenController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() NamespacedServiceAccountTokenLister
 	AddHandler(handler NamespacedServiceAccountTokenHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler NamespacedServiceAccountTokenHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -65,6 +66,8 @@ type NamespacedServiceAccountTokenInterface interface {
 	Controller() NamespacedServiceAccountTokenController
 	AddSyncHandler(sync NamespacedServiceAccountTokenHandlerFunc)
 	AddLifecycle(name string, lifecycle NamespacedServiceAccountTokenLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync NamespacedServiceAccountTokenHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle NamespacedServiceAccountTokenLifecycle)
 }
 
 type namespacedServiceAccountTokenLister struct {
@@ -117,6 +120,24 @@ func (c *namespacedServiceAccountTokenController) AddHandler(handler NamespacedS
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*NamespacedServiceAccountToken))
+	})
+}
+
+func (c *namespacedServiceAccountTokenController) AddClusterScopedHandler(cluster string, handler NamespacedServiceAccountTokenHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*NamespacedServiceAccountToken))
 	})
 }
@@ -217,6 +238,15 @@ func (s *namespacedServiceAccountTokenClient) AddSyncHandler(sync NamespacedServ
 }
 
 func (s *namespacedServiceAccountTokenClient) AddLifecycle(name string, lifecycle NamespacedServiceAccountTokenLifecycle) {
-	sync := NewNamespacedServiceAccountTokenLifecycleAdapter(name, s, lifecycle)
+	sync := NewNamespacedServiceAccountTokenLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *namespacedServiceAccountTokenClient) AddClusterScopedSyncHandler(clusterName string, sync NamespacedServiceAccountTokenHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *namespacedServiceAccountTokenClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle NamespacedServiceAccountTokenLifecycle) {
+	sync := NewNamespacedServiceAccountTokenLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

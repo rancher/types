@@ -47,6 +47,7 @@ type RoleBindingController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() RoleBindingLister
 	AddHandler(handler RoleBindingHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler RoleBindingHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -66,6 +67,8 @@ type RoleBindingInterface interface {
 	Controller() RoleBindingController
 	AddSyncHandler(sync RoleBindingHandlerFunc)
 	AddLifecycle(name string, lifecycle RoleBindingLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync RoleBindingHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle RoleBindingLifecycle)
 }
 
 type roleBindingLister struct {
@@ -118,6 +121,24 @@ func (c *roleBindingController) AddHandler(handler RoleBindingHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*v1.RoleBinding))
+	})
+}
+
+func (c *roleBindingController) AddClusterScopedHandler(cluster string, handler RoleBindingHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*v1.RoleBinding))
 	})
 }
@@ -218,6 +239,15 @@ func (s *roleBindingClient) AddSyncHandler(sync RoleBindingHandlerFunc) {
 }
 
 func (s *roleBindingClient) AddLifecycle(name string, lifecycle RoleBindingLifecycle) {
-	sync := NewRoleBindingLifecycleAdapter(name, s, lifecycle)
+	sync := NewRoleBindingLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *roleBindingClient) AddClusterScopedSyncHandler(clusterName string, sync RoleBindingHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *roleBindingClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle RoleBindingLifecycle) {
+	sync := NewRoleBindingLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

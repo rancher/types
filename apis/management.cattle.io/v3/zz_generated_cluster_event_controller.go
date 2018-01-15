@@ -46,6 +46,7 @@ type ClusterEventController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() ClusterEventLister
 	AddHandler(handler ClusterEventHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler ClusterEventHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -65,6 +66,8 @@ type ClusterEventInterface interface {
 	Controller() ClusterEventController
 	AddSyncHandler(sync ClusterEventHandlerFunc)
 	AddLifecycle(name string, lifecycle ClusterEventLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync ClusterEventHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle ClusterEventLifecycle)
 }
 
 type clusterEventLister struct {
@@ -117,6 +120,24 @@ func (c *clusterEventController) AddHandler(handler ClusterEventHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*ClusterEvent))
+	})
+}
+
+func (c *clusterEventController) AddClusterScopedHandler(cluster string, handler ClusterEventHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*ClusterEvent))
 	})
 }
@@ -217,6 +238,15 @@ func (s *clusterEventClient) AddSyncHandler(sync ClusterEventHandlerFunc) {
 }
 
 func (s *clusterEventClient) AddLifecycle(name string, lifecycle ClusterEventLifecycle) {
-	sync := NewClusterEventLifecycleAdapter(name, s, lifecycle)
+	sync := NewClusterEventLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *clusterEventClient) AddClusterScopedSyncHandler(clusterName string, sync ClusterEventHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *clusterEventClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle ClusterEventLifecycle) {
+	sync := NewClusterEventLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

@@ -45,6 +45,7 @@ type PrincipalController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() PrincipalLister
 	AddHandler(handler PrincipalHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler PrincipalHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -64,6 +65,8 @@ type PrincipalInterface interface {
 	Controller() PrincipalController
 	AddSyncHandler(sync PrincipalHandlerFunc)
 	AddLifecycle(name string, lifecycle PrincipalLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync PrincipalHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle PrincipalLifecycle)
 }
 
 type principalLister struct {
@@ -116,6 +119,24 @@ func (c *principalController) AddHandler(handler PrincipalHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*Principal))
+	})
+}
+
+func (c *principalController) AddClusterScopedHandler(cluster string, handler PrincipalHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*Principal))
 	})
 }
@@ -216,6 +237,15 @@ func (s *principalClient) AddSyncHandler(sync PrincipalHandlerFunc) {
 }
 
 func (s *principalClient) AddLifecycle(name string, lifecycle PrincipalLifecycle) {
-	sync := NewPrincipalLifecycleAdapter(name, s, lifecycle)
+	sync := NewPrincipalLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *principalClient) AddClusterScopedSyncHandler(clusterName string, sync PrincipalHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *principalClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle PrincipalLifecycle) {
+	sync := NewPrincipalLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

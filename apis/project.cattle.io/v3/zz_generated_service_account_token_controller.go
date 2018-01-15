@@ -46,6 +46,7 @@ type ServiceAccountTokenController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() ServiceAccountTokenLister
 	AddHandler(handler ServiceAccountTokenHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler ServiceAccountTokenHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -65,6 +66,8 @@ type ServiceAccountTokenInterface interface {
 	Controller() ServiceAccountTokenController
 	AddSyncHandler(sync ServiceAccountTokenHandlerFunc)
 	AddLifecycle(name string, lifecycle ServiceAccountTokenLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync ServiceAccountTokenHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle ServiceAccountTokenLifecycle)
 }
 
 type serviceAccountTokenLister struct {
@@ -117,6 +120,24 @@ func (c *serviceAccountTokenController) AddHandler(handler ServiceAccountTokenHa
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*ServiceAccountToken))
+	})
+}
+
+func (c *serviceAccountTokenController) AddClusterScopedHandler(cluster string, handler ServiceAccountTokenHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*ServiceAccountToken))
 	})
 }
@@ -217,6 +238,15 @@ func (s *serviceAccountTokenClient) AddSyncHandler(sync ServiceAccountTokenHandl
 }
 
 func (s *serviceAccountTokenClient) AddLifecycle(name string, lifecycle ServiceAccountTokenLifecycle) {
-	sync := NewServiceAccountTokenLifecycleAdapter(name, s, lifecycle)
+	sync := NewServiceAccountTokenLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *serviceAccountTokenClient) AddClusterScopedSyncHandler(clusterName string, sync ServiceAccountTokenHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *serviceAccountTokenClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle ServiceAccountTokenLifecycle) {
+	sync := NewServiceAccountTokenLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

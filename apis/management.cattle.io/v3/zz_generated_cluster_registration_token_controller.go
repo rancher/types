@@ -45,6 +45,7 @@ type ClusterRegistrationTokenController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() ClusterRegistrationTokenLister
 	AddHandler(handler ClusterRegistrationTokenHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler ClusterRegistrationTokenHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -64,6 +65,8 @@ type ClusterRegistrationTokenInterface interface {
 	Controller() ClusterRegistrationTokenController
 	AddSyncHandler(sync ClusterRegistrationTokenHandlerFunc)
 	AddLifecycle(name string, lifecycle ClusterRegistrationTokenLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync ClusterRegistrationTokenHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle ClusterRegistrationTokenLifecycle)
 }
 
 type clusterRegistrationTokenLister struct {
@@ -116,6 +119,24 @@ func (c *clusterRegistrationTokenController) AddHandler(handler ClusterRegistrat
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*ClusterRegistrationToken))
+	})
+}
+
+func (c *clusterRegistrationTokenController) AddClusterScopedHandler(cluster string, handler ClusterRegistrationTokenHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*ClusterRegistrationToken))
 	})
 }
@@ -216,6 +237,15 @@ func (s *clusterRegistrationTokenClient) AddSyncHandler(sync ClusterRegistration
 }
 
 func (s *clusterRegistrationTokenClient) AddLifecycle(name string, lifecycle ClusterRegistrationTokenLifecycle) {
-	sync := NewClusterRegistrationTokenLifecycleAdapter(name, s, lifecycle)
+	sync := NewClusterRegistrationTokenLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *clusterRegistrationTokenClient) AddClusterScopedSyncHandler(clusterName string, sync ClusterRegistrationTokenHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *clusterRegistrationTokenClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle ClusterRegistrationTokenLifecycle) {
+	sync := NewClusterRegistrationTokenLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

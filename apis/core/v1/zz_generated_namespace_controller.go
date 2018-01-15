@@ -46,6 +46,7 @@ type NamespaceController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() NamespaceLister
 	AddHandler(handler NamespaceHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler NamespaceHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -65,6 +66,8 @@ type NamespaceInterface interface {
 	Controller() NamespaceController
 	AddSyncHandler(sync NamespaceHandlerFunc)
 	AddLifecycle(name string, lifecycle NamespaceLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync NamespaceHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle NamespaceLifecycle)
 }
 
 type namespaceLister struct {
@@ -117,6 +120,24 @@ func (c *namespaceController) AddHandler(handler NamespaceHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*v1.Namespace))
+	})
+}
+
+func (c *namespaceController) AddClusterScopedHandler(cluster string, handler NamespaceHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*v1.Namespace))
 	})
 }
@@ -217,6 +238,15 @@ func (s *namespaceClient) AddSyncHandler(sync NamespaceHandlerFunc) {
 }
 
 func (s *namespaceClient) AddLifecycle(name string, lifecycle NamespaceLifecycle) {
-	sync := NewNamespaceLifecycleAdapter(name, s, lifecycle)
+	sync := NewNamespaceLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *namespaceClient) AddClusterScopedSyncHandler(clusterName string, sync NamespaceHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *namespaceClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle NamespaceLifecycle) {
+	sync := NewNamespaceLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

@@ -47,6 +47,7 @@ type RoleController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() RoleLister
 	AddHandler(handler RoleHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler RoleHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -66,6 +67,8 @@ type RoleInterface interface {
 	Controller() RoleController
 	AddSyncHandler(sync RoleHandlerFunc)
 	AddLifecycle(name string, lifecycle RoleLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync RoleHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle RoleLifecycle)
 }
 
 type roleLister struct {
@@ -118,6 +121,24 @@ func (c *roleController) AddHandler(handler RoleHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*v1.Role))
+	})
+}
+
+func (c *roleController) AddClusterScopedHandler(cluster string, handler RoleHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*v1.Role))
 	})
 }
@@ -218,6 +239,15 @@ func (s *roleClient) AddSyncHandler(sync RoleHandlerFunc) {
 }
 
 func (s *roleClient) AddLifecycle(name string, lifecycle RoleLifecycle) {
-	sync := NewRoleLifecycleAdapter(name, s, lifecycle)
+	sync := NewRoleLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *roleClient) AddClusterScopedSyncHandler(clusterName string, sync RoleHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *roleClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle RoleLifecycle) {
+	sync := NewRoleLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

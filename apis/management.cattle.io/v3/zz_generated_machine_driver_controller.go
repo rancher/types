@@ -45,6 +45,7 @@ type MachineDriverController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() MachineDriverLister
 	AddHandler(handler MachineDriverHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler MachineDriverHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -64,6 +65,8 @@ type MachineDriverInterface interface {
 	Controller() MachineDriverController
 	AddSyncHandler(sync MachineDriverHandlerFunc)
 	AddLifecycle(name string, lifecycle MachineDriverLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync MachineDriverHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle MachineDriverLifecycle)
 }
 
 type machineDriverLister struct {
@@ -116,6 +119,24 @@ func (c *machineDriverController) AddHandler(handler MachineDriverHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*MachineDriver))
+	})
+}
+
+func (c *machineDriverController) AddClusterScopedHandler(cluster string, handler MachineDriverHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*MachineDriver))
 	})
 }
@@ -216,6 +237,15 @@ func (s *machineDriverClient) AddSyncHandler(sync MachineDriverHandlerFunc) {
 }
 
 func (s *machineDriverClient) AddLifecycle(name string, lifecycle MachineDriverLifecycle) {
-	sync := NewMachineDriverLifecycleAdapter(name, s, lifecycle)
+	sync := NewMachineDriverLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *machineDriverClient) AddClusterScopedSyncHandler(clusterName string, sync MachineDriverHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *machineDriverClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle MachineDriverLifecycle) {
+	sync := NewMachineDriverLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

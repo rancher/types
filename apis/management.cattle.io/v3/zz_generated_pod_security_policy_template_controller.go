@@ -45,6 +45,7 @@ type PodSecurityPolicyTemplateController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() PodSecurityPolicyTemplateLister
 	AddHandler(handler PodSecurityPolicyTemplateHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler PodSecurityPolicyTemplateHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -64,6 +65,8 @@ type PodSecurityPolicyTemplateInterface interface {
 	Controller() PodSecurityPolicyTemplateController
 	AddSyncHandler(sync PodSecurityPolicyTemplateHandlerFunc)
 	AddLifecycle(name string, lifecycle PodSecurityPolicyTemplateLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync PodSecurityPolicyTemplateHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle PodSecurityPolicyTemplateLifecycle)
 }
 
 type podSecurityPolicyTemplateLister struct {
@@ -116,6 +119,24 @@ func (c *podSecurityPolicyTemplateController) AddHandler(handler PodSecurityPoli
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*PodSecurityPolicyTemplate))
+	})
+}
+
+func (c *podSecurityPolicyTemplateController) AddClusterScopedHandler(cluster string, handler PodSecurityPolicyTemplateHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*PodSecurityPolicyTemplate))
 	})
 }
@@ -216,6 +237,15 @@ func (s *podSecurityPolicyTemplateClient) AddSyncHandler(sync PodSecurityPolicyT
 }
 
 func (s *podSecurityPolicyTemplateClient) AddLifecycle(name string, lifecycle PodSecurityPolicyTemplateLifecycle) {
-	sync := NewPodSecurityPolicyTemplateLifecycleAdapter(name, s, lifecycle)
+	sync := NewPodSecurityPolicyTemplateLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *podSecurityPolicyTemplateClient) AddClusterScopedSyncHandler(clusterName string, sync PodSecurityPolicyTemplateHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *podSecurityPolicyTemplateClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle PodSecurityPolicyTemplateLifecycle) {
+	sync := NewPodSecurityPolicyTemplateLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

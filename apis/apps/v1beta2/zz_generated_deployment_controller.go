@@ -47,6 +47,7 @@ type DeploymentController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() DeploymentLister
 	AddHandler(handler DeploymentHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler DeploymentHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -66,6 +67,8 @@ type DeploymentInterface interface {
 	Controller() DeploymentController
 	AddSyncHandler(sync DeploymentHandlerFunc)
 	AddLifecycle(name string, lifecycle DeploymentLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync DeploymentHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle DeploymentLifecycle)
 }
 
 type deploymentLister struct {
@@ -118,6 +121,24 @@ func (c *deploymentController) AddHandler(handler DeploymentHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*v1beta2.Deployment))
+	})
+}
+
+func (c *deploymentController) AddClusterScopedHandler(cluster string, handler DeploymentHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*v1beta2.Deployment))
 	})
 }
@@ -218,6 +239,15 @@ func (s *deploymentClient) AddSyncHandler(sync DeploymentHandlerFunc) {
 }
 
 func (s *deploymentClient) AddLifecycle(name string, lifecycle DeploymentLifecycle) {
-	sync := NewDeploymentLifecycleAdapter(name, s, lifecycle)
+	sync := NewDeploymentLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *deploymentClient) AddClusterScopedSyncHandler(clusterName string, sync DeploymentHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *deploymentClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle DeploymentLifecycle) {
+	sync := NewDeploymentLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }
