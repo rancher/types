@@ -14,6 +14,7 @@ const (
 	MachineStatusFieldNodeName        = "nodeName"
 	MachineStatusFieldRequested       = "requested"
 	MachineStatusFieldSSHUser         = "sshUser"
+	MachineStatusFieldToken           = "token"
 	MachineStatusFieldVolumesAttached = "volumesAttached"
 	MachineStatusFieldVolumesInUse    = "volumesInUse"
 )
@@ -31,6 +32,7 @@ type MachineStatus struct {
 	NodeName        string                    `json:"nodeName,omitempty"`
 	Requested       map[string]string         `json:"requested,omitempty"`
 	SSHUser         string                    `json:"sshUser,omitempty"`
+	Token           string                    `json:"token,omitempty"`
 	VolumesAttached map[string]AttachedVolume `json:"volumesAttached,omitempty"`
 	VolumesInUse    []string                  `json:"volumesInUse,omitempty"`
 }
