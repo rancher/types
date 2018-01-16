@@ -46,6 +46,7 @@ type NodeController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() NodeLister
 	AddHandler(handler NodeHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler NodeHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -65,6 +66,8 @@ type NodeInterface interface {
 	Controller() NodeController
 	AddSyncHandler(sync NodeHandlerFunc)
 	AddLifecycle(name string, lifecycle NodeLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync NodeHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle NodeLifecycle)
 }
 
 type nodeLister struct {
@@ -117,6 +120,24 @@ func (c *nodeController) AddHandler(handler NodeHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*v1.Node))
+	})
+}
+
+func (c *nodeController) AddClusterScopedHandler(cluster string, handler NodeHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*v1.Node))
 	})
 }
@@ -217,6 +238,15 @@ func (s *nodeClient) AddSyncHandler(sync NodeHandlerFunc) {
 }
 
 func (s *nodeClient) AddLifecycle(name string, lifecycle NodeLifecycle) {
-	sync := NewNodeLifecycleAdapter(name, s, lifecycle)
+	sync := NewNodeLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *nodeClient) AddClusterScopedSyncHandler(clusterName string, sync NodeHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *nodeClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle NodeLifecycle) {
+	sync := NewNodeLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

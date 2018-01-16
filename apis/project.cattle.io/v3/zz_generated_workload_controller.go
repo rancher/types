@@ -46,6 +46,7 @@ type WorkloadController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() WorkloadLister
 	AddHandler(handler WorkloadHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler WorkloadHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -65,6 +66,8 @@ type WorkloadInterface interface {
 	Controller() WorkloadController
 	AddSyncHandler(sync WorkloadHandlerFunc)
 	AddLifecycle(name string, lifecycle WorkloadLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync WorkloadHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle WorkloadLifecycle)
 }
 
 type workloadLister struct {
@@ -117,6 +120,24 @@ func (c *workloadController) AddHandler(handler WorkloadHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*Workload))
+	})
+}
+
+func (c *workloadController) AddClusterScopedHandler(cluster string, handler WorkloadHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*Workload))
 	})
 }
@@ -217,6 +238,15 @@ func (s *workloadClient) AddSyncHandler(sync WorkloadHandlerFunc) {
 }
 
 func (s *workloadClient) AddLifecycle(name string, lifecycle WorkloadLifecycle) {
-	sync := NewWorkloadLifecycleAdapter(name, s, lifecycle)
+	sync := NewWorkloadLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *workloadClient) AddClusterScopedSyncHandler(clusterName string, sync WorkloadHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *workloadClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle WorkloadLifecycle) {
+	sync := NewWorkloadLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

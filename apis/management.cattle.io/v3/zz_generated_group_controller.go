@@ -45,6 +45,7 @@ type GroupController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() GroupLister
 	AddHandler(handler GroupHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler GroupHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -64,6 +65,8 @@ type GroupInterface interface {
 	Controller() GroupController
 	AddSyncHandler(sync GroupHandlerFunc)
 	AddLifecycle(name string, lifecycle GroupLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync GroupHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle GroupLifecycle)
 }
 
 type groupLister struct {
@@ -116,6 +119,24 @@ func (c *groupController) AddHandler(handler GroupHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*Group))
+	})
+}
+
+func (c *groupController) AddClusterScopedHandler(cluster string, handler GroupHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*Group))
 	})
 }
@@ -216,6 +237,15 @@ func (s *groupClient) AddSyncHandler(sync GroupHandlerFunc) {
 }
 
 func (s *groupClient) AddLifecycle(name string, lifecycle GroupLifecycle) {
-	sync := NewGroupLifecycleAdapter(name, s, lifecycle)
+	sync := NewGroupLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *groupClient) AddClusterScopedSyncHandler(clusterName string, sync GroupHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *groupClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle GroupLifecycle) {
+	sync := NewGroupLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

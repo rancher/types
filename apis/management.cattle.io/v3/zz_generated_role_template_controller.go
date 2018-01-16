@@ -45,6 +45,7 @@ type RoleTemplateController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() RoleTemplateLister
 	AddHandler(handler RoleTemplateHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler RoleTemplateHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -64,6 +65,8 @@ type RoleTemplateInterface interface {
 	Controller() RoleTemplateController
 	AddSyncHandler(sync RoleTemplateHandlerFunc)
 	AddLifecycle(name string, lifecycle RoleTemplateLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync RoleTemplateHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle RoleTemplateLifecycle)
 }
 
 type roleTemplateLister struct {
@@ -116,6 +119,24 @@ func (c *roleTemplateController) AddHandler(handler RoleTemplateHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*RoleTemplate))
+	})
+}
+
+func (c *roleTemplateController) AddClusterScopedHandler(cluster string, handler RoleTemplateHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*RoleTemplate))
 	})
 }
@@ -216,6 +237,15 @@ func (s *roleTemplateClient) AddSyncHandler(sync RoleTemplateHandlerFunc) {
 }
 
 func (s *roleTemplateClient) AddLifecycle(name string, lifecycle RoleTemplateLifecycle) {
-	sync := NewRoleTemplateLifecycleAdapter(name, s, lifecycle)
+	sync := NewRoleTemplateLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *roleTemplateClient) AddClusterScopedSyncHandler(clusterName string, sync RoleTemplateHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *roleTemplateClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle RoleTemplateLifecycle) {
+	sync := NewRoleTemplateLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

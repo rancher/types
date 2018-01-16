@@ -45,6 +45,7 @@ type DynamicSchemaController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() DynamicSchemaLister
 	AddHandler(handler DynamicSchemaHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler DynamicSchemaHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -64,6 +65,8 @@ type DynamicSchemaInterface interface {
 	Controller() DynamicSchemaController
 	AddSyncHandler(sync DynamicSchemaHandlerFunc)
 	AddLifecycle(name string, lifecycle DynamicSchemaLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync DynamicSchemaHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle DynamicSchemaLifecycle)
 }
 
 type dynamicSchemaLister struct {
@@ -116,6 +119,24 @@ func (c *dynamicSchemaController) AddHandler(handler DynamicSchemaHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*DynamicSchema))
+	})
+}
+
+func (c *dynamicSchemaController) AddClusterScopedHandler(cluster string, handler DynamicSchemaHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*DynamicSchema))
 	})
 }
@@ -216,6 +237,15 @@ func (s *dynamicSchemaClient) AddSyncHandler(sync DynamicSchemaHandlerFunc) {
 }
 
 func (s *dynamicSchemaClient) AddLifecycle(name string, lifecycle DynamicSchemaLifecycle) {
-	sync := NewDynamicSchemaLifecycleAdapter(name, s, lifecycle)
+	sync := NewDynamicSchemaLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *dynamicSchemaClient) AddClusterScopedSyncHandler(clusterName string, sync DynamicSchemaHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *dynamicSchemaClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle DynamicSchemaLifecycle) {
+	sync := NewDynamicSchemaLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

@@ -46,6 +46,7 @@ type SSHAuthController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() SSHAuthLister
 	AddHandler(handler SSHAuthHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler SSHAuthHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -65,6 +66,8 @@ type SSHAuthInterface interface {
 	Controller() SSHAuthController
 	AddSyncHandler(sync SSHAuthHandlerFunc)
 	AddLifecycle(name string, lifecycle SSHAuthLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync SSHAuthHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle SSHAuthLifecycle)
 }
 
 type sshAuthLister struct {
@@ -117,6 +120,24 @@ func (c *sshAuthController) AddHandler(handler SSHAuthHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*SSHAuth))
+	})
+}
+
+func (c *sshAuthController) AddClusterScopedHandler(cluster string, handler SSHAuthHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*SSHAuth))
 	})
 }
@@ -217,6 +238,15 @@ func (s *sshAuthClient) AddSyncHandler(sync SSHAuthHandlerFunc) {
 }
 
 func (s *sshAuthClient) AddLifecycle(name string, lifecycle SSHAuthLifecycle) {
-	sync := NewSSHAuthLifecycleAdapter(name, s, lifecycle)
+	sync := NewSSHAuthLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *sshAuthClient) AddClusterScopedSyncHandler(clusterName string, sync SSHAuthHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *sshAuthClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle SSHAuthLifecycle) {
+	sync := NewSSHAuthLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }

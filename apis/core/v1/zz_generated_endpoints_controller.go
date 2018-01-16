@@ -47,6 +47,7 @@ type EndpointsController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() EndpointsLister
 	AddHandler(handler EndpointsHandlerFunc)
+	AddClusterScopedHandler(clusterName string, handler EndpointsHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -66,6 +67,8 @@ type EndpointsInterface interface {
 	Controller() EndpointsController
 	AddSyncHandler(sync EndpointsHandlerFunc)
 	AddLifecycle(name string, lifecycle EndpointsLifecycle)
+	AddClusterScopedSyncHandler(clusterName string, sync EndpointsHandlerFunc)
+	AddClusterScopedLifecycle(name, clusterName string, lifecycle EndpointsLifecycle)
 }
 
 type endpointsLister struct {
@@ -118,6 +121,24 @@ func (c *endpointsController) AddHandler(handler EndpointsHandlerFunc) {
 		if !exists {
 			return handler(key, nil)
 		}
+		return handler(key, obj.(*v1.Endpoints))
+	})
+}
+
+func (c *endpointsController) AddClusterScopedHandler(cluster string, handler EndpointsHandlerFunc) {
+	c.GenericController.AddHandler(func(key string) error {
+		obj, exists, err := c.Informer().GetStore().GetByKey(key)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			return handler(key, nil)
+		}
+
+		if !controller.ObjectInCluster(cluster, obj) {
+			return nil
+		}
+
 		return handler(key, obj.(*v1.Endpoints))
 	})
 }
@@ -218,6 +239,15 @@ func (s *endpointsClient) AddSyncHandler(sync EndpointsHandlerFunc) {
 }
 
 func (s *endpointsClient) AddLifecycle(name string, lifecycle EndpointsLifecycle) {
-	sync := NewEndpointsLifecycleAdapter(name, s, lifecycle)
+	sync := NewEndpointsLifecycleAdapter(name, false, s, lifecycle)
 	s.AddSyncHandler(sync)
+}
+
+func (s *endpointsClient) AddClusterScopedSyncHandler(clusterName string, sync EndpointsHandlerFunc) {
+	s.Controller().AddClusterScopedHandler(clusterName, sync)
+}
+
+func (s *endpointsClient) AddClusterScopedLifecycle(name, clusterName string, lifecycle EndpointsLifecycle) {
+	sync := NewEndpointsLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.AddClusterScopedSyncHandler(clusterName, sync)
 }
