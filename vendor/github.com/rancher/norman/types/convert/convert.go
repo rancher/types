@@ -10,6 +10,20 @@ import (
 	"unicode"
 )
 
+func Chan(c <-chan map[string]interface{}, f func(map[string]interface{}) map[string]interface{}) chan map[string]interface{} {
+	result := make(chan map[string]interface{})
+	go func() {
+		for data := range c {
+			modified := f(data)
+			if modified != nil {
+				result <- modified
+			}
+		}
+		close(result)
+	}()
+	return result
+}
+
 func Singular(value interface{}) interface{} {
 	if slice, ok := value.([]string); ok {
 		if len(slice) == 0 {
@@ -34,7 +48,7 @@ func ToString(value interface{}) string {
 	if single == nil {
 		return ""
 	}
-	return fmt.Sprint(single)
+	return strings.TrimSpace(fmt.Sprint(single))
 }
 
 func ToTimestamp(value interface{}) (int64, error) {
@@ -150,7 +164,7 @@ func ToStringSlice(data interface{}) []string {
 		return v
 	}
 	if v, ok := data.([]interface{}); ok {
-		result := []string{}
+		var result []string
 		for _, item := range v {
 			result = append(result, ToString(item))
 		}
