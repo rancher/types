@@ -110,7 +110,7 @@ type MachineSpec struct {
 	ClusterName          string      `json:"clusterName,omitempty" norman:"type=reference[cluster],noupdate,required"`
 	Role                 []string    `json:"role,omitempty" norman:"noupdate,type=array[enum],options=etcd|worker|controlplane"`
 	MachineTemplateName  string      `json:"machineTemplateName,omitempty" norman:"type=reference[machineTemplate],noupdate"`
-	UseInternalIPAddress bool        `json:"useInternalIpAddress,omitempty"`
+	UseInternalIPAddress bool        `json:"useInternalIpAddress,omitempty" norman:"default=true"`
 }
 
 type MachineCommonParams struct {
