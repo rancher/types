@@ -67,6 +67,7 @@ type MachineStatus struct {
 	Limits              v1.ResourceList      `json:"limits,omitempty"`
 	MachineTemplateSpec *MachineTemplateSpec `json:"machineTemplateSpec,omitempty"`
 	NodeConfig          *RKEConfigNode       `json:"rkeNode,omitempty"`
+	ExtractedConfig     string               `json:"extractedConfig,omitempty"`
 	SSHUser             string               `json:"sshUser,omitempty"`
 	MachineDriverConfig string               `json:"machineDriverConfig,omitempty"`
 	NodeAnnotations     map[string]string    `json:"nodeAnnotations,omitempty"`
