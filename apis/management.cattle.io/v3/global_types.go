@@ -8,9 +8,9 @@ type Setting struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Value     string `json:"value" norman:"required"`
-	HideValue bool   `json:"hideValue" norman:"noupdate"`
-	ReadOnly  bool   `json:"readOnly" norman:"nocreate,noupdate"`
+	Value      string `json:"value" norman:"required"`
+	Default    string `json:"default" norman:"nocreate,noupdate"`
+	Customized bool   `json:"customized" norman:"nocreate,noupdate"`
 }
 
 type ListenConfig struct {
