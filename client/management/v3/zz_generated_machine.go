@@ -14,6 +14,7 @@ const (
 	MachineFieldCreated              = "created"
 	MachineFieldCreatorID            = "creatorId"
 	MachineFieldDescription          = "description"
+	MachineFieldExtractedConfig      = "extractedConfig"
 	MachineFieldHostname             = "hostname"
 	MachineFieldIPAddress            = "ipAddress"
 	MachineFieldInfo                 = "info"
@@ -54,6 +55,7 @@ type Machine struct {
 	Created              string                    `json:"created,omitempty"`
 	CreatorID            string                    `json:"creatorId,omitempty"`
 	Description          string                    `json:"description,omitempty"`
+	ExtractedConfig      string                    `json:"extractedConfig,omitempty"`
 	Hostname             string                    `json:"hostname,omitempty"`
 	IPAddress            string                    `json:"ipAddress,omitempty"`
 	Info                 *NodeInfo                 `json:"info,omitempty"`
