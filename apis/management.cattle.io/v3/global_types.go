@@ -21,6 +21,8 @@ type ListenConfig struct {
 	Description string   `json:"description,omitempty"`
 	Mode        string   `json:"mode,omitempty" norman:"type=enum,options=https|http|acme"`
 	CACerts     string   `json:"caCerts,omitempty"`
+	CACert      string   `json:"caCert,omitempty"`
+	CAKey       string   `json:"caKey,omitempty"`
 	Cert        string   `json:"cert,omitempty"`
 	Key         string   `json:"key,omitempty" norman:"writeOnly"`
 	Domains     []string `json:"domains,omitempty"`
