@@ -2204,6 +2204,13 @@ func (in *MachineStatus) DeepCopyInto(out *MachineStatus) {
 			(*out)[key] = val
 		}
 	}
+	if in.NodeTaints != nil {
+		in, out := &in.NodeTaints, &out.NodeTaints
+		*out = make([]v1.Taint, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
 	return
 }
 
