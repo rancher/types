@@ -67,7 +67,15 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 			schema.SubContext = "clusters"
 		}).
 		MustImport(&Version, v3.ClusterEvent{}).
-		MustImport(&Version, v3.ClusterRegistrationToken{})
+		MustImport(&Version, v3.ClusterRegistrationToken{}).
+		MustImportAndCustomize(&Version, v3.Cluster{}, func(schema *types.Schema) {
+			schema.MustCustomizeField("name", func(field types.Field) types.Field {
+				field.Type = "dnsLabel"
+				field.Nullable = true
+				field.Required = false
+				return field
+			})
+		})
 }
 
 func authzTypes(schemas *types.Schemas) *types.Schemas {
@@ -185,6 +193,7 @@ func machineTypes(schemas *types.Schemas) *types.Schemas {
 			}
 		}).
 		MustImport(&Version, v3.MachineTemplate{})
+
 }
 
 func authnTypes(schemas *types.Schemas) *types.Schemas {
