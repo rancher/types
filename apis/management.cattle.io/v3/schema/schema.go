@@ -175,7 +175,9 @@ func machineTypes(schemas *types.Schemas) *types.Schemas {
 			m.DisplayName{}).
 		AddMapperForType(&Version, v3.MachineDriver{}, m.DisplayName{}).
 		AddMapperForType(&Version, v3.MachineTemplate{}, m.DisplayName{}).
-		MustImport(&Version, v3.Machine{}).
+		MustImportAndCustomize(&Version, v3.Machine{}, func(schema *types.Schema) {
+			schema.ResourceActions["machineConfig"] = types.Action{}
+		}).
 		MustImportAndCustomize(&Version, v3.MachineDriver{}, func(schema *types.Schema) {
 			schema.ResourceActions["activate"] = types.Action{
 				Output: "machineDriver",
