@@ -8,6 +8,7 @@ const (
 	RancherKubernetesEngineConfigFieldIgnoreDockerVersion = "ignoreDockerVersion"
 	RancherKubernetesEngineConfigFieldNetwork             = "network"
 	RancherKubernetesEngineConfigFieldNodes               = "nodes"
+	RancherKubernetesEngineConfigFieldPrivateRegistries   = "privateRegistries"
 	RancherKubernetesEngineConfigFieldSSHKeyPath          = "sshKeyPath"
 	RancherKubernetesEngineConfigFieldServices            = "services"
 	RancherKubernetesEngineConfigFieldSystemImages        = "systemImages"
@@ -21,6 +22,7 @@ type RancherKubernetesEngineConfig struct {
 	IgnoreDockerVersion *bool              `json:"ignoreDockerVersion,omitempty"`
 	Network             *NetworkConfig     `json:"network,omitempty"`
 	Nodes               []RKEConfigNode    `json:"nodes,omitempty"`
+	PrivateRegistries   []PrivateRegistry  `json:"privateRegistries,omitempty"`
 	SSHKeyPath          string             `json:"sshKeyPath,omitempty"`
 	Services            *RKEConfigServices `json:"services,omitempty"`
 	SystemImages        map[string]string  `json:"systemImages,omitempty"`
