@@ -21,6 +21,17 @@ type RancherKubernetesEngineConfig struct {
 	IgnoreDockerVersion bool `yaml:"ignore_docker_version" json:"ignoreDockerVersion"`
 	// Kubernetes version to use (overrides individual Images)
 	Version string `yaml:"kubernetesVersion"`
+	// List of private registries and their credentials
+	PrivateRegistries []PrivateRegistry `yaml:"private_registries" json:"privateRegistries,omitempty"`
+}
+
+type PrivateRegistry struct {
+	// URL for the registry
+	URL string `yaml:"url" json:"url,omitempty"`
+	// User name for registry acces
+	User string `yaml:"user" json:"user,omitempty"`
+	// Password for registry access
+	Password string `yaml:"password" json:"password,omitempty"`
 }
 
 type RKEConfigNode struct {
