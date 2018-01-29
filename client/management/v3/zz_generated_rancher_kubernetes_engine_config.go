@@ -12,7 +12,7 @@ const (
 	RancherKubernetesEngineConfigFieldSSHKeyPath          = "sshKeyPath"
 	RancherKubernetesEngineConfigFieldServices            = "services"
 	RancherKubernetesEngineConfigFieldSystemImages        = "systemImages"
-	RancherKubernetesEngineConfigFieldVersion             = "version"
+	RancherKubernetesEngineConfigFieldVersion             = "kubernetesVersion"
 )
 
 type RancherKubernetesEngineConfig struct {
@@ -25,6 +25,6 @@ type RancherKubernetesEngineConfig struct {
 	PrivateRegistries   []PrivateRegistry  `json:"privateRegistries,omitempty"`
 	SSHKeyPath          string             `json:"sshKeyPath,omitempty"`
 	Services            *RKEConfigServices `json:"services,omitempty"`
-	SystemImages        map[string]string  `json:"systemImages,omitempty"`
-	Version             string             `json:"version,omitempty"`
+	SystemImages        *RKESystemImages   `json:"systemImages,omitempty"`
+	Version             string             `json:"kubernetesVersion,omitempty"`
 }
