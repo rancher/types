@@ -29,6 +29,9 @@ type Client struct {
 	Principal                  PrincipalOperations
 	Token                      TokenOperations
 	User                       UserOperations
+	GithubConfig               GithubConfigOperations
+	AuthConfig                 AuthConfigOperations
+	LocalConfig                LocalConfigOperations
 	DynamicSchema              DynamicSchemaOperations
 	Stack                      StackOperations
 	Preference                 PreferenceOperations
@@ -70,6 +73,9 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Principal = newPrincipalClient(client)
 	client.Token = newTokenClient(client)
 	client.User = newUserClient(client)
+	client.GithubConfig = newGithubConfigClient(client)
+	client.AuthConfig = newAuthConfigClient(client)
+	client.LocalConfig = newLocalConfigClient(client)
 	client.DynamicSchema = newDynamicSchemaClient(client)
 	client.Stack = newStackClient(client)
 	client.Preference = newPreferenceClient(client)
