@@ -40,6 +40,9 @@ func schemaTypes(schemas *types.Schemas) *types.Schemas {
 
 func catalogTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
+		AddMapperForType(&Version, v3.Catalog{},
+			&m.Move{From: "catalogKind", To: "kind"},
+		).
 		MustImport(&Version, v3.Catalog{}).
 		MustImport(&Version, v3.Template{}).
 		MustImport(&Version, v3.TemplateVersion{})
