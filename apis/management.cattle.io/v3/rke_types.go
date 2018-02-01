@@ -38,7 +38,7 @@ type RKESystemImages struct {
 	// etcd image
 	Etcd string `yaml:"etcd" json:"etcd,omitempty" norman:"default=quay.io/coreos/etcd:v3.0.17"`
 	// Alpine image
-	Alpine string `yaml:"alpine" json:"alpine,omitempty" norman:"default=alpine"`
+	Alpine string `yaml:"alpine" json:"alpine,omitempty" norman:"default=alpine:v1.8.5-rancher4"`
 	// rke-nginx-proxy image
 	NginxProxy string `yaml:"nginx_proxy" json:"nginxProxy,omitempty" norman:"default=rancher/rke-nginx-proxy:v0.1.1"`
 	// rke-cert-deployer image
