@@ -38,9 +38,10 @@ type MachineTemplateCondition struct {
 }
 
 type MachineTemplateSpec struct {
-	DisplayName         string `json:"displayName"`
-	Description         string `json:"description"`
-	Driver              string `json:"driver"`
+	DisplayName         string            `json:"displayName"`
+	Description         string            `json:"description"`
+	Driver              string            `json:"driver"`
+	SecretValues        map[string]string `json:"secretValues,omitempty"`
 	MachineCommonParams `json:",inline"`
 }
 
