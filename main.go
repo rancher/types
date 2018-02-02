@@ -6,6 +6,7 @@ package main
 import (
 	clusterSchema "github.com/rancher/types/apis/cluster.cattle.io/v3/schema"
 	managementSchema "github.com/rancher/types/apis/management.cattle.io/v3/schema"
+	publicSchema "github.com/rancher/types/apis/management.cattle.io/v3public/schema"
 	projectSchema "github.com/rancher/types/apis/project.cattle.io/v3/schema"
 	"github.com/rancher/types/generator"
 	"k8s.io/api/apps/v1beta2"
@@ -16,6 +17,7 @@ import (
 
 func main() {
 	generator.Generate(managementSchema.Schemas)
+	generator.Generate(publicSchema.PublicSchemas)
 	generator.Generate(clusterSchema.Schemas)
 	generator.Generate(projectSchema.Schemas)
 	generator.GenerateNativeTypes(v1.SchemeGroupVersion, []interface{}{
