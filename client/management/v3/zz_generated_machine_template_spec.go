@@ -15,6 +15,7 @@ const (
 	MachineTemplateSpecFieldEngineOpt                = "engineOpt"
 	MachineTemplateSpecFieldEngineRegistryMirror     = "engineRegistryMirror"
 	MachineTemplateSpecFieldEngineStorageDriver      = "engineStorageDriver"
+	MachineTemplateSpecFieldSecretValues             = "secretValues"
 )
 
 type MachineTemplateSpec struct {
@@ -31,4 +32,5 @@ type MachineTemplateSpec struct {
 	EngineOpt                map[string]string `json:"engineOpt,omitempty"`
 	EngineRegistryMirror     []string          `json:"engineRegistryMirror,omitempty"`
 	EngineStorageDriver      string            `json:"engineStorageDriver,omitempty"`
+	SecretValues             map[string]string `json:"secretValues,omitempty"`
 }
