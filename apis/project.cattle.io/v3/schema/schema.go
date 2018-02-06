@@ -6,9 +6,9 @@ import (
 	"github.com/rancher/types/apis/project.cattle.io/v3"
 	"github.com/rancher/types/factory"
 	"github.com/rancher/types/mapper"
+	"k8s.io/api/apps/v1beta2"
 	"k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
-	"k8s.io/kubernetes/staging/src/k8s.io/api/apps/v1beta2"
 )
 
 var (
@@ -22,8 +22,6 @@ var (
 	}
 
 	Schemas = factory.Schemas(&Version).
-		// Namespace must be first
-		Init(namespaceTypes).
 		// volume before pod types.  pod types uses volume things, so need to register mapper
 		Init(volumeTypes).
 		Init(ingressTypes).
@@ -40,52 +38,21 @@ var (
 )
 
 func configMapTypes(schemas *types.Schemas) *types.Schemas {
-	return ConfigMapTypes(&Version, schemas)
+	return schemas.MustImport(&Version, v1.ConfigMap{})
 }
 
-func ConfigMapTypes(version *types.APIVersion, schemas *types.Schemas) *types.Schemas {
-	return schemas.MustImport(version, v1.ConfigMap{})
-}
-
-func namespaceTypes(schemas *types.Schemas) *types.Schemas {
-	return NamespaceTypes(&Version, schemas)
-}
-
-func NamespaceTypes(version *types.APIVersion, schemas *types.Schemas) *types.Schemas {
-	return schemas.
-		AddMapperForType(version, v1.NamespaceStatus{},
-			&m.Drop{Field: "phase"},
-		).
-		AddMapperForType(version, v1.NamespaceSpec{},
-			&m.Drop{Field: "finalizers"},
-		).
-		AddMapperForType(version, v1.Namespace{},
-			&m.AnnotationField{Field: "description"},
-			&m.AnnotationField{Field: "projectId"},
-			&m.AnnotationField{Field: "externalId"},
-			&m.AnnotationField{Field: "templates", Object: true},
-			&m.AnnotationField{Field: "prune"},
-			&m.AnnotationField{Field: "answers", Object: true},
-		).
-		MustImport(version, v1.Namespace{}, struct {
-			Description string                 `json:"description"`
-			ProjectID   string                 `norman:"type=reference[/v3/schemas/project]"`
-			Templates   map[string]string      `json:"templates"`
-			Answers     map[string]interface{} `json:"answers"`
-			Prune       bool                   `json:"prune"`
-			ExternalID  string                 `json:"externalId"`
-			Tags        []string               `json:"tags"`
-		}{})
+type Workload struct {
 }
 
 func workloadTypes(schemas *types.Schemas) *types.Schemas {
-	return schemas.
-		AddMapperForType(&Version, v3.WorkloadSpec{},
-			&m.Embed{Field: "deployConfig"},
-			&m.Embed{Field: "template"},
-		).
-		AddMapperForType(&Version, v3.Workload{}, mapper.NewWorkloadTypeMapper()).
-		MustImport(&Version, v3.Workload{}, projectOverride{})
+	return schemas.MustImportAndCustomize(&Version, Workload{}, func(schema *types.Schema) {
+		for "deployment",
+			"statefulSet",
+			"....")) {
+				copy resource fields
+		}
+
+	})
 }
 
 func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
@@ -121,7 +88,6 @@ func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
 			m.Drop{Field: "selector"},
 			&m.Embed{Field: "template"},
 		).
-		AddMapperForType(&Version, v1beta2.StatefulSet{}, mapper.NewWorkloadTypeMapper()).
 		MustImport(&Version, v1beta2.StatefulSetSpec{}, deployOverride{}).
 		MustImport(&Version, v1beta2.StatefulSet{}, projectOverride{})
 }
@@ -197,25 +163,30 @@ func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		AddMapperForType(&Version, v1beta2.DeploymentSpec{},
 			&m.Move{
-				From:        "replicas",
-				To:          "scale",
-				DestDefined: true,
+				From: "replicas",
+				To:   "scale",
 			},
 			&m.Move{
 				From: "minReadySeconds",
-				To:   "deploymentStrategy/parallelConfig/minReadySeconds",
+				To:   "deployment/minReadySeconds",
+			},
+			&m.Move{
+				From: "strategy",
+				To:   "deployment/strategy",
+			},
+			&m.Move{
+				From: "revisionHistoryLimit",
+				To:   "deployment/revisionHistoryLimit",
+			},
+			&m.Move{
+				From: "paused",
+				To:   "deployment/paused",
 			},
 			&m.Move{
 				From: "progressDeadlineSeconds",
-				To:   "deploymentStrategy/parallelConfig/progressDeadlineSeconds",
+				To:   "deployment/progressDeadlineSeconds",
 			},
-			mapper.DeploymentStrategyMapper{},
-			m.Drop{Field: "selector"},
-			m.Drop{Field: "strategy"},
-			&m.Embed{Field: "template"},
 		).
-		AddMapperForType(&Version, v1beta2.Deployment{}, mapper.NewWorkloadTypeMapper()).
-		MustImport(&Version, v1beta2.DeploymentSpec{}, deployOverride{}).
 		MustImportAndCustomize(&Version, v1beta2.Deployment{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
 		}, projectOverride{})
@@ -248,25 +219,12 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 		AddMapperForType(&Version, v1.Container{},
 			m.Move{From: "command", To: "entrypoint"},
 			m.Move{From: "args", To: "command"},
-			m.Move{From: "livenessProbe", To: "healthcheck"},
-			m.Move{From: "readinessProbe", To: "readycheck"},
-			m.Move{From: "imagePullPolicy", To: "pullPolicy", DestDefined: true},
 			mapper.EnvironmentMapper{},
 			&m.Embed{Field: "securityContext"},
 			&m.Embed{Field: "lifecycle"},
 		).
 		AddMapperForType(&Version, v1.ContainerPort{},
-			m.Drop{Field: "name"},
 			m.Move{From: "hostIP", To: "hostIp"},
-		).
-		AddMapperForType(&Version, v1.VolumeMount{},
-			m.Enum{
-				Field: "mountPropagation",
-				Values: map[string][]string{
-					"HostToContainer": {"rslave"},
-					"Bidirectional":   {"rshared", "shared"},
-				},
-			},
 		).
 		AddMapperForType(&Version, v1.Handler{}, handlerMapper).
 		AddMapperForType(&Version, v1.Probe{}, handlerMapper).
@@ -275,22 +233,11 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 			m.Move{From: "podIP", To: "podIp"},
 		).
 		AddMapperForType(&Version, v1.PodSpec{},
-			m.Move{From: "restartPolicy", To: "restart"},
-			m.Move{From: "imagePullSecrets", To: "pullSecrets"},
-			mapper.NamespaceMapper{},
 			mapper.InitContainerMapper{},
 			mapper.SchedulingMapper{},
 			m.Move{From: "tolerations", To: "scheduling/tolerations", DestDefined: true},
 			&m.Embed{Field: "securityContext"},
 			&m.Drop{Field: "serviceAccount"},
-			&m.SliceToMap{
-				Field: "volumes",
-				Key:   "name",
-			},
-			&m.SliceToMap{
-				Field: "hostAliases",
-				Key:   "ip",
-			},
 		).
 		AddMapperForType(&Version, v1.ResourceRequirements{},
 			mapper.PivotMapper{Plural: true},
@@ -316,10 +263,6 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v1.PodSpec{}, struct {
 			Scheduling *Scheduling
 			NodeName   string `norman:"type=reference[node]"`
-			Net        string `norman:"type=enum,options=pod|host,default=pod"`
-			PID        string `norman:"type=enum,options=pod|host,default=pod"`
-			IPC        string `norman:"type=enum,options=pod|host,default=pod"`
-			PullPolicy string `norman:"type=enum,options=Always|Never|IfNotPresent,default=IfNotPresent"`
 		}{}).
 		MustImport(&Version, v1.Pod{}, projectOverride{}, struct {
 			Description     string `json:"description"`
