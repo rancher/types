@@ -22,6 +22,7 @@ type Interface interface {
 	PodsGetter
 	ServicesGetter
 	SecretsGetter
+	ConfigMapsGetter
 }
 
 type Client struct {
@@ -37,6 +38,7 @@ type Client struct {
 	podControllers             map[string]PodController
 	serviceControllers         map[string]ServiceController
 	secretControllers          map[string]SecretController
+	configMapControllers       map[string]ConfigMapController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -61,6 +63,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		podControllers:             map[string]PodController{},
 		serviceControllers:         map[string]ServiceController{},
 		secretControllers:          map[string]SecretController{},
+		configMapControllers:       map[string]ConfigMapController{},
 	}, nil
 }
 
@@ -174,6 +177,19 @@ type SecretsGetter interface {
 func (c *Client) Secrets(namespace string) SecretInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &SecretResource, SecretGroupVersionKind, secretFactory{})
 	return &secretClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type ConfigMapsGetter interface {
+	ConfigMaps(namespace string) ConfigMapInterface
+}
+
+func (c *Client) ConfigMaps(namespace string) ConfigMapInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ConfigMapResource, ConfigMapGroupVersionKind, configMapFactory{})
+	return &configMapClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

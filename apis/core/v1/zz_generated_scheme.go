@@ -41,6 +41,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&PodList{},
 		&ServiceList{},
 		&SecretList{},
+		&ConfigMapList{},
 	)
 	return nil
 }
