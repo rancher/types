@@ -25,6 +25,7 @@ func main() {
 		v1.Pod{},
 		v1.Service{},
 		v1.Secret{},
+		v1.ConfigMap{},
 	}, []interface{}{
 		v1.Node{},
 		v1.ComponentStatus{},
