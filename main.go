@@ -26,6 +26,7 @@ func main() {
 		v1.Service{},
 		v1.Secret{},
 		v1.ConfigMap{},
+		v1.ServiceAccount{},
 	}, []interface{}{
 		v1.Node{},
 		v1.ComponentStatus{},
