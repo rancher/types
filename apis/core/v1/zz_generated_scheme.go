@@ -42,6 +42,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ServiceList{},
 		&SecretList{},
 		&ConfigMapList{},
+		&ServiceAccountList{},
 	)
 	return nil
 }
