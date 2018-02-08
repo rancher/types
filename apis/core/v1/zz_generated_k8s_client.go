@@ -23,6 +23,7 @@ type Interface interface {
 	ServicesGetter
 	SecretsGetter
 	ConfigMapsGetter
+	ServiceAccountsGetter
 }
 
 type Client struct {
@@ -39,6 +40,7 @@ type Client struct {
 	serviceControllers         map[string]ServiceController
 	secretControllers          map[string]SecretController
 	configMapControllers       map[string]ConfigMapController
+	serviceAccountControllers  map[string]ServiceAccountController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -64,6 +66,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		serviceControllers:         map[string]ServiceController{},
 		secretControllers:          map[string]SecretController{},
 		configMapControllers:       map[string]ConfigMapController{},
+		serviceAccountControllers:  map[string]ServiceAccountController{},
 	}, nil
 }
 
@@ -190,6 +193,19 @@ type ConfigMapsGetter interface {
 func (c *Client) ConfigMaps(namespace string) ConfigMapInterface {
 	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ConfigMapResource, ConfigMapGroupVersionKind, configMapFactory{})
 	return &configMapClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type ServiceAccountsGetter interface {
+	ServiceAccounts(namespace string) ServiceAccountInterface
+}
+
+func (c *Client) ServiceAccounts(namespace string) ServiceAccountInterface {
+	objectClient := clientbase.NewObjectClient(namespace, c.restClient, &ServiceAccountResource, ServiceAccountGroupVersionKind, serviceAccountFactory{})
+	return &serviceAccountClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
