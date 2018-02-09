@@ -95,3 +95,8 @@ type PublicEndpoint struct {
 	PodName string `json:"pod,omitempty" norman:"type=reference[pod],nocreate,noupdate"`
 	//serviceName and podName are mutually exclusive
 }
+
+type Workload struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+}
