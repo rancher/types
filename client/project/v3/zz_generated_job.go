@@ -5,45 +5,53 @@ import (
 )
 
 const (
-	JobType                      = "job"
-	JobFieldAnnotations          = "annotations"
-	JobFieldCreated              = "created"
-	JobFieldCreatorID            = "creatorId"
-	JobFieldJob                  = "job"
-	JobFieldJobStatus            = "jobStatus"
-	JobFieldLabels               = "labels"
-	JobFieldName                 = "name"
-	JobFieldNamespaceId          = "namespaceId"
-	JobFieldOwnerReferences      = "ownerReferences"
-	JobFieldProjectID            = "projectId"
-	JobFieldRemoved              = "removed"
-	JobFieldSelector             = "selector"
-	JobFieldState                = "state"
-	JobFieldTemplate             = "template"
-	JobFieldTransitioning        = "transitioning"
-	JobFieldTransitioningMessage = "transitioningMessage"
-	JobFieldUuid                 = "uuid"
+	JobType                       = "job"
+	JobFieldActiveDeadlineSeconds = "activeDeadlineSeconds"
+	JobFieldAnnotations           = "annotations"
+	JobFieldBackoffLimit          = "backoffLimit"
+	JobFieldCompletions           = "completions"
+	JobFieldCreated               = "created"
+	JobFieldCreatorID             = "creatorId"
+	JobFieldJobStatus             = "jobStatus"
+	JobFieldLabels                = "labels"
+	JobFieldManualSelector        = "manualSelector"
+	JobFieldName                  = "name"
+	JobFieldNamespaceId           = "namespaceId"
+	JobFieldOwnerReferences       = "ownerReferences"
+	JobFieldParallelism           = "parallelism"
+	JobFieldProjectID             = "projectId"
+	JobFieldRemoved               = "removed"
+	JobFieldSelector              = "selector"
+	JobFieldState                 = "state"
+	JobFieldTemplate              = "template"
+	JobFieldTransitioning         = "transitioning"
+	JobFieldTransitioningMessage  = "transitioningMessage"
+	JobFieldUuid                  = "uuid"
 )
 
 type Job struct {
 	types.Resource
-	Annotations          map[string]string `json:"annotations,omitempty"`
-	Created              string            `json:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty"`
-	Job                  *JobConfig        `json:"job,omitempty"`
-	JobStatus            *JobStatus        `json:"jobStatus,omitempty"`
-	Labels               map[string]string `json:"labels,omitempty"`
-	Name                 string            `json:"name,omitempty"`
-	NamespaceId          string            `json:"namespaceId,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty"`
-	ProjectID            string            `json:"projectId,omitempty"`
-	Removed              string            `json:"removed,omitempty"`
-	Selector             *LabelSelector    `json:"selector,omitempty"`
-	State                string            `json:"state,omitempty"`
-	Template             *PodTemplateSpec  `json:"template,omitempty"`
-	Transitioning        string            `json:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty"`
-	Uuid                 string            `json:"uuid,omitempty"`
+	ActiveDeadlineSeconds *int64            `json:"activeDeadlineSeconds,omitempty"`
+	Annotations           map[string]string `json:"annotations,omitempty"`
+	BackoffLimit          *int64            `json:"backoffLimit,omitempty"`
+	Completions           *int64            `json:"completions,omitempty"`
+	Created               string            `json:"created,omitempty"`
+	CreatorID             string            `json:"creatorId,omitempty"`
+	JobStatus             *JobStatus        `json:"jobStatus,omitempty"`
+	Labels                map[string]string `json:"labels,omitempty"`
+	ManualSelector        *bool             `json:"manualSelector,omitempty"`
+	Name                  string            `json:"name,omitempty"`
+	NamespaceId           string            `json:"namespaceId,omitempty"`
+	OwnerReferences       []OwnerReference  `json:"ownerReferences,omitempty"`
+	Parallelism           *int64            `json:"parallelism,omitempty"`
+	ProjectID             string            `json:"projectId,omitempty"`
+	Removed               string            `json:"removed,omitempty"`
+	Selector              *LabelSelector    `json:"selector,omitempty"`
+	State                 string            `json:"state,omitempty"`
+	Template              *PodTemplateSpec  `json:"template,omitempty"`
+	Transitioning         string            `json:"transitioning,omitempty"`
+	TransitioningMessage  string            `json:"transitioningMessage,omitempty"`
+	Uuid                  string            `json:"uuid,omitempty"`
 }
 type JobCollection struct {
 	types.Collection

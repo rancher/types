@@ -36,8 +36,8 @@ var (
 		Init(replicaSetTypes).
 		Init(statefulSetTypes).
 		Init(daemonSetTypes).
-		Init(jobTypes).
 		Init(cronJobTypes).
+		Init(jobTypes).
 		Init(podTemplateSpecTypes).
 		Init(workloadTypes).
 		Init(configMapTypes)
@@ -153,6 +153,7 @@ func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
 				From: "updateStrategy",
 				To:   "statefulSet/updateStrategy",
 			},
+			&m.Embed{Field: "template"},
 		).
 		AddMapperForType(&Version, v1beta2.StatefulSet{},
 			&m.Move{
@@ -182,6 +183,7 @@ func replicaSetTypes(schemas *types.Schemas) *types.Schemas {
 				From: "status",
 				To:   "replicaSetStatus",
 			},
+			&m.Embed{Field: "template"},
 		).
 		MustImport(&Version, v1beta1.ReplicaSetSpec{}, replicaSetConfigOverride{}).
 		MustImportAndCustomize(&Version, v1beta1.ReplicaSet{}, func(schema *types.Schema) {
@@ -201,6 +203,7 @@ func replicationControllerTypes(schemas *types.Schemas) *types.Schemas {
 				From: "minReadySeconds",
 				To:   "replicationController/minReadySeconds",
 			},
+			&m.Embed{Field: "template"},
 		).
 		AddMapperForType(&Version, v1.ReplicationController{},
 			&m.Move{
@@ -229,6 +232,7 @@ func daemonSetTypes(schemas *types.Schemas) *types.Schemas {
 				From: "revisionHistoryLimit",
 				To:   "daemonSet/revisionHistoryLimit",
 			},
+			&m.Embed{Field: "template"},
 		).
 		AddMapperForType(&Version, v1beta2.DaemonSet{},
 			&m.Move{
@@ -265,6 +269,7 @@ func jobTypes(schemas *types.Schemas) *types.Schemas {
 				From: "manualSelector",
 				To:   "job/manualSelector",
 			},
+			&m.Embed{Field: "template"},
 		).
 		AddMapperForType(&Version, batchv1.Job{},
 			&m.Move{
@@ -314,26 +319,27 @@ func cronJobTypes(schemas *types.Schemas) *types.Schemas {
 				To:   "template",
 			},
 			&m.Move{
-				From: "jobTemplate/spec/job/parallelism",
+				From: "jobTemplate/spec/parallelism",
 				To:   "cronJob/parallelism",
 			},
 			&m.Move{
-				From: "jobTemplate/spec/job/completions",
+				From: "jobTemplate/spec/completions",
 				To:   "cronJob/completions",
 			},
 			&m.Move{
-				From: "jobTemplate/spec/job/activeDeadlineSeconds",
+				From: "jobTemplate/spec/activeDeadlineSeconds",
 				To:   "cronJob/activeDeadlineSeconds",
 			},
 			&m.Move{
-				From: "jobTemplate/spec/job/backoffLimit",
+				From: "jobTemplate/spec/backoffLimit",
 				To:   "cronJob/backoffLimit",
 			},
 			&m.Move{
-				From: "jobTemplate/spec/job/manualSelector",
+				From: "jobTemplate/spec/manualSelector",
 				To:   "cronJob/manualSelector",
 			},
 			&m.Drop{Field: "jobTemplate"},
+			&m.Embed{Field: "template"},
 		).
 		AddMapperForType(&Version, batchv1beta1.CronJob{},
 			&m.Move{
@@ -374,6 +380,7 @@ func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 				From: "progressDeadlineSeconds",
 				To:   "deployment/progressDeadlineSeconds",
 			},
+			&m.Embed{Field: "template"},
 		).
 		AddMapperForType(&Version, v1beta2.Deployment{},
 			&m.Move{
