@@ -7,6 +7,7 @@ import (
 type Client struct {
 	clientbase.APIBaseClient
 
+	Namespace                     NamespaceOperations
 	PersistentVolumeClaim         PersistentVolumeClaimOperations
 	Ingress                       IngressOperations
 	Secret                        SecretOperations
@@ -44,6 +45,7 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 		APIBaseClient: baseClient,
 	}
 
+	client.Namespace = newNamespaceClient(client)
 	client.PersistentVolumeClaim = newPersistentVolumeClaimClient(client)
 	client.Ingress = newIngressClient(client)
 	client.Secret = newSecretClient(client)

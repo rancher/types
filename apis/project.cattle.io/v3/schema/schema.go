@@ -24,6 +24,7 @@ var (
 	}
 
 	Schemas = factory.Schemas(&Version).
+		Init(namespaceTypes).
 		// volume before pod types.  pod types uses volume things, so need to register mapper
 		Init(volumeTypes).
 		Init(ingressTypes).
@@ -563,4 +564,35 @@ func volumeTypes(schemas *types.Schemas) *types.Schemas {
 func podTemplateSpecTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		MustImport(&Version, v1.PodTemplateSpec{})
+}
+
+func namespaceTypes(schemas *types.Schemas) *types.Schemas {
+	return NamespaceTypes(&Version, schemas)
+}
+
+func NamespaceTypes(version *types.APIVersion, schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(version, v1.NamespaceStatus{},
+			&m.Drop{Field: "phase"},
+		).
+		AddMapperForType(version, v1.NamespaceSpec{},
+			&m.Drop{Field: "finalizers"},
+		).
+		AddMapperForType(version, v1.Namespace{},
+			&m.AnnotationField{Field: "description"},
+			&m.AnnotationField{Field: "projectId"},
+			&m.AnnotationField{Field: "externalId"},
+			&m.AnnotationField{Field: "templates", Object: true},
+			&m.AnnotationField{Field: "prune"},
+			&m.AnnotationField{Field: "answers", Object: true},
+		).
+		MustImport(version, v1.Namespace{}, struct {
+			Description string                 `json:"description"`
+			ProjectID   string                 `norman:"type=reference[/v3/schemas/project]"`
+			Templates   map[string]string      `json:"templates"`
+			Answers     map[string]interface{} `json:"answers"`
+			Prune       bool                   `json:"prune"`
+			ExternalID  string                 `json:"externalId"`
+			Tags        []string               `json:"tags"`
+		}{})
 }
