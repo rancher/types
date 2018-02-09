@@ -33,6 +33,7 @@ var (
 		Init(podTypes).
 		Init(deploymentTypes).
 		Init(replicationControllerTypes).
+		Init(replicaSetTypes).
 		Init(statefulSetTypes).
 		Init(daemonSetTypes).
 		Init(jobTypes).
@@ -50,6 +51,9 @@ type DeploymentConfig struct {
 }
 
 type StatefulSetConfig struct {
+}
+
+type ReplicaSetConfig struct {
 }
 
 type ReplicationControllerConfig struct {
@@ -70,6 +74,10 @@ type deploymentConfigOverride struct {
 
 type statefulSetConfigOverride struct {
 	StatefulSet StatefulSetConfig
+}
+
+type replicaSetConfigOverride struct {
+	ReplicaSet ReplicaSetConfig
 }
 
 type replicationControllerConfigOverride struct {
@@ -111,7 +119,6 @@ func workloadTypes(schemas *types.Schemas) *types.Schemas {
 
 			}
 		})
-	//.AddMapperForType(&Version, Workload{}, &m.Embed{Field: "template"})
 }
 
 func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
@@ -155,6 +162,31 @@ func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
 		).
 		MustImport(&Version, v1beta2.StatefulSetSpec{}, statefulSetConfigOverride{}).
 		MustImport(&Version, v1beta2.StatefulSet{}, projectOverride{})
+}
+
+func replicaSetTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v1beta1.ReplicaSetSpec{},
+			&m.Move{
+				From:        "replicas",
+				To:          "scale",
+				DestDefined: true,
+			},
+			&m.Move{
+				From: "minReadySeconds",
+				To:   "replicaSet/minReadySeconds",
+			},
+		).
+		AddMapperForType(&Version, v1beta1.ReplicaSet{},
+			&m.Move{
+				From: "status",
+				To:   "replicaSetStatus",
+			},
+		).
+		MustImport(&Version, v1beta1.ReplicaSetSpec{}, replicaSetConfigOverride{}).
+		MustImportAndCustomize(&Version, v1beta1.ReplicaSet{}, func(schema *types.Schema) {
+			schema.BaseType = "workload"
+		}, projectOverride{})
 }
 
 func replicationControllerTypes(schemas *types.Schemas) *types.Schemas {

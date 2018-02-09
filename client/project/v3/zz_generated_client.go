@@ -27,6 +27,7 @@ type Client struct {
 	Pod                           PodOperations
 	Deployment                    DeploymentOperations
 	ReplicationController         ReplicationControllerOperations
+	ReplicaSet                    ReplicaSetOperations
 	StatefulSet                   StatefulSetOperations
 	DaemonSet                     DaemonSetOperations
 	Job                           JobOperations
@@ -65,6 +66,7 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Pod = newPodClient(client)
 	client.Deployment = newDeploymentClient(client)
 	client.ReplicationController = newReplicationControllerClient(client)
+	client.ReplicaSet = newReplicaSetClient(client)
 	client.StatefulSet = newStatefulSetClient(client)
 	client.DaemonSet = newDaemonSetClient(client)
 	client.Job = newJobClient(client)
