@@ -7,7 +7,6 @@ import (
 type Client struct {
 	clientbase.APIBaseClient
 
-	Namespace                     NamespaceOperations
 	PersistentVolumeClaim         PersistentVolumeClaimOperations
 	Ingress                       IngressOperations
 	Secret                        SecretOperations
@@ -26,10 +25,11 @@ type Client struct {
 	DNSRecord                     DNSRecordOperations
 	Pod                           PodOperations
 	Deployment                    DeploymentOperations
-	StatefulSet                   StatefulSetOperations
-	ReplicaSet                    ReplicaSetOperations
 	ReplicationController         ReplicationControllerOperations
+	StatefulSet                   StatefulSetOperations
 	DaemonSet                     DaemonSetOperations
+	Job                           JobOperations
+	CronJob                       CronJobOperations
 	Workload                      WorkloadOperations
 	ConfigMap                     ConfigMapOperations
 }
@@ -44,7 +44,6 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 		APIBaseClient: baseClient,
 	}
 
-	client.Namespace = newNamespaceClient(client)
 	client.PersistentVolumeClaim = newPersistentVolumeClaimClient(client)
 	client.Ingress = newIngressClient(client)
 	client.Secret = newSecretClient(client)
@@ -63,10 +62,11 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.DNSRecord = newDNSRecordClient(client)
 	client.Pod = newPodClient(client)
 	client.Deployment = newDeploymentClient(client)
-	client.StatefulSet = newStatefulSetClient(client)
-	client.ReplicaSet = newReplicaSetClient(client)
 	client.ReplicationController = newReplicationControllerClient(client)
+	client.StatefulSet = newStatefulSetClient(client)
 	client.DaemonSet = newDaemonSetClient(client)
+	client.Job = newJobClient(client)
+	client.CronJob = newCronJobClient(client)
 	client.Workload = newWorkloadClient(client)
 	client.ConfigMap = newConfigMapClient(client)
 
