@@ -1,40 +1,41 @@
 package client
 
 const (
-	StatefulSetSpecType                               = "statefulSetSpec"
-	StatefulSetSpecFieldActiveDeadlineSeconds         = "activeDeadlineSeconds"
-	StatefulSetSpecFieldAutomountServiceAccountToken  = "automountServiceAccountToken"
-	StatefulSetSpecFieldContainers                    = "containers"
-	StatefulSetSpecFieldDNSPolicy                     = "dnsPolicy"
-	StatefulSetSpecFieldFsgid                         = "fsgid"
-	StatefulSetSpecFieldGids                          = "gids"
-	StatefulSetSpecFieldHostAliases                   = "hostAliases"
-	StatefulSetSpecFieldHostIPC                       = "hostIPC"
-	StatefulSetSpecFieldHostNetwork                   = "hostNetwork"
-	StatefulSetSpecFieldHostPID                       = "hostPID"
-	StatefulSetSpecFieldHostname                      = "hostname"
-	StatefulSetSpecFieldImagePullSecrets              = "imagePullSecrets"
-	StatefulSetSpecFieldNodeId                        = "nodeId"
-	StatefulSetSpecFieldObjectMeta                    = "metadata"
-	StatefulSetSpecFieldPriority                      = "priority"
-	StatefulSetSpecFieldPriorityClassName             = "priorityClassName"
-	StatefulSetSpecFieldRestartPolicy                 = "restartPolicy"
-	StatefulSetSpecFieldRunAsNonRoot                  = "runAsNonRoot"
-	StatefulSetSpecFieldSchedulerName                 = "schedulerName"
-	StatefulSetSpecFieldScheduling                    = "scheduling"
-	StatefulSetSpecFieldSelector                      = "selector"
-	StatefulSetSpecFieldServiceAccountName            = "serviceAccountName"
-	StatefulSetSpecFieldStatefulSet                   = "statefulSet"
-	StatefulSetSpecFieldSubdomain                     = "subdomain"
-	StatefulSetSpecFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
-	StatefulSetSpecFieldUid                           = "uid"
-	StatefulSetSpecFieldVolumes                       = "volumes"
+	CronJobSpecType                               = "cronJobSpec"
+	CronJobSpecFieldActiveDeadlineSeconds         = "activeDeadlineSeconds"
+	CronJobSpecFieldAutomountServiceAccountToken  = "automountServiceAccountToken"
+	CronJobSpecFieldContainers                    = "containers"
+	CronJobSpecFieldCronJob                       = "cronJob"
+	CronJobSpecFieldDNSPolicy                     = "dnsPolicy"
+	CronJobSpecFieldFsgid                         = "fsgid"
+	CronJobSpecFieldGids                          = "gids"
+	CronJobSpecFieldHostAliases                   = "hostAliases"
+	CronJobSpecFieldHostIPC                       = "hostIPC"
+	CronJobSpecFieldHostNetwork                   = "hostNetwork"
+	CronJobSpecFieldHostPID                       = "hostPID"
+	CronJobSpecFieldHostname                      = "hostname"
+	CronJobSpecFieldImagePullSecrets              = "imagePullSecrets"
+	CronJobSpecFieldNodeId                        = "nodeId"
+	CronJobSpecFieldObjectMeta                    = "metadata"
+	CronJobSpecFieldPriority                      = "priority"
+	CronJobSpecFieldPriorityClassName             = "priorityClassName"
+	CronJobSpecFieldRestartPolicy                 = "restartPolicy"
+	CronJobSpecFieldRunAsNonRoot                  = "runAsNonRoot"
+	CronJobSpecFieldSchedulerName                 = "schedulerName"
+	CronJobSpecFieldScheduling                    = "scheduling"
+	CronJobSpecFieldSelector                      = "selector"
+	CronJobSpecFieldServiceAccountName            = "serviceAccountName"
+	CronJobSpecFieldSubdomain                     = "subdomain"
+	CronJobSpecFieldTerminationGracePeriodSeconds = "terminationGracePeriodSeconds"
+	CronJobSpecFieldUid                           = "uid"
+	CronJobSpecFieldVolumes                       = "volumes"
 )
 
-type StatefulSetSpec struct {
+type CronJobSpec struct {
 	ActiveDeadlineSeconds         *int64                 `json:"activeDeadlineSeconds,omitempty"`
 	AutomountServiceAccountToken  *bool                  `json:"automountServiceAccountToken,omitempty"`
 	Containers                    []Container            `json:"containers,omitempty"`
+	CronJob                       *CronJobConfig         `json:"cronJob,omitempty"`
 	DNSPolicy                     string                 `json:"dnsPolicy,omitempty"`
 	Fsgid                         *int64                 `json:"fsgid,omitempty"`
 	Gids                          []int64                `json:"gids,omitempty"`
@@ -54,7 +55,6 @@ type StatefulSetSpec struct {
 	Scheduling                    *Scheduling            `json:"scheduling,omitempty"`
 	Selector                      *LabelSelector         `json:"selector,omitempty"`
 	ServiceAccountName            string                 `json:"serviceAccountName,omitempty"`
-	StatefulSet                   *StatefulSetConfig     `json:"statefulSet,omitempty"`
 	Subdomain                     string                 `json:"subdomain,omitempty"`
 	TerminationGracePeriodSeconds *int64                 `json:"terminationGracePeriodSeconds,omitempty"`
 	Uid                           *int64                 `json:"uid,omitempty"`
