@@ -11,8 +11,8 @@ type ClusterConditionType string
 
 const (
 	// ClusterConditionReady Cluster ready to serve API (healthy when true, unhealthy when false)
-	ClusterConditionReady           condition.Cond = "Ready"
-	ClusterConditionMachinesCreated condition.Cond = "MachinesCreated"
+	ClusterConditionReady        condition.Cond = "Ready"
+	ClusterConditionNodesCreated condition.Cond = "NodesCreated"
 	// ClusterConditionProvisioned Cluster is provisioned
 	ClusterConditionProvisioned condition.Cond = "Provisioned"
 	ClusterConditionUpdated     condition.Cond = "Updated"
@@ -43,7 +43,7 @@ type Cluster struct {
 }
 
 type ClusterSpec struct {
-	Nodes                                []MachineConfig                `json:"nodes"`
+	Nodes                                []NodeConfig                   `json:"nodes"`
 	DisplayName                          string                         `json:"displayName"`
 	Description                          string                         `json:"description"`
 	Internal                             bool                           `json:"internal" norman:"nocreate,noupdate"`
