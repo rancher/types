@@ -68,7 +68,7 @@ func NamespaceTypes(version *types.APIVersion, schemas *types.Schemas) *types.Sc
 		).
 		MustImport(version, v1.Namespace{}, struct {
 			Description string                 `json:"description"`
-			ProjectID   string                 `norman:"type=reference[/v3/schemas/project]"`
+			ProjectID   string                 `norman:"type=reference[/v3/schemas/project],required"`
 			Templates   map[string]string      `json:"templates"`
 			Answers     map[string]interface{} `json:"answers"`
 			Prune       bool                   `json:"prune"`
