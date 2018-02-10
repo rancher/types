@@ -36,7 +36,7 @@ func namespaceTypes(schemas *types.Schemas) *types.Schemas {
 		).
 		MustImport(&Version, v1.Namespace{}, struct {
 			Description string `json:"description"`
-			ProjectID   string `norman:"type=reference[/v3/schemas/project]"`
+			ProjectID   string `norman:"type=reference[/v3/schemas/project],required"`
 		}{})
 }
 
