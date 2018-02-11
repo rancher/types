@@ -61,8 +61,8 @@ type SourceCodeRepository struct {
 }
 
 type ClusterPipelineSpec struct {
-	ClusterName  string        `json:"clusterName" norman:"type=reference[cluster]"`
-	Deploy       bool          `json:"deploy"`
+	ClusterName  string               `json:"clusterName" norman:"type=reference[cluster]"`
+	Deploy       bool                 `json:"deploy"`
 	GithubConfig *GithubClusterConfig `json:"githubConfig,omitempty"`
 }
 
