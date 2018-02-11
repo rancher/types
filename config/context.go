@@ -48,15 +48,17 @@ type ManagementContext struct {
 	Schemas           *types.Schemas
 	Scheme            *runtime.Scheme
 	AccessControl     types.AccessControl
-	Project           projectv3.Interface
-	Management        managementv3.Interface
-	RBAC              rbacv1.Interface
-	Core              corev1.Interface
+
+	Management managementv3.Interface
+	Project    projectv3.Interface
+	RBAC       rbacv1.Interface
+	Core       corev1.Interface
 }
 
 func (c *ManagementContext) controllers() []controller.Starter {
 	return []controller.Starter{
 		c.Management,
+		c.Project,
 		c.RBAC,
 		c.Core,
 		c.Project,
@@ -136,6 +138,11 @@ func NewManagementContext(config rest.Config) (*ManagementContext, error) {
 	}
 
 	context.Management, err = managementv3.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	context.Project, err = projectv3.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
