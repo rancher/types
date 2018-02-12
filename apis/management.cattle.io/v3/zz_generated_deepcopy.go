@@ -692,6 +692,11 @@ func (in *AuthConfig) DeepCopyInto(out *AuthConfig) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
 	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	if in.AllowedPrincipalIDs != nil {
+		in, out := &in.AllowedPrincipalIDs, &out.AllowedPrincipalIDs
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 
