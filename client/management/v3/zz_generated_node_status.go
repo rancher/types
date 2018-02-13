@@ -10,6 +10,7 @@ const (
 	NodeStatusFieldInfo            = "info"
 	NodeStatusFieldLimits          = "limits"
 	NodeStatusFieldNodeAnnotations = "nodeAnnotations"
+	NodeStatusFieldNodeConfig      = "rkeNode"
 	NodeStatusFieldNodeLabels      = "nodeLabels"
 	NodeStatusFieldNodeName        = "nodeName"
 	NodeStatusFieldNodeTaints      = "nodeTaints"
@@ -27,6 +28,7 @@ type NodeStatus struct {
 	Info            *NodeInfo                 `json:"info,omitempty"`
 	Limits          map[string]string         `json:"limits,omitempty"`
 	NodeAnnotations map[string]string         `json:"nodeAnnotations,omitempty"`
+	NodeConfig      *RKEConfigNode            `json:"rkeNode,omitempty"`
 	NodeLabels      map[string]string         `json:"nodeLabels,omitempty"`
 	NodeName        string                    `json:"nodeName,omitempty"`
 	NodeTaints      []Taint                   `json:"nodeTaints,omitempty"`
