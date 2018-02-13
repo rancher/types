@@ -228,6 +228,7 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 		MustImportAndCustomize(&Version, v3.GithubConfig{}, func(schema *types.Schema) {
 			schema.BaseType = "authConfig"
 			schema.ResourceActions = map[string]types.Action{
+				"disable": {},
 				"configureTest": {
 					Input:  "githubConfig",
 					Output: "githubConfigTestOutput",
