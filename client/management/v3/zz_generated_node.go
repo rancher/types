@@ -37,6 +37,7 @@ const (
 	NodeFieldRemoved              = "removed"
 	NodeFieldRequested            = "requested"
 	NodeFieldRequestedHostname    = "requestedHostname"
+	NodeFieldSshUser              = "sshUser"
 	NodeFieldState                = "state"
 	NodeFieldTaints               = "taints"
 	NodeFieldTransitioning        = "transitioning"
@@ -81,6 +82,7 @@ type Node struct {
 	Removed              string                    `json:"removed,omitempty"`
 	Requested            map[string]string         `json:"requested,omitempty"`
 	RequestedHostname    string                    `json:"requestedHostname,omitempty"`
+	SshUser              string                    `json:"sshUser,omitempty"`
 	State                string                    `json:"state,omitempty"`
 	Taints               []Taint                   `json:"taints,omitempty"`
 	Transitioning        string                    `json:"transitioning,omitempty"`
