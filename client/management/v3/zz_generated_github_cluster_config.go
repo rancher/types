@@ -14,5 +14,5 @@ type GithubClusterConfig struct {
 	ClientSecret string `json:"clientSecret,omitempty"`
 	Host         string `json:"host,omitempty"`
 	RedirectURL  string `json:"redirectUrl,omitempty"`
-	TLS          *bool  `json:"tls,omitempty"`
+	TLS          bool   `json:"tls,omitempty"`
 }
