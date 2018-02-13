@@ -60,18 +60,16 @@ type Node struct {
 }
 
 type NodeStatus struct {
-	Conditions       []NodeCondition   `json:"conditions,omitempty"`
-	NodeStatus       v1.NodeStatus     `json:"nodeStatus,omitempty"`
-	NodeName         string            `json:"nodeName,omitempty"`
-	Requested        v1.ResourceList   `json:"requested,omitempty"`
-	Limits           v1.ResourceList   `json:"limits,omitempty"`
-	NodeTemplateSpec *NodeTemplateSpec `json:"nodeTemplateSpec,omitempty"`
-	NodeConfig       *RKEConfigNode    `json:"rkeNode,omitempty"`
-	SSHUser          string            `json:"sshUser,omitempty"`
-	NodeDriverConfig string            `json:"nodeDriverConfig,omitempty"`
-	NodeAnnotations  map[string]string `json:"nodeAnnotations,omitempty"`
-	NodeLabels       map[string]string `json:"nodeLabels,omitempty"`
-	NodeTaints       []v1.Taint        `json:"nodeTaints,omitempty"`
+	Conditions         []NodeCondition   `json:"conditions,omitempty"`
+	InternalNodeStatus v1.NodeStatus     `json:"internalNodeStatus,omitempty"`
+	NodeName           string            `json:"nodeName,omitempty"`
+	Requested          v1.ResourceList   `json:"requested,omitempty"`
+	Limits             v1.ResourceList   `json:"limits,omitempty"`
+	NodeTemplateSpec   *NodeTemplateSpec `json:"nodeTemplateSpec,omitempty"`
+	NodeConfig         *RKEConfigNode    `json:"rkeNode,omitempty"`
+	NodeAnnotations    map[string]string `json:"nodeAnnotations,omitempty"`
+	NodeLabels         map[string]string `json:"nodeLabels,omitempty"`
+	NodeTaints         []v1.Taint        `json:"nodeTaints,omitempty"`
 }
 
 var (
@@ -96,10 +94,14 @@ type NodeCondition struct {
 	Message string `json:"message,omitempty"`
 }
 
-type NodeConfig struct {
-	NodeSpec
-	Labels      map[string]string `json:"labels"`
-	Annotations map[string]string `json:"annotations"`
+type NodePool struct {
+	CommonNodeSpec
+
+	UUID           string            `json:"uuid" norman:"nocreate,noupdate"`
+	HostnamePrefix string            `json:"hostnamePrefix" norman:"required"`
+	Quantity       int               `json:"quantity" norman:"required,default=1"`
+	Labels         map[string]string `json:"labels"`
+	Annotations    map[string]string `json:"annotations"`
 }
 
 type CustomConfig struct {
@@ -113,19 +115,27 @@ type CustomConfig struct {
 	DockerSocket string `yaml:"docker_socket" json:"dockerSocket,omitempty"`
 	// SSH Private Key
 	SSHKey string `yaml:"ssh_key" json:"sshKey,omitempty"`
+	// Roles
+	Roles []string `yaml:"roles" json:"roles,omitempty"`
+}
+
+type CommonNodeSpec struct {
+	Etcd             bool   `json:"etcd"`
+	ControlPlane     bool   `json:"controlPlane"`
+	Worker           bool   `json:"worker"`
+	NodeTemplateName string `json:"nodeTemplateName,omitempty" norman:"type=reference[nodeTemplate],noupdate"`
 }
 
 type NodeSpec struct {
-	NodeSpec             v1.NodeSpec   `json:"nodeSpec"`
-	CustomConfig         *CustomConfig `json:"customConfig"`
-	Imported             bool          `json:"imported"`
-	Description          string        `json:"description,omitempty"`
-	DisplayName          string        `json:"displayName"`
-	RequestedHostname    string        `json:"requestedHostname,omitempty" norman:"type=dnsLabel,nullable,noupdate,required"`
-	ClusterName          string        `json:"clusterName,omitempty" norman:"type=reference[cluster],noupdate,required"`
-	Role                 []string      `json:"role,omitempty" norman:"noupdate,type=array[enum],options=etcd|worker|controlplane"`
-	NodeTemplateName     string        `json:"nodeTemplateName,omitempty" norman:"type=reference[nodeTemplate],noupdate"`
-	UseInternalIPAddress bool          `json:"useInternalIpAddress,omitempty" norman:"default=true,noupdate"`
+	CommonNodeSpec    `json:",inline"`
+	NodePoolUUID      string        `json:"nodePoolUuid" norman:"nocreate,noupdate"`
+	CustomConfig      *CustomConfig `json:"customConfig"`
+	Imported          bool          `json:"imported"`
+	Description       string        `json:"description,omitempty"`
+	DisplayName       string        `json:"displayName"`
+	RequestedHostname string        `json:"requestedHostname,omitempty" norman:"type=dnsLabel,nullable,noupdate,required"`
+	ClusterName       string        `json:"clusterName,omitempty" norman:"type=reference[cluster],noupdate,required"`
+	InternalNodeSpec  v1.NodeSpec   `json:"internalNodeSpec"`
 }
 
 type NodeCommonParams struct {
@@ -139,6 +149,7 @@ type NodeCommonParams struct {
 	EngineLabel              map[string]string `json:"engineLabel,omitempty"`
 	EngineStorageDriver      string            `json:"engineStorageDriver,omitempty"`
 	EngineEnv                map[string]string `json:"engineEnv,omitempty"`
+	UseInternalIPAddress     bool              `json:"useInternalIpAddress,omitempty" norman:"default=true,noupdate"`
 }
 
 type NodeDriver struct {

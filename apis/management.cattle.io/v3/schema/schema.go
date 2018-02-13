@@ -153,15 +153,12 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 
 func nodeTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		AddMapperForType(&Version, v3.NodeSpec{}, &m.Embed{Field: "nodeSpec"}).
+		AddMapperForType(&Version, v3.NodeSpec{}, &m.Embed{Field: "internalNodeSpec"}).
 		AddMapperForType(&Version, v3.NodeStatus{},
 			&m.Drop{Field: "rkeNode"},
 			&m.Drop{Field: "nodeTemplateSpec"},
-			&m.Drop{Field: "nodeDriverConfig"},
-			&m.Embed{Field: "nodeStatus"},
+			&m.Embed{Field: "internalNodeStatus"},
 			&m.SliceMerge{From: []string{"conditions", "nodeConditions"}, To: "conditions"}).
-		AddMapperForType(&Version, v3.NodeConfig{},
-			&m.Drop{Field: "clusterName"}).
 		AddMapperForType(&Version, v3.Node{},
 			&m.Embed{Field: "status"},
 			m.DisplayName{}).
