@@ -10,6 +10,9 @@ import (
 	projectSchema "github.com/rancher/types/apis/project.cattle.io/v3/schema"
 	"github.com/rancher/types/generator"
 	"k8s.io/api/apps/v1beta2"
+	batchv1 "k8s.io/api/batch/v1"
+	batchv1beta1 "k8s.io/api/batch/v1beta1"
+
 	"k8s.io/api/core/v1"
 	extv1beta1 "k8s.io/api/extensions/v1beta1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -27,6 +30,7 @@ func main() {
 		v1.Secret{},
 		v1.ConfigMap{},
 		v1.ServiceAccount{},
+		v1.ReplicationController{},
 	}, []interface{}{
 		v1.Node{},
 		v1.ComponentStatus{},
@@ -37,6 +41,7 @@ func main() {
 		v1beta2.Deployment{},
 		v1beta2.DaemonSet{},
 		v1beta2.StatefulSet{},
+		v1beta2.ReplicaSet{},
 	}, nil)
 	generator.GenerateNativeTypes(rbacv1.SchemeGroupVersion, []interface{}{
 		rbacv1.RoleBinding{},
@@ -45,6 +50,12 @@ func main() {
 		rbacv1.ClusterRoleBinding{},
 		rbacv1.ClusterRole{},
 	})
+	generator.GenerateNativeTypes(batchv1.SchemeGroupVersion, []interface{}{
+		batchv1.Job{},
+	}, nil)
+	generator.GenerateNativeTypes(batchv1beta1.SchemeGroupVersion, []interface{}{
+		batchv1beta1.CronJob{},
+	}, nil)
 	generator.GenerateNativeTypes(extv1beta1.SchemeGroupVersion, nil,
 		[]interface{}{
 			extv1beta1.PodSecurityPolicy{},
