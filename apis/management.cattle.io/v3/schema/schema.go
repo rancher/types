@@ -155,12 +155,14 @@ func nodeTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		AddMapperForType(&Version, v3.NodeSpec{}, &m.Embed{Field: "internalNodeSpec"}).
 		AddMapperForType(&Version, v3.NodeStatus{},
-			&m.Drop{Field: "rkeNode"},
 			&m.Drop{Field: "nodeTemplateSpec"},
 			&m.Embed{Field: "internalNodeStatus"},
 			&m.SliceMerge{From: []string{"conditions", "nodeConditions"}, To: "conditions"}).
 		AddMapperForType(&Version, v3.Node{},
 			&m.Embed{Field: "status"},
+			&m.Move{From: "rkeNode/user", To: "sshUser"},
+			&m.ReadOnly{Field: "sshUser"},
+			&m.Drop{Field: "rkeNode"},
 			m.DisplayName{}).
 		AddMapperForType(&Version, v3.NodeDriver{}, m.DisplayName{}).
 		AddMapperForType(&Version, v3.NodeTemplate{}, m.DisplayName{}).
