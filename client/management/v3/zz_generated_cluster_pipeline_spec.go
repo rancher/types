@@ -9,6 +9,6 @@ const (
 
 type ClusterPipelineSpec struct {
 	ClusterId    string               `json:"clusterId,omitempty"`
-	Deploy       *bool                `json:"deploy,omitempty"`
+	Deploy       bool                 `json:"deploy,omitempty"`
 	GithubConfig *GithubClusterConfig `json:"githubConfig,omitempty"`
 }

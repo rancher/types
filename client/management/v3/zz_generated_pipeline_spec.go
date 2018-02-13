@@ -16,5 +16,5 @@ type PipelineSpec struct {
 	Stages                []Stage `json:"stages,omitempty"`
 	TriggerCronExpression string  `json:"triggerCronExpression,omitempty"`
 	TriggerCronTimezone   string  `json:"triggerCronTimezone,omitempty"`
-	TriggerWebhook        *bool   `json:"triggerWebhook,omitempty"`
+	TriggerWebhook        bool    `json:"triggerWebhook,omitempty"`
 }

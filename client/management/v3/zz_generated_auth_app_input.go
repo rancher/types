@@ -18,5 +18,5 @@ type AuthAppInput struct {
 	Host           string `json:"host,omitempty"`
 	RedirectURL    string `json:"redirectUrl,omitempty"`
 	SourceCodeType string `json:"sourceCodeType,omitempty"`
-	TLS            *bool  `json:"tls,omitempty"`
+	TLS            bool   `json:"tls,omitempty"`
 }

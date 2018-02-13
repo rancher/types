@@ -46,7 +46,7 @@ type Pipeline struct {
 	TransitioningMessage  string            `json:"transitioningMessage,omitempty"`
 	TriggerCronExpression string            `json:"triggerCronExpression,omitempty"`
 	TriggerCronTimezone   string            `json:"triggerCronTimezone,omitempty"`
-	TriggerWebhook        *bool             `json:"triggerWebhook,omitempty"`
+	TriggerWebhook        bool              `json:"triggerWebhook,omitempty"`
 	Uuid                  string            `json:"uuid,omitempty"`
 }
 type PipelineCollection struct {

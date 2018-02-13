@@ -15,6 +15,6 @@ type RunScriptConfig struct {
 	Entrypoint  string   `json:"entrypoint,omitempty"`
 	Env         []string `json:"env,omitempty"`
 	Image       string   `json:"image,omitempty"`
-	IsShell     *bool    `json:"isShell,omitempty"`
+	IsShell     bool     `json:"isShell,omitempty"`
 	ShellScript string   `json:"shellScript,omitempty"`
 }
