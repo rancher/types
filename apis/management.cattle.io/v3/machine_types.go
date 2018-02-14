@@ -40,7 +40,7 @@ type NodeTemplateCondition struct {
 type NodeTemplateSpec struct {
 	DisplayName      string `json:"displayName"`
 	Description      string `json:"description"`
-	Driver           string `json:"driver"`
+	Driver           string `json:"driver" norman:"nocreate,noupdate"`
 	NodeCommonParams `json:",inline"`
 }
 
