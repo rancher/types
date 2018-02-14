@@ -281,6 +281,16 @@ func NewUserContext(managementConfig, config rest.Config, clusterName string) (*
 		return nil, err
 	}
 
+	context.BatchV1, err = batchv1.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	context.BatchV1Beta1, err = batchv1beta1.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
 	dynamicConfig := config
 	if dynamicConfig.NegotiatedSerializer == nil {
 		configConfig := dynamic.ContentConfig()
