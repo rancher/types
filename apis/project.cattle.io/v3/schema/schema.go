@@ -553,7 +553,7 @@ func ingressTypes(schemas *types.Schemas) *types.Schemas {
 			&m.Move{From: "servicePort", To: "targetPort"},
 		).
 		MustImport(&Version, v1beta1.IngressBackend{}, struct {
-			WorkloadIDs string `json:"workloadIds" norman:"type=array[reference[workload]]"`
+			WorkloadId  string `json:"workloadId" norman:"type=reference[workload]"`
 			ServiceName string `norman:"type=reference[service]"`
 		}{}).
 		MustImportAndCustomize(&Version, v1beta1.IngressRule{}, func(schema *types.Schema) {
