@@ -59,5 +59,6 @@ func main() {
 	generator.GenerateNativeTypes(extv1beta1.SchemeGroupVersion, nil,
 		[]interface{}{
 			extv1beta1.PodSecurityPolicy{},
+			extv1beta1.Ingress{},
 		})
 }
