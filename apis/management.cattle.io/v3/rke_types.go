@@ -56,7 +56,7 @@ type RKESystemImages struct {
 	// KubeDNS autoscaler image
 	KubeDNSAutoscaler string `yaml:"kubedns_autoscaler" json:"kubednsAutoscaler,omitempty"`
 	// Kubernetes image
-	Kubernetes string `yaml:"kubernetes" json:"kubernetes,omitempty" norman:"default=rancher/k8s:v1.8.5-rancher4"`
+	Kubernetes string `yaml:"kubernetes" json:"kubernetes,omitempty"`
 	// Flannel image
 	Flannel string `yaml:"flannel" json:"flannel,omitempty"`
 	// Flannel CNI image
@@ -81,6 +81,10 @@ type RKESystemImages struct {
 	WeaveCNI string `yaml:"weave_cni" json:"weaveCni,omitempty"`
 	// Pod infra container image
 	PodInfraContainer string `yaml:"pod_infra_container" json:"podInfraContainer,omitempty"`
+	// Ingress Controller image
+	Ingress string `yaml:"ingress" json:"ingress,omitempty"`
+	// Ingress Controller Backend image
+	IngressBackend string `yaml:"ingress_backend" json:"ingressBackend,omitempty"`
 }
 
 type RKEConfigNode struct {
