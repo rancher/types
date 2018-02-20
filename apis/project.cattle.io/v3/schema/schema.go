@@ -41,7 +41,8 @@ var (
 		Init(podTemplateSpecTypes).
 		Init(workloadTypes).
 		Init(appTypes).
-		Init(configMapTypes)
+		Init(configMapTypes).
+		Init(namespaceComposeType)
 )
 
 func configMapTypes(schemas *types.Schemas) *types.Schemas {
@@ -676,4 +677,8 @@ func NewWorkloadTypeMapper() types.Mapper {
 		mapper.WorkloadAnnotations{},
 		&m.AnnotationField{Field: "publicEndpoints", List: true},
 	}
+}
+
+func namespaceComposeType(schemas *types.Schemas) *types.Schemas {
+	return schemas.MustImport(&Version, v3.NamespaceComposeConfig{})
 }

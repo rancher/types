@@ -19,6 +19,7 @@ import (
 )
 
 func main() {
+	generator.GenerateComposeType(projectSchema.Schemas, managementSchema.Schemas, clusterSchema.Schemas)
 	generator.Generate(managementSchema.Schemas)
 	generator.Generate(publicSchema.PublicSchemas)
 	generator.Generate(clusterSchema.Schemas)
