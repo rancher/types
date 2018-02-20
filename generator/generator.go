@@ -5,16 +5,53 @@ import (
 	"path"
 	"strings"
 
+	"net/http"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"text/template"
+
 	"github.com/rancher/norman/generator"
 	"github.com/rancher/norman/types"
+	"github.com/rancher/norman/types/convert"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/gengo/args"
 )
 
 var (
 	basePackage = "github.com/rancher/types"
 	baseCattle  = "client"
 	baseK8s     = "apis"
+	baseCompose = "compose"
 )
+
+func funcs() template.FuncMap {
+	return template.FuncMap{
+		"capitalize":   convert.Capitalize,
+		"unCapitalize": convert.Uncapitalize,
+		"upper":        strings.ToUpper,
+		"toLower":      strings.ToLower,
+		"hasGet":       hasGet,
+		"hasPost":      hasPost,
+	}
+}
+
+func hasGet(schema *types.Schema) bool {
+	return contains(schema.CollectionMethods, http.MethodGet)
+}
+
+func hasPost(schema *types.Schema) bool {
+	return contains(schema.CollectionMethods, http.MethodPost)
+}
+
+func contains(list []string, needle string) bool {
+	for _, i := range list {
+		if i == needle {
+			return true
+		}
+	}
+	return false
+}
 
 func Generate(schemas *types.Schemas) {
 	version := getVersion(schemas)
@@ -26,6 +63,51 @@ func Generate(schemas *types.Schemas) {
 	if err := generator.Generate(schemas, cattleOutputPackage, k8sOutputPackage); err != nil {
 		panic(err)
 	}
+}
+
+func GenerateComposeType(projectSchemas *types.Schemas, managementSchemas *types.Schemas, clusterSchemas *types.Schemas) {
+	if err := generateComposeType(filepath.Join(basePackage, baseCompose), projectSchemas, managementSchemas, clusterSchemas); err != nil {
+		panic(err)
+	}
+}
+
+func generateComposeType(baseCompose string, projectSchemas *types.Schemas, managementSchemas *types.Schemas, clusterSchemas *types.Schemas) error {
+	outputDir := filepath.Join(args.DefaultSourceTree(), baseCompose)
+	if err := os.MkdirAll(outputDir, 0755); err != nil {
+		return err
+	}
+	filePath := "zz_generated_compose.go"
+	output, err := os.Create(path.Join(outputDir, filePath))
+	if err != nil {
+		return err
+	}
+	defer output.Close()
+
+	typeTemplate, err := template.New("compose.template").
+		Funcs(funcs()).
+		Parse(strings.Replace(composeTemplate, "%BACK%", "`", -1))
+	if err != nil {
+		return err
+	}
+
+	if err := typeTemplate.Execute(output, map[string]interface{}{
+		"managementSchemas": managementSchemas.Schemas(),
+		"projectSchemas":    projectSchemas.Schemas(),
+		"clusterSchemas":    clusterSchemas.Schemas(),
+	}); err != nil {
+		return err
+	}
+
+	return gofmt(args.DefaultSourceTree(), baseCompose)
+}
+
+func gofmt(workDir, pkg string) error {
+	cmd := exec.Command("goimports", "-w", "-l", "./"+pkg)
+	cmd.Dir = workDir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }
 
 func GenerateNativeTypes(gv schema.GroupVersion, nsObjs []interface{}, objs []interface{}) {
