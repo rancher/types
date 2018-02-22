@@ -321,12 +321,12 @@ func globalTypes(schema *types.Schemas) *types.Schemas {
 
 func alertTypes(schema *types.Schemas) *types.Schemas {
 	return schema.
-		AddMapperForType(&Version, &v3.Notifier{},
+		AddMapperForType(&Version, v3.Notifier{},
 			m.DisplayName{}).
-		AddMapperForType(&Version, &v3.ClusterAlert{},
+		AddMapperForType(&Version, v3.ClusterAlert{},
 			&m.Embed{Field: "status"},
 			m.DisplayName{}).
-		AddMapperForType(&Version, &v3.ProjectAlert{},
+		AddMapperForType(&Version, v3.ProjectAlert{},
 			&m.Embed{Field: "status"},
 			m.DisplayName{}).
 		MustImport(&Version, v3.Notification{}).
