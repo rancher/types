@@ -283,6 +283,13 @@ func jobTypes(schemas *types.Schemas) *types.Schemas {
 
 func cronJobTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
+		AddMapperForType(&Version, batchv1beta1.JobTemplateSpec{},
+			&m.Move{
+				From: "metadata",
+				To:   "jobMetadata",
+			},
+			&m.Embed{Field: "spec"},
+		).
 		AddMapperForType(&Version, batchv1beta1.CronJobSpec{},
 			&m.Move{
 				From: "schedule",
@@ -308,22 +315,34 @@ func cronJobTypes(schemas *types.Schemas) *types.Schemas {
 				From: "failedJobsHistoryLimit",
 				To:   "cronJob/failedJobsHistoryLimit",
 			},
-			// TODO - embed jobTemplate field. Now it fails due to jobTemplate.spec and jobTemplate.spec.template.spec
-			// name conflict
-			&m.Move{
-				From: "jobTemplate",
-				To:   "cronJob/jobTemplate",
+			&m.Embed{
+				Field: "jobTemplate",
 			},
+			&m.Move{
+				From: "job",
+				To:   "cronJob/job",
+			},
+			&m.Move{
+				From:              "jobMetadata/labels",
+				To:                "cronJob/jobLabels",
+				NoDeleteFromField: true,
+			},
+			&m.Move{
+				From:              "jobMetadata/annotations",
+				To:                "cronJob/jobAnnotations",
+				NoDeleteFromField: true,
+			},
+			&m.Drop{Field: "jobMetadata"},
 		).
 		AddMapperForType(&Version, batchv1beta1.CronJob{},
 			&m.Move{
 				From: "status",
 				To:   "cronJobStatus",
 			},
-			// TODO resolve once proper embedding for jobTemplate is done
-			//NewWorkloadTypeMapper(),
+			NewWorkloadTypeMapper(),
 		).
 		MustImport(&Version, batchv1beta1.CronJobSpec{}, cronJobOverride{}).
+		MustImport(&Version, batchv1beta1.JobTemplateSpec{}).
 		MustImportAndCustomize(&Version, batchv1beta1.CronJob{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
 		}, projectOverride{})
