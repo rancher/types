@@ -295,9 +295,9 @@ func projectNetworkPolicyTypes(schema *types.Schemas) *types.Schemas {
 
 func logTypes(schema *types.Schemas) *types.Schemas {
 	return schema.
-		AddMapperForType(&Version, &v3.ClusterLogging{},
+		AddMapperForType(&Version, v3.ClusterLogging{},
 			m.DisplayName{}).
-		AddMapperForType(&Version, &v3.ProjectLogging{},
+		AddMapperForType(&Version, v3.ProjectLogging{},
 			m.DisplayName{}).
 		MustImport(&Version, v3.ClusterLogging{}).
 		MustImport(&Version, v3.ProjectLogging{})
