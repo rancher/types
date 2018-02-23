@@ -162,7 +162,9 @@ func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v1beta2.StatefulSetSpec{}, statefulSetConfigOverride{}).
 		MustImportAndCustomize(&Version, v1beta2.StatefulSet{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
-		}, projectOverride{})
+		}, projectOverride{}, struct {
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
+		}{})
 }
 
 func replicaSetTypes(schemas *types.Schemas) *types.Schemas {
@@ -189,7 +191,9 @@ func replicaSetTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v1beta1.ReplicaSetSpec{}, replicaSetConfigOverride{}).
 		MustImportAndCustomize(&Version, v1beta1.ReplicaSet{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
-		}, projectOverride{})
+		}, projectOverride{}, struct {
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
+		}{})
 }
 
 func replicationControllerTypes(schemas *types.Schemas) *types.Schemas {
@@ -216,7 +220,9 @@ func replicationControllerTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v1.ReplicationControllerSpec{}, replicationControllerConfigOverride{}).
 		MustImportAndCustomize(&Version, v1.ReplicationController{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
-		}, projectOverride{})
+		}, projectOverride{}, struct {
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
+		}{})
 }
 
 func daemonSetTypes(schemas *types.Schemas) *types.Schemas {
@@ -246,7 +252,9 @@ func daemonSetTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v1beta2.DaemonSetSpec{}, daemonSetOverride{}).
 		MustImportAndCustomize(&Version, v1beta2.DaemonSet{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
-		}, projectOverride{})
+		}, projectOverride{}, struct {
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
+		}{})
 }
 
 func jobTypes(schemas *types.Schemas) *types.Schemas {
@@ -284,7 +292,9 @@ func jobTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, batchv1.JobSpec{}, jobOverride{}).
 		MustImportAndCustomize(&Version, batchv1.Job{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
-		}, projectOverride{})
+		}, projectOverride{}, struct {
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
+		}{})
 }
 
 func cronJobTypes(schemas *types.Schemas) *types.Schemas {
@@ -351,7 +361,9 @@ func cronJobTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, batchv1beta1.JobTemplateSpec{}).
 		MustImportAndCustomize(&Version, batchv1beta1.CronJob{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
-		}, projectOverride{})
+		}, projectOverride{}, struct {
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
+		}{})
 }
 
 func deploymentTypes(schemas *types.Schemas) *types.Schemas {
@@ -393,7 +405,9 @@ func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v1beta2.DeploymentSpec{}, deploymentConfigOverride{}).
 		MustImportAndCustomize(&Version, v1beta2.Deployment{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
-		}, projectOverride{})
+		}, projectOverride{}, struct {
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
+		}{})
 }
 
 func podTypes(schemas *types.Schemas) *types.Schemas {
@@ -657,5 +671,6 @@ func NewWorkloadTypeMapper() types.Mapper {
 		&m.Move{From: "metadata/annotations", To: "annotations", NoDeleteFromField: true},
 		&m.Drop{Field: "metadata"},
 		mapper.ContainerPorts{},
+		&m.AnnotationField{Field: "publicEndpoints", List: true},
 	}
 }
