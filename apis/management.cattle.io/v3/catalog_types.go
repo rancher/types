@@ -45,6 +45,7 @@ type Template struct {
 }
 
 type TemplateSpec struct {
+	DisplayName              string `json:"displayName"`
 	CatalogID                string `json:"catalogId,omitempty" norman:"type=reference[catalog]"`
 	DefaultTemplateVersionID string `json:"defaultTemplateVersionId,omitempty" norman:"type=reference[templateVersion]"`
 
