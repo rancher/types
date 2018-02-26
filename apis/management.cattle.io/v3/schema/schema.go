@@ -260,6 +260,7 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 		MustImportAndCustomize(&Version, v3.ActiveDirectoryConfig{}, func(schema *types.Schema) {
 			schema.BaseType = "authConfig"
 			schema.ResourceActions = map[string]types.Action{
+				"disable": {},
 				"testAndApply": {
 					Input: "activeDirectoryTestAndApplyInput",
 				},
