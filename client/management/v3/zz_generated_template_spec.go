@@ -9,7 +9,6 @@ const (
 	TemplateSpecFieldDefaultTemplateVersionID = "defaultTemplateVersionId"
 	TemplateSpecFieldDefaultVersion           = "defaultVersion"
 	TemplateSpecFieldDescription              = "description"
-	TemplateSpecFieldDisplayName              = "displayName"
 	TemplateSpecFieldFolderName               = "folderName"
 	TemplateSpecFieldIcon                     = "icon"
 	TemplateSpecFieldIconFilename             = "iconFilename"
@@ -31,7 +30,6 @@ type TemplateSpec struct {
 	DefaultTemplateVersionID string                `json:"defaultTemplateVersionId,omitempty"`
 	DefaultVersion           string                `json:"defaultVersion,omitempty"`
 	Description              string                `json:"description,omitempty"`
-	DisplayName              string                `json:"displayName,omitempty"`
 	FolderName               string                `json:"folderName,omitempty"`
 	Icon                     string                `json:"icon,omitempty"`
 	IconFilename             string                `json:"iconFilename,omitempty"`
