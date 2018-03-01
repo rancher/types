@@ -70,7 +70,6 @@ type NodeStatus struct {
 	NodeTemplateSpec   *NodeTemplateSpec `json:"nodeTemplateSpec,omitempty"`
 	NodeConfig         *RKEConfigNode    `json:"rkeNode,omitempty"`
 	NodeAnnotations    map[string]string `json:"nodeAnnotations,omitempty"`
-	NodeLabels         map[string]string `json:"nodeLabels,omitempty"`
 	NodeTaints         []v1.Taint        `json:"nodeTaints,omitempty"`
 }
 
@@ -154,14 +153,15 @@ type NodeSpec struct {
 	Worker           bool   `json:"worker" norman:"noupdate"`
 	NodeTemplateName string `json:"nodeTemplateName,omitempty" norman:"type=reference[nodeTemplate],noupdate"`
 
-	NodePoolName      string        `json:"nodePoolName" norman:"type=reference[nodePool],nocreate,noupdate"`
-	CustomConfig      *CustomConfig `json:"customConfig"`
-	Imported          bool          `json:"imported"`
-	Description       string        `json:"description,omitempty"`
-	DisplayName       string        `json:"displayName"`
-	RequestedHostname string        `json:"requestedHostname,omitempty" norman:"type=dnsLabel,nullable,noupdate,required"`
-	ClusterName       string        `json:"clusterName,omitempty" norman:"type=reference[cluster],noupdate,required"`
-	InternalNodeSpec  v1.NodeSpec   `json:"internalNodeSpec"`
+	NodePoolName      string            `json:"nodePoolName" norman:"type=reference[nodePool],nocreate,noupdate"`
+	CustomConfig      *CustomConfig     `json:"customConfig"`
+	Imported          bool              `json:"imported"`
+	Description       string            `json:"description,omitempty"`
+	DisplayName       string            `json:"displayName"`
+	RequestedHostname string            `json:"requestedHostname,omitempty" norman:"type=dnsLabel,nullable,noupdate,required"`
+	ClusterName       string            `json:"clusterName,omitempty" norman:"type=reference[cluster],noupdate,required"`
+	InternalNodeSpec  v1.NodeSpec       `json:"internalNodeSpec"`
+	NodeLabels        map[string]string `json:"nodeLabels,omitempty"`
 }
 
 type NodeCommonParams struct {
