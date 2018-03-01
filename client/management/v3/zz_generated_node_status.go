@@ -11,7 +11,6 @@ const (
 	NodeStatusFieldLimits          = "limits"
 	NodeStatusFieldNodeAnnotations = "nodeAnnotations"
 	NodeStatusFieldNodeConfig      = "rkeNode"
-	NodeStatusFieldNodeLabels      = "nodeLabels"
 	NodeStatusFieldNodeName        = "nodeName"
 	NodeStatusFieldNodeTaints      = "nodeTaints"
 	NodeStatusFieldRequested       = "requested"
@@ -29,7 +28,6 @@ type NodeStatus struct {
 	Limits          map[string]string         `json:"limits,omitempty" yaml:"limits,omitempty"`
 	NodeAnnotations map[string]string         `json:"nodeAnnotations,omitempty" yaml:"nodeAnnotations,omitempty"`
 	NodeConfig      *RKEConfigNode            `json:"rkeNode,omitempty" yaml:"rkeNode,omitempty"`
-	NodeLabels      map[string]string         `json:"nodeLabels,omitempty" yaml:"nodeLabels,omitempty"`
 	NodeName        string                    `json:"nodeName,omitempty" yaml:"nodeName,omitempty"`
 	NodeTaints      []Taint                   `json:"nodeTaints,omitempty" yaml:"nodeTaints,omitempty"`
 	Requested       map[string]string         `json:"requested,omitempty" yaml:"requested,omitempty"`
