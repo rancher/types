@@ -11,7 +11,7 @@ var (
 
 	// RancherK8sVersionToSystemImages versions must match github release version
 	RancherK8sVersionToSystemImages = map[string]RancherSystemImages{
-		"v1.9.2-rancher1": v192SystemImages,
+		"v1.9.4-rancher1": v194SystemImages,
 	}
 
 	// v187SystemImages defaults for rke and rancher 2.0
@@ -41,17 +41,17 @@ var (
 		IngressBackend:            "rancher/nginx-ingress-controller-defaultbackend:1.4",
 	}
 
-	// v192SystemImages defaults for 1.6 with k8s v1.9
-	v192SystemImages = RancherSystemImages{
+	// v194SystemImages defaults for 1.6 with k8s v1.9
+	v194SystemImages = RancherSystemImages{
 		RKESystemImages: RKESystemImages{
-			KubeDNS:        "rancher/k8s-dns-kube-dns-amd64:1.14.7",
-			DNSmasq:        "rancher/k8s-dns-dnsmasq-nanny-amd64:1.14.7",
-			KubeDNSSidecar: "rancher/k8s-dns-sidecar-amd64:1.14.7",
+			KubeDNS:        "k8s-dns-kube-dns-amd64:1.14.7",
+			DNSmasq:        "k8s-dns-dnsmasq-nanny-amd64:1.14.7",
+			KubeDNSSidecar: "k8s-dns-sidecar-amd64:1.14.7",
 		},
-		Heapster:  "rancher/heapster-grafana-amd64:v4.4.3",
-		Grafana:   "rancher/heapster-amd64:v1.5.0",
-		Influxdb:  "rancher/heapster-influxdb-amd64:v1.3.3",
-		Tiller:    "rancher/tiller:v2.7.2",
-		Dashboard: "rancher/kubernetes-dashboard-amd64:v1.8.0",
+		Grafana:   "heapster-grafana-amd64:v4.4.3",
+		Heapster:  "heapster-amd64:v1.5.0",
+		Influxdb:  "heapster-influxdb-amd64:v1.3.3",
+		Tiller:    "tiller:v2.7.2",
+		Dashboard: "kubernetes-dashboard-amd64:v1.8.0",
 	}
 )
