@@ -26,8 +26,8 @@ type Project struct {
 }
 
 type ProjectStatus struct {
-	Conditions []ProjectCondition `json:"conditions"`
-	PodSecurityPolicyTemplateName string `json:"podSecurityPolicyTemplateId"`
+	Conditions                    []ProjectCondition `json:"conditions"`
+	PodSecurityPolicyTemplateName string             `json:"podSecurityPolicyTemplateId"`
 }
 
 type ProjectCondition struct {
@@ -97,7 +97,7 @@ type PodSecurityPolicyTemplateProjectBinding struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	PodSecurityPolicyTemplateName string `json:"podSecurityPolicyTemplateId" norman:"required,type=reference[podSecurityPolicyTemplate]"`
-	TargetProjectName                   string `json:"projectId" norman:"required,type=reference[project]"`
+	TargetProjectName             string `json:"targetProjectId" norman:"required,type=reference[project]"`
 }
 
 type ProjectRoleTemplateBinding struct {
