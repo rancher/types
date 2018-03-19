@@ -625,6 +625,21 @@ func ingressTypes(schemas *types.Schemas) *types.Schemas {
 
 func volumeTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
+		AddMapperForType(&Version, v1.HostPathVolumeSource{},
+			m.Move{From: "type", To: "kind"},
+			m.Enum{
+				Options: []string{
+					"DirectoryOrCreate",
+					"Directory",
+					"FileOrCreate",
+					"File",
+					"Socket",
+					"CharDevice",
+					"BlockDevice",
+				},
+				Field: "kind",
+			},
+		).
 		AddMapperForType(&Version, v1.ResourceRequirements{},
 			mapper.PivotMapper{Plural: true},
 		).
@@ -638,6 +653,9 @@ func volumeTypes(schemas *types.Schemas) *types.Schemas {
 			SecretName string `norman:"type=reference[secret]"`
 		}{}).
 		MustImport(&Version, v1.Volume{}, struct {
+		}{}).
+		MustImport(&Version, v1.PersistentVolumeSpec{}, struct {
+			StorageClassName *string `json:"storageClassName,omitempty" norman:"type=reference[/v3/cluster/storageClass]"`
 		}{}).
 		MustImport(&Version, v1.PersistentVolumeClaimSpec{}, struct {
 			AccessModes      []string `json:"accessModes,omitempty" norman:"type=array[enum],options=ReadWriteOnce|ReadOnlyMany|ReadWriteMany"`
