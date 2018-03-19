@@ -44,9 +44,9 @@ var (
 	// v194SystemImages defaults for 1.6 with k8s v1.9
 	v194SystemImages = RancherSystemImages{
 		RKESystemImages: RKESystemImages{
-			KubeDNS:        "k8s-dns-kube-dns-amd64:1.14.7",
-			DNSmasq:        "k8s-dns-dnsmasq-nanny-amd64:1.14.7",
-			KubeDNSSidecar: "k8s-dns-sidecar-amd64:1.14.7",
+			KubeDNS:        "k8s-dns-kube-dns-amd64:1.14.8",
+			DNSmasq:        "k8s-dns-dnsmasq-nanny-amd64:1.14.8",
+			KubeDNSSidecar: "k8s-dns-sidecar-amd64:1.14.8",
 		},
 		Grafana:   "heapster-grafana-amd64:v4.4.3",
 		Heapster:  "heapster-amd64:v1.5.0",
