@@ -5,6 +5,7 @@ const (
 	RancherKubernetesEngineConfigFieldAddons              = "addons"
 	RancherKubernetesEngineConfigFieldAuthentication      = "authentication"
 	RancherKubernetesEngineConfigFieldAuthorization       = "authorization"
+	RancherKubernetesEngineConfigFieldClusterName         = "clusterName"
 	RancherKubernetesEngineConfigFieldIgnoreDockerVersion = "ignoreDockerVersion"
 	RancherKubernetesEngineConfigFieldIngress             = "ingress"
 	RancherKubernetesEngineConfigFieldNetwork             = "network"
@@ -20,6 +21,7 @@ type RancherKubernetesEngineConfig struct {
 	Addons              string             `json:"addons,omitempty" yaml:"addons,omitempty"`
 	Authentication      *AuthnConfig       `json:"authentication,omitempty" yaml:"authentication,omitempty"`
 	Authorization       *AuthzConfig       `json:"authorization,omitempty" yaml:"authorization,omitempty"`
+	ClusterName         string             `json:"clusterName,omitempty" yaml:"clusterName,omitempty"`
 	IgnoreDockerVersion bool               `json:"ignoreDockerVersion,omitempty" yaml:"ignoreDockerVersion,omitempty"`
 	Ingress             *IngressConfig     `json:"ingress,omitempty" yaml:"ingress,omitempty"`
 	Network             *NetworkConfig     `json:"network,omitempty" yaml:"network,omitempty"`
