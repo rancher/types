@@ -1089,6 +1089,11 @@ func (in *AuthnConfig) DeepCopyInto(out *AuthnConfig) {
 			(*out)[key] = val
 		}
 	}
+	if in.SANs != nil {
+		in, out := &in.SANs, &out.SANs
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 
