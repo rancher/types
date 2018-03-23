@@ -4,6 +4,7 @@ import (
 	ejson "encoding/json"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/rancher/norman/types"
 	"github.com/rancher/norman/types/convert"
@@ -113,6 +114,11 @@ func (p *Store) getUser(apiContext *types.APIContext) string {
 }
 
 func (p *Store) doAuthed(apiContext *types.APIContext, request *rest.Request) rest.Result {
+	start := time.Now()
+	defer func() {
+		logrus.Debug("GET:", time.Now().Sub(start), p.resourcePlural)
+	}()
+
 	for _, header := range authHeaders {
 		request.SetHeader(header, apiContext.Request.Header[http.CanonicalHeaderKey(header)]...)
 	}
@@ -157,7 +163,9 @@ func (p *Store) List(apiContext *types.APIContext, schema *types.Schema, opt *ty
 	req := p.common(namespace, k8sClient.Get())
 
 	resultList := &unstructured.UnstructuredList{}
+	start := time.Now()
 	err = req.Do().Into(resultList)
+	logrus.Debug("LIST:", time.Now().Sub(start), p.resourcePlural)
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +176,7 @@ func (p *Store) List(apiContext *types.APIContext, schema *types.Schema, opt *ty
 		result = append(result, p.fromInternal(schema, obj.Object))
 	}
 
-	return apiContext.AccessControl.FilterList(apiContext, result, p.authContext), nil
+	return apiContext.AccessControl.FilterList(apiContext, schema, result, p.authContext), nil
 }
 
 func (p *Store) Watch(apiContext *types.APIContext, schema *types.Schema, opt *types.QueryOptions) (chan map[string]interface{}, error) {
@@ -210,7 +218,7 @@ func (p *Store) Watch(apiContext *types.APIContext, schema *types.Schema, opt *t
 			if event.Type == watch.Deleted && data.Object != nil {
 				data.Object[".removed"] = true
 			}
-			result <- apiContext.AccessControl.Filter(apiContext, data.Object, p.authContext)
+			result <- apiContext.AccessControl.Filter(apiContext, schema, data.Object, p.authContext)
 		}
 		logrus.Debugf("closing watcher for %s", schema.ID)
 		close(result)
