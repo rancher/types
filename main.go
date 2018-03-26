@@ -15,6 +15,7 @@ import (
 
 	"k8s.io/api/core/v1"
 	extv1beta1 "k8s.io/api/extensions/v1beta1"
+	knetworkingv1 "k8s.io/api/networking/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 )
 
@@ -51,6 +52,9 @@ func main() {
 		rbacv1.ClusterRoleBinding{},
 		rbacv1.ClusterRole{},
 	})
+	generator.GenerateNativeTypes(knetworkingv1.SchemeGroupVersion, []interface{}{
+		knetworkingv1.NetworkPolicy{},
+	}, nil)
 	generator.GenerateNativeTypes(batchv1.SchemeGroupVersion, []interface{}{
 		batchv1.Job{},
 	}, nil)
