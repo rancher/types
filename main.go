@@ -61,9 +61,12 @@ func main() {
 	generator.GenerateNativeTypes(batchv1beta1.SchemeGroupVersion, []interface{}{
 		batchv1beta1.CronJob{},
 	}, nil)
-	generator.GenerateNativeTypes(extv1beta1.SchemeGroupVersion, nil,
+	generator.GenerateNativeTypes(extv1beta1.SchemeGroupVersion,
+		[]interface{}{
+			extv1beta1.Ingress{},
+		},
 		[]interface{}{
 			extv1beta1.PodSecurityPolicy{},
-			extv1beta1.Ingress{},
-		})
+		},
+	)
 }
