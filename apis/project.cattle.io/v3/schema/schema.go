@@ -601,6 +601,7 @@ func ingressTypes(schemas *types.Schemas) *types.Schemas {
 		AddMapperForType(&Version, v1beta1.Ingress{},
 			&m.AnnotationField{Field: "description"},
 			&m.Move{From: "backend", To: "defaultBackend"},
+			&m.AnnotationField{Field: "publicEndpoints", List: true},
 		).
 		AddMapperForType(&Version, v1beta1.IngressTLS{},
 			&m.Move{From: "secretName", To: "certificateName"},
@@ -622,7 +623,8 @@ func ingressTypes(schemas *types.Schemas) *types.Schemas {
 			SecretName string `norman:"type=reference[certificate]"`
 		}{}).
 		MustImport(&Version, v1beta1.Ingress{}, projectOverride{}, struct {
-			Description string `json:"description"`
+			Description     string `json:"description"`
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
 		}{})
 }
 
