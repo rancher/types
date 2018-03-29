@@ -266,6 +266,8 @@ type RKEConfigNodePlan struct {
 	Processes map[string]Process `json:"processes,omitempty"`
 	// List of portchecks that should be open on the node
 	PortChecks []PortCheck `json:"portChecks,omitempty"`
+	// List of files to deploy on the node
+	Files []File `json:"files,omitempty"`
 }
 
 type Process struct {

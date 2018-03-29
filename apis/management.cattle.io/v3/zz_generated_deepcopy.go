@@ -5472,6 +5472,11 @@ func (in *RKEConfigNodePlan) DeepCopyInto(out *RKEConfigNodePlan) {
 		*out = make([]PortCheck, len(*in))
 		copy(*out, *in)
 	}
+	if in.Files != nil {
+		in, out := &in.Files, &out.Files
+		*out = make([]File, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 
