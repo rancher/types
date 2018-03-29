@@ -35,6 +35,7 @@ type Client struct {
 	Workload                      WorkloadOperations
 	App                           AppOperations
 	NamespaceComposeConfig        NamespaceComposeConfigOperations
+	ControllerRevision            ControllerRevisionOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -75,6 +76,7 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Workload = newWorkloadClient(client)
 	client.App = newAppClient(client)
 	client.NamespaceComposeConfig = newNamespaceComposeConfigClient(client)
+	client.ControllerRevision = newControllerRevisionClient(client)
 
 	return client, nil
 }

@@ -84,4 +84,5 @@ type Config struct {
 	Workloads                      map[string]projectClient.Workload                      `json:"workloads,omitempty" yaml:"workloads,omitempty"`
 	Apps                           map[string]projectClient.App                           `json:"apps,omitempty" yaml:"apps,omitempty"`
 	NamespaceComposeConfigs        map[string]projectClient.NamespaceComposeConfig        `json:"namespaceComposeConfigs,omitempty" yaml:"namespaceComposeConfigs,omitempty"`
+	ControllerRevisions            map[string]projectClient.ControllerRevision            `json:"controllerRevisions,omitempty" yaml:"controllerRevisions,omitempty"`
 }
