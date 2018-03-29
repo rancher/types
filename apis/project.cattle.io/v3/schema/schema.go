@@ -42,7 +42,8 @@ var (
 		Init(podTemplateSpecTypes).
 		Init(workloadTypes).
 		Init(appTypes).
-		Init(namespaceComposeType)
+		Init(namespaceComposeType).
+		Init(controllerRevisionType)
 )
 
 func configMapTypes(schemas *types.Schemas) *types.Schemas {
@@ -102,7 +103,7 @@ func workloadTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.MustImportAndCustomize(&Version, v3.Workload{},
 		func(schema *types.Schema) {
 			toInclude := []string{"deployment", "replicationController", "statefulSet",
-				"daemonSet", "job", "cronJob", "replicaSet"}
+				"daemonSet", "job", "cronJob", "replicaSet", "controllerRevision"}
 			for _, name := range toInclude {
 				baseSchema := schemas.Schema(&Version, name)
 				if baseSchema == nil {
@@ -710,4 +711,17 @@ func NewWorkloadTypeMapper() types.Mapper {
 
 func namespaceComposeType(schemas *types.Schemas) *types.Schemas {
 	return schemas.MustImport(&Version, v3.NamespaceComposeConfig{})
+}
+
+func controllerRevisionType(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v1beta2.ControllerRevision{}, mapper.ControllerRevisionMapper{}).
+		MustImportAndCustomize(&Version, v1beta2.ControllerRevision{}, func(schema *types.Schema) {
+			schema.BaseType = "workload"
+		}, projectOverride{}, struct {
+			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
+			Data            string `json:"data,omitempty" norman:"type=podTemplateSpec"`
+		}{}).AddMapperForType(&Version, v1beta2.ControllerRevision{},
+		NewWorkloadTypeMapper(),
+	)
 }
