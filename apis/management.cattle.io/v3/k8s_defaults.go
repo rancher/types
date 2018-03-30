@@ -75,7 +75,7 @@ var (
 
 	// v19 system images defaults
 	v19SystemImages = RKESystemImages{
-		Etcd:                      "rancher/coreos-etcd:v3.0.17",
+		Etcd:                      "rancher/coreos-etcd:v3.1.12",
 		Kubernetes:                "rancher/k8s:" + K8sV19,
 		Alpine:                    "alpine:latest",
 		NginxProxy:                "rancher/rke-nginx-proxy:v0.1.1",
