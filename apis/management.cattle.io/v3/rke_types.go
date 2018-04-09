@@ -33,6 +33,8 @@ type RancherKubernetesEngineConfig struct {
 	ClusterName string `yaml:"cluster_name" json:"clusterName,omitempty"`
 	// Cloud Provider options
 	CloudProvider CloudProvider `yaml:"cloud_provider" json:"cloudProvider,omitempty"`
+	// kubernetes directory path
+	K8sDirPath string `yaml:"k8s_dir_path" json:"k8sDirPath,omitempty"`
 }
 
 type PrivateRegistry struct {
