@@ -399,12 +399,12 @@ type AWSCloudProvider struct {
 
 type CalicoNetworkProvider struct {
 	// Cloud provider type used with calico
-	CloudProvider string
+	CloudProvider string `json:"cloudProvider"`
 }
 
 type FlannelNetworkProvider struct {
 	// Alternate cloud interface for flannel
-	Iface string
+	Iface string `json:"iface"`
 }
 
 type CanalNetworkProvider struct {
