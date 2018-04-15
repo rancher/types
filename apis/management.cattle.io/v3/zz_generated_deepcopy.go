@@ -3216,8 +3216,8 @@ func (in *IngressConfig) DeepCopyInto(out *IngressConfig) {
 			(*out)[key] = val
 		}
 	}
-	if in.ExtraArguments != nil {
-		in, out := &in.ExtraArguments, &out.ExtraArguments
+	if in.ExtraArgs != nil {
+		in, out := &in.ExtraArgs, &out.ExtraArgs
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
