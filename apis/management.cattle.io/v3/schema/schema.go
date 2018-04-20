@@ -172,17 +172,12 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 			&mapper.NamespaceIDMapper{},
 		).
 		MustImport(&Version, v3.SetPodSecurityPolicyTemplateInput{}).
-		MustImport(&Version, v3.ImportProjectYamlInput{}).
 		MustImport(&Version, v3.ImportYamlOutput{}).
 		MustImportAndCustomize(&Version, v3.Project{}, func(schema *types.Schema) {
 			schema.ResourceActions = map[string]types.Action{
 				"setpodsecuritypolicytemplate": {
 					Input:  "setPodSecurityPolicyTemplateInput",
 					Output: "project",
-				},
-				"importYaml": {
-					Input:  "importProjectYamlInput",
-					Output: "importYamlOutput",
 				},
 			}
 		}).

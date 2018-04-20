@@ -240,14 +240,12 @@ type GenerateKubeConfigOutput struct {
 }
 
 type ImportClusterYamlInput struct {
-	Yaml string `json:"yaml,omitempty"`
-}
-
-type ImportProjectYamlInput struct {
-	Yaml      string `json:"yaml,omitempty"`
-	Namespace string `json:"namespace,omitempty"`
+	YAML             string `json:"yaml,omitempty"`
+	DefaultNamespace string `json:"defaultNamespace,omitempty"`
+	Namespace        string `json:"namespace,omitempty"`
+	ProjectName      string `json:"projectName,omitempty" norman:"type=reference[project]"`
 }
 
 type ImportYamlOutput struct {
-	OutputMessage string `json:"outputMessage,omitempty"`
+	Message string `json:"message,omitempty"`
 }
