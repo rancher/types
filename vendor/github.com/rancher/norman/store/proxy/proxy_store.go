@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rancher/norman/httperror"
 	"github.com/rancher/norman/restwatch"
 	"github.com/rancher/norman/types"
 	"github.com/rancher/norman/types/convert"
@@ -117,7 +118,7 @@ func (p *Store) getUser(apiContext *types.APIContext) string {
 func (p *Store) doAuthed(apiContext *types.APIContext, request *rest.Request) rest.Result {
 	start := time.Now()
 	defer func() {
-		logrus.Debug("GET:", time.Now().Sub(start), p.resourcePlural)
+		logrus.Debug("GET: ", time.Now().Sub(start), p.resourcePlural)
 	}()
 
 	for _, header := range authHeaders {
@@ -131,6 +132,18 @@ func (p *Store) k8sClient(apiContext *types.APIContext) (rest.Interface, error) 
 }
 
 func (p *Store) ByID(apiContext *types.APIContext, schema *types.Schema, id string) (map[string]interface{}, error) {
+	splitted := strings.Split(strings.TrimSpace(id), ":")
+	validID := false
+	namespaced := schema.Scope == types.NamespaceScope
+	if namespaced {
+		validID = len(splitted) == 2 && len(strings.TrimSpace(splitted[0])) > 0 && len(strings.TrimSpace(splitted[1])) > 0
+	} else {
+		validID = len(splitted) == 1 && len(strings.TrimSpace(splitted[0])) > 0
+	}
+	if !validID {
+		return nil, httperror.NewAPIError(httperror.NotFound, "failed to find resource by id")
+	}
+
 	_, result, err := p.byID(apiContext, schema, id)
 	return result, err
 }
@@ -166,7 +179,7 @@ func (p *Store) List(apiContext *types.APIContext, schema *types.Schema, opt *ty
 	resultList := &unstructured.UnstructuredList{}
 	start := time.Now()
 	err = req.Do().Into(resultList)
-	logrus.Debug("LIST:", time.Now().Sub(start), p.resourcePlural)
+	logrus.Debug("LIST: ", time.Now().Sub(start), p.resourcePlural)
 	if err != nil {
 		return nil, err
 	}
@@ -266,7 +279,7 @@ func (p *Store) Create(apiContext *types.APIContext, schema *types.Schema, data 
 	if name == "" {
 		generated, _ := values.GetValueN(data, "metadata", "generateName").(string)
 		if generated == "" {
-			values.PutValue(data, strings.ToLower(schema.ID+"-"), "metadata", "generateName")
+			values.PutValue(data, types.GenerateName(schema.ID), "metadata", "name")
 		}
 	}
 
@@ -335,14 +348,14 @@ func (p *Store) Delete(apiContext *types.APIContext, schema *types.Schema, id st
 		return nil, err
 	}
 
-	namespace, id := splitID(id)
+	namespace, name := splitID(id)
 
 	prop := metav1.DeletePropagationForeground
 	req := p.common(namespace, k8sClient.Delete()).
 		Body(&metav1.DeleteOptions{
 			PropagationPolicy: &prop,
 		}).
-		Name(id)
+		Name(name)
 
 	err = p.doAuthed(apiContext, req).Error()
 	if err != nil {
