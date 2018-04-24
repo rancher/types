@@ -14,7 +14,7 @@ var (
 	K8sVersionToRKESystemImages = map[string]RKESystemImages{
 		"v1.8.10-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.0.17"),
-			Kubernetes:                m("gcr.io/google_containers/hyperkube:v1.8.10"),
+			Kubernetes:                m("rancher/hyperkube:v1.8.10-rancher1"),
 			Alpine:                    ToolsImage,
 			NginxProxy:                ToolsImage,
 			CertDownloader:            ToolsImage,
@@ -39,7 +39,7 @@ var (
 		},
 		"v1.8.11-rancher1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.0.17"),
-			Kubernetes:                m("gcr.io/google_containers/hyperkube:v1.8.11"),
+			Kubernetes:                m("rancher/hyperkube:v1.8.11-rancher1"),
 			Alpine:                    ToolsImage,
 			NginxProxy:                ToolsImage,
 			CertDownloader:            ToolsImage,
@@ -64,7 +64,7 @@ var (
 		},
 		"v1.9.7-rancher1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
-			Kubernetes:                m("gcr.io/google_containers/hyperkube:v1.9.7"),
+			Kubernetes:                m("rancher/hyperkube:v1.9.7-rancher1"),
 			Alpine:                    ToolsImage,
 			NginxProxy:                ToolsImage,
 			CertDownloader:            ToolsImage,
@@ -89,7 +89,7 @@ var (
 		},
 		"v1.9.5-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
-			Kubernetes:                m("gcr.io/google_containers/hyperkube:v1.9.5"),
+			Kubernetes:                m("rancher/hyperkube:v1.9.5-rancher1"),
 			Alpine:                    ToolsImage,
 			NginxProxy:                ToolsImage,
 			CertDownloader:            ToolsImage,
@@ -114,7 +114,7 @@ var (
 		},
 		"v1.10.0-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
-			Kubernetes:                m("gcr.io/google_containers/hyperkube:v1.10.0"),
+			Kubernetes:                m("rancher/hyperkube:v1.10.0-rancher1"),
 			Alpine:                    ToolsImage,
 			NginxProxy:                ToolsImage,
 			CertDownloader:            ToolsImage,
@@ -139,7 +139,7 @@ var (
 		},
 		"v1.10.1-rancher1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
-			Kubernetes:                m("gcr.io/google_containers/hyperkube:v1.10.1"),
+			Kubernetes:                m("rancher/hyperkube:v1.10.1-rancher1"),
 			Alpine:                    ToolsImage,
 			NginxProxy:                ToolsImage,
 			CertDownloader:            ToolsImage,
