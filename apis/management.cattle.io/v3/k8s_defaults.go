@@ -34,7 +34,7 @@ var (
 			WeaveNode:                 m("weaveworks/weave-kube:2.1.2"),
 			WeaveCNI:                  m("weaveworks/weave-npc:2.1.2"),
 			PodInfraContainer:         m("gcr.io/google_containers/pause-amd64:3.0"),
-			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher2"),
+			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher3"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 		},
 		"v1.8.11-rancher1": {
@@ -59,7 +59,7 @@ var (
 			WeaveNode:                 m("weaveworks/weave-kube:2.1.2"),
 			WeaveCNI:                  m("weaveworks/weave-npc:2.1.2"),
 			PodInfraContainer:         m("gcr.io/google_containers/pause-amd64:3.0"),
-			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher2"),
+			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher3"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 		},
 		"v1.9.7-rancher1": {
@@ -84,7 +84,7 @@ var (
 			WeaveNode:                 m("weaveworks/weave-kube:2.1.2"),
 			WeaveCNI:                  m("weaveworks/weave-npc:2.1.2"),
 			PodInfraContainer:         m("gcr.io/google_containers/pause-amd64:3.0"),
-			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher2"),
+			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher3"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 		},
 		"v1.9.5-rancher1-1": {
@@ -109,7 +109,7 @@ var (
 			WeaveNode:                 m("weaveworks/weave-kube:2.1.2"),
 			WeaveCNI:                  m("weaveworks/weave-npc:2.1.2"),
 			PodInfraContainer:         m("gcr.io/google_containers/pause-amd64:3.0"),
-			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher2"),
+			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher3"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 		},
 		"v1.10.0-rancher1-1": {
@@ -134,7 +134,7 @@ var (
 			WeaveNode:                 m("weaveworks/weave-kube:2.1.2"),
 			WeaveCNI:                  m("weaveworks/weave-npc:2.1.2"),
 			PodInfraContainer:         m("gcr.io/google_containers/pause-amd64:3.1"),
-			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher2"),
+			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher3"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 		},
 		"v1.10.1-rancher1": {
@@ -159,7 +159,7 @@ var (
 			WeaveNode:                 m("weaveworks/weave-kube:2.1.2"),
 			WeaveCNI:                  m("weaveworks/weave-npc:2.1.2"),
 			PodInfraContainer:         m("gcr.io/google_containers/pause-amd64:3.1"),
-			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher2"),
+			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher3"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 		},
 	}
