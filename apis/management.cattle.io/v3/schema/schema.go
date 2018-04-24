@@ -157,6 +157,12 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 				Input:  "importClusterYamlInput",
 				Output: "importYamlOutput",
 			}
+		}).
+		MustImportAndCustomize(&Version, v3.GoogleKubernetesEngineConfig{}, func(schema *types.Schema) {
+			schema.MustCustomizeField("httpLoadBalancing", func(field types.Field) types.Field {
+				field.Default = true
+				return field
+			})
 		})
 }
 
