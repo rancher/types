@@ -187,10 +187,10 @@ var (
 			AlertManagerHelper: m("rancher/alertmanager-helper:v0.0.2"),
 		},
 		PipelineSystemImages: PipelineSystemImages{
-			Jenkins:       m("jenkins/jenkins:lts"),
+			Jenkins:       m("jenkins/jenkins:2.107-slim"),
 			JenkinsJnlp:   m("jenkins/jnlp-slave:3.10-1-alpine"),
-			AlpineGit:     m("alpine/git"),
-			PluginsDocker: m("plugins/docker"),
+			AlpineGit:     m("alpine/git:1.0.4"),
+			PluginsDocker: m("plugins/docker:17.12"),
 		},
 		LoggingSystemImages: LoggingSystemImages{
 			Fluentd:                       m("rancher/fluentd:v0.1.7"),
