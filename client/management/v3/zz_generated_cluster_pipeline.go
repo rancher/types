@@ -60,7 +60,13 @@ type ClusterPipelineOperations interface {
 	ByID(id string) (*ClusterPipeline, error)
 	Delete(container *ClusterPipeline) error
 
-	ActionAuthuser(*ClusterPipeline, *AuthUserInput) (*SourceCodeCredential, error)
+	ActionAuthuser(resource *ClusterPipeline, input *AuthUserInput) (*SourceCodeCredential, error)
+
+	ActionDeploy(resource *ClusterPipeline) error
+
+	ActionDestroy(resource *ClusterPipeline) error
+
+	ActionRevokeapp(resource *ClusterPipeline) error
 }
 
 func newClusterPipelineClient(apiClient *Client) *ClusterPipelineClient {
@@ -109,10 +115,22 @@ func (c *ClusterPipelineClient) Delete(container *ClusterPipeline) error {
 }
 
 func (c *ClusterPipelineClient) ActionAuthuser(resource *ClusterPipeline, input *AuthUserInput) (*SourceCodeCredential, error) {
-
 	resp := &SourceCodeCredential{}
-
 	err := c.apiClient.Ops.DoAction(ClusterPipelineType, "authuser", &resource.Resource, input, resp)
-
 	return resp, err
+}
+
+func (c *ClusterPipelineClient) ActionDeploy(resource *ClusterPipeline) error {
+	err := c.apiClient.Ops.DoAction(ClusterPipelineType, "deploy", &resource.Resource, nil, nil)
+	return err
+}
+
+func (c *ClusterPipelineClient) ActionDestroy(resource *ClusterPipeline) error {
+	err := c.apiClient.Ops.DoAction(ClusterPipelineType, "destroy", &resource.Resource, nil, nil)
+	return err
+}
+
+func (c *ClusterPipelineClient) ActionRevokeapp(resource *ClusterPipeline) error {
+	err := c.apiClient.Ops.DoAction(ClusterPipelineType, "revokeapp", &resource.Resource, nil, nil)
+	return err
 }
