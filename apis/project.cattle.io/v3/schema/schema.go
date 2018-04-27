@@ -114,7 +114,7 @@ func workloadTypes(schemas *types.Schemas) *types.Schemas {
 			}
 			schema.ResourceActions = map[string]types.Action{
 				"rollback": {
-					Input: "revision",
+					Input: "rollbackRevision",
 				},
 				"pause":  {},
 				"resume": {},
