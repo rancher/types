@@ -291,6 +291,8 @@ type Process struct {
 	Privileged bool `json:"privileged,omitempty"`
 	// Process healthcheck
 	HealthCheck HealthCheck `json:"healthCheck,omitempty"`
+	// Process docker container Labels
+	Labels map[string]string `json:"labels,omitempty"`
 }
 
 type HealthCheck struct {
