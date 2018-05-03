@@ -99,6 +99,7 @@ type DockerInfo struct {
 var (
 	NodeConditionInitialized condition.Cond = "Initialized"
 	NodeConditionProvisioned condition.Cond = "Provisioned"
+	NodeConditionDeployed    condition.Cond = "Deployed"
 	NodeConditionUpdated     condition.Cond = "Updated"
 	NodeConditionRegistered  condition.Cond = "Registered"
 	NodeConditionRemoved     condition.Cond = "Removed"
@@ -166,7 +167,7 @@ type CustomConfig struct {
 	// Optional - Docker socket on the node that will be used in tunneling
 	DockerSocket string `yaml:"docker_socket" json:"dockerSocket,omitempty"`
 	// SSH Private Key
-	SSHKey string `yaml:"ssh_key" json:"sshKey,omitempty"`
+	SSHKey string `yaml:"ssh_key" json:"sshKey,omitempty" norman:"type=password"`
 }
 
 type NodeSpec struct {
