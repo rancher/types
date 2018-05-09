@@ -2,7 +2,7 @@ package client
 
 const (
 	RancherKubernetesEngineConfigType                     = "rancherKubernetesEngineConfig"
-	RancherKubernetesEngineConfigFieldAddonJobRetries     = "addonJobRetries"
+	RancherKubernetesEngineConfigFieldAddonJobTimeout     = "addonJobTimeout"
 	RancherKubernetesEngineConfigFieldAddons              = "addons"
 	RancherKubernetesEngineConfigFieldAddonsInclude       = "addonsInclude"
 	RancherKubernetesEngineConfigFieldAuthentication      = "authentication"
@@ -23,7 +23,7 @@ const (
 )
 
 type RancherKubernetesEngineConfig struct {
-	AddonJobRetries     int64              `json:"addonJobRetries,omitempty" yaml:"addonJobRetries,omitempty"`
+	AddonJobTimeout     int64              `json:"addonJobTimeout,omitempty" yaml:"addonJobTimeout,omitempty"`
 	Addons              string             `json:"addons,omitempty" yaml:"addons,omitempty"`
 	AddonsInclude       []string           `json:"addonsInclude,omitempty" yaml:"addonsInclude,omitempty"`
 	Authentication      *AuthnConfig       `json:"authentication,omitempty" yaml:"authentication,omitempty"`
