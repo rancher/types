@@ -84,7 +84,7 @@ type AuthConfig struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Type                string   `json:"type" norman:"noupdate"`
-	Enabled             bool     `json:"enabled,omitempty" norman:"noupdate"`
+	Enabled             bool     `json:"enabled,omitempty"`
 	AccessMode          string   `json:"accessMode,omitempty" norman:"required,notnullable,type=enum,options=required|restricted|unrestricted"`
 	AllowedPrincipalIDs []string `json:"allowedPrincipalIds,omitempty" norman:"type=array[reference[principal]]"`
 }
