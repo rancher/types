@@ -151,3 +151,23 @@ type ActiveDirectoryTestAndApplyInput struct {
 	Password              string                `json:"password"`
 	Enabled               bool                  `json:"enabled,omitempty"`
 }
+
+type AzureADConfig struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	AuthConfig        `json:",inline" mapstructure:",squash"`
+
+	TenantID             string `json:"tenantId,omitempty"                          norman:"required"`
+	ClientID             string `json:"clientId,omitempty"                          norman:"required"`
+	Domain               string `json:"domain,omitempty"                            norman:"required"`
+	ClientSecret         string `json:"clientSecret,omitempty"`
+	AdminAccountUsername string `json:"adminAccountUsername,omitempty"              norman:"required"`
+	AdminAccountPassword string `json:"adminAccountPassword,omitempty"              norman:"required"`
+}
+
+type AzureADTestAndApplyInput struct {
+	AzureADConfig AzureADConfig `json:"azureAdConfig, omitempty"`
+	Username      string        `json:"username"`
+	Password      string        `json:"password"`
+	Enabled       bool          `json:"enabled,omitempty"`
+}
