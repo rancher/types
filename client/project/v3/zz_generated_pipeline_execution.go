@@ -7,25 +7,34 @@ import (
 const (
 	PipelineExecutionType                      = "pipelineExecution"
 	PipelineExecutionFieldAnnotations          = "annotations"
+	PipelineExecutionFieldAuthor               = "author"
+	PipelineExecutionFieldAvatarURL            = "avatarUrl"
+	PipelineExecutionFieldBranch               = "branch"
 	PipelineExecutionFieldCommit               = "commit"
 	PipelineExecutionFieldConditions           = "conditions"
 	PipelineExecutionFieldCreated              = "created"
 	PipelineExecutionFieldCreatorID            = "creatorId"
+	PipelineExecutionFieldEmail                = "email"
 	PipelineExecutionFieldEnded                = "ended"
-	PipelineExecutionFieldEnvVars              = "envVars"
+	PipelineExecutionFieldEvent                = "event"
 	PipelineExecutionFieldExecutionState       = "executionState"
+	PipelineExecutionFieldHTMLLink             = "htmlLink"
 	PipelineExecutionFieldLabels               = "labels"
+	PipelineExecutionFieldMessage              = "message"
 	PipelineExecutionFieldName                 = "name"
 	PipelineExecutionFieldNamespaceId          = "namespaceId"
 	PipelineExecutionFieldOwnerReferences      = "ownerReferences"
-	PipelineExecutionFieldPipeline             = "pipeline"
+	PipelineExecutionFieldPipelineConfig       = "pipelineConfig"
 	PipelineExecutionFieldPipelineID           = "pipelineId"
 	PipelineExecutionFieldProjectID            = "projectId"
+	PipelineExecutionFieldRef                  = "ref"
 	PipelineExecutionFieldRemoved              = "removed"
+	PipelineExecutionFieldRepositoryURL        = "repositoryUrl"
 	PipelineExecutionFieldRun                  = "run"
 	PipelineExecutionFieldStages               = "stages"
 	PipelineExecutionFieldStarted              = "started"
 	PipelineExecutionFieldState                = "state"
+	PipelineExecutionFieldTitle                = "title"
 	PipelineExecutionFieldTransitioning        = "transitioning"
 	PipelineExecutionFieldTransitioningMessage = "transitioningMessage"
 	PipelineExecutionFieldTriggerUserID        = "triggerUserId"
@@ -36,25 +45,34 @@ const (
 type PipelineExecution struct {
 	types.Resource
 	Annotations          map[string]string   `json:"annotations,omitempty" yaml:"annotations,omitempty"`
+	Author               string              `json:"author,omitempty" yaml:"author,omitempty"`
+	AvatarURL            string              `json:"avatarUrl,omitempty" yaml:"avatarUrl,omitempty"`
+	Branch               string              `json:"branch,omitempty" yaml:"branch,omitempty"`
 	Commit               string              `json:"commit,omitempty" yaml:"commit,omitempty"`
 	Conditions           []PipelineCondition `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created              string              `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID            string              `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	Email                string              `json:"email,omitempty" yaml:"email,omitempty"`
 	Ended                string              `json:"ended,omitempty" yaml:"ended,omitempty"`
-	EnvVars              map[string]string   `json:"envVars,omitempty" yaml:"envVars,omitempty"`
+	Event                string              `json:"event,omitempty" yaml:"event,omitempty"`
 	ExecutionState       string              `json:"executionState,omitempty" yaml:"executionState,omitempty"`
+	HTMLLink             string              `json:"htmlLink,omitempty" yaml:"htmlLink,omitempty"`
 	Labels               map[string]string   `json:"labels,omitempty" yaml:"labels,omitempty"`
+	Message              string              `json:"message,omitempty" yaml:"message,omitempty"`
 	Name                 string              `json:"name,omitempty" yaml:"name,omitempty"`
 	NamespaceId          string              `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
 	OwnerReferences      []OwnerReference    `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	Pipeline             *Pipeline           `json:"pipeline,omitempty" yaml:"pipeline,omitempty"`
+	PipelineConfig       *PipelineConfig     `json:"pipelineConfig,omitempty" yaml:"pipelineConfig,omitempty"`
 	PipelineID           string              `json:"pipelineId,omitempty" yaml:"pipelineId,omitempty"`
 	ProjectID            string              `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	Ref                  string              `json:"ref,omitempty" yaml:"ref,omitempty"`
 	Removed              string              `json:"removed,omitempty" yaml:"removed,omitempty"`
+	RepositoryURL        string              `json:"repositoryUrl,omitempty" yaml:"repositoryUrl,omitempty"`
 	Run                  int64               `json:"run,omitempty" yaml:"run,omitempty"`
 	Stages               []StageStatus       `json:"stages,omitempty" yaml:"stages,omitempty"`
 	Started              string              `json:"started,omitempty" yaml:"started,omitempty"`
 	State                string              `json:"state,omitempty" yaml:"state,omitempty"`
+	Title                string              `json:"title,omitempty" yaml:"title,omitempty"`
 	Transitioning        string              `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
 	TransitioningMessage string              `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
 	TriggerUserID        string              `json:"triggerUserId,omitempty" yaml:"triggerUserId,omitempty"`
