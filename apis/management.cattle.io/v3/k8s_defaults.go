@@ -8,17 +8,16 @@ const (
 
 var (
 	m          = image.Mirror
-	ToolsImage = m("rancher/rke-tools:v0.1.4")
 
 	// K8sVersionToRKESystemImages - images map for 2.0
 	K8sVersionToRKESystemImages = map[string]RKESystemImages{
 		"v1.8.10-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.0.17"),
 			Kubernetes:                m("rancher/hyperkube:v1.8.10-rancher2"),
-			Alpine:                    ToolsImage,
-			NginxProxy:                ToolsImage,
-			CertDownloader:            ToolsImage,
-			KubernetesServicesSidecar: ToolsImage,
+			Alpine:                    m("rancher/rke-tools:v0.1.4"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.4"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.4"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.4"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.5"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.5"),
@@ -40,10 +39,10 @@ var (
 		"v1.8.11-rancher1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.0.17"),
 			Kubernetes:                m("rancher/hyperkube:v1.8.11-rancher2"),
-			Alpine:                    ToolsImage,
-			NginxProxy:                ToolsImage,
-			CertDownloader:            ToolsImage,
-			KubernetesServicesSidecar: ToolsImage,
+			Alpine:                    m("rancher/rke-tools:v0.1.4"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.4"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.4"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.4"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.5"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.5"),
@@ -65,10 +64,10 @@ var (
 		"v1.9.7-rancher1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
 			Kubernetes:                m("rancher/hyperkube:v1.9.7-rancher2"),
-			Alpine:                    ToolsImage,
-			NginxProxy:                ToolsImage,
-			CertDownloader:            ToolsImage,
-			KubernetesServicesSidecar: ToolsImage,
+			Alpine:                    m("rancher/rke-tools:v0.1.4"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.4"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.4"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.4"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.7"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.7"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.7"),
@@ -90,10 +89,10 @@ var (
 		"v1.9.5-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
 			Kubernetes:                m("rancher/hyperkube:v1.9.5-rancher1"),
-			Alpine:                    ToolsImage,
-			NginxProxy:                ToolsImage,
-			CertDownloader:            ToolsImage,
-			KubernetesServicesSidecar: ToolsImage,
+			Alpine:                    m("rancher/rke-tools:v0.1.4"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.4"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.4"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.4"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.7"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.7"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.7"),
@@ -115,10 +114,10 @@ var (
 		"v1.10.0-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
 			Kubernetes:                m("rancher/hyperkube:v1.10.0-rancher1"),
-			Alpine:                    ToolsImage,
-			NginxProxy:                ToolsImage,
-			CertDownloader:            ToolsImage,
-			KubernetesServicesSidecar: ToolsImage,
+			Alpine:                    m("rancher/rke-tools:v0.1.4"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.4"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.4"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.4"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.8"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.8"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.8"),
@@ -140,10 +139,10 @@ var (
 		"v1.10.1-rancher1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
 			Kubernetes:                m("rancher/hyperkube:v1.10.1-rancher2"),
-			Alpine:                    ToolsImage,
-			NginxProxy:                ToolsImage,
-			CertDownloader:            ToolsImage,
-			KubernetesServicesSidecar: ToolsImage,
+			Alpine:                    m("rancher/rke-tools:v0.1.4"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.4"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.4"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.4"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.8"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.8"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.8"),
@@ -200,7 +199,7 @@ var (
 			LogAggregatorFlexVolumeDriver: m("rancher/log-aggregator:v0.1.3"),
 			Elaticsearch:                  m("quay.io/pires/docker-elasticsearch-kubernetes:5.6.2"),
 			Kibana:                        m("kibana:5.6.4"),
-			Busybox:                       ToolsImage,
+			Busybox:                       m("rancher/rke-tools:v0.1.4"),
 		},
 	}
 )
