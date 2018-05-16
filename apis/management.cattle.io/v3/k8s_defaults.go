@@ -3,7 +3,7 @@ package v3
 import "github.com/rancher/types/image"
 
 const (
-	DefaultK8s = "v1.10.1-rancher1"
+	DefaultK8s = "v1.10.1-rancher2-1"
 )
 
 var (
