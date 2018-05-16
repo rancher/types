@@ -7,7 +7,6 @@ import (
 const (
 	SourceCodeRepositoryType                        = "sourceCodeRepository"
 	SourceCodeRepositoryFieldAnnotations            = "annotations"
-	SourceCodeRepositoryFieldClusterID              = "clusterId"
 	SourceCodeRepositoryFieldCreated                = "created"
 	SourceCodeRepositoryFieldCreatorID              = "creatorId"
 	SourceCodeRepositoryFieldDefaultBranch          = "defaultBranch"
@@ -16,6 +15,7 @@ const (
 	SourceCodeRepositoryFieldName                   = "name"
 	SourceCodeRepositoryFieldOwnerReferences        = "ownerReferences"
 	SourceCodeRepositoryFieldPermissions            = "permissions"
+	SourceCodeRepositoryFieldProjectID              = "projectId"
 	SourceCodeRepositoryFieldRemoved                = "removed"
 	SourceCodeRepositoryFieldSourceCodeCredentialID = "sourceCodeCredentialId"
 	SourceCodeRepositoryFieldSourceCodeType         = "sourceCodeType"
@@ -31,7 +31,6 @@ const (
 type SourceCodeRepository struct {
 	types.Resource
 	Annotations            map[string]string           `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	ClusterID              string                      `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
 	Created                string                      `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID              string                      `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	DefaultBranch          string                      `json:"defaultBranch,omitempty" yaml:"defaultBranch,omitempty"`
@@ -40,6 +39,7 @@ type SourceCodeRepository struct {
 	Name                   string                      `json:"name,omitempty" yaml:"name,omitempty"`
 	OwnerReferences        []OwnerReference            `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
 	Permissions            *RepoPerm                   `json:"permissions,omitempty" yaml:"permissions,omitempty"`
+	ProjectID              string                      `json:"projectId,omitempty" yaml:"projectId,omitempty"`
 	Removed                string                      `json:"removed,omitempty" yaml:"removed,omitempty"`
 	SourceCodeCredentialID string                      `json:"sourceCodeCredentialId,omitempty" yaml:"sourceCodeCredentialId,omitempty"`
 	SourceCodeType         string                      `json:"sourceCodeType,omitempty" yaml:"sourceCodeType,omitempty"`
