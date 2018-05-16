@@ -7,7 +7,7 @@ const (
 )
 
 var (
-	m          = image.Mirror
+	m = image.Mirror
 
 	// K8sVersionToRKESystemImages - images map for 2.0
 	K8sVersionToRKESystemImages = map[string]RKESystemImages{
@@ -274,7 +274,7 @@ var (
 			LogAggregatorFlexVolumeDriver: m("rancher/log-aggregator:v0.1.3"),
 			Elaticsearch:                  m("quay.io/pires/docker-elasticsearch-kubernetes:5.6.2"),
 			Kibana:                        m("kibana:5.6.4"),
-			Busybox:                       m("rancher/rke-tools:v0.1.4"),
+			Busybox:                       m("busybox"),
 		},
 	}
 )
