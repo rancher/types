@@ -157,6 +157,9 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 				Input:  "importClusterYamlInput",
 				Output: "importYamlOutput",
 			}
+			schema.ResourceActions["exportYaml"] = types.Action{
+				Output: "exportOutput",
+			}
 		})
 }
 
@@ -181,6 +184,7 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 					Input:  "setPodSecurityPolicyTemplateInput",
 					Output: "project",
 				},
+				"exportYaml": {},
 			}
 		}).
 		MustImport(&Version, v3.GlobalRole{}).
@@ -482,6 +486,5 @@ func pipelineTypes(schema *types.Schemas) *types.Schemas {
 }
 
 func composeType(schemas *types.Schemas) *types.Schemas {
-	return schemas.MustImport(&Version, v3.GlobalComposeConfig{}).
-		MustImport(&Version, v3.ClusterComposeConfig{})
+	return schemas.MustImport(&Version, v3.ComposeConfig{})
 }
