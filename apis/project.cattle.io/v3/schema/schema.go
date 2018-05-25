@@ -448,6 +448,7 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 			m.Move{From: "command", To: "entrypoint"},
 			m.Move{From: "args", To: "command"},
 			mapper.EnvironmentMapper{},
+			mapper.ContainerSecurityContext{},
 			&m.Embed{Field: "securityContext"},
 			&m.Embed{Field: "lifecycle"},
 		).
