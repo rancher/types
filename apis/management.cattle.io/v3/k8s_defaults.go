@@ -3,7 +3,7 @@ package v3
 import "github.com/rancher/types/image"
 
 const (
-	DefaultK8s = "v1.10.1-rancher2-1"
+	DefaultK8s = "v1.10.3-rancher2-1"
 )
 
 var (
@@ -236,13 +236,13 @@ var (
 			Ingress:                   m("rancher/nginx-ingress-controller:0.10.2-rancher3"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 		},
-		"v1.10.1-rancher2-1": {
+		"v1.10.3-rancher2-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.1.12"),
-			Kubernetes:                m("rancher/hyperkube:v1.10.1-rancher2"),
-			Alpine:                    m("rancher/rke-tools:v0.1.8"),
-			NginxProxy:                m("rancher/rke-tools:v0.1.8"),
-			CertDownloader:            m("rancher/rke-tools:v0.1.8"),
-			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.8"),
+			Kubernetes:                m("rancher/hyperkube:v1.10.3-rancher2"),
+			Alpine:                    m("rancher/rke-tools:v0.1.9"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.9"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.9"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.9"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.8"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.8"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.8"),
