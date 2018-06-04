@@ -9,6 +9,7 @@ const (
 	CattleInstanceFieldAnnotations     = "annotations"
 	CattleInstanceFieldCreated         = "created"
 	CattleInstanceFieldCreatorID       = "creatorId"
+	CattleInstanceFieldIdentity        = "identity"
 	CattleInstanceFieldLabels          = "labels"
 	CattleInstanceFieldName            = "name"
 	CattleInstanceFieldOwnerReferences = "ownerReferences"
@@ -21,6 +22,7 @@ type CattleInstance struct {
 	Annotations     map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created         string            `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID       string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	Identity        string            `json:"identity,omitempty" yaml:"identity,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`
 	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
