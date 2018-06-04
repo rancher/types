@@ -572,11 +572,5 @@ func cattleInstanceType(schames *types.Schemas) *types.Schemas {
 		AddMapperForType(&Version, v3.CattleInstance{},
 			m.Drop{Field: "token"},
 		).
-		MustImport(&Version, v3.CattleInstance{}).
-		MustImportAndCustomize(&Version, v3.Setting{}, func(schema *types.Schema) {
-			schema.MustCustomizeField("name", func(f types.Field) types.Field {
-				f.Required = true
-				return f
-			})
-		})
+		MustImport(&Version, v3.CattleInstance{})
 }

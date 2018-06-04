@@ -47,4 +47,5 @@ type CattleInstance struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	Token             string `json:"token,omitempty" norman:"nocreate,noupdate"`
+	Identity          string `json:"identity,omitempty" norman:"nocreate,noupdate"`
 }
