@@ -42,3 +42,9 @@ type ListenConfig struct {
 	KeySize                 int      `json:"keySize,omitempty" norman:"nocreate,noupdate"`
 	SubjectAlternativeNames []string `json:"subjectAlternativeNames,omitempty" norman:"nocreate,noupdate"`
 }
+
+type CattleInstance struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Token             string `json:"token,omitempty" norman:"nocreate,noupdate"`
+}
