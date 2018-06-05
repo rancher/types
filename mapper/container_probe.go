@@ -16,7 +16,8 @@ func (n ContainerProbeHandler) FromInternal(data map[string]interface{}) {
 	}
 }
 
-func (n ContainerProbeHandler) ToInternal(data map[string]interface{}) {
+func (n ContainerProbeHandler) ToInternal(data map[string]interface{}) error {
+	return nil
 }
 
 func (n ContainerProbeHandler) ModifySchema(schema *types.Schema, schemas *types.Schemas) error {

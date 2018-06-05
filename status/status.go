@@ -17,6 +17,7 @@ type status struct {
 }
 
 type condition struct {
+	Reason  string
 	Type    string
 	Status  string
 	Message string
@@ -105,10 +106,10 @@ func concat(str, next string) string {
 
 func Set(data map[string]interface{}) {
 	genericStatus(data)
-	loadBalancerSetatus(data)
+	loadBalancerStatus(data)
 }
 
-func loadBalancerSetatus(data map[string]interface{}) {
+func loadBalancerStatus(data map[string]interface{}) {
 	if data["state"] == "active" && data["kind"] == "Service" && values.GetValueN(data, "spec", "serviceKind") == "LoadBalancer" {
 		addresses, ok := values.GetSlice(data, "status", "loadBalancer", "ingress")
 		if !ok || len(addresses) == 0 {
@@ -149,7 +150,7 @@ func genericStatus(data map[string]interface{}) {
 	message := ""
 
 	for _, c := range conditions {
-		if errorMapping[c.Type] && c.Status == "False" {
+		if (errorMapping[c.Type] && c.Status == "False") || c.Reason == "Error" {
 			error = true
 			message = c.Message
 			break
