@@ -89,7 +89,8 @@ func (n ContainerStatus) FromInternal(data map[string]interface{}) {
 	}
 }
 
-func (n ContainerStatus) ToInternal(data map[string]interface{}) {
+func (n ContainerStatus) ToInternal(data map[string]interface{}) error {
+	return nil
 }
 
 func (n ContainerStatus) ModifySchema(schema *types.Schema, schemas *types.Schemas) error {
