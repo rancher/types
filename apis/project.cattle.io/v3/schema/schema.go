@@ -367,7 +367,7 @@ func cronJobTypes(schemas *types.Schemas) *types.Schemas {
 func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		AddMapperForType(&Version, v1beta2.DeploymentStrategy{},
-			&m.Embed{Field: "rollingUpdate"},
+			&m.Embed{Field: "rollingUpdate", EmptyValueOk: true},
 			m.Enum{Field: "type", Options: []string{
 				"Recreate",
 				"RollingUpdate",
