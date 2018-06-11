@@ -111,3 +111,42 @@ type Workload struct {
 type DeploymentRollbackInput struct {
 	ReplicaSetID string `json:"replicaSetId" norman:"type=reference[replicaSet]"`
 }
+
+type LoadBalancer struct {
+	Config       LoadBalancerConfig `json:"config"`
+	Scale        int64              `json:"scale"`
+	NodeSelector map[string]string  `json:"nodeSelector"`
+	//Version or Image? For Rancher-haproxy
+	Version string `json:"version"`
+}
+
+type LoadBalancerConfig struct {
+	// custom haproxy options as a string
+	Config             string                             `json:"config"`
+	PortRules          []LoadBalancerPortRule             `json:"portRules"`
+	DefaultCertificate string                             `json:"defaultCertificate" norman:"type=reference[secret]"`
+	Certificates       []string                           `json:"certificates" norman:"type=array[reference[secret]]"`
+	StickinessPolicy   LoadBalancerCookieStickinessPolicy `json:"stickinessPolicy"`
+}
+
+type LoadBalancerPortRule struct {
+	Hostname    string            `json:"hostname"`
+	Path        string            `json:"path"`
+	SourcePort  int32             `json:"sourcePort" norman:"required"`
+	TargetPort  int32             `json:"targetPort"`
+	Protocol    string            `json:"protocol" norman:"type=enum,options=http|tcp|https|tsl|sni|udp,default=http"`
+	Service     string            `json:"service" norman:"type=reference[service]"`
+	Selector    map[string]string `json:"selector"`
+	Priority    int32             `json:"priority"`
+	BackendName string            `json:"backendName"`
+}
+
+type LoadBalancerCookieStickinessPolicy struct {
+	Name     string `json:"name"`
+	Cookie   string `json:"cookie"`
+	Domain   string `json:"domain"`
+	Indirect bool   `json:"indirect"`
+	Nocache  bool   `json:"nocache"`
+	Postonly bool   `json:"postonly"`
+	Mode     string `json:"mode" norman:"type=enum,options=rewrite|insert|prefix,default=insert"`
+}
