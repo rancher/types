@@ -23,7 +23,7 @@ type ETCDService struct {
 	ExternalURLs []string          `json:"externalUrls,omitempty" yaml:"externalUrls,omitempty"`
 	ExtraArgs    map[string]string `json:"extraArgs,omitempty" yaml:"extraArgs,omitempty"`
 	ExtraBinds   []string          `json:"extraBinds,omitempty" yaml:"extraBinds,omitempty"`
-	ExtraEnv     []string          `json:"extraEnv,omitempty" yaml:"extraEnv,omitempty"`
+	ExtraEnv     map[string]string `json:"extraEnv,omitempty" yaml:"extraEnv,omitempty"`
 	Image        string            `json:"image,omitempty" yaml:"image,omitempty"`
 	Key          string            `json:"key,omitempty" yaml:"key,omitempty"`
 	Path         string            `json:"path,omitempty" yaml:"path,omitempty"`
