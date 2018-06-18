@@ -39,6 +39,7 @@ type Interface interface {
 	PrincipalsGetter
 	UsersGetter
 	AuthConfigsGetter
+	LdapConfigsGetter
 	TokensGetter
 	DynamicSchemasGetter
 	PreferencesGetter
@@ -88,6 +89,7 @@ type Client struct {
 	principalControllers                               map[string]PrincipalController
 	userControllers                                    map[string]UserController
 	authConfigControllers                              map[string]AuthConfigController
+	ldapConfigControllers                              map[string]LdapConfigController
 	tokenControllers                                   map[string]TokenController
 	dynamicSchemaControllers                           map[string]DynamicSchemaController
 	preferenceControllers                              map[string]PreferenceController
@@ -146,6 +148,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		principalControllers:                               map[string]PrincipalController{},
 		userControllers:                                    map[string]UserController{},
 		authConfigControllers:                              map[string]AuthConfigController{},
+		ldapConfigControllers:                              map[string]LdapConfigController{},
 		tokenControllers:                                   map[string]TokenController{},
 		dynamicSchemaControllers:                           map[string]DynamicSchemaController{},
 		preferenceControllers:                              map[string]PreferenceController{},
@@ -485,6 +488,19 @@ type AuthConfigsGetter interface {
 func (c *Client) AuthConfigs(namespace string) AuthConfigInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &AuthConfigResource, AuthConfigGroupVersionKind, authConfigFactory{})
 	return &authConfigClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type LdapConfigsGetter interface {
+	LdapConfigs(namespace string) LdapConfigInterface
+}
+
+func (c *Client) LdapConfigs(namespace string) LdapConfigInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &LdapConfigResource, LdapConfigGroupVersionKind, ldapConfigFactory{})
+	return &ldapConfigClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
