@@ -416,6 +416,10 @@ func userTypes(schema *types.Schemas) *types.Schemas {
 				f.Required = false
 				return f
 			})
+		}).
+		MustImportAndCustomize(&Version, v3.UserAttribute{}, func(schema *types.Schema) {
+			schema.CollectionMethods = []string{}
+			schema.ResourceMethods = []string{}
 		})
 }
 
