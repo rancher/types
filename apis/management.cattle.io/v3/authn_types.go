@@ -35,6 +35,19 @@ type User struct {
 	Me                 bool     `json:"me,omitempty"`
 }
 
+// UserAttribute will have a CRD (and controller) generated for it, but will not be exposed in the API.
+type UserAttribute struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	UserName        string
+	GroupPrincipals map[string]Principals // the value is a []Principal, but code generator cannot handle slice as a value
+}
+
+type Principals struct {
+	Items []Principal
+}
+
 type Group struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

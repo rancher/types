@@ -21,10 +21,12 @@ import (
 
 func main() {
 	generator.GenerateComposeType(projectSchema.Schemas, managementSchema.Schemas, clusterSchema.Schemas)
-	generator.Generate(managementSchema.Schemas)
-	generator.Generate(publicSchema.PublicSchemas)
-	generator.Generate(clusterSchema.Schemas)
-	generator.Generate(projectSchema.Schemas)
+	generator.Generate(managementSchema.Schemas, map[string]bool{
+		"userAttribute": true},
+	)
+	generator.Generate(publicSchema.PublicSchemas, nil)
+	generator.Generate(clusterSchema.Schemas, nil)
+	generator.Generate(projectSchema.Schemas, nil)
 	generator.GenerateNativeTypes(v1.SchemeGroupVersion, []interface{}{
 		v1.Endpoints{},
 		v1.Pod{},
