@@ -84,9 +84,10 @@ var errorMapping = map[string]bool{
 // False == transitioning
 // Unknown == error
 var doneMap = map[string]string{
-	"Completed": "activating",
-	"Ready":     "unavailable",
-	"Available": "updating",
+	"Completed":   "activating",
+	"Ready":       "unavailable",
+	"Available":   "updating",
+	"Progressing": "inactive",
 }
 
 // True == transitioning
@@ -115,7 +116,7 @@ func loadBalancerStatus(data map[string]interface{}) {
 		if !ok || len(addresses) == 0 {
 			data["state"] = "pending"
 			data["transitioning"] = "yes"
-			data["transitioningMessage"] = "Load Balancer is being provisioned"
+			data["transitioningMessage"] = "Load balancer is being provisioned"
 		}
 	}
 }
@@ -285,6 +286,10 @@ func genericStatus(data map[string]interface{}) {
 		if ok && len(finalizers) > 0 {
 			parts := strings.Split(finalizers[0], "controller.cattle.io/")
 			f := parts[len(parts)-1]
+
+			if f == "foregroundDeletion" {
+				f = "object cleanup"
+			}
 
 			if len(msg) > 0 {
 				msg = msg + "; waiting on " + f
