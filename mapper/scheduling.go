@@ -207,7 +207,7 @@ func (s SchedulingMapper) ToInternal(data map[string]interface{}) {
 	preferred := convert.ToStringSlice(values.GetValueN(data, "scheduling", "node", "preferred"))
 
 	if len(requireAll) == 0 && len(requireAny) == 0 && len(preferred) == 0 {
-		data["affinity"] = nil
+		values.PutValue(data, nil, "affinity", "nodeAffinity")
 		return
 	}
 
