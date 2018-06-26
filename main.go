@@ -35,6 +35,7 @@ func main() {
 		v1.ConfigMap{},
 		v1.ServiceAccount{},
 		v1.ReplicationController{},
+		v1.ResourceQuota{},
 	}, []interface{}{
 		v1.Node{},
 		v1.ComponentStatus{},
