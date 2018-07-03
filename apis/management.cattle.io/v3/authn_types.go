@@ -217,6 +217,7 @@ type LdapConfig struct {
 	GroupMemberUserAttribute        string   `json:"groupMemberUserAttribute,omitempty"    norman:"default=entryDN,notnullable"`
 	GroupMemberMappingAttribute     string   `json:"groupMemberMappingAttribute,omitempty" norman:"default=member,notnullable,required"`
 	ConnectionTimeout               int64    `json:"connectionTimeout,omitempty"           norman:"default=1000,notnullable,required"`
+	NestedGroupMembershipEnabled    bool     `json:"nestedGroupMembershipEnabled"    norman:"default=true"`
 }
 
 type LdapTestAndApplyInput struct {
