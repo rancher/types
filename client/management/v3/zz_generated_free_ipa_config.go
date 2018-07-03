@@ -19,7 +19,6 @@ const (
 	FreeIpaConfigFieldGroupSearchBase                 = "groupSearchBase"
 	FreeIpaConfigFieldLabels                          = "labels"
 	FreeIpaConfigFieldName                            = "name"
-	FreeIpaConfigFieldNestedGroupMembershipEnabled    = "nestedGroupMembershipEnabled"
 	FreeIpaConfigFieldOwnerReferences                 = "ownerReferences"
 	FreeIpaConfigFieldPort                            = "port"
 	FreeIpaConfigFieldRemoved                         = "removed"
@@ -57,7 +56,6 @@ type FreeIpaConfig struct {
 	GroupSearchBase                 string            `json:"groupSearchBase,omitempty" yaml:"groupSearchBase,omitempty"`
 	Labels                          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                            string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NestedGroupMembershipEnabled    bool              `json:"nestedGroupMembershipEnabled,omitempty" yaml:"nestedGroupMembershipEnabled,omitempty"`
 	OwnerReferences                 []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
 	Port                            int64             `json:"port,omitempty" yaml:"port,omitempty"`
 	Removed                         string            `json:"removed,omitempty" yaml:"removed,omitempty"`
