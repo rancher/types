@@ -59,6 +59,7 @@ type Interface interface {
 	PipelineExecutionLogsGetter
 	SourceCodeRepositoriesGetter
 	ComposeConfigsGetter
+	CattleInstancesGetter
 }
 
 type Client struct {
@@ -110,6 +111,7 @@ type Client struct {
 	pipelineExecutionLogControllers                    map[string]PipelineExecutionLogController
 	sourceCodeRepositoryControllers                    map[string]SourceCodeRepositoryController
 	composeConfigControllers                           map[string]ComposeConfigController
+	cattleInstanceControllers                          map[string]CattleInstanceController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -170,6 +172,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		pipelineExecutionLogControllers:                    map[string]PipelineExecutionLogController{},
 		sourceCodeRepositoryControllers:                    map[string]SourceCodeRepositoryController{},
 		composeConfigControllers:                           map[string]ComposeConfigController{},
+		cattleInstanceControllers:                          map[string]CattleInstanceController{},
 	}, nil
 }
 
@@ -751,6 +754,19 @@ type ComposeConfigsGetter interface {
 func (c *Client) ComposeConfigs(namespace string) ComposeConfigInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ComposeConfigResource, ComposeConfigGroupVersionKind, composeConfigFactory{})
 	return &composeConfigClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type CattleInstancesGetter interface {
+	CattleInstances(namespace string) CattleInstanceInterface
+}
+
+func (c *Client) CattleInstances(namespace string) CattleInstanceInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &CattleInstanceResource, CattleInstanceGroupVersionKind, cattleInstanceFactory{})
+	return &cattleInstanceClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
