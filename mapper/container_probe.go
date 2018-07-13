@@ -11,7 +11,7 @@ type ContainerProbeHandler struct {
 
 func (n ContainerProbeHandler) FromInternal(data map[string]interface{}) {
 	value := values.GetValueN(data, "tcpSocket", "port")
-	if !convert.IsEmpty(value) {
+	if !convert.IsAPIObjectEmpty(value) {
 		data["tcp"] = true
 	}
 }

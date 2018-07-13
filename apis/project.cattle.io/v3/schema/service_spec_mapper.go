@@ -16,7 +16,7 @@ func (e ServiceSpecMapper) ToInternal(data map[string]interface{}) error {
 		return nil
 	}
 
-	if convert.IsEmpty(data["hostname"]) {
+	if convert.IsAPIObjectEmpty(data["hostname"]) {
 		data["type"] = "ClusterIP"
 		data["clusterIP"] = "None"
 	} else {
