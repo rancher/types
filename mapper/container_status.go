@@ -69,7 +69,8 @@ func (n ContainerStatus) FromInternal(data map[string]interface{}) {
 	containerStatus = convert.ToMapSlice(values.GetValueN(data, "status", "initContainerStatuses"))
 	checkStatus(containerStates, containerStatus)
 
-	containers := convert.ToMapSlice(values.GetValueN(data, "containers"))
+	containers := append(convert.ToMapSlice(values.GetValueN(data, "containers")),
+		convert.ToMapSlice(values.GetValueN(data, "initContainers"))...)
 	for _, container := range containers {
 		if container == nil {
 			continue
