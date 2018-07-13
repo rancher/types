@@ -241,3 +241,24 @@ type FreeIpaConfig struct {
 type FreeIpaTestAndApplyInput struct {
 	LdapTestAndApplyInput `json:",inline" mapstructure:",squash"`
 }
+
+type PhabricatorConfig struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	AuthConfig        `json:",inline" mapstructure:",squash"`
+
+	Hostname     string `json:"hostname,omitempty" norman:"default=phabricator.sprasia.jp" norman:"required"`
+	TLS          bool   `json:"tls,omitempty" norman:"notnullable,default=true" norman:"required"`
+	ClientID     string `json:"clientId,omitempty" norman:"required"`
+	ClientSecret string `json:"clientSecret,omitempty" norman:"required,type=password"`
+}
+
+type PhabricatorConfigTestOutput struct {
+	RedirectURL string `json:"redirectUrl"`
+}
+
+type PhabricatorConfigApplyInput struct {
+	PhabricatorConfig PhabricatorConfig `json:"phabricatorConfig,omitempty"`
+	Code              string            `json:"code,omitempty"`
+	Enabled           bool              `json:"enabled,omitempty"`
+}

@@ -56,6 +56,19 @@ func authProvidersTypes(schemas *types.Schemas) *types.Schemas {
 			schema.ResourceMethods = []string{http.MethodGet}
 		}).
 		MustImport(&PublicVersion, v3public.GithubLogin{}).
+		// Phabricator provider
+		MustImportAndCustomize(&PublicVersion, v3public.PhabricatorProvider{}, func(schema *types.Schema) {
+			schema.BaseType = "authProvider"
+			schema.ResourceActions = map[string]types.Action{
+				"login": {
+					Input:  "phabricatorLogin",
+					Output: "token",
+				},
+			}
+			schema.CollectionMethods = []string{}
+			schema.ResourceMethods = []string{http.MethodGet}
+		}).
+		MustImport(&PublicVersion, v3public.PhabricatorLogin{}).
 		// Active Directory provider
 		MustImportAndCustomize(&PublicVersion, v3public.ActiveDirectoryProvider{}, func(schema *types.Schema) {
 			schema.BaseType = "authProvider"

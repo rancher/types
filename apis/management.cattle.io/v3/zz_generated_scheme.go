@@ -81,6 +81,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&UserList{},
 		&AuthConfig{},
 		&AuthConfigList{},
+		&PhabricatorConfig{},
+		&PhabricatorConfigList{},
 		&LdapConfig{},
 		&LdapConfigList{},
 		&Token{},

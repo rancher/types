@@ -39,6 +39,7 @@ type Interface interface {
 	PrincipalsGetter
 	UsersGetter
 	AuthConfigsGetter
+	PhabricatorConfigsGetter
 	LdapConfigsGetter
 	TokensGetter
 	DynamicSchemasGetter
@@ -90,6 +91,7 @@ type Client struct {
 	principalControllers                               map[string]PrincipalController
 	userControllers                                    map[string]UserController
 	authConfigControllers                              map[string]AuthConfigController
+	phabricatorConfigControllers                       map[string]PhabricatorConfigController
 	ldapConfigControllers                              map[string]LdapConfigController
 	tokenControllers                                   map[string]TokenController
 	dynamicSchemaControllers                           map[string]DynamicSchemaController
@@ -150,6 +152,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		principalControllers:                               map[string]PrincipalController{},
 		userControllers:                                    map[string]UserController{},
 		authConfigControllers:                              map[string]AuthConfigController{},
+		phabricatorConfigControllers:                       map[string]PhabricatorConfigController{},
 		ldapConfigControllers:                              map[string]LdapConfigController{},
 		tokenControllers:                                   map[string]TokenController{},
 		dynamicSchemaControllers:                           map[string]DynamicSchemaController{},
@@ -491,6 +494,19 @@ type AuthConfigsGetter interface {
 func (c *Client) AuthConfigs(namespace string) AuthConfigInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &AuthConfigResource, AuthConfigGroupVersionKind, authConfigFactory{})
 	return &authConfigClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type PhabricatorConfigsGetter interface {
+	PhabricatorConfigs(namespace string) PhabricatorConfigInterface
+}
+
+func (c *Client) PhabricatorConfigs(namespace string) PhabricatorConfigInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &PhabricatorConfigResource, PhabricatorConfigGroupVersionKind, phabricatorConfigFactory{})
+	return &phabricatorConfigClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
