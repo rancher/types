@@ -29,6 +29,7 @@ func main() {
 	generator.Generate(projectSchema.Schemas, nil)
 	generator.GenerateNativeTypes(v1.SchemeGroupVersion, []interface{}{
 		v1.Endpoints{},
+		v1.PersistentVolumeClaim{},
 		v1.Pod{},
 		v1.Service{},
 		v1.Secret{},
