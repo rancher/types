@@ -3,6 +3,7 @@ package client
 const (
 	SchedulingType                   = "scheduling"
 	SchedulingFieldNode              = "node"
+	SchedulingFieldPod               = "pod"
 	SchedulingFieldPriority          = "priority"
 	SchedulingFieldPriorityClassName = "priorityClassName"
 	SchedulingFieldScheduler         = "scheduler"
@@ -11,6 +12,7 @@ const (
 
 type Scheduling struct {
 	Node              *NodeScheduling `json:"node,omitempty" yaml:"node,omitempty"`
+	Pod               *PodScheduling  `json:"pod,omitempty" yaml:"pod,omitempty"`
 	Priority          *int64          `json:"priority,omitempty" yaml:"priority,omitempty"`
 	PriorityClassName string          `json:"priorityClassName,omitempty" yaml:"priorityClassName,omitempty"`
 	Scheduler         string          `json:"scheduler,omitempty" yaml:"scheduler,omitempty"`
