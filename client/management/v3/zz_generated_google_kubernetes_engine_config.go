@@ -18,6 +18,12 @@ const (
 	GoogleKubernetesEngineConfigFieldMachineType                     = "machineType"
 	GoogleKubernetesEngineConfigFieldMasterVersion                   = "masterVersion"
 	GoogleKubernetesEngineConfigFieldNetwork                         = "network"
+<<<<<<< HEAD
+=======
+	GoogleKubernetesEngineConfigFieldNoNetworkPolicy                 = "noNetworkPolicy"
+	GoogleKubernetesEngineConfigFieldNoStackdriverLogging            = "noStackdriverLogging"
+	GoogleKubernetesEngineConfigFieldNoStackdriverMonitoring         = "noStackdriverMonitoring"
+>>>>>>> b4785ed...  s code
 	GoogleKubernetesEngineConfigFieldNodeCount                       = "nodeCount"
 	GoogleKubernetesEngineConfigFieldNodeVersion                     = "nodeVersion"
 	GoogleKubernetesEngineConfigFieldProjectID                       = "projectId"
@@ -42,6 +48,12 @@ type GoogleKubernetesEngineConfig struct {
 	MachineType                     string            `json:"machineType,omitempty" yaml:"machineType,omitempty"`
 	MasterVersion                   string            `json:"masterVersion,omitempty" yaml:"masterVersion,omitempty"`
 	Network                         string            `json:"network,omitempty" yaml:"network,omitempty"`
+<<<<<<< HEAD
+=======
+	NoNetworkPolicy                 bool              `json:"noNetworkPolicy,omitempty" yaml:"noNetworkPolicy,omitempty"`
+	NoStackdriverLogging            bool              `json:"noStackdriverLogging,omitempty" yaml:"noStackdriverLogging,omitempty"`
+	NoStackdriverMonitoring         bool              `json:"noStackdriverMonitoring,omitempty" yaml:"noStackdriverMonitoring,omitempty"`
+>>>>>>> b4785ed...  s code
 	NodeCount                       int64             `json:"nodeCount,omitempty" yaml:"nodeCount,omitempty"`
 	NodeVersion                     string            `json:"nodeVersion,omitempty" yaml:"nodeVersion,omitempty"`
 	ProjectID                       string            `json:"projectId,omitempty" yaml:"projectId,omitempty"`
