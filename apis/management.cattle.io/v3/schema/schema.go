@@ -594,5 +594,7 @@ func composeType(schemas *types.Schemas) *types.Schemas {
 
 func resourceQuotaTemplateTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		MustImport(&Version, v3.ResourceQuotaTemplate{})
+		MustImportAndCustomize(&Version, v3.ResourceQuotaTemplate{}, func(schema *types.Schema) {
+			schema.ResourceMethods = []string{http.MethodGet, http.MethodDelete}
+		})
 }
