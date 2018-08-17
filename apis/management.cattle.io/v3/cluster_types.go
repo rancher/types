@@ -98,6 +98,22 @@ type ClusterStatus struct {
 	Version                              *version.Info            `json:"version,omitempty"`
 	AppliedPodSecurityPolicyTemplateName string                   `json:"appliedPodSecurityPolicyTemplateId"`
 	AppliedEnableNetworkPolicy           bool                     `json:"appliedEnableNetworkPolicy" norman:"nocreate,noupdate,default=false"`
+	ClusterCapabilities                  []ClusterCapabilities    `json:"clusterCapabilities,omitempty"`
+}
+
+type LoadBalancerCapability struct {
+	Provider string `json:"provider,omitempty"`
+}
+
+type IngressCapability struct {
+	Provider                string `json:"provider,omitempty"`
+	RequiresNodePortService bool   `json:"requiresNodePortService,omitempty"`
+	runningNatively         bool   `json:"runningNatively,omitempty"`
+}
+
+type ClusterCapabilities struct {
+	LoadBalancerCapability LoadBalancerCapability `json:"loadbalancerCapabilities,omitempty"`
+	IngressCapability      IngressCapability      `json:"ingressCapabilities,omitempty"`
 }
 
 type ClusterComponentStatus struct {
