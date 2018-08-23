@@ -382,6 +382,7 @@ func (s *Store) Update(apiContext *types.APIContext, schema *types.Schema, data 
 		if errors.IsConflict(err) {
 			continue
 		}
+		return result, err
 	}
 
 	return result, err
@@ -395,7 +396,7 @@ func (s *Store) Delete(apiContext *types.APIContext, schema *types.Schema, id st
 
 	namespace, name := splitID(id)
 
-	prop := metav1.DeletePropagationForeground
+	prop := metav1.DeletePropagationBackground
 	req := s.common(namespace, k8sClient.Delete()).
 		Body(&metav1.DeleteOptions{
 			PropagationPolicy: &prop,
