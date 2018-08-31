@@ -65,6 +65,8 @@ type PrivateRegistry struct {
 	User string `yaml:"user" json:"user,omitempty"`
 	// Password for registry access
 	Password string `yaml:"password" json:"password,omitempty"`
+	// Default registry
+	IsDefault bool `yaml:"is_default" json:"isDefault,omitempty"`
 }
 
 type RKESystemImages struct {
