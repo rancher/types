@@ -9,8 +9,8 @@ import (
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
-	v1beta1a "github.com/rancher/types/apis/extensions/v1beta1"
-	v1beta1 "k8s.io/api/extensions/v1beta1"
+	v1beta1a "github.com/rancher/types/apis/policy/v1beta1"
+	v1beta1 "k8s.io/api/policy/v1beta1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	watch "k8s.io/apimachinery/pkg/watch"
