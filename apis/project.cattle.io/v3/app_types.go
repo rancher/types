@@ -24,7 +24,7 @@ type AppSpec struct {
 	Files           map[string]string `json:"files,omitempty"`
 	Answers         map[string]string `json:"answers,omitempty"`
 	AppRevisionName string            `json:"appRevisionName,omitempty" norman:"type=reference[/v3/project/schemas/apprevision]"`
-	ValuesYaml      string            `json:"valuesYaml,omitempty"`
+	Prune           bool              `json:"prune,omitempty"`
 }
 
 var (
