@@ -23,6 +23,7 @@ import (
 	projectSchema "github.com/rancher/types/apis/project.cattle.io/v3/schema"
 	rbacv1 "github.com/rancher/types/apis/rbac.authorization.k8s.io/v1"
 	"github.com/rancher/types/config/dialer"
+	"github.com/rancher/types/peermanager"
 	"github.com/rancher/types/user"
 	"github.com/sirupsen/logrus"
 	"k8s.io/api/core/v1"
@@ -51,7 +52,7 @@ type ScaledContext struct {
 	AccessControl     types.AccessControl
 	Dialer            dialer.Factory
 	UserManager       user.Manager
-	Leader            bool
+	PeerManager       peermanager.PeerManager
 
 	Management managementv3.Interface
 	Project    projectv3.Interface
