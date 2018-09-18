@@ -7,7 +7,8 @@ import (
 type Client struct {
 	clientbase.APIBaseClient
 
-	AuthProvider AuthProviderOperations
+	AuthProvider            AuthProviderOperations
+	ActiveDirectoryProvider ActiveDirectoryProviderOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -21,6 +22,7 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	}
 
 	client.AuthProvider = newAuthProviderClient(client)
+	client.ActiveDirectoryProvider = newActiveDirectoryProviderClient(client)
 
 	return client, nil
 }
