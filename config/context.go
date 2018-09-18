@@ -3,7 +3,6 @@ package config
 import (
 	"context"
 
-	"github.com/pkg/errors"
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/event"
 	"github.com/rancher/norman/restwatch"
@@ -359,11 +358,6 @@ func NewUserContext(scaledContext *ScaledContext, config rest.Config, clusterNam
 	context.K8sClient, err = kubernetes.NewForConfig(&config)
 	if err != nil {
 		return nil, err
-	}
-
-	_, err = context.K8sClient.Discovery().ServerVersion()
-	if err != nil {
-		return nil, errors.Wrap(err, "could not contact server")
 	}
 
 	context.Apps, err = appsv1beta2.NewForConfig(config)
