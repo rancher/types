@@ -35,6 +35,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 
 		&AuthProvider{},
 		&AuthProviderList{},
+		&ActiveDirectoryProvider{},
+		&ActiveDirectoryProviderList{},
 	)
 	return nil
 }
