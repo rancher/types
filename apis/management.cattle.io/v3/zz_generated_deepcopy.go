@@ -4907,6 +4907,7 @@ func (in *RKEConfigNode) DeepCopyInto(out *RKEConfigNode) {
 			(*out)[key] = val
 		}
 	}
+	in.Services.DeepCopyInto(&out.Services)
 	return
 }
 
