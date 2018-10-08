@@ -174,6 +174,8 @@ type TemplateContent struct {
 }
 
 type MultiClusterApp struct {
-	TemplateName string `json:"multiclusterapp" norman:"type=reference[template]"`
-	ClusterID
+	TemplateName string `json:"multiclusterapp" norman:"required,type=reference[template]"`
+	ProjectID    string `json:"projectID,omitempty" normal:"required,type=reference[project]"`
+	ClusterID    string `json:"clusterID,omitempty" norman:"required,type=reference[cluster]"`
+	GlobalDNS    string `json:"globalDNS,omitempty" norman:"required"`
 }
