@@ -172,3 +172,8 @@ type TemplateContent struct {
 	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
 	Data string `json:"data,omitempty"`
 }
+
+type MultiClusterApp struct {
+	TemplateName string `json:"multiclusterapp" norman:"type=reference[template]"`
+	ClusterID
+}
