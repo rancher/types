@@ -78,12 +78,12 @@ var (
 		PipelineSystemImages: projectv3.PipelineSystemImages{
 			Jenkins:       m("rancher/pipeline-jenkins-server:v0.1.0"),
 			JenkinsJnlp:   m("jenkins/jnlp-slave:3.10-1-alpine"),
-			AlpineGit:     m("rancher/pipeline-tools:v0.1.0"),
+			AlpineGit:     m("rancher/pipeline-tools:v0.1.2"),
 			PluginsDocker: m("plugins/docker:17.12"),
 			Minio:         m("minio/minio:RELEASE.2018-05-25T19-49-13Z"),
 			Registry:      m("registry:2"),
-			RegistryProxy: m("rancher/pipeline-tools:v0.1.0"),
-			KubeApply:     m("rancher/pipeline-tools:v0.1.0"),
+			RegistryProxy: m("rancher/pipeline-tools:v0.1.2"),
+			KubeApply:     m("rancher/pipeline-tools:v0.1.2"),
 		},
 		LoggingSystemImages: LoggingSystemImages{
 			Fluentd:                       m("rancher/fluentd:v0.1.11"),
