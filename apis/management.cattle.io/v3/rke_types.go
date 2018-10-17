@@ -147,6 +147,8 @@ type RKEConfigNode struct {
 	SSHKeyPath string `yaml:"ssh_key_path" json:"sshKeyPath,omitempty"`
 	// Node Labels
 	Labels map[string]string `yaml:"labels" json:"labels,omitempty"`
+	// Kubernetes components
+	Services RKEConfigServices `yaml:"services" json:"services,omitempty"`
 }
 
 type RKEConfigServices struct {
