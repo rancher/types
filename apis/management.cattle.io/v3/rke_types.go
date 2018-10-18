@@ -189,11 +189,11 @@ type ETCDService struct {
 
 type S3Config struct {
 	// Backup path on AWS S3 (must at least be <bucket-name>)
-	Path `yaml:"path" json:"path,omitempty"`
+	Path string `yaml:"path" json:"path,omitempty"`
 	// Path to AWS credentials file
-	CredentialsFile `yaml:"credentials" json:"credentials,omitempty"`
+	CredentialsFile string `yaml:"credentials" json:"credentials,omitempty"`
 	// Path to AWS config file (e.g. region settings)
-	ConfigFile `yaml:"config" json:"config,omitempty"`
+	ConfigFile string `yaml:"config" json:"config,omitempty"`
 }
 
 type KubeAPIService struct {
