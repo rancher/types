@@ -183,6 +183,17 @@ type ETCDService struct {
 	Retention string `yaml:"retention" json:"retention,omitempty"`
 	// Etcd snapshot Creation period
 	Creation string `yaml:"creation" json:"creation,omitempty"`
+	// AWS S3 Configuration
+	S3 S3Config `yaml:"s3" json:"s3,omitempty"`
+}
+
+type S3Config struct {
+	// Backup path on AWS S3 (must at least be <bucket-name>)
+	Path `yaml:"path" json:"path,omitempty"`
+	// Path to AWS credentials file
+	CredentialsFile `yaml:"credentials" json:"credentials,omitempty"`
+	// Path to AWS config file (e.g. region settings)
+	ConfigFile `yaml:"config" json:"config,omitempty"`
 }
 
 type KubeAPIService struct {
