@@ -41,6 +41,8 @@ var (
 
 	TokenSchemas = factory.Schemas(&Version).
 			Init(tokens)
+	MultiClusterAppSchemas = factory.Schemas(&Version).
+				Init(multiClusterTypes)
 )
 
 func rkeTypes(schemas *types.Schemas) *types.Schemas {
