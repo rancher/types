@@ -587,5 +587,7 @@ func clusterCatalogTypes(schemas *types.Schemas) *types.Schemas {
 func multiClusterTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		MustImportAndCustomize(&Version, v3.GlobalDNS{}, func(schema *types.Schema) {
+		}).
+		MustImportAndCustomize(&Version, v3.MultiClusterApp{}, func(schema *types.Schema) {
 		})
 }
