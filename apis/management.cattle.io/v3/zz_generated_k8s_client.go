@@ -56,6 +56,8 @@ type Interface interface {
 	ProjectCatalogsGetter
 	ClusterCatalogsGetter
 	GlobalDNSsGetter
+	TargetsGetter
+	MultiClusterAppsGetter
 }
 
 type Client struct {
@@ -104,6 +106,8 @@ type Client struct {
 	projectCatalogControllers                          map[string]ProjectCatalogController
 	clusterCatalogControllers                          map[string]ClusterCatalogController
 	globalDNSControllers                               map[string]GlobalDNSController
+	targetControllers                                  map[string]TargetController
+	multiClusterAppControllers                         map[string]MultiClusterAppController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -160,6 +164,8 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		projectCatalogControllers:                          map[string]ProjectCatalogController{},
 		clusterCatalogControllers:                          map[string]ClusterCatalogController{},
 		globalDNSControllers:                               map[string]GlobalDNSController{},
+		targetControllers:                                  map[string]TargetController{},
+		multiClusterAppControllers:                         map[string]MultiClusterAppController{},
 	}, nil
 }
 
@@ -702,6 +708,32 @@ type GlobalDNSsGetter interface {
 func (c *Client) GlobalDNSs(namespace string) GlobalDNSInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &GlobalDNSResource, GlobalDNSGroupVersionKind, globalDNSFactory{})
 	return &globalDNSClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type TargetsGetter interface {
+	Targets(namespace string) TargetInterface
+}
+
+func (c *Client) Targets(namespace string) TargetInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &TargetResource, TargetGroupVersionKind, targetFactory{})
+	return &targetClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type MultiClusterAppsGetter interface {
+	MultiClusterApps(namespace string) MultiClusterAppInterface
+}
+
+func (c *Client) MultiClusterApps(namespace string) MultiClusterAppInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &MultiClusterAppResource, MultiClusterAppGroupVersionKind, multiClusterAppFactory{})
+	return &multiClusterAppClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
