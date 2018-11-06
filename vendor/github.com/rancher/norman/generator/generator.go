@@ -361,27 +361,33 @@ func GenerateControllerForTypes(version *types.APIVersion, k8sOutputPackage stri
 	return gofmt(baseDir, k8sOutputPackage)
 }
 
-func Generate(schemas *types.Schemas, backendTypes map[string]bool, cattleOutputPackage, k8sOutputPackage string) error {
+func Generate(schemas *types.Schemas, foreignTypes map[string]bool, cattleOutputPackage, k8sOutputPackage string) error {
 	baseDir := args.DefaultSourceTree()
 	cattleDir := path.Join(baseDir, cattleOutputPackage)
 	k8sDir := path.Join(baseDir, k8sOutputPackage)
+
+	if cattleOutputPackage == "" {
+		cattleDir = ""
+	}
 
 	if err := prepareDirs(cattleDir, k8sDir); err != nil {
 		return err
 	}
 
-	controllers := []*types.Schema{}
+	var controllers []*types.Schema
 
-	cattleClientTypes := []*types.Schema{}
+	var cattleClientTypes []*types.Schema
 	for _, schema := range schemas.Schemas() {
 		if blackListTypes[schema.ID] {
 			continue
 		}
 
-		_, backendType := backendTypes[schema.ID]
+		_, backendType := foreignTypes[schema.ID]
 
-		if err := generateType(cattleDir, schema, schemas); err != nil {
-			return err
+		if cattleDir != "" {
+			if err := generateType(cattleDir, schema, schemas); err != nil {
+				return err
+			}
 		}
 
 		if backendType ||
@@ -402,8 +408,10 @@ func Generate(schemas *types.Schemas, backendTypes map[string]bool, cattleOutput
 		}
 	}
 
-	if err := generateClient(cattleDir, cattleClientTypes); err != nil {
-		return err
+	if cattleDir != "" {
+		if err := generateClient(cattleDir, cattleClientTypes); err != nil {
+			return err
+		}
 	}
 
 	if len(controllers) > 0 {
@@ -424,11 +432,19 @@ func Generate(schemas *types.Schemas, backendTypes map[string]bool, cattleOutput
 		return err
 	}
 
-	return gofmt(baseDir, cattleOutputPackage)
+	if cattleOutputPackage != "" {
+		return gofmt(baseDir, cattleOutputPackage)
+	}
+
+	return nil
 }
 
 func prepareDirs(dirs ...string) error {
 	for _, dir := range dirs {
+		if dir == "" {
+			continue
+		}
+
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			return err
 		}
