@@ -5,35 +5,41 @@ import (
 )
 
 const (
-	GlobalDNSType                 = "globalDNS"
-	GlobalDNSFieldAnnotations     = "annotations"
-	GlobalDNSFieldCreated         = "created"
-	GlobalDNSFieldCreatorID       = "creatorId"
-	GlobalDNSFieldDNSName         = "dnsName"
-	GlobalDNSFieldLabels          = "labels"
-	GlobalDNSFieldName            = "name"
-	GlobalDNSFieldOwnerReferences = "ownerReferences"
-	GlobalDNSFieldProviderName    = "providerName"
-	GlobalDNSFieldRemoved         = "removed"
-	GlobalDNSFieldRootDomain      = "rootDomain"
-	GlobalDNSFieldTTLSeconds      = "ttl"
-	GlobalDNSFieldUUID            = "uuid"
+	GlobalDNSType                      = "globalDNS"
+	GlobalDNSFieldAnnotations          = "annotations"
+	GlobalDNSFieldClusterIDs           = "clusterIds"
+	GlobalDNSFieldCreated              = "created"
+	GlobalDNSFieldCreatorID            = "creatorId"
+	GlobalDNSFieldLabels               = "labels"
+	GlobalDNSFieldName                 = "name"
+	GlobalDNSFieldOwnerReferences      = "ownerReferences"
+	GlobalDNSFieldProviderName         = "providerName"
+	GlobalDNSFieldRemoved              = "removed"
+	GlobalDNSFieldRootDomain           = "rootDomain"
+	GlobalDNSFieldState                = "state"
+	GlobalDNSFieldStatus               = "status"
+	GlobalDNSFieldTransitioning        = "transitioning"
+	GlobalDNSFieldTransitioningMessage = "transitioningMessage"
+	GlobalDNSFieldUUID                 = "uuid"
 )
 
 type GlobalDNS struct {
 	types.Resource
-	Annotations     map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	Created         string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID       string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DNSName         string            `json:"dnsName,omitempty" yaml:"dnsName,omitempty"`
-	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
-	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProviderName    string            `json:"providerName,omitempty" yaml:"providerName,omitempty"`
-	Removed         string            `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RootDomain      string            `json:"rootDomain,omitempty" yaml:"rootDomain,omitempty"`
-	TTLSeconds      int64             `json:"ttl,omitempty" yaml:"ttl,omitempty"`
-	UUID            string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
+	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
+	ClusterIDs           []string          `json:"clusterIds,omitempty" yaml:"clusterIds,omitempty"`
+	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
+	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	ProviderName         string            `json:"providerName,omitempty" yaml:"providerName,omitempty"`
+	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
+	RootDomain           string            `json:"rootDomain,omitempty" yaml:"rootDomain,omitempty"`
+	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
+	Status               *GlobalDNSStatus  `json:"status,omitempty" yaml:"status,omitempty"`
+	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 
 type GlobalDNSCollection struct {
