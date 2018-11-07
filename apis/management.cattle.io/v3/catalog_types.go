@@ -4,7 +4,7 @@ import (
 	"github.com/rancher/norman/condition"
 	"github.com/rancher/norman/types"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -86,6 +86,7 @@ type TemplateSpec struct {
 	FolderName     string `json:"folderName,omitempty"`
 	Icon           string `json:"icon,omitempty"`
 	IconFilename   string `json:"iconFilename,omitempty"`
+	IconURL        string `json:"iconUrl,omitempty"`
 	Readme         string `json:"readme,omitempty"`
 
 	Categories []string              `json:"categories,omitempty"`
@@ -109,18 +110,24 @@ type TemplateVersion struct {
 }
 
 type TemplateVersionSpec struct {
-	ExternalID          string            `json:"externalId,omitempty"`
-	Version             string            `json:"version,omitempty"`
-	RancherVersion      string            `json:"rancherVersion,omitempty"`
-	KubeVersion         string            `json:"kubeVersion,omitempty"`
-	Readme              string            `json:"readme,omitempty"`
-	AppReadme           string            `json:"appReadme,omitempty"`
+	ExternalID     string `json:"externalId,omitempty"`
+	Version        string `json:"version,omitempty"`
+	RancherVersion string `json:"rancherVersion,omitempty"`
+	KubeVersion    string `json:"kubeVersion,omitempty"`
+	Readme         string `json:"readme,omitempty"`
+	AppReadme      string `json:"appReadme,omitempty"`
+
 	UpgradeVersionLinks map[string]string `json:"upgradeVersionLinks,omitempty"`
 	Digest              string            `json:"digest,omitempty"`
 
 	Files             map[string]string `json:"files,omitempty"`
 	Questions         []Question        `json:"questions,omitempty"`
 	RequiredNamespace string            `json:"requiredNamespace,omitempty"`
+
+	// for local cache rebuilt
+	VersionName string   `json:"versionName,omitempty"`
+	VersionDir  string   `json:"versionDir,omitempty"`
+	VersionURLs []string `json:"versionUrls,omitempty"`
 }
 
 type TemplateVersionStatus struct {
