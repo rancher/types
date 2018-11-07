@@ -14,6 +14,7 @@ const (
 	TemplateSpecFieldFolderName               = "folderName"
 	TemplateSpecFieldIcon                     = "icon"
 	TemplateSpecFieldIconFilename             = "iconFilename"
+	TemplateSpecFieldIconURL                  = "iconUrl"
 	TemplateSpecFieldMaintainer               = "maintainer"
 	TemplateSpecFieldPath                     = "path"
 	TemplateSpecFieldProjectCatalogID         = "projectCatalogId"
@@ -37,6 +38,7 @@ type TemplateSpec struct {
 	FolderName               string                `json:"folderName,omitempty" yaml:"folderName,omitempty"`
 	Icon                     string                `json:"icon,omitempty" yaml:"icon,omitempty"`
 	IconFilename             string                `json:"iconFilename,omitempty" yaml:"iconFilename,omitempty"`
+	IconURL                  string                `json:"iconUrl,omitempty" yaml:"iconUrl,omitempty"`
 	Maintainer               string                `json:"maintainer,omitempty" yaml:"maintainer,omitempty"`
 	Path                     string                `json:"path,omitempty" yaml:"path,omitempty"`
 	ProjectCatalogID         string                `json:"projectCatalogId,omitempty" yaml:"projectCatalogId,omitempty"`
