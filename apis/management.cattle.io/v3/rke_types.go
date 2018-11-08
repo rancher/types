@@ -567,3 +567,30 @@ type MonitoringConfig struct {
 	// Metrics server options
 	Options map[string]string `yaml:"options" json:"options,omitempty"`
 }
+
+type CertificatePKI struct {
+	// Certificate in PEM format
+	Certificate string
+	// Key in PEM format
+	Key string
+	// Kubeconfig content
+	Config string
+	// Name of the certificate
+	Name string
+	// Common name of the certificate
+	CommonName string
+	// Organizational unit of the certificate
+	OUName string
+	// Environment name of certificate
+	EnvName string
+	// Path of the certificate
+	Path string
+	// Environment name of the key
+	KeyEnvName string
+	// Path of the key
+	KeyPath string
+	// Environment name of the config
+	ConfigEnvName string
+	// Path of the config
+	ConfigPath string
+}
