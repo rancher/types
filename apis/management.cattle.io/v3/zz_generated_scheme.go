@@ -110,6 +110,10 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProjectCatalogList{},
 		&ClusterCatalog{},
 		&ClusterCatalogList{},
+		&GlobalDNS{},
+		&GlobalDNSList{},
+		&GlobalDNSProvider{},
+		&GlobalDNSProviderList{},
 	)
 	return nil
 }

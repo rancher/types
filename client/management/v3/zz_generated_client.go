@@ -45,6 +45,8 @@ type Client struct {
 	ComposeConfig                           ComposeConfigOperations
 	ProjectCatalog                          ProjectCatalogOperations
 	ClusterCatalog                          ClusterCatalogOperations
+	GlobalDNS                               GlobalDNSOperations
+	GlobalDNSProvider                       GlobalDNSProviderOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -95,6 +97,8 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.ComposeConfig = newComposeConfigClient(client)
 	client.ProjectCatalog = newProjectCatalogClient(client)
 	client.ClusterCatalog = newClusterCatalogClient(client)
+	client.GlobalDNS = newGlobalDNSClient(client)
+	client.GlobalDNSProvider = newGlobalDNSProviderClient(client)
 
 	return client, nil
 }

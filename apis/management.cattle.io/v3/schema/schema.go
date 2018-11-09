@@ -36,7 +36,8 @@ var (
 		Init(alertTypes).
 		Init(composeType).
 		Init(projectCatalogTypes).
-		Init(clusterCatalogTypes)
+		Init(clusterCatalogTypes).
+		Init(globalDNSTypes)
 
 	TokenSchemas = factory.Schemas(&Version).
 			Init(tokens)
@@ -576,5 +577,14 @@ func clusterCatalogTypes(schemas *types.Schemas) *types.Schemas {
 			schema.CollectionActions = map[string]types.Action{
 				"refresh": {},
 			}
+		})
+}
+
+func globalDNSTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v3.GlobalDNS{}, m.Drop{Field: "namespaceId"}).
+		MustImportAndCustomize(&Version, v3.GlobalDNS{}, func(schema *types.Schema) {
+		}).
+		MustImportAndCustomize(&Version, v3.GlobalDNSProvider{}, func(schema *types.Schema) {
 		})
 }
