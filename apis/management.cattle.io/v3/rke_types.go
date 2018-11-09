@@ -183,6 +183,8 @@ type ETCDService struct {
 	Retention string `yaml:"retention" json:"retention,omitempty" norman:"default=72h"`
 	// Etcd snapshot Creation period
 	Creation string `yaml:"creation" json:"creation,omitempty" norman:"default=12h"`
+	// Backup backend for etcd snapshots, used by rke only
+	BackupBackend *BackupBackend `yaml:"backup_backend" json:"backupBackend,omitempty"`
 }
 
 type KubeAPIService struct {

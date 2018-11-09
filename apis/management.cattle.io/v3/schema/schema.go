@@ -36,7 +36,9 @@ var (
 		Init(alertTypes).
 		Init(composeType).
 		Init(projectCatalogTypes).
-		Init(clusterCatalogTypes)
+		Init(clusterCatalogTypes).
+		Init(etcdBackupConfigTypes).
+		Init(etcdBackupTypes)
 
 	TokenSchemas = factory.Schemas(&Version).
 			Init(tokens)
@@ -575,4 +577,12 @@ func clusterCatalogTypes(schemas *types.Schemas) *types.Schemas {
 				"refresh": {},
 			}
 		})
+}
+
+func etcdBackupConfigTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.MustImport(&Version, v3.EtcdBackupConfig{})
+}
+
+func etcdBackupTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.MustImport(&Version, v3.EtcdBackup{})
 }
