@@ -8,10 +8,6 @@ import (
 	"github.com/rancher/types/image"
 )
 
-const (
-	DefaultK8s = "v1.12.1-rancher1-1"
-)
-
 var (
 	m = image.Mirror
 
@@ -613,10 +609,6 @@ func init() {
 			panic("K8s version " + " is not found in AllK8sVersions map")
 		}
 		K8sVersionToRKESystemImages[latest] = images
-	}
-
-	if _, ok := K8sVersionToRKESystemImages[DefaultK8s]; !ok {
-		panic("Default K8s version " + DefaultK8s + " is not found in k8sVersionsCurrent list")
 	}
 
 	// init Windows versions

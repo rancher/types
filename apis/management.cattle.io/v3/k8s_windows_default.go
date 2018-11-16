@@ -235,7 +235,4 @@ func initWindows() {
 		K8sVersionWindowsSystemImages[version] = images
 	}
 
-	if _, ok := K8sVersionWindowsSystemImages[DefaultK8s]; !ok {
-		panic("Default K8s version " + DefaultK8s + " is not found in k8sVersionsCurrent list")
-	}
 }
