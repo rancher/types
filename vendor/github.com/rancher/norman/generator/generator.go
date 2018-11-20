@@ -320,11 +320,12 @@ func GenerateControllerForTypes(version *types.APIVersion, k8sOutputPackage stri
 		}
 		controllers = append(controllers, schema)
 
-		if err := generateController(true, k8sDir, schema, schemas); err != nil {
+		external := strings.HasPrefix(schema.PkgName, "k8s.io") || strings.Contains(schema.PkgName, "/vendor/")
+		if err := generateController(external, k8sDir, schema, schemas); err != nil {
 			return err
 		}
 
-		if err := generateLifecycle(true, k8sDir, schema, schemas); err != nil {
+		if err := generateLifecycle(external, k8sDir, schema, schemas); err != nil {
 			return err
 		}
 	}
@@ -337,11 +338,12 @@ func GenerateControllerForTypes(version *types.APIVersion, k8sOutputPackage stri
 		schema.Scope = types.NamespaceScope
 		controllers = append(controllers, schema)
 
-		if err := generateController(true, k8sDir, schema, schemas); err != nil {
+		external := strings.HasPrefix(schema.PkgName, "k8s.io") || strings.Contains(schema.PkgName, "/vendor/")
+		if err := generateController(external, k8sDir, schema, schemas); err != nil {
 			return err
 		}
 
-		if err := generateLifecycle(true, k8sDir, schema, schemas); err != nil {
+		if err := generateLifecycle(external, k8sDir, schema, schemas); err != nil {
 			return err
 		}
 	}
@@ -361,7 +363,7 @@ func GenerateControllerForTypes(version *types.APIVersion, k8sOutputPackage stri
 	return gofmt(baseDir, k8sOutputPackage)
 }
 
-func Generate(schemas *types.Schemas, foreignTypes map[string]bool, cattleOutputPackage, k8sOutputPackage string) error {
+func Generate(schemas *types.Schemas, privateTypes map[string]bool, cattleOutputPackage, k8sOutputPackage string) error {
 	baseDir := args.DefaultSourceTree()
 	cattleDir := path.Join(baseDir, cattleOutputPackage)
 	k8sDir := path.Join(baseDir, k8sOutputPackage)
@@ -382,7 +384,7 @@ func Generate(schemas *types.Schemas, foreignTypes map[string]bool, cattleOutput
 			continue
 		}
 
-		_, backendType := foreignTypes[schema.ID]
+		_, privateType := privateTypes[schema.ID]
 
 		if cattleDir != "" {
 			if err := generateType(cattleDir, schema, schemas); err != nil {
@@ -390,10 +392,11 @@ func Generate(schemas *types.Schemas, foreignTypes map[string]bool, cattleOutput
 			}
 		}
 
-		if backendType ||
+		if privateType ||
 			(contains(schema.CollectionMethods, http.MethodGet) &&
 				!strings.HasPrefix(schema.PkgName, "k8s.io") &&
-				!strings.Contains(schema.PkgName, "/vendor/")) {
+				!strings.Contains(schema.PkgName, "/vendor/")) &&
+				!strings.Contains(schema.PkgName, "native.cattle.io") {
 			controllers = append(controllers, schema)
 			if err := generateController(false, k8sDir, schema, schemas); err != nil {
 				return err
@@ -403,7 +406,7 @@ func Generate(schemas *types.Schemas, foreignTypes map[string]bool, cattleOutput
 			}
 		}
 
-		if !backendType {
+		if !privateType {
 			cattleClientTypes = append(cattleClientTypes, schema)
 		}
 	}
