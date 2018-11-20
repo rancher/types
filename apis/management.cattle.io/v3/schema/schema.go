@@ -37,7 +37,8 @@ var (
 		Init(composeType).
 		Init(projectCatalogTypes).
 		Init(clusterCatalogTypes).
-		Init(globalDNSTypes)
+		Init(globalDNSTypes).
+		Init(multiClusterAppTypes)
 
 	TokenSchemas = factory.Schemas(&Version).
 			Init(tokens)
@@ -587,4 +588,11 @@ func globalDNSTypes(schemas *types.Schemas) *types.Schemas {
 		}).
 		MustImportAndCustomize(&Version, v3.GlobalDNSProvider{}, func(schema *types.Schema) {
 		})
+}
+
+func multiClusterAppTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v3.MultiClusterApp{}, m.Drop{Field: "namespaceId"}).
+		MustImport(&Version, v3.MultiClusterApp{}).
+		MustImport(&Version, v3.Target{})
 }
