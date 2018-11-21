@@ -4,6 +4,7 @@
 package main
 
 import (
+	monitoringv1 "github.com/coreos/prometheus-operator/pkg/client/monitoring/v1"
 	clusterSchema "github.com/rancher/types/apis/cluster.cattle.io/v3/schema"
 	managementSchema "github.com/rancher/types/apis/management.cattle.io/v3/schema"
 	publicSchema "github.com/rancher/types/apis/management.cattle.io/v3public/schema"
@@ -17,6 +18,7 @@ import (
 	extv1beta1 "k8s.io/api/extensions/v1beta1"
 	knetworkingv1 "k8s.io/api/networking/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	k8sschema "k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 func main() {
@@ -72,5 +74,15 @@ func main() {
 		[]interface{}{
 			extv1beta1.PodSecurityPolicy{},
 		},
+	)
+	generator.GenerateNativeTypes(
+		k8sschema.GroupVersion{Group: monitoringv1.Group, Version: monitoringv1.Version},
+		[]interface{}{
+			monitoringv1.Prometheus{},
+			monitoringv1.Alertmanager{},
+			monitoringv1.PrometheusRule{},
+			monitoringv1.ServiceMonitor{},
+		},
+		[]interface{}{},
 	)
 }
