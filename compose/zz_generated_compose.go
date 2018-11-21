@@ -86,4 +86,8 @@ type Config struct {
 	PipelineExecutions             map[string]projectClient.PipelineExecution             `json:"pipelineExecutions,omitempty" yaml:"pipelineExecutions,omitempty"`
 	PipelineSettings               map[string]projectClient.PipelineSetting               `json:"pipelineSettings,omitempty" yaml:"pipelineSettings,omitempty"`
 	SourceCodeRepositorys          map[string]projectClient.SourceCodeRepository          `json:"sourceCodeRepositories,omitempty" yaml:"sourceCodeRepositories,omitempty"`
+	Prometheuss                    map[string]projectClient.Prometheus                    `json:"prometheuses,omitempty" yaml:"prometheuses,omitempty"`
+	ServiceMonitors                map[string]projectClient.ServiceMonitor                `json:"serviceMonitors,omitempty" yaml:"serviceMonitors,omitempty"`
+	PrometheusRules                map[string]projectClient.PrometheusRule                `json:"prometheusRules,omitempty" yaml:"prometheusRules,omitempty"`
+	Alertmanagers                  map[string]projectClient.Alertmanager                  `json:"alertmanagers,omitempty" yaml:"alertmanagers,omitempty"`
 }
