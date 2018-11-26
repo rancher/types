@@ -36,6 +36,8 @@ type GlobalDNSProviderList struct {
 
 type GlobalDNSProviderHandlerFunc func(key string, obj *GlobalDNSProvider) (runtime.Object, error)
 
+type GlobalDNSProviderChangeHandlerFunc func(obj *GlobalDNSProvider) (runtime.Object, error)
+
 type GlobalDNSProviderLister interface {
 	List(namespace string, selector labels.Selector) (ret []*GlobalDNSProvider, err error)
 	Get(namespace, name string) (*GlobalDNSProvider, error)
@@ -246,4 +248,179 @@ func (s *globalDNSProviderClient) AddClusterScopedHandler(ctx context.Context, n
 func (s *globalDNSProviderClient) AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle GlobalDNSProviderLifecycle) {
 	sync := NewGlobalDNSProviderLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
 	s.Controller().AddClusterScopedHandler(ctx, name, clusterName, sync)
+}
+
+type GlobalDNSProviderIndexer func(obj *GlobalDNSProvider) ([]string, error)
+
+type GlobalDNSProviderClientCache interface {
+	Get(namespace, name string) (*GlobalDNSProvider, error)
+	List(namespace string, selector labels.Selector) ([]*GlobalDNSProvider, error)
+
+	Index(name string, indexer GlobalDNSProviderIndexer)
+	GetIndexed(name, key string) ([]*GlobalDNSProvider, error)
+}
+
+type GlobalDNSProviderClient interface {
+	Create(*GlobalDNSProvider) (*GlobalDNSProvider, error)
+	Get(namespace, name string, opts metav1.GetOptions) (*GlobalDNSProvider, error)
+	Update(*GlobalDNSProvider) (*GlobalDNSProvider, error)
+	Delete(namespace, name string, options *metav1.DeleteOptions) error
+	List(namespace string, opts metav1.ListOptions) (*GlobalDNSProviderList, error)
+	Watch(opts metav1.ListOptions) (watch.Interface, error)
+
+	Cache() GlobalDNSProviderClientCache
+
+	OnCreate(ctx context.Context, name string, sync GlobalDNSProviderChangeHandlerFunc)
+	OnChange(ctx context.Context, name string, sync GlobalDNSProviderChangeHandlerFunc)
+	OnRemove(ctx context.Context, name string, sync GlobalDNSProviderChangeHandlerFunc)
+	Enqueue(namespace, name string)
+
+	Generic() controller.GenericController
+	Interface() GlobalDNSProviderInterface
+}
+
+type globalDNSProviderClientCache struct {
+	client *globalDNSProviderClient2
+}
+
+type globalDNSProviderClient2 struct {
+	iface      GlobalDNSProviderInterface
+	controller GlobalDNSProviderController
+}
+
+func (n *globalDNSProviderClient2) Interface() GlobalDNSProviderInterface {
+	return n.iface
+}
+
+func (n *globalDNSProviderClient2) Generic() controller.GenericController {
+	return n.iface.Controller().Generic()
+}
+
+func (n *globalDNSProviderClient2) Enqueue(namespace, name string) {
+	n.iface.Controller().Enqueue(namespace, name)
+}
+
+func (n *globalDNSProviderClient2) Create(obj *GlobalDNSProvider) (*GlobalDNSProvider, error) {
+	return n.iface.Create(obj)
+}
+
+func (n *globalDNSProviderClient2) Get(namespace, name string, opts metav1.GetOptions) (*GlobalDNSProvider, error) {
+	return n.iface.GetNamespaced(namespace, name, opts)
+}
+
+func (n *globalDNSProviderClient2) Update(obj *GlobalDNSProvider) (*GlobalDNSProvider, error) {
+	return n.iface.Update(obj)
+}
+
+func (n *globalDNSProviderClient2) Delete(namespace, name string, options *metav1.DeleteOptions) error {
+	return n.iface.DeleteNamespaced(namespace, name, options)
+}
+
+func (n *globalDNSProviderClient2) List(namespace string, opts metav1.ListOptions) (*GlobalDNSProviderList, error) {
+	return n.iface.List(opts)
+}
+
+func (n *globalDNSProviderClient2) Watch(opts metav1.ListOptions) (watch.Interface, error) {
+	return n.iface.Watch(opts)
+}
+
+func (n *globalDNSProviderClientCache) Get(namespace, name string) (*GlobalDNSProvider, error) {
+	return n.client.controller.Lister().Get(namespace, name)
+}
+
+func (n *globalDNSProviderClientCache) List(namespace string, selector labels.Selector) ([]*GlobalDNSProvider, error) {
+	return n.client.controller.Lister().List(namespace, selector)
+}
+
+func (n *globalDNSProviderClient2) Cache() GlobalDNSProviderClientCache {
+	n.loadController()
+	return &globalDNSProviderClientCache{
+		client: n,
+	}
+}
+
+func (n *globalDNSProviderClient2) OnCreate(ctx context.Context, name string, sync GlobalDNSProviderChangeHandlerFunc) {
+	n.loadController()
+	n.iface.AddLifecycle(ctx, name+"-create", &globalDNSProviderLifecycleDelegate{create: sync})
+}
+
+func (n *globalDNSProviderClient2) OnChange(ctx context.Context, name string, sync GlobalDNSProviderChangeHandlerFunc) {
+	n.loadController()
+	n.iface.AddLifecycle(ctx, name+"-change", &globalDNSProviderLifecycleDelegate{update: sync})
+}
+
+func (n *globalDNSProviderClient2) OnRemove(ctx context.Context, name string, sync GlobalDNSProviderChangeHandlerFunc) {
+	n.loadController()
+	n.iface.AddLifecycle(ctx, name, &globalDNSProviderLifecycleDelegate{remove: sync})
+}
+
+func (n *globalDNSProviderClientCache) Index(name string, indexer GlobalDNSProviderIndexer) {
+	err := n.client.controller.Informer().GetIndexer().AddIndexers(map[string]cache.IndexFunc{
+		name: func(obj interface{}) ([]string, error) {
+			if v, ok := obj.(*GlobalDNSProvider); ok {
+				return indexer(v)
+			}
+			return nil, nil
+		},
+	})
+
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (n *globalDNSProviderClientCache) GetIndexed(name, key string) ([]*GlobalDNSProvider, error) {
+	var result []*GlobalDNSProvider
+	objs, err := n.client.controller.Informer().GetIndexer().ByIndex(name, key)
+	if err != nil {
+		return nil, err
+	}
+	for _, obj := range objs {
+		if v, ok := obj.(*GlobalDNSProvider); ok {
+			result = append(result, v)
+		}
+	}
+
+	return result, nil
+}
+
+func (n *globalDNSProviderClient2) loadController() {
+	if n.controller == nil {
+		n.controller = n.iface.Controller()
+	}
+}
+
+type globalDNSProviderLifecycleDelegate struct {
+	create GlobalDNSProviderChangeHandlerFunc
+	update GlobalDNSProviderChangeHandlerFunc
+	remove GlobalDNSProviderChangeHandlerFunc
+}
+
+func (n *globalDNSProviderLifecycleDelegate) HasCreate() bool {
+	return n.create != nil
+}
+
+func (n *globalDNSProviderLifecycleDelegate) Create(obj *GlobalDNSProvider) (runtime.Object, error) {
+	if n.create == nil {
+		return obj, nil
+	}
+	return n.create(obj)
+}
+
+func (n *globalDNSProviderLifecycleDelegate) HasFinalize() bool {
+	return n.remove != nil
+}
+
+func (n *globalDNSProviderLifecycleDelegate) Remove(obj *GlobalDNSProvider) (runtime.Object, error) {
+	if n.remove == nil {
+		return obj, nil
+	}
+	return n.remove(obj)
+}
+
+func (n *globalDNSProviderLifecycleDelegate) Updated(obj *GlobalDNSProvider) (runtime.Object, error) {
+	if n.update == nil {
+		return obj, nil
+	}
+	return n.update(obj)
 }

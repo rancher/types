@@ -15,6 +15,16 @@ type globalDNSProviderLifecycleAdapter struct {
 	lifecycle GlobalDNSProviderLifecycle
 }
 
+func (w *globalDNSProviderLifecycleAdapter) HasCreate() bool {
+	o, ok := w.lifecycle.(lifecycle.ObjectLifecycleCondition)
+	return !ok || o.HasCreate()
+}
+
+func (w *globalDNSProviderLifecycleAdapter) HasFinalize() bool {
+	o, ok := w.lifecycle.(lifecycle.ObjectLifecycleCondition)
+	return !ok || o.HasFinalize()
+}
+
 func (w *globalDNSProviderLifecycleAdapter) Create(obj runtime.Object) (runtime.Object, error) {
 	o, err := w.lifecycle.Create(obj.(*GlobalDNSProvider))
 	if o == nil {

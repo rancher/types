@@ -61,6 +61,7 @@ type Interface interface {
 	ClusterCatalogsGetter
 	GlobalDNSsGetter
 	GlobalDNSProvidersGetter
+	MultiClusterAppsGetter
 }
 
 type Clients struct {
@@ -103,6 +104,9 @@ type Clients struct {
 	ComposeConfig                           ComposeConfigClient
 	ProjectCatalog                          ProjectCatalogClient
 	ClusterCatalog                          ClusterCatalogClient
+	GlobalDNS                               GlobalDNSClient
+	GlobalDNSProvider                       GlobalDNSProviderClient
+	MultiClusterApp                         MultiClusterAppClient
 }
 
 type Client struct {
@@ -151,6 +155,7 @@ type Client struct {
 	clusterCatalogControllers                          map[string]ClusterCatalogController
 	globalDNSControllers                               map[string]GlobalDNSController
 	globalDNSProviderControllers                       map[string]GlobalDNSProviderController
+	multiClusterAppControllers                         map[string]MultiClusterAppController
 }
 
 func Factory(ctx context.Context, config rest.Config) (context.Context, controller.Starter, error) {
@@ -302,6 +307,15 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		ClusterCatalog: &clusterCatalogClient2{
 			iface: iface.ClusterCatalogs(""),
 		},
+		GlobalDNS: &globalDNSClient2{
+			iface: iface.GlobalDNSs(""),
+		},
+		GlobalDNSProvider: &globalDNSProviderClient2{
+			iface: iface.GlobalDNSProviders(""),
+		},
+		MultiClusterApp: &multiClusterAppClient2{
+			iface: iface.MultiClusterApps(""),
+		},
 	}
 }
 
@@ -359,6 +373,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		clusterCatalogControllers:                          map[string]ClusterCatalogController{},
 		globalDNSControllers:                               map[string]GlobalDNSController{},
 		globalDNSProviderControllers:                       map[string]GlobalDNSProviderController{},
+		multiClusterAppControllers:                         map[string]MultiClusterAppController{},
 	}, nil
 }
 
@@ -901,6 +916,19 @@ type GlobalDNSProvidersGetter interface {
 func (c *Client) GlobalDNSProviders(namespace string) GlobalDNSProviderInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &GlobalDNSProviderResource, GlobalDNSProviderGroupVersionKind, globalDNSProviderFactory{})
 	return &globalDNSProviderClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type MultiClusterAppsGetter interface {
+	MultiClusterApps(namespace string) MultiClusterAppInterface
+}
+
+func (c *Client) MultiClusterApps(namespace string) MultiClusterAppInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &MultiClusterAppResource, MultiClusterAppGroupVersionKind, multiClusterAppFactory{})
+	return &multiClusterAppClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

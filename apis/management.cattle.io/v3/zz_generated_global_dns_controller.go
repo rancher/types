@@ -37,6 +37,8 @@ type GlobalDNSList struct {
 
 type GlobalDNSHandlerFunc func(key string, obj *GlobalDNS) (runtime.Object, error)
 
+type GlobalDNSChangeHandlerFunc func(obj *GlobalDNS) (runtime.Object, error)
+
 type GlobalDNSLister interface {
 	List(namespace string, selector labels.Selector) (ret []*GlobalDNS, err error)
 	Get(namespace, name string) (*GlobalDNS, error)
@@ -247,4 +249,179 @@ func (s *globalDNSClient) AddClusterScopedHandler(ctx context.Context, name, clu
 func (s *globalDNSClient) AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle GlobalDNSLifecycle) {
 	sync := NewGlobalDNSLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
 	s.Controller().AddClusterScopedHandler(ctx, name, clusterName, sync)
+}
+
+type GlobalDNSIndexer func(obj *GlobalDNS) ([]string, error)
+
+type GlobalDNSClientCache interface {
+	Get(namespace, name string) (*GlobalDNS, error)
+	List(namespace string, selector labels.Selector) ([]*GlobalDNS, error)
+
+	Index(name string, indexer GlobalDNSIndexer)
+	GetIndexed(name, key string) ([]*GlobalDNS, error)
+}
+
+type GlobalDNSClient interface {
+	Create(*GlobalDNS) (*GlobalDNS, error)
+	Get(namespace, name string, opts metav1.GetOptions) (*GlobalDNS, error)
+	Update(*GlobalDNS) (*GlobalDNS, error)
+	Delete(namespace, name string, options *metav1.DeleteOptions) error
+	List(namespace string, opts metav1.ListOptions) (*GlobalDNSList, error)
+	Watch(opts metav1.ListOptions) (watch.Interface, error)
+
+	Cache() GlobalDNSClientCache
+
+	OnCreate(ctx context.Context, name string, sync GlobalDNSChangeHandlerFunc)
+	OnChange(ctx context.Context, name string, sync GlobalDNSChangeHandlerFunc)
+	OnRemove(ctx context.Context, name string, sync GlobalDNSChangeHandlerFunc)
+	Enqueue(namespace, name string)
+
+	Generic() controller.GenericController
+	Interface() GlobalDNSInterface
+}
+
+type globalDNSClientCache struct {
+	client *globalDNSClient2
+}
+
+type globalDNSClient2 struct {
+	iface      GlobalDNSInterface
+	controller GlobalDNSController
+}
+
+func (n *globalDNSClient2) Interface() GlobalDNSInterface {
+	return n.iface
+}
+
+func (n *globalDNSClient2) Generic() controller.GenericController {
+	return n.iface.Controller().Generic()
+}
+
+func (n *globalDNSClient2) Enqueue(namespace, name string) {
+	n.iface.Controller().Enqueue(namespace, name)
+}
+
+func (n *globalDNSClient2) Create(obj *GlobalDNS) (*GlobalDNS, error) {
+	return n.iface.Create(obj)
+}
+
+func (n *globalDNSClient2) Get(namespace, name string, opts metav1.GetOptions) (*GlobalDNS, error) {
+	return n.iface.GetNamespaced(namespace, name, opts)
+}
+
+func (n *globalDNSClient2) Update(obj *GlobalDNS) (*GlobalDNS, error) {
+	return n.iface.Update(obj)
+}
+
+func (n *globalDNSClient2) Delete(namespace, name string, options *metav1.DeleteOptions) error {
+	return n.iface.DeleteNamespaced(namespace, name, options)
+}
+
+func (n *globalDNSClient2) List(namespace string, opts metav1.ListOptions) (*GlobalDNSList, error) {
+	return n.iface.List(opts)
+}
+
+func (n *globalDNSClient2) Watch(opts metav1.ListOptions) (watch.Interface, error) {
+	return n.iface.Watch(opts)
+}
+
+func (n *globalDNSClientCache) Get(namespace, name string) (*GlobalDNS, error) {
+	return n.client.controller.Lister().Get(namespace, name)
+}
+
+func (n *globalDNSClientCache) List(namespace string, selector labels.Selector) ([]*GlobalDNS, error) {
+	return n.client.controller.Lister().List(namespace, selector)
+}
+
+func (n *globalDNSClient2) Cache() GlobalDNSClientCache {
+	n.loadController()
+	return &globalDNSClientCache{
+		client: n,
+	}
+}
+
+func (n *globalDNSClient2) OnCreate(ctx context.Context, name string, sync GlobalDNSChangeHandlerFunc) {
+	n.loadController()
+	n.iface.AddLifecycle(ctx, name+"-create", &globalDNSLifecycleDelegate{create: sync})
+}
+
+func (n *globalDNSClient2) OnChange(ctx context.Context, name string, sync GlobalDNSChangeHandlerFunc) {
+	n.loadController()
+	n.iface.AddLifecycle(ctx, name+"-change", &globalDNSLifecycleDelegate{update: sync})
+}
+
+func (n *globalDNSClient2) OnRemove(ctx context.Context, name string, sync GlobalDNSChangeHandlerFunc) {
+	n.loadController()
+	n.iface.AddLifecycle(ctx, name, &globalDNSLifecycleDelegate{remove: sync})
+}
+
+func (n *globalDNSClientCache) Index(name string, indexer GlobalDNSIndexer) {
+	err := n.client.controller.Informer().GetIndexer().AddIndexers(map[string]cache.IndexFunc{
+		name: func(obj interface{}) ([]string, error) {
+			if v, ok := obj.(*GlobalDNS); ok {
+				return indexer(v)
+			}
+			return nil, nil
+		},
+	})
+
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (n *globalDNSClientCache) GetIndexed(name, key string) ([]*GlobalDNS, error) {
+	var result []*GlobalDNS
+	objs, err := n.client.controller.Informer().GetIndexer().ByIndex(name, key)
+	if err != nil {
+		return nil, err
+	}
+	for _, obj := range objs {
+		if v, ok := obj.(*GlobalDNS); ok {
+			result = append(result, v)
+		}
+	}
+
+	return result, nil
+}
+
+func (n *globalDNSClient2) loadController() {
+	if n.controller == nil {
+		n.controller = n.iface.Controller()
+	}
+}
+
+type globalDNSLifecycleDelegate struct {
+	create GlobalDNSChangeHandlerFunc
+	update GlobalDNSChangeHandlerFunc
+	remove GlobalDNSChangeHandlerFunc
+}
+
+func (n *globalDNSLifecycleDelegate) HasCreate() bool {
+	return n.create != nil
+}
+
+func (n *globalDNSLifecycleDelegate) Create(obj *GlobalDNS) (runtime.Object, error) {
+	if n.create == nil {
+		return obj, nil
+	}
+	return n.create(obj)
+}
+
+func (n *globalDNSLifecycleDelegate) HasFinalize() bool {
+	return n.remove != nil
+}
+
+func (n *globalDNSLifecycleDelegate) Remove(obj *GlobalDNS) (runtime.Object, error) {
+	if n.remove == nil {
+		return obj, nil
+	}
+	return n.remove(obj)
+}
+
+func (n *globalDNSLifecycleDelegate) Updated(obj *GlobalDNS) (runtime.Object, error) {
+	if n.update == nil {
+		return obj, nil
+	}
+	return n.update(obj)
 }

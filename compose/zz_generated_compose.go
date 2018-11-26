@@ -46,6 +46,7 @@ type Config struct {
 	ClusterCatalogs                          map[string]managementClient.ClusterCatalog                          `json:"clusterCatalogs,omitempty" yaml:"clusterCatalogs,omitempty"`
 	GlobalDNSs                               map[string]managementClient.GlobalDNS                               `json:"globalDNSs,omitempty" yaml:"globalDNSs,omitempty"`
 	GlobalDNSProviders                       map[string]managementClient.GlobalDNSProvider                       `json:"globalDNSProviders,omitempty" yaml:"globalDNSProviders,omitempty"`
+	MultiClusterApps                         map[string]managementClient.MultiClusterApp                         `json:"multiClusterApps,omitempty" yaml:"multiClusterApps,omitempty"`
 
 	// Cluster Client
 	Namespaces        map[string]clusterClient.Namespace        `json:"namespaces,omitempty" yaml:"namespaces,omitempty"`
