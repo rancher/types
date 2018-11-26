@@ -342,12 +342,12 @@ func (n *clusterAlertClient2) Cache() ClusterAlertClientCache {
 
 func (n *clusterAlertClient2) OnCreate(ctx context.Context, name string, sync ClusterAlertChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterAlertLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &clusterAlertLifecycleDelegate{create: sync})
 }
 
 func (n *clusterAlertClient2) OnChange(ctx context.Context, name string, sync ClusterAlertChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterAlertLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &clusterAlertLifecycleDelegate{update: sync})
 }
 
 func (n *clusterAlertClient2) OnRemove(ctx context.Context, name string, sync ClusterAlertChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *clusterAlertLifecycleDelegate) Remove(obj *ClusterAlert) (runtime.Objec
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *clusterAlertLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *clusterAlertLifecycleDelegate) Updated(obj *ClusterAlert) (runtime.Object, error) {

@@ -343,12 +343,12 @@ func (n *configMapClient2) Cache() ConfigMapClientCache {
 
 func (n *configMapClient2) OnCreate(ctx context.Context, name string, sync ConfigMapChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &configMapLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &configMapLifecycleDelegate{create: sync})
 }
 
 func (n *configMapClient2) OnChange(ctx context.Context, name string, sync ConfigMapChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &configMapLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &configMapLifecycleDelegate{update: sync})
 }
 
 func (n *configMapClient2) OnRemove(ctx context.Context, name string, sync ConfigMapChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *configMapLifecycleDelegate) Remove(obj *v1.ConfigMap) (runtime.Object, 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *configMapLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *configMapLifecycleDelegate) Updated(obj *v1.ConfigMap) (runtime.Object, error) {

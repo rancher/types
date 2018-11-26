@@ -341,12 +341,12 @@ func (n *principalClient2) Cache() PrincipalClientCache {
 
 func (n *principalClient2) OnCreate(ctx context.Context, name string, sync PrincipalChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &principalLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &principalLifecycleDelegate{create: sync})
 }
 
 func (n *principalClient2) OnChange(ctx context.Context, name string, sync PrincipalChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &principalLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &principalLifecycleDelegate{update: sync})
 }
 
 func (n *principalClient2) OnRemove(ctx context.Context, name string, sync PrincipalChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *principalLifecycleDelegate) Remove(obj *Principal) (runtime.Object, err
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *principalLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *principalLifecycleDelegate) Updated(obj *Principal) (runtime.Object, error) {

@@ -341,12 +341,12 @@ func (n *catalogClient2) Cache() CatalogClientCache {
 
 func (n *catalogClient2) OnCreate(ctx context.Context, name string, sync CatalogChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &catalogLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &catalogLifecycleDelegate{create: sync})
 }
 
 func (n *catalogClient2) OnChange(ctx context.Context, name string, sync CatalogChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &catalogLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &catalogLifecycleDelegate{update: sync})
 }
 
 func (n *catalogClient2) OnRemove(ctx context.Context, name string, sync CatalogChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *catalogLifecycleDelegate) Remove(obj *Catalog) (runtime.Object, error) 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *catalogLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *catalogLifecycleDelegate) Updated(obj *Catalog) (runtime.Object, error) {

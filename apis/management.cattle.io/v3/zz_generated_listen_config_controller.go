@@ -341,12 +341,12 @@ func (n *listenConfigClient2) Cache() ListenConfigClientCache {
 
 func (n *listenConfigClient2) OnCreate(ctx context.Context, name string, sync ListenConfigChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &listenConfigLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &listenConfigLifecycleDelegate{create: sync})
 }
 
 func (n *listenConfigClient2) OnChange(ctx context.Context, name string, sync ListenConfigChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &listenConfigLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &listenConfigLifecycleDelegate{update: sync})
 }
 
 func (n *listenConfigClient2) OnRemove(ctx context.Context, name string, sync ListenConfigChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *listenConfigLifecycleDelegate) Remove(obj *ListenConfig) (runtime.Objec
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *listenConfigLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *listenConfigLifecycleDelegate) Updated(obj *ListenConfig) (runtime.Object, error) {

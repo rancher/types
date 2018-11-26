@@ -341,12 +341,12 @@ func (n *userAttributeClient2) Cache() UserAttributeClientCache {
 
 func (n *userAttributeClient2) OnCreate(ctx context.Context, name string, sync UserAttributeChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &userAttributeLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &userAttributeLifecycleDelegate{create: sync})
 }
 
 func (n *userAttributeClient2) OnChange(ctx context.Context, name string, sync UserAttributeChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &userAttributeLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &userAttributeLifecycleDelegate{update: sync})
 }
 
 func (n *userAttributeClient2) OnRemove(ctx context.Context, name string, sync UserAttributeChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *userAttributeLifecycleDelegate) Remove(obj *UserAttribute) (runtime.Obj
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *userAttributeLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *userAttributeLifecycleDelegate) Updated(obj *UserAttribute) (runtime.Object, error) {

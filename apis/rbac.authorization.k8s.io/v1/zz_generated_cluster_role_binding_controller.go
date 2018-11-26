@@ -342,12 +342,12 @@ func (n *clusterRoleBindingClient2) Cache() ClusterRoleBindingClientCache {
 
 func (n *clusterRoleBindingClient2) OnCreate(ctx context.Context, name string, sync ClusterRoleBindingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterRoleBindingLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &clusterRoleBindingLifecycleDelegate{create: sync})
 }
 
 func (n *clusterRoleBindingClient2) OnChange(ctx context.Context, name string, sync ClusterRoleBindingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterRoleBindingLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &clusterRoleBindingLifecycleDelegate{update: sync})
 }
 
 func (n *clusterRoleBindingClient2) OnRemove(ctx context.Context, name string, sync ClusterRoleBindingChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *clusterRoleBindingLifecycleDelegate) Remove(obj *v1.ClusterRoleBinding)
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *clusterRoleBindingLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *clusterRoleBindingLifecycleDelegate) Updated(obj *v1.ClusterRoleBinding) (runtime.Object, error) {

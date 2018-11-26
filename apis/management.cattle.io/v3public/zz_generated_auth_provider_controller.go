@@ -341,12 +341,12 @@ func (n *authProviderClient2) Cache() AuthProviderClientCache {
 
 func (n *authProviderClient2) OnCreate(ctx context.Context, name string, sync AuthProviderChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &authProviderLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &authProviderLifecycleDelegate{create: sync})
 }
 
 func (n *authProviderClient2) OnChange(ctx context.Context, name string, sync AuthProviderChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &authProviderLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &authProviderLifecycleDelegate{update: sync})
 }
 
 func (n *authProviderClient2) OnRemove(ctx context.Context, name string, sync AuthProviderChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *authProviderLifecycleDelegate) Remove(obj *AuthProvider) (runtime.Objec
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *authProviderLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *authProviderLifecycleDelegate) Updated(obj *AuthProvider) (runtime.Object, error) {

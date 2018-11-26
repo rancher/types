@@ -342,12 +342,12 @@ func (n *workloadClient2) Cache() WorkloadClientCache {
 
 func (n *workloadClient2) OnCreate(ctx context.Context, name string, sync WorkloadChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &workloadLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &workloadLifecycleDelegate{create: sync})
 }
 
 func (n *workloadClient2) OnChange(ctx context.Context, name string, sync WorkloadChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &workloadLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &workloadLifecycleDelegate{update: sync})
 }
 
 func (n *workloadClient2) OnRemove(ctx context.Context, name string, sync WorkloadChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *workloadLifecycleDelegate) Remove(obj *Workload) (runtime.Object, error
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *workloadLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *workloadLifecycleDelegate) Updated(obj *Workload) (runtime.Object, error) {

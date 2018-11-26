@@ -342,12 +342,12 @@ func (n *dockerCredentialClient2) Cache() DockerCredentialClientCache {
 
 func (n *dockerCredentialClient2) OnCreate(ctx context.Context, name string, sync DockerCredentialChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &dockerCredentialLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &dockerCredentialLifecycleDelegate{create: sync})
 }
 
 func (n *dockerCredentialClient2) OnChange(ctx context.Context, name string, sync DockerCredentialChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &dockerCredentialLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &dockerCredentialLifecycleDelegate{update: sync})
 }
 
 func (n *dockerCredentialClient2) OnRemove(ctx context.Context, name string, sync DockerCredentialChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *dockerCredentialLifecycleDelegate) Remove(obj *DockerCredential) (runti
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *dockerCredentialLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *dockerCredentialLifecycleDelegate) Updated(obj *DockerCredential) (runtime.Object, error) {

@@ -343,12 +343,12 @@ func (n *deploymentClient2) Cache() DeploymentClientCache {
 
 func (n *deploymentClient2) OnCreate(ctx context.Context, name string, sync DeploymentChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &deploymentLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &deploymentLifecycleDelegate{create: sync})
 }
 
 func (n *deploymentClient2) OnChange(ctx context.Context, name string, sync DeploymentChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &deploymentLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &deploymentLifecycleDelegate{update: sync})
 }
 
 func (n *deploymentClient2) OnRemove(ctx context.Context, name string, sync DeploymentChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *deploymentLifecycleDelegate) Remove(obj *v1beta2.Deployment) (runtime.O
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *deploymentLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *deploymentLifecycleDelegate) Updated(obj *v1beta2.Deployment) (runtime.Object, error) {

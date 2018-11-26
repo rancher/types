@@ -342,12 +342,12 @@ func (n *namespacedBasicAuthClient2) Cache() NamespacedBasicAuthClientCache {
 
 func (n *namespacedBasicAuthClient2) OnCreate(ctx context.Context, name string, sync NamespacedBasicAuthChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &namespacedBasicAuthLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &namespacedBasicAuthLifecycleDelegate{create: sync})
 }
 
 func (n *namespacedBasicAuthClient2) OnChange(ctx context.Context, name string, sync NamespacedBasicAuthChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &namespacedBasicAuthLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &namespacedBasicAuthLifecycleDelegate{update: sync})
 }
 
 func (n *namespacedBasicAuthClient2) OnRemove(ctx context.Context, name string, sync NamespacedBasicAuthChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *namespacedBasicAuthLifecycleDelegate) Remove(obj *NamespacedBasicAuth) 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *namespacedBasicAuthLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *namespacedBasicAuthLifecycleDelegate) Updated(obj *NamespacedBasicAuth) (runtime.Object, error) {

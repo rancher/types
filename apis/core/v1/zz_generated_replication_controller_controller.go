@@ -343,12 +343,12 @@ func (n *replicationControllerClient2) Cache() ReplicationControllerClientCache 
 
 func (n *replicationControllerClient2) OnCreate(ctx context.Context, name string, sync ReplicationControllerChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &replicationControllerLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &replicationControllerLifecycleDelegate{create: sync})
 }
 
 func (n *replicationControllerClient2) OnChange(ctx context.Context, name string, sync ReplicationControllerChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &replicationControllerLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &replicationControllerLifecycleDelegate{update: sync})
 }
 
 func (n *replicationControllerClient2) OnRemove(ctx context.Context, name string, sync ReplicationControllerChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *replicationControllerLifecycleDelegate) Remove(obj *v1.ReplicationContr
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *replicationControllerLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *replicationControllerLifecycleDelegate) Updated(obj *v1.ReplicationController) (runtime.Object, error) {

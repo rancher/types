@@ -342,12 +342,12 @@ func (n *namespaceClient2) Cache() NamespaceClientCache {
 
 func (n *namespaceClient2) OnCreate(ctx context.Context, name string, sync NamespaceChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &namespaceLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &namespaceLifecycleDelegate{create: sync})
 }
 
 func (n *namespaceClient2) OnChange(ctx context.Context, name string, sync NamespaceChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &namespaceLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &namespaceLifecycleDelegate{update: sync})
 }
 
 func (n *namespaceClient2) OnRemove(ctx context.Context, name string, sync NamespaceChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *namespaceLifecycleDelegate) Remove(obj *v1.Namespace) (runtime.Object, 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *namespaceLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *namespaceLifecycleDelegate) Updated(obj *v1.Namespace) (runtime.Object, error) {

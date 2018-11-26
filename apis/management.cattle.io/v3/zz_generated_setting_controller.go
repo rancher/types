@@ -341,12 +341,12 @@ func (n *settingClient2) Cache() SettingClientCache {
 
 func (n *settingClient2) OnCreate(ctx context.Context, name string, sync SettingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &settingLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &settingLifecycleDelegate{create: sync})
 }
 
 func (n *settingClient2) OnChange(ctx context.Context, name string, sync SettingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &settingLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &settingLifecycleDelegate{update: sync})
 }
 
 func (n *settingClient2) OnRemove(ctx context.Context, name string, sync SettingChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *settingLifecycleDelegate) Remove(obj *Setting) (runtime.Object, error) 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *settingLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *settingLifecycleDelegate) Updated(obj *Setting) (runtime.Object, error) {

@@ -341,12 +341,12 @@ func (n *dynamicSchemaClient2) Cache() DynamicSchemaClientCache {
 
 func (n *dynamicSchemaClient2) OnCreate(ctx context.Context, name string, sync DynamicSchemaChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &dynamicSchemaLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &dynamicSchemaLifecycleDelegate{create: sync})
 }
 
 func (n *dynamicSchemaClient2) OnChange(ctx context.Context, name string, sync DynamicSchemaChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &dynamicSchemaLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &dynamicSchemaLifecycleDelegate{update: sync})
 }
 
 func (n *dynamicSchemaClient2) OnRemove(ctx context.Context, name string, sync DynamicSchemaChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *dynamicSchemaLifecycleDelegate) Remove(obj *DynamicSchema) (runtime.Obj
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *dynamicSchemaLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *dynamicSchemaLifecycleDelegate) Updated(obj *DynamicSchema) (runtime.Object, error) {

@@ -342,12 +342,12 @@ func (n *clusterRegistrationTokenClient2) Cache() ClusterRegistrationTokenClient
 
 func (n *clusterRegistrationTokenClient2) OnCreate(ctx context.Context, name string, sync ClusterRegistrationTokenChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterRegistrationTokenLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &clusterRegistrationTokenLifecycleDelegate{create: sync})
 }
 
 func (n *clusterRegistrationTokenClient2) OnChange(ctx context.Context, name string, sync ClusterRegistrationTokenChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterRegistrationTokenLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &clusterRegistrationTokenLifecycleDelegate{update: sync})
 }
 
 func (n *clusterRegistrationTokenClient2) OnRemove(ctx context.Context, name string, sync ClusterRegistrationTokenChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *clusterRegistrationTokenLifecycleDelegate) Remove(obj *ClusterRegistrat
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *clusterRegistrationTokenLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *clusterRegistrationTokenLifecycleDelegate) Updated(obj *ClusterRegistrationToken) (runtime.Object, error) {

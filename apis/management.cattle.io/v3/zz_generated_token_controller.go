@@ -341,12 +341,12 @@ func (n *tokenClient2) Cache() TokenClientCache {
 
 func (n *tokenClient2) OnCreate(ctx context.Context, name string, sync TokenChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &tokenLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &tokenLifecycleDelegate{create: sync})
 }
 
 func (n *tokenClient2) OnChange(ctx context.Context, name string, sync TokenChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &tokenLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &tokenLifecycleDelegate{update: sync})
 }
 
 func (n *tokenClient2) OnRemove(ctx context.Context, name string, sync TokenChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *tokenLifecycleDelegate) Remove(obj *Token) (runtime.Object, error) {
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *tokenLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *tokenLifecycleDelegate) Updated(obj *Token) (runtime.Object, error) {

@@ -343,12 +343,12 @@ func (n *endpointsClient2) Cache() EndpointsClientCache {
 
 func (n *endpointsClient2) OnCreate(ctx context.Context, name string, sync EndpointsChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &endpointsLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &endpointsLifecycleDelegate{create: sync})
 }
 
 func (n *endpointsClient2) OnChange(ctx context.Context, name string, sync EndpointsChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &endpointsLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &endpointsLifecycleDelegate{update: sync})
 }
 
 func (n *endpointsClient2) OnRemove(ctx context.Context, name string, sync EndpointsChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *endpointsLifecycleDelegate) Remove(obj *v1.Endpoints) (runtime.Object, 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *endpointsLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *endpointsLifecycleDelegate) Updated(obj *v1.Endpoints) (runtime.Object, error) {

@@ -342,12 +342,12 @@ func (n *sourceCodeRepositoryClient2) Cache() SourceCodeRepositoryClientCache {
 
 func (n *sourceCodeRepositoryClient2) OnCreate(ctx context.Context, name string, sync SourceCodeRepositoryChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &sourceCodeRepositoryLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &sourceCodeRepositoryLifecycleDelegate{create: sync})
 }
 
 func (n *sourceCodeRepositoryClient2) OnChange(ctx context.Context, name string, sync SourceCodeRepositoryChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &sourceCodeRepositoryLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &sourceCodeRepositoryLifecycleDelegate{update: sync})
 }
 
 func (n *sourceCodeRepositoryClient2) OnRemove(ctx context.Context, name string, sync SourceCodeRepositoryChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *sourceCodeRepositoryLifecycleDelegate) Remove(obj *SourceCodeRepository
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *sourceCodeRepositoryLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *sourceCodeRepositoryLifecycleDelegate) Updated(obj *SourceCodeRepository) (runtime.Object, error) {

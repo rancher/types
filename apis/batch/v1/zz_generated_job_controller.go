@@ -343,12 +343,12 @@ func (n *jobClient2) Cache() JobClientCache {
 
 func (n *jobClient2) OnCreate(ctx context.Context, name string, sync JobChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &jobLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &jobLifecycleDelegate{create: sync})
 }
 
 func (n *jobClient2) OnChange(ctx context.Context, name string, sync JobChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &jobLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &jobLifecycleDelegate{update: sync})
 }
 
 func (n *jobClient2) OnRemove(ctx context.Context, name string, sync JobChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *jobLifecycleDelegate) Remove(obj *v1.Job) (runtime.Object, error) {
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *jobLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *jobLifecycleDelegate) Updated(obj *v1.Job) (runtime.Object, error) {

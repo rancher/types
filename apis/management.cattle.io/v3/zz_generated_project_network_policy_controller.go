@@ -342,12 +342,12 @@ func (n *projectNetworkPolicyClient2) Cache() ProjectNetworkPolicyClientCache {
 
 func (n *projectNetworkPolicyClient2) OnCreate(ctx context.Context, name string, sync ProjectNetworkPolicyChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &projectNetworkPolicyLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &projectNetworkPolicyLifecycleDelegate{create: sync})
 }
 
 func (n *projectNetworkPolicyClient2) OnChange(ctx context.Context, name string, sync ProjectNetworkPolicyChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &projectNetworkPolicyLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &projectNetworkPolicyLifecycleDelegate{update: sync})
 }
 
 func (n *projectNetworkPolicyClient2) OnRemove(ctx context.Context, name string, sync ProjectNetworkPolicyChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *projectNetworkPolicyLifecycleDelegate) Remove(obj *ProjectNetworkPolicy
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *projectNetworkPolicyLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *projectNetworkPolicyLifecycleDelegate) Updated(obj *ProjectNetworkPolicy) (runtime.Object, error) {

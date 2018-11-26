@@ -343,12 +343,12 @@ func (n *cronJobClient2) Cache() CronJobClientCache {
 
 func (n *cronJobClient2) OnCreate(ctx context.Context, name string, sync CronJobChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &cronJobLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &cronJobLifecycleDelegate{create: sync})
 }
 
 func (n *cronJobClient2) OnChange(ctx context.Context, name string, sync CronJobChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &cronJobLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &cronJobLifecycleDelegate{update: sync})
 }
 
 func (n *cronJobClient2) OnRemove(ctx context.Context, name string, sync CronJobChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *cronJobLifecycleDelegate) Remove(obj *v1beta1.CronJob) (runtime.Object,
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *cronJobLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *cronJobLifecycleDelegate) Updated(obj *v1beta1.CronJob) (runtime.Object, error) {

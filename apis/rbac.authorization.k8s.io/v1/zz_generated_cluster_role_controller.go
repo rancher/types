@@ -342,12 +342,12 @@ func (n *clusterRoleClient2) Cache() ClusterRoleClientCache {
 
 func (n *clusterRoleClient2) OnCreate(ctx context.Context, name string, sync ClusterRoleChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterRoleLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &clusterRoleLifecycleDelegate{create: sync})
 }
 
 func (n *clusterRoleClient2) OnChange(ctx context.Context, name string, sync ClusterRoleChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterRoleLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &clusterRoleLifecycleDelegate{update: sync})
 }
 
 func (n *clusterRoleClient2) OnRemove(ctx context.Context, name string, sync ClusterRoleChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *clusterRoleLifecycleDelegate) Remove(obj *v1.ClusterRole) (runtime.Obje
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *clusterRoleLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *clusterRoleLifecycleDelegate) Updated(obj *v1.ClusterRole) (runtime.Object, error) {

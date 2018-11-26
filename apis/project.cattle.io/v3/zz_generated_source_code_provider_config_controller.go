@@ -342,12 +342,12 @@ func (n *sourceCodeProviderConfigClient2) Cache() SourceCodeProviderConfigClient
 
 func (n *sourceCodeProviderConfigClient2) OnCreate(ctx context.Context, name string, sync SourceCodeProviderConfigChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &sourceCodeProviderConfigLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &sourceCodeProviderConfigLifecycleDelegate{create: sync})
 }
 
 func (n *sourceCodeProviderConfigClient2) OnChange(ctx context.Context, name string, sync SourceCodeProviderConfigChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &sourceCodeProviderConfigLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &sourceCodeProviderConfigLifecycleDelegate{update: sync})
 }
 
 func (n *sourceCodeProviderConfigClient2) OnRemove(ctx context.Context, name string, sync SourceCodeProviderConfigChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *sourceCodeProviderConfigLifecycleDelegate) Remove(obj *SourceCodeProvid
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *sourceCodeProviderConfigLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *sourceCodeProviderConfigLifecycleDelegate) Updated(obj *SourceCodeProviderConfig) (runtime.Object, error) {

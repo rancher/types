@@ -342,12 +342,12 @@ func (n *sshAuthClient2) Cache() SSHAuthClientCache {
 
 func (n *sshAuthClient2) OnCreate(ctx context.Context, name string, sync SSHAuthChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &sshAuthLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &sshAuthLifecycleDelegate{create: sync})
 }
 
 func (n *sshAuthClient2) OnChange(ctx context.Context, name string, sync SSHAuthChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &sshAuthLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &sshAuthLifecycleDelegate{update: sync})
 }
 
 func (n *sshAuthClient2) OnRemove(ctx context.Context, name string, sync SSHAuthChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *sshAuthLifecycleDelegate) Remove(obj *SSHAuth) (runtime.Object, error) 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *sshAuthLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *sshAuthLifecycleDelegate) Updated(obj *SSHAuth) (runtime.Object, error) {

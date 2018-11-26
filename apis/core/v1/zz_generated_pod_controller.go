@@ -343,12 +343,12 @@ func (n *podClient2) Cache() PodClientCache {
 
 func (n *podClient2) OnCreate(ctx context.Context, name string, sync PodChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &podLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &podLifecycleDelegate{create: sync})
 }
 
 func (n *podClient2) OnChange(ctx context.Context, name string, sync PodChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &podLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &podLifecycleDelegate{update: sync})
 }
 
 func (n *podClient2) OnRemove(ctx context.Context, name string, sync PodChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *podLifecycleDelegate) Remove(obj *v1.Pod) (runtime.Object, error) {
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *podLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *podLifecycleDelegate) Updated(obj *v1.Pod) (runtime.Object, error) {

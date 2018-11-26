@@ -342,12 +342,12 @@ func (n *notifierClient2) Cache() NotifierClientCache {
 
 func (n *notifierClient2) OnCreate(ctx context.Context, name string, sync NotifierChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &notifierLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &notifierLifecycleDelegate{create: sync})
 }
 
 func (n *notifierClient2) OnChange(ctx context.Context, name string, sync NotifierChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &notifierLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &notifierLifecycleDelegate{update: sync})
 }
 
 func (n *notifierClient2) OnRemove(ctx context.Context, name string, sync NotifierChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *notifierLifecycleDelegate) Remove(obj *Notifier) (runtime.Object, error
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *notifierLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *notifierLifecycleDelegate) Updated(obj *Notifier) (runtime.Object, error) {

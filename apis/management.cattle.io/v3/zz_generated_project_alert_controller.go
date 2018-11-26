@@ -342,12 +342,12 @@ func (n *projectAlertClient2) Cache() ProjectAlertClientCache {
 
 func (n *projectAlertClient2) OnCreate(ctx context.Context, name string, sync ProjectAlertChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &projectAlertLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &projectAlertLifecycleDelegate{create: sync})
 }
 
 func (n *projectAlertClient2) OnChange(ctx context.Context, name string, sync ProjectAlertChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &projectAlertLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &projectAlertLifecycleDelegate{update: sync})
 }
 
 func (n *projectAlertClient2) OnRemove(ctx context.Context, name string, sync ProjectAlertChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *projectAlertLifecycleDelegate) Remove(obj *ProjectAlert) (runtime.Objec
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *projectAlertLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *projectAlertLifecycleDelegate) Updated(obj *ProjectAlert) (runtime.Object, error) {

@@ -343,12 +343,12 @@ func (n *resourceQuotaClient2) Cache() ResourceQuotaClientCache {
 
 func (n *resourceQuotaClient2) OnCreate(ctx context.Context, name string, sync ResourceQuotaChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &resourceQuotaLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &resourceQuotaLifecycleDelegate{create: sync})
 }
 
 func (n *resourceQuotaClient2) OnChange(ctx context.Context, name string, sync ResourceQuotaChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &resourceQuotaLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &resourceQuotaLifecycleDelegate{update: sync})
 }
 
 func (n *resourceQuotaClient2) OnRemove(ctx context.Context, name string, sync ResourceQuotaChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *resourceQuotaLifecycleDelegate) Remove(obj *v1.ResourceQuota) (runtime.
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *resourceQuotaLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *resourceQuotaLifecycleDelegate) Updated(obj *v1.ResourceQuota) (runtime.Object, error) {

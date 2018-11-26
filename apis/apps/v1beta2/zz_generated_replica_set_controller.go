@@ -343,12 +343,12 @@ func (n *replicaSetClient2) Cache() ReplicaSetClientCache {
 
 func (n *replicaSetClient2) OnCreate(ctx context.Context, name string, sync ReplicaSetChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &replicaSetLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &replicaSetLifecycleDelegate{create: sync})
 }
 
 func (n *replicaSetClient2) OnChange(ctx context.Context, name string, sync ReplicaSetChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &replicaSetLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &replicaSetLifecycleDelegate{update: sync})
 }
 
 func (n *replicaSetClient2) OnRemove(ctx context.Context, name string, sync ReplicaSetChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *replicaSetLifecycleDelegate) Remove(obj *v1beta2.ReplicaSet) (runtime.O
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *replicaSetLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *replicaSetLifecycleDelegate) Updated(obj *v1beta2.ReplicaSet) (runtime.Object, error) {

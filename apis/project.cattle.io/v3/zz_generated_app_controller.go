@@ -342,12 +342,12 @@ func (n *appClient2) Cache() AppClientCache {
 
 func (n *appClient2) OnCreate(ctx context.Context, name string, sync AppChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &appLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &appLifecycleDelegate{create: sync})
 }
 
 func (n *appClient2) OnChange(ctx context.Context, name string, sync AppChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &appLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &appLifecycleDelegate{update: sync})
 }
 
 func (n *appClient2) OnRemove(ctx context.Context, name string, sync AppChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *appLifecycleDelegate) Remove(obj *App) (runtime.Object, error) {
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *appLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *appLifecycleDelegate) Updated(obj *App) (runtime.Object, error) {
