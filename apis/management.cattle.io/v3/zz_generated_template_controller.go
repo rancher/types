@@ -341,12 +341,12 @@ func (n *templateClient2) Cache() TemplateClientCache {
 
 func (n *templateClient2) OnCreate(ctx context.Context, name string, sync TemplateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &templateLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &templateLifecycleDelegate{create: sync})
 }
 
 func (n *templateClient2) OnChange(ctx context.Context, name string, sync TemplateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &templateLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &templateLifecycleDelegate{update: sync})
 }
 
 func (n *templateClient2) OnRemove(ctx context.Context, name string, sync TemplateChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *templateLifecycleDelegate) Remove(obj *Template) (runtime.Object, error
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *templateLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *templateLifecycleDelegate) Updated(obj *Template) (runtime.Object, error) {

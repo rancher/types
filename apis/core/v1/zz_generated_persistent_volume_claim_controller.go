@@ -343,12 +343,12 @@ func (n *persistentVolumeClaimClient2) Cache() PersistentVolumeClaimClientCache 
 
 func (n *persistentVolumeClaimClient2) OnCreate(ctx context.Context, name string, sync PersistentVolumeClaimChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &persistentVolumeClaimLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &persistentVolumeClaimLifecycleDelegate{create: sync})
 }
 
 func (n *persistentVolumeClaimClient2) OnChange(ctx context.Context, name string, sync PersistentVolumeClaimChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &persistentVolumeClaimLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &persistentVolumeClaimLifecycleDelegate{update: sync})
 }
 
 func (n *persistentVolumeClaimClient2) OnRemove(ctx context.Context, name string, sync PersistentVolumeClaimChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *persistentVolumeClaimLifecycleDelegate) Remove(obj *v1.PersistentVolume
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *persistentVolumeClaimLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *persistentVolumeClaimLifecycleDelegate) Updated(obj *v1.PersistentVolumeClaim) (runtime.Object, error) {

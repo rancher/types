@@ -341,12 +341,12 @@ func (n *ldapConfigClient2) Cache() LdapConfigClientCache {
 
 func (n *ldapConfigClient2) OnCreate(ctx context.Context, name string, sync LdapConfigChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &ldapConfigLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &ldapConfigLifecycleDelegate{create: sync})
 }
 
 func (n *ldapConfigClient2) OnChange(ctx context.Context, name string, sync LdapConfigChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &ldapConfigLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &ldapConfigLifecycleDelegate{update: sync})
 }
 
 func (n *ldapConfigClient2) OnRemove(ctx context.Context, name string, sync LdapConfigChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *ldapConfigLifecycleDelegate) Remove(obj *LdapConfig) (runtime.Object, e
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *ldapConfigLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *ldapConfigLifecycleDelegate) Updated(obj *LdapConfig) (runtime.Object, error) {

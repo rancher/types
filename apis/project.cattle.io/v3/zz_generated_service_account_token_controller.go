@@ -342,12 +342,12 @@ func (n *serviceAccountTokenClient2) Cache() ServiceAccountTokenClientCache {
 
 func (n *serviceAccountTokenClient2) OnCreate(ctx context.Context, name string, sync ServiceAccountTokenChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &serviceAccountTokenLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &serviceAccountTokenLifecycleDelegate{create: sync})
 }
 
 func (n *serviceAccountTokenClient2) OnChange(ctx context.Context, name string, sync ServiceAccountTokenChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &serviceAccountTokenLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &serviceAccountTokenLifecycleDelegate{update: sync})
 }
 
 func (n *serviceAccountTokenClient2) OnRemove(ctx context.Context, name string, sync ServiceAccountTokenChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *serviceAccountTokenLifecycleDelegate) Remove(obj *ServiceAccountToken) 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *serviceAccountTokenLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *serviceAccountTokenLifecycleDelegate) Updated(obj *ServiceAccountToken) (runtime.Object, error) {

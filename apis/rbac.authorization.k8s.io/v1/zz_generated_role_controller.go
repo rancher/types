@@ -343,12 +343,12 @@ func (n *roleClient2) Cache() RoleClientCache {
 
 func (n *roleClient2) OnCreate(ctx context.Context, name string, sync RoleChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &roleLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &roleLifecycleDelegate{create: sync})
 }
 
 func (n *roleClient2) OnChange(ctx context.Context, name string, sync RoleChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &roleLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &roleLifecycleDelegate{update: sync})
 }
 
 func (n *roleClient2) OnRemove(ctx context.Context, name string, sync RoleChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *roleLifecycleDelegate) Remove(obj *v1.Role) (runtime.Object, error) {
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *roleLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *roleLifecycleDelegate) Updated(obj *v1.Role) (runtime.Object, error) {

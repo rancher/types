@@ -343,12 +343,12 @@ func (n *daemonSetClient2) Cache() DaemonSetClientCache {
 
 func (n *daemonSetClient2) OnCreate(ctx context.Context, name string, sync DaemonSetChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &daemonSetLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &daemonSetLifecycleDelegate{create: sync})
 }
 
 func (n *daemonSetClient2) OnChange(ctx context.Context, name string, sync DaemonSetChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &daemonSetLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &daemonSetLifecycleDelegate{update: sync})
 }
 
 func (n *daemonSetClient2) OnRemove(ctx context.Context, name string, sync DaemonSetChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *daemonSetLifecycleDelegate) Remove(obj *v1beta2.DaemonSet) (runtime.Obj
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *daemonSetLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *daemonSetLifecycleDelegate) Updated(obj *v1beta2.DaemonSet) (runtime.Object, error) {

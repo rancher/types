@@ -342,12 +342,12 @@ func (n *nodeClient2) Cache() NodeClientCache {
 
 func (n *nodeClient2) OnCreate(ctx context.Context, name string, sync NodeChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &nodeLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &nodeLifecycleDelegate{create: sync})
 }
 
 func (n *nodeClient2) OnChange(ctx context.Context, name string, sync NodeChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &nodeLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &nodeLifecycleDelegate{update: sync})
 }
 
 func (n *nodeClient2) OnRemove(ctx context.Context, name string, sync NodeChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *nodeLifecycleDelegate) Remove(obj *v1.Node) (runtime.Object, error) {
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *nodeLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *nodeLifecycleDelegate) Updated(obj *v1.Node) (runtime.Object, error) {

@@ -343,12 +343,12 @@ func (n *serviceClient2) Cache() ServiceClientCache {
 
 func (n *serviceClient2) OnCreate(ctx context.Context, name string, sync ServiceChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &serviceLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &serviceLifecycleDelegate{create: sync})
 }
 
 func (n *serviceClient2) OnChange(ctx context.Context, name string, sync ServiceChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &serviceLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &serviceLifecycleDelegate{update: sync})
 }
 
 func (n *serviceClient2) OnRemove(ctx context.Context, name string, sync ServiceChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *serviceLifecycleDelegate) Remove(obj *v1.Service) (runtime.Object, erro
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *serviceLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *serviceLifecycleDelegate) Updated(obj *v1.Service) (runtime.Object, error) {

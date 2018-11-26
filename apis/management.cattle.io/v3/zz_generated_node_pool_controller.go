@@ -342,12 +342,12 @@ func (n *nodePoolClient2) Cache() NodePoolClientCache {
 
 func (n *nodePoolClient2) OnCreate(ctx context.Context, name string, sync NodePoolChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &nodePoolLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &nodePoolLifecycleDelegate{create: sync})
 }
 
 func (n *nodePoolClient2) OnChange(ctx context.Context, name string, sync NodePoolChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &nodePoolLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &nodePoolLifecycleDelegate{update: sync})
 }
 
 func (n *nodePoolClient2) OnRemove(ctx context.Context, name string, sync NodePoolChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *nodePoolLifecycleDelegate) Remove(obj *NodePool) (runtime.Object, error
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *nodePoolLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *nodePoolLifecycleDelegate) Updated(obj *NodePool) (runtime.Object, error) {

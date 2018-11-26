@@ -342,12 +342,12 @@ func (n *projectRoleTemplateBindingClient2) Cache() ProjectRoleTemplateBindingCl
 
 func (n *projectRoleTemplateBindingClient2) OnCreate(ctx context.Context, name string, sync ProjectRoleTemplateBindingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &projectRoleTemplateBindingLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &projectRoleTemplateBindingLifecycleDelegate{create: sync})
 }
 
 func (n *projectRoleTemplateBindingClient2) OnChange(ctx context.Context, name string, sync ProjectRoleTemplateBindingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &projectRoleTemplateBindingLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &projectRoleTemplateBindingLifecycleDelegate{update: sync})
 }
 
 func (n *projectRoleTemplateBindingClient2) OnRemove(ctx context.Context, name string, sync ProjectRoleTemplateBindingChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *projectRoleTemplateBindingLifecycleDelegate) Remove(obj *ProjectRoleTem
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *projectRoleTemplateBindingLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *projectRoleTemplateBindingLifecycleDelegate) Updated(obj *ProjectRoleTemplateBinding) (runtime.Object, error) {

@@ -341,12 +341,12 @@ func (n *roleTemplateClient2) Cache() RoleTemplateClientCache {
 
 func (n *roleTemplateClient2) OnCreate(ctx context.Context, name string, sync RoleTemplateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &roleTemplateLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &roleTemplateLifecycleDelegate{create: sync})
 }
 
 func (n *roleTemplateClient2) OnChange(ctx context.Context, name string, sync RoleTemplateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &roleTemplateLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &roleTemplateLifecycleDelegate{update: sync})
 }
 
 func (n *roleTemplateClient2) OnRemove(ctx context.Context, name string, sync RoleTemplateChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *roleTemplateLifecycleDelegate) Remove(obj *RoleTemplate) (runtime.Objec
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *roleTemplateLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *roleTemplateLifecycleDelegate) Updated(obj *RoleTemplate) (runtime.Object, error) {

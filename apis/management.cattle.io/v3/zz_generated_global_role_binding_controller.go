@@ -341,12 +341,12 @@ func (n *globalRoleBindingClient2) Cache() GlobalRoleBindingClientCache {
 
 func (n *globalRoleBindingClient2) OnCreate(ctx context.Context, name string, sync GlobalRoleBindingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &globalRoleBindingLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &globalRoleBindingLifecycleDelegate{create: sync})
 }
 
 func (n *globalRoleBindingClient2) OnChange(ctx context.Context, name string, sync GlobalRoleBindingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &globalRoleBindingLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &globalRoleBindingLifecycleDelegate{update: sync})
 }
 
 func (n *globalRoleBindingClient2) OnRemove(ctx context.Context, name string, sync GlobalRoleBindingChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *globalRoleBindingLifecycleDelegate) Remove(obj *GlobalRoleBinding) (run
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *globalRoleBindingLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *globalRoleBindingLifecycleDelegate) Updated(obj *GlobalRoleBinding) (runtime.Object, error) {

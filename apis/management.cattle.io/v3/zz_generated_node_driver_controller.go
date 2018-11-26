@@ -341,12 +341,12 @@ func (n *nodeDriverClient2) Cache() NodeDriverClientCache {
 
 func (n *nodeDriverClient2) OnCreate(ctx context.Context, name string, sync NodeDriverChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &nodeDriverLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &nodeDriverLifecycleDelegate{create: sync})
 }
 
 func (n *nodeDriverClient2) OnChange(ctx context.Context, name string, sync NodeDriverChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &nodeDriverLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &nodeDriverLifecycleDelegate{update: sync})
 }
 
 func (n *nodeDriverClient2) OnRemove(ctx context.Context, name string, sync NodeDriverChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *nodeDriverLifecycleDelegate) Remove(obj *NodeDriver) (runtime.Object, e
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *nodeDriverLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *nodeDriverLifecycleDelegate) Updated(obj *NodeDriver) (runtime.Object, error) {

@@ -342,12 +342,12 @@ func (n *projectClient2) Cache() ProjectClientCache {
 
 func (n *projectClient2) OnCreate(ctx context.Context, name string, sync ProjectChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &projectLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &projectLifecycleDelegate{create: sync})
 }
 
 func (n *projectClient2) OnChange(ctx context.Context, name string, sync ProjectChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &projectLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &projectLifecycleDelegate{update: sync})
 }
 
 func (n *projectClient2) OnRemove(ctx context.Context, name string, sync ProjectChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *projectLifecycleDelegate) Remove(obj *Project) (runtime.Object, error) 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *projectLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *projectLifecycleDelegate) Updated(obj *Project) (runtime.Object, error) {

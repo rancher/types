@@ -343,12 +343,12 @@ func (n *ingressClient2) Cache() IngressClientCache {
 
 func (n *ingressClient2) OnCreate(ctx context.Context, name string, sync IngressChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &ingressLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &ingressLifecycleDelegate{create: sync})
 }
 
 func (n *ingressClient2) OnChange(ctx context.Context, name string, sync IngressChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &ingressLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &ingressLifecycleDelegate{update: sync})
 }
 
 func (n *ingressClient2) OnRemove(ctx context.Context, name string, sync IngressChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *ingressLifecycleDelegate) Remove(obj *v1beta1.Ingress) (runtime.Object,
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *ingressLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *ingressLifecycleDelegate) Updated(obj *v1beta1.Ingress) (runtime.Object, error) {

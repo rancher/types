@@ -341,12 +341,12 @@ func (n *clusterClient2) Cache() ClusterClientCache {
 
 func (n *clusterClient2) OnCreate(ctx context.Context, name string, sync ClusterChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &clusterLifecycleDelegate{create: sync})
 }
 
 func (n *clusterClient2) OnChange(ctx context.Context, name string, sync ClusterChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &clusterLifecycleDelegate{update: sync})
 }
 
 func (n *clusterClient2) OnRemove(ctx context.Context, name string, sync ClusterChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *clusterLifecycleDelegate) Remove(obj *Cluster) (runtime.Object, error) 
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *clusterLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *clusterLifecycleDelegate) Updated(obj *Cluster) (runtime.Object, error) {

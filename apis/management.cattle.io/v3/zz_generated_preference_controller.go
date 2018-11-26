@@ -342,12 +342,12 @@ func (n *preferenceClient2) Cache() PreferenceClientCache {
 
 func (n *preferenceClient2) OnCreate(ctx context.Context, name string, sync PreferenceChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &preferenceLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &preferenceLifecycleDelegate{create: sync})
 }
 
 func (n *preferenceClient2) OnChange(ctx context.Context, name string, sync PreferenceChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &preferenceLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &preferenceLifecycleDelegate{update: sync})
 }
 
 func (n *preferenceClient2) OnRemove(ctx context.Context, name string, sync PreferenceChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *preferenceLifecycleDelegate) Remove(obj *Preference) (runtime.Object, e
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *preferenceLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *preferenceLifecycleDelegate) Updated(obj *Preference) (runtime.Object, error) {

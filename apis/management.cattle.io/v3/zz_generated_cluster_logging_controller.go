@@ -342,12 +342,12 @@ func (n *clusterLoggingClient2) Cache() ClusterLoggingClientCache {
 
 func (n *clusterLoggingClient2) OnCreate(ctx context.Context, name string, sync ClusterLoggingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterLoggingLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &clusterLoggingLifecycleDelegate{create: sync})
 }
 
 func (n *clusterLoggingClient2) OnChange(ctx context.Context, name string, sync ClusterLoggingChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterLoggingLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &clusterLoggingLifecycleDelegate{update: sync})
 }
 
 func (n *clusterLoggingClient2) OnRemove(ctx context.Context, name string, sync ClusterLoggingChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *clusterLoggingLifecycleDelegate) Remove(obj *ClusterLogging) (runtime.O
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *clusterLoggingLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *clusterLoggingLifecycleDelegate) Updated(obj *ClusterLogging) (runtime.Object, error) {

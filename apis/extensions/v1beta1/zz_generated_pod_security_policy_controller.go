@@ -342,12 +342,12 @@ func (n *podSecurityPolicyClient2) Cache() PodSecurityPolicyClientCache {
 
 func (n *podSecurityPolicyClient2) OnCreate(ctx context.Context, name string, sync PodSecurityPolicyChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &podSecurityPolicyLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &podSecurityPolicyLifecycleDelegate{create: sync})
 }
 
 func (n *podSecurityPolicyClient2) OnChange(ctx context.Context, name string, sync PodSecurityPolicyChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &podSecurityPolicyLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &podSecurityPolicyLifecycleDelegate{update: sync})
 }
 
 func (n *podSecurityPolicyClient2) OnRemove(ctx context.Context, name string, sync PodSecurityPolicyChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *podSecurityPolicyLifecycleDelegate) Remove(obj *v1beta1.PodSecurityPoli
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *podSecurityPolicyLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *podSecurityPolicyLifecycleDelegate) Updated(obj *v1beta1.PodSecurityPolicy) (runtime.Object, error) {

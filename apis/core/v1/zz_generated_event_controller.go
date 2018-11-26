@@ -342,12 +342,12 @@ func (n *eventClient2) Cache() EventClientCache {
 
 func (n *eventClient2) OnCreate(ctx context.Context, name string, sync EventChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &eventLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &eventLifecycleDelegate{create: sync})
 }
 
 func (n *eventClient2) OnChange(ctx context.Context, name string, sync EventChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &eventLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &eventLifecycleDelegate{update: sync})
 }
 
 func (n *eventClient2) OnRemove(ctx context.Context, name string, sync EventChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *eventLifecycleDelegate) Remove(obj *v1.Event) (runtime.Object, error) {
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *eventLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *eventLifecycleDelegate) Updated(obj *v1.Event) (runtime.Object, error) {

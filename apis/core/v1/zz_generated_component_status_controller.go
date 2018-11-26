@@ -342,12 +342,12 @@ func (n *componentStatusClient2) Cache() ComponentStatusClientCache {
 
 func (n *componentStatusClient2) OnCreate(ctx context.Context, name string, sync ComponentStatusChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &componentStatusLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &componentStatusLifecycleDelegate{create: sync})
 }
 
 func (n *componentStatusClient2) OnChange(ctx context.Context, name string, sync ComponentStatusChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &componentStatusLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &componentStatusLifecycleDelegate{update: sync})
 }
 
 func (n *componentStatusClient2) OnRemove(ctx context.Context, name string, sync ComponentStatusChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *componentStatusLifecycleDelegate) Remove(obj *v1.ComponentStatus) (runt
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *componentStatusLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *componentStatusLifecycleDelegate) Updated(obj *v1.ComponentStatus) (runtime.Object, error) {

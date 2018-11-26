@@ -342,12 +342,12 @@ func (n *clusterCatalogClient2) Cache() ClusterCatalogClientCache {
 
 func (n *clusterCatalogClient2) OnCreate(ctx context.Context, name string, sync ClusterCatalogChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterCatalogLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &clusterCatalogLifecycleDelegate{create: sync})
 }
 
 func (n *clusterCatalogClient2) OnChange(ctx context.Context, name string, sync ClusterCatalogChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &clusterCatalogLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &clusterCatalogLifecycleDelegate{update: sync})
 }
 
 func (n *clusterCatalogClient2) OnRemove(ctx context.Context, name string, sync ClusterCatalogChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *clusterCatalogLifecycleDelegate) Remove(obj *ClusterCatalog) (runtime.O
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *clusterCatalogLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *clusterCatalogLifecycleDelegate) Updated(obj *ClusterCatalog) (runtime.Object, error) {

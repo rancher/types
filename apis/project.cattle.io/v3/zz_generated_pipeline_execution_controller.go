@@ -342,12 +342,12 @@ func (n *pipelineExecutionClient2) Cache() PipelineExecutionClientCache {
 
 func (n *pipelineExecutionClient2) OnCreate(ctx context.Context, name string, sync PipelineExecutionChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &pipelineExecutionLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &pipelineExecutionLifecycleDelegate{create: sync})
 }
 
 func (n *pipelineExecutionClient2) OnChange(ctx context.Context, name string, sync PipelineExecutionChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &pipelineExecutionLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &pipelineExecutionLifecycleDelegate{update: sync})
 }
 
 func (n *pipelineExecutionClient2) OnRemove(ctx context.Context, name string, sync PipelineExecutionChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *pipelineExecutionLifecycleDelegate) Remove(obj *PipelineExecution) (run
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *pipelineExecutionLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *pipelineExecutionLifecycleDelegate) Updated(obj *PipelineExecution) (runtime.Object, error) {

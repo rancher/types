@@ -342,12 +342,12 @@ func (n *sourceCodeCredentialClient2) Cache() SourceCodeCredentialClientCache {
 
 func (n *sourceCodeCredentialClient2) OnCreate(ctx context.Context, name string, sync SourceCodeCredentialChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &sourceCodeCredentialLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &sourceCodeCredentialLifecycleDelegate{create: sync})
 }
 
 func (n *sourceCodeCredentialClient2) OnChange(ctx context.Context, name string, sync SourceCodeCredentialChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &sourceCodeCredentialLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &sourceCodeCredentialLifecycleDelegate{update: sync})
 }
 
 func (n *sourceCodeCredentialClient2) OnRemove(ctx context.Context, name string, sync SourceCodeCredentialChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *sourceCodeCredentialLifecycleDelegate) Remove(obj *SourceCodeCredential
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *sourceCodeCredentialLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *sourceCodeCredentialLifecycleDelegate) Updated(obj *SourceCodeCredential) (runtime.Object, error) {

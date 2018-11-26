@@ -342,12 +342,12 @@ func (n *namespacedSshAuthClient2) Cache() NamespacedSSHAuthClientCache {
 
 func (n *namespacedSshAuthClient2) OnCreate(ctx context.Context, name string, sync NamespacedSSHAuthChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &namespacedSshAuthLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &namespacedSshAuthLifecycleDelegate{create: sync})
 }
 
 func (n *namespacedSshAuthClient2) OnChange(ctx context.Context, name string, sync NamespacedSSHAuthChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &namespacedSshAuthLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &namespacedSshAuthLifecycleDelegate{update: sync})
 }
 
 func (n *namespacedSshAuthClient2) OnRemove(ctx context.Context, name string, sync NamespacedSSHAuthChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *namespacedSshAuthLifecycleDelegate) Remove(obj *NamespacedSSHAuth) (run
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *namespacedSshAuthLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *namespacedSshAuthLifecycleDelegate) Updated(obj *NamespacedSSHAuth) (runtime.Object, error) {

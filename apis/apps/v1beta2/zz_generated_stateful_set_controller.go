@@ -343,12 +343,12 @@ func (n *statefulSetClient2) Cache() StatefulSetClientCache {
 
 func (n *statefulSetClient2) OnCreate(ctx context.Context, name string, sync StatefulSetChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &statefulSetLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &statefulSetLifecycleDelegate{create: sync})
 }
 
 func (n *statefulSetClient2) OnChange(ctx context.Context, name string, sync StatefulSetChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &statefulSetLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &statefulSetLifecycleDelegate{update: sync})
 }
 
 func (n *statefulSetClient2) OnRemove(ctx context.Context, name string, sync StatefulSetChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *statefulSetLifecycleDelegate) Remove(obj *v1beta2.StatefulSet) (runtime
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *statefulSetLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *statefulSetLifecycleDelegate) Updated(obj *v1beta2.StatefulSet) (runtime.Object, error) {

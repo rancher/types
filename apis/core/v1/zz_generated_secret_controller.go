@@ -343,12 +343,12 @@ func (n *secretClient2) Cache() SecretClientCache {
 
 func (n *secretClient2) OnCreate(ctx context.Context, name string, sync SecretChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &secretLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &secretLifecycleDelegate{create: sync})
 }
 
 func (n *secretClient2) OnChange(ctx context.Context, name string, sync SecretChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &secretLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &secretLifecycleDelegate{update: sync})
 }
 
 func (n *secretClient2) OnRemove(ctx context.Context, name string, sync SecretChangeHandlerFunc) {
@@ -418,10 +418,6 @@ func (n *secretLifecycleDelegate) Remove(obj *v1.Secret) (runtime.Object, error)
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *secretLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *secretLifecycleDelegate) Updated(obj *v1.Secret) (runtime.Object, error) {

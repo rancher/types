@@ -341,12 +341,12 @@ func (n *groupMemberClient2) Cache() GroupMemberClientCache {
 
 func (n *groupMemberClient2) OnCreate(ctx context.Context, name string, sync GroupMemberChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &groupMemberLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &groupMemberLifecycleDelegate{create: sync})
 }
 
 func (n *groupMemberClient2) OnChange(ctx context.Context, name string, sync GroupMemberChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &groupMemberLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &groupMemberLifecycleDelegate{update: sync})
 }
 
 func (n *groupMemberClient2) OnRemove(ctx context.Context, name string, sync GroupMemberChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *groupMemberLifecycleDelegate) Remove(obj *GroupMember) (runtime.Object,
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *groupMemberLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *groupMemberLifecycleDelegate) Updated(obj *GroupMember) (runtime.Object, error) {

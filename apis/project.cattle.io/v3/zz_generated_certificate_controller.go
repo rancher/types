@@ -342,12 +342,12 @@ func (n *certificateClient2) Cache() CertificateClientCache {
 
 func (n *certificateClient2) OnCreate(ctx context.Context, name string, sync CertificateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &certificateLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &certificateLifecycleDelegate{create: sync})
 }
 
 func (n *certificateClient2) OnChange(ctx context.Context, name string, sync CertificateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &certificateLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &certificateLifecycleDelegate{update: sync})
 }
 
 func (n *certificateClient2) OnRemove(ctx context.Context, name string, sync CertificateChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *certificateLifecycleDelegate) Remove(obj *Certificate) (runtime.Object,
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *certificateLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *certificateLifecycleDelegate) Updated(obj *Certificate) (runtime.Object, error) {

@@ -342,12 +342,12 @@ func (n *nodeTemplateClient2) Cache() NodeTemplateClientCache {
 
 func (n *nodeTemplateClient2) OnCreate(ctx context.Context, name string, sync NodeTemplateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &nodeTemplateLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &nodeTemplateLifecycleDelegate{create: sync})
 }
 
 func (n *nodeTemplateClient2) OnChange(ctx context.Context, name string, sync NodeTemplateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &nodeTemplateLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &nodeTemplateLifecycleDelegate{update: sync})
 }
 
 func (n *nodeTemplateClient2) OnRemove(ctx context.Context, name string, sync NodeTemplateChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *nodeTemplateLifecycleDelegate) Remove(obj *NodeTemplate) (runtime.Objec
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *nodeTemplateLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *nodeTemplateLifecycleDelegate) Updated(obj *NodeTemplate) (runtime.Object, error) {

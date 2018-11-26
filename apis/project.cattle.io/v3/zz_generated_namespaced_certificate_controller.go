@@ -342,12 +342,12 @@ func (n *namespacedCertificateClient2) Cache() NamespacedCertificateClientCache 
 
 func (n *namespacedCertificateClient2) OnCreate(ctx context.Context, name string, sync NamespacedCertificateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &namespacedCertificateLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &namespacedCertificateLifecycleDelegate{create: sync})
 }
 
 func (n *namespacedCertificateClient2) OnChange(ctx context.Context, name string, sync NamespacedCertificateChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &namespacedCertificateLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &namespacedCertificateLifecycleDelegate{update: sync})
 }
 
 func (n *namespacedCertificateClient2) OnRemove(ctx context.Context, name string, sync NamespacedCertificateChangeHandlerFunc) {
@@ -417,10 +417,6 @@ func (n *namespacedCertificateLifecycleDelegate) Remove(obj *NamespacedCertifica
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *namespacedCertificateLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *namespacedCertificateLifecycleDelegate) Updated(obj *NamespacedCertificate) (runtime.Object, error) {

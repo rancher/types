@@ -341,12 +341,12 @@ func (n *composeConfigClient2) Cache() ComposeConfigClientCache {
 
 func (n *composeConfigClient2) OnCreate(ctx context.Context, name string, sync ComposeConfigChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &composeConfigLifecycleDelegate{create: sync})
+	n.iface.AddLifecycle(ctx, name+"-create", &composeConfigLifecycleDelegate{create: sync})
 }
 
 func (n *composeConfigClient2) OnChange(ctx context.Context, name string, sync ComposeConfigChangeHandlerFunc) {
 	n.loadController()
-	n.iface.AddLifecycle(ctx, name, &composeConfigLifecycleDelegate{update: sync})
+	n.iface.AddLifecycle(ctx, name+"-change", &composeConfigLifecycleDelegate{update: sync})
 }
 
 func (n *composeConfigClient2) OnRemove(ctx context.Context, name string, sync ComposeConfigChangeHandlerFunc) {
@@ -416,10 +416,6 @@ func (n *composeConfigLifecycleDelegate) Remove(obj *ComposeConfig) (runtime.Obj
 		return obj, nil
 	}
 	return n.remove(obj)
-}
-
-func (n *composeConfigLifecycleDelegate) HasUpdated() bool {
-	return n.remove != nil
 }
 
 func (n *composeConfigLifecycleDelegate) Updated(obj *ComposeConfig) (runtime.Object, error) {
