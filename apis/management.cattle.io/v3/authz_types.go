@@ -10,11 +10,12 @@ import (
 )
 
 var (
-	NamespaceBackedResource               condition.Cond = "BackingNamespaceCreated"
-	CreatorMadeOwner                      condition.Cond = "CreatorMadeOwner"
-	DefaultNetworkPolicyCreated           condition.Cond = "DefaultNetworkPolicyCreated"
-	ProjectConditionInitialRolesPopulated condition.Cond = "InitialRolesPopulated"
-	ProjectConditionMonitoringEnabled     condition.Cond = "MonitoringEnabled"
+	NamespaceBackedResource                  condition.Cond = "BackingNamespaceCreated"
+	CreatorMadeOwner                         condition.Cond = "CreatorMadeOwner"
+	DefaultNetworkPolicyCreated              condition.Cond = "DefaultNetworkPolicyCreated"
+	ProjectConditionInitialRolesPopulated    condition.Cond = "InitialRolesPopulated"
+	ProjectConditionMonitoringEnabled        condition.Cond = "MonitoringEnabled"
+	ProjectConditionMetricExpressionDeployed condition.Cond = "MetricExpressionDeployed"
 )
 
 type Project struct {
