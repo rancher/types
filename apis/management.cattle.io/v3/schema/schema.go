@@ -3,13 +3,12 @@ package schema
 import (
 	"net/http"
 
-	"k8s.io/api/core/v1"
-
 	"github.com/rancher/norman/types"
 	m "github.com/rancher/norman/types/mapper"
 	"github.com/rancher/types/apis/management.cattle.io/v3"
 	"github.com/rancher/types/factory"
 	"github.com/rancher/types/mapper"
+	"k8s.io/api/core/v1"
 )
 
 var (
@@ -507,12 +506,8 @@ func alertTypes(schema *types.Schemas) *types.Schemas {
 	return schema.
 		AddMapperForType(&Version, v3.Notifier{},
 			m.DisplayName{}).
-		AddMapperForType(&Version, v3.ClusterAlert{},
-			&m.Embed{Field: "status"},
-			m.DisplayName{}).
-		AddMapperForType(&Version, v3.ProjectAlert{},
-			&m.Embed{Field: "status"},
-			m.DisplayName{}).
+		MustImport(&Version, v3.ClusterAlert{}).
+		MustImport(&Version, v3.ProjectAlert{}).
 		MustImport(&Version, v3.Notification{}).
 		MustImportAndCustomize(&Version, v3.Notifier{}, func(schema *types.Schema) {
 			schema.CollectionActions = map[string]types.Action{
@@ -526,8 +521,22 @@ func alertTypes(schema *types.Schemas) *types.Schemas {
 				},
 			}
 		}).
-		MustImportAndCustomize(&Version, v3.ClusterAlert{}, func(schema *types.Schema) {
-
+		MustImport(&Version, v3.AlertStatus{}).
+		AddMapperForType(&Version, v3.ClusterAlertGroup{},
+			&m.Embed{Field: "status"},
+			m.DisplayName{}).
+		AddMapperForType(&Version, v3.ProjectAlertGroup{},
+			&m.Embed{Field: "status"},
+			m.DisplayName{}).
+		AddMapperForType(&Version, v3.ClusterAlertRule{},
+			&m.Embed{Field: "status"},
+			m.DisplayName{}).
+		AddMapperForType(&Version, v3.ProjectAlertRule{},
+			&m.Embed{Field: "status"},
+			m.DisplayName{}).
+		MustImport(&Version, v3.ClusterAlertGroup{}).
+		MustImport(&Version, v3.ProjectAlertGroup{}).
+		MustImportAndCustomize(&Version, v3.ClusterAlertRule{}, func(schema *types.Schema) {
 			schema.ResourceActions = map[string]types.Action{
 				"activate":   {},
 				"deactivate": {},
@@ -535,8 +544,7 @@ func alertTypes(schema *types.Schemas) *types.Schemas {
 				"unmute":     {},
 			}
 		}).
-		MustImportAndCustomize(&Version, v3.ProjectAlert{}, func(schema *types.Schema) {
-
+		MustImportAndCustomize(&Version, v3.ProjectAlertRule{}, func(schema *types.Schema) {
 			schema.ResourceActions = map[string]types.Action{
 				"activate":   {},
 				"deactivate": {},
