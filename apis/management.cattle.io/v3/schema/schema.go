@@ -145,6 +145,7 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.ImportClusterYamlInput{}).
 		MustImport(&Version, v3.ImportYamlOutput{}).
 		MustImport(&Version, v3.ExportOutput{}).
+		MustImport(&Version, v3.MonitoringInput{}).
 		MustImportAndCustomize(&Version, v3.ETCDService{}, func(schema *types.Schema) {
 			schema.MustCustomizeField("extraArgs", func(field types.Field) types.Field {
 				field.Default = map[string]interface{}{
@@ -170,14 +171,20 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 			schema.ResourceActions["exportYaml"] = types.Action{
 				Output: "exportOutput",
 			}
+			schema.ResourceActions["enableMonitoring"] = types.Action{
+				Input: "monitoringInput",
+			}
+			schema.ResourceActions["disableMonitoring"] = types.Action{}
 		})
 }
 
 func authzTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.
 		MustImport(&Version, v3.ProjectStatus{}).
-		AddMapperForType(&Version, v3.Project{}, m.DisplayName{},
-			&m.Embed{Field: "status"}).
+		AddMapperForType(&Version, v3.Project{},
+			m.DisplayName{},
+			&m.Embed{Field: "status"},
+		).
 		AddMapperForType(&Version, v3.GlobalRole{}, m.DisplayName{}).
 		AddMapperForType(&Version, v3.RoleTemplate{}, m.DisplayName{}).
 		AddMapperForType(&Version,
@@ -195,6 +202,10 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 					Output: "project",
 				},
 				"exportYaml": {},
+				"enableMonitoring": {
+					Input: "monitoringInput",
+				},
+				"disableMonitoring": {},
 			}
 		}).
 		MustImportAndCustomize(&Version, v3.GlobalRole{}, func(schema *types.Schema) {
