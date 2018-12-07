@@ -24,7 +24,7 @@ type RancherKubernetesEngineConfig struct {
 	// Enable/disable strict docker version checking
 	IgnoreDockerVersion bool `yaml:"ignore_docker_version" json:"ignoreDockerVersion" norman:"default=true"`
 	// Is this a DinD install?
-	DinD bool
+	DinD bool `yaml:"dind,omitempty" json:"dind,omitempty"`
 	// Kubernetes version to use (if kubernetes image is specifed, image version takes precedence)
 	Version string `yaml:"kubernetes_version" json:"kubernetesVersion,omitempty"`
 	// List of private registries and their credentials
