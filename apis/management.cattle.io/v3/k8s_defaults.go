@@ -67,12 +67,6 @@ var (
 				"cadvisor-port": "0",
 			},
 		},
-		"v1.8": {
-			KubeAPI: map[string]string{
-				"endpoint-reconciler-type": "lease",
-				"admission-control":        "ServiceAccount,NamespaceLifecycle,LimitRanger,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds",
-			},
-		},
 	}
 
 	// ToolsSystemImages default images for alert, pipeline, logging
