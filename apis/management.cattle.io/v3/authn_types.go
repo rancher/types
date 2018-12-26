@@ -310,3 +310,7 @@ type ADFSConfig struct {
 type KeyCloakConfig struct {
 	SamlConfig `json:",inline" mapstructure:",squash"`
 }
+
+type OKTAConfig struct {
+	SamlConfig `json:",inline" mapstructure:",squash"`
+}
