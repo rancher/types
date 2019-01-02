@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultK8s = "v1.11.5-rancher1-1"
+	DefaultK8s = "v1.11.6-rancher1-1"
 )
 
 var (
@@ -19,7 +19,7 @@ var (
 	k8sVersionsCurrent = []string{
 		"v1.9.7-rancher2-2",
 		"v1.10.11-rancher1-1",
-		"v1.11.5-rancher1-1",
+		"v1.11.6-rancher1-1",
 		"v1.12.3-rancher1-1",
 	}
 
@@ -578,9 +578,9 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.2.1"),
 		},
-		"v1.11.5-rancher1-1": {
+		"v1.11.6-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.18"),
-			Kubernetes:                m("rancher/hyperkube:v1.11.5-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.11.6-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.15"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.15"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.15"),
