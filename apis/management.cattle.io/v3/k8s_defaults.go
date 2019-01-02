@@ -35,7 +35,6 @@ var (
 			},
 			Kubelet: map[string]string{
 				"tls-cipher-suites": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
-				"cadvisor-port":     "",
 			},
 		},
 		"v1.11": {
@@ -45,6 +44,7 @@ var (
 			},
 			Kubelet: map[string]string{
 				"tls-cipher-suites": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
+				"cadvisor-port":     "0",
 			},
 		},
 		"v1.10": {
@@ -55,12 +55,16 @@ var (
 			},
 			Kubelet: map[string]string{
 				"tls-cipher-suites": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
+				"cadvisor-port":     "0",
 			},
 		},
 		"v1.9": {
 			KubeAPI: map[string]string{
 				"endpoint-reconciler-type": "lease",
 				"admission-control":        "ServiceAccount,NamespaceLifecycle,LimitRanger,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds",
+			},
+			Kubelet: map[string]string{
+				"cadvisor-port": "0",
 			},
 		},
 	}
