@@ -22,6 +22,7 @@ type MultiClusterAppSpec struct {
 	TemplateVersionName string   `json:"templateVersionName,omitempty" norman:"type=reference[templateVersion],required"`
 	Answers             []Answer `json:"answers,omitempty"`
 	Targets             []Target `json:"targets,omitempty" norman:"required"`
+	Members             []Member `json:"members,omitempty"`
 }
 
 type MultiClusterAppStatus struct {
@@ -38,4 +39,12 @@ type Answer struct {
 	ProjectName string            `json:"projectName,omitempty" norman:"type=reference[project]"`
 	ClusterName string            `json:"clusterName,omitempty" norman:"type=reference[cluster]"`
 	Values      map[string]string `json:"values,omitempty" norman:"required"`
+}
+
+type Member struct {
+	UserName           string `json:"userName,omitempty" norman:"type=reference[user]"`
+	UserPrincipalName  string `json:"userPrincipalName,omitempty" norman:"type=reference[principal]"`
+	DisplayName        string `json:"displayName,omitempty"`
+	GroupPrincipalName string `json:"groupPrincipalName,omitempty" norman:"type=reference[principal]"`
+	AccessType         string `json:"accessType,omitempty" norman:"type=enum,options=all|readonly|update"`
 }
