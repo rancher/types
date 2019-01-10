@@ -11,6 +11,7 @@ const (
 	MultiClusterAppFieldCreated              = "created"
 	MultiClusterAppFieldCreatorID            = "creatorId"
 	MultiClusterAppFieldLabels               = "labels"
+	MultiClusterAppFieldMembers              = "members"
 	MultiClusterAppFieldName                 = "name"
 	MultiClusterAppFieldOwnerReferences      = "ownerReferences"
 	MultiClusterAppFieldRemoved              = "removed"
@@ -30,6 +31,7 @@ type MultiClusterApp struct {
 	Created              string                 `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID            string                 `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	Labels               map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
+	Members              []Member               `json:"members,omitempty" yaml:"members,omitempty"`
 	Name                 string                 `json:"name,omitempty" yaml:"name,omitempty"`
 	OwnerReferences      []OwnerReference       `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
 	Removed              string                 `json:"removed,omitempty" yaml:"removed,omitempty"`
