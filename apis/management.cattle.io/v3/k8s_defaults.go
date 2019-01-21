@@ -21,6 +21,7 @@ var (
 		"v1.10.12-rancher1-1",
 		"v1.11.6-rancher1-1",
 		"v1.12.4-rancher1-1",
+		"v1.12.5-rancher1-1",
 		"v1.13.1-rancher1-1",
 	}
 
@@ -746,9 +747,9 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.3.1"),
 		},
-		"v1.12.4-rancher1-1": {
+		"v1.12.5-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24"),
-			Kubernetes:                m("rancher/hyperkube:v1.12.4-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.12.5-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.21"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.21"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.21"),
@@ -765,8 +766,8 @@ var (
 			CanalNode:                 m("quay.io/calico/node:v3.1.3"),
 			CanalCNI:                  m("quay.io/calico/cni:v3.1.3"),
 			CanalFlannel:              m("quay.io/coreos/flannel:v0.10.0"),
-			WeaveNode:                 m("weaveworks/weave-kube:2.1.2"),
-			WeaveCNI:                  m("weaveworks/weave-npc:2.1.2"),
+			WeaveNode:                 m("weaveworks/weave-kube:2.5.0"),
+			WeaveCNI:                  m("weaveworks/weave-npc:2.5.0"),
 			PodInfraContainer:         m("gcr.io/google_containers/pause-amd64:3.1"),
 			Ingress:                   m("rancher/nginx-ingress-controller:0.16.2-rancher1"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
