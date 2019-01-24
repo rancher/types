@@ -75,6 +75,7 @@ type AppRevisionStatus struct {
 	Answers     map[string]string `json:"answers"`
 	Digest      string            `json:"digest"`
 	ValuesYaml  string            `json:"valuesYaml,omitempty"`
+	Files       map[string]string `json:"files,omitempty"`
 }
 
 type AppUpgradeConfig struct {
