@@ -81,6 +81,7 @@ type AppUpgradeConfig struct {
 	ExternalID   string            `json:"externalId,omitempty"`
 	Answers      map[string]string `json:"answers,omitempty"`
 	ForceUpgrade bool              `json:"forceUpgrade,omitempty"`
+	Files        map[string]string `json:"files,omitempty"`
 }
 
 type RollbackRevision struct {
