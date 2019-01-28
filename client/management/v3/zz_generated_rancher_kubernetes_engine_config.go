@@ -5,6 +5,7 @@ const (
 	RancherKubernetesEngineConfigFieldAddonJobTimeout     = "addonJobTimeout"
 	RancherKubernetesEngineConfigFieldAddons              = "addons"
 	RancherKubernetesEngineConfigFieldAddonsInclude       = "addonsInclude"
+	RancherKubernetesEngineConfigFieldArchitecture        = "architecture"
 	RancherKubernetesEngineConfigFieldAuthentication      = "authentication"
 	RancherKubernetesEngineConfigFieldAuthorization       = "authorization"
 	RancherKubernetesEngineConfigFieldBastionHost         = "bastionHost"
@@ -31,6 +32,7 @@ type RancherKubernetesEngineConfig struct {
 	AddonJobTimeout     int64               `json:"addonJobTimeout,omitempty" yaml:"addonJobTimeout,omitempty"`
 	Addons              string              `json:"addons,omitempty" yaml:"addons,omitempty"`
 	AddonsInclude       []string            `json:"addonsInclude,omitempty" yaml:"addonsInclude,omitempty"`
+	Architecture        string              `json:"architecture,omitempty" yaml:"architecture,omitempty"`
 	Authentication      *AuthnConfig        `json:"authentication,omitempty" yaml:"authentication,omitempty"`
 	Authorization       *AuthzConfig        `json:"authorization,omitempty" yaml:"authorization,omitempty"`
 	BastionHost         *BastionHost        `json:"bastionHost,omitempty" yaml:"bastionHost,omitempty"`
