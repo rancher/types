@@ -54,6 +54,6 @@ type Route53ProviderConfig struct {
 
 type CloudflareProviderConfig struct {
 	RootDomain string `json:"rootDomain" norman:"required"`
-	APIKey     string `json:"apiKey" norman:"required,type=password"`
-	APIEmail   string `json:"apiEmail" norman:"required"`
+	APIKey     string `json:"apiKey" norman:"notnullable,required,type=password"`
+	APIEmail   string `json:"apiEmail" norman:"notnullable,required"`
 }
