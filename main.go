@@ -42,6 +42,7 @@ func main() {
 		v1.ServiceAccount{},
 		v1.ReplicationController{},
 		v1.ResourceQuota{},
+		v1.LimitRange{},
 	}, []interface{}{
 		v1.Node{},
 		v1.ComponentStatus{},
