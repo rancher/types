@@ -4419,9 +4419,7 @@ func (in *MultiClusterAppStatus) DeepCopyInto(out *MultiClusterAppStatus) {
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
 		*out = make([]projectcattleiov3.AppCondition, len(*in))
-		for i := range *in {
-			(*in)[i].DeepCopyInto(&(*out)[i])
-		}
+		copy(*out, *in)
 	}
 	return
 }
