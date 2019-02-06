@@ -609,7 +609,7 @@ type ServiceOverride struct {
 	SigningName   string `json:"signing-name" yaml:"signing-name" ini:"signing-name,omitempty"`
 }
 
-type GlobelAwsOpts struct {
+type GlobalAwsOpts struct {
 	// TODO: Is there any use for this?  We can get it from the instance metadata service
 	// Maybe if we're not running on AWS, e.g. bootstrap; for now it is not very useful
 	Zone string `json:"zone" yaml:"zone" ini:"zone,omitempty"`
