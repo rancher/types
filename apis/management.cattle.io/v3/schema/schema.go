@@ -177,6 +177,7 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.GenerateKubeConfigOutput{}).
 		MustImport(&Version, v3.ImportClusterYamlInput{}).
 		MustImport(&Version, v3.RotateCertificateInput{}).
+		MustImport(&Version, v3.RotateCertificateOutput{}).
 		MustImport(&Version, v3.ImportYamlOutput{}).
 		MustImport(&Version, v3.ExportOutput{}).
 		MustImport(&Version, v3.MonitoringInput{}).
@@ -215,7 +216,8 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 				Input: "restoreFromEtcdBackupInput",
 			}
 			schema.ResourceActions["rotateCertificates"] = types.Action{
-				Input: "rotateCertificateInput",
+				Input:  "rotateCertificateInput",
+				Output: "rotateCertificateOutput",
 			}
 		})
 }
