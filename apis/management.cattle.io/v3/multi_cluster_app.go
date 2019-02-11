@@ -30,7 +30,7 @@ type MultiClusterAppSpec struct {
 	Answers              []Answer        `json:"answers,omitempty"`
 	Targets              []Target        `json:"targets,omitempty" norman:"required,noupdate"`
 	Members              []Member        `json:"members,omitempty"`
-	Roles                []string        `json:"roles,omitempty" norman:"type=array[reference[roleTemplate]]"`
+	Roles                []string        `json:"roles,omitempty" norman:"type=array[reference[roleTemplate]],required"`
 	RevisionHistoryLimit int             `json:"revisionHistoryLimit,omitempty" norman:"default=10"`
 	UpgradeStrategy      UpgradeStrategy `json:"upgradeStrategy,omitempty"`
 }
