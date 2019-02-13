@@ -169,9 +169,6 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 		AddMapperForType(&Version, v3.ClusterRegistrationToken{},
 			&m.Embed{Field: "status"},
 		).
-		AddMapperForType(&Version, v3.RancherKubernetesEngineConfig{},
-			m.Drop{Field: "systemImages"},
-		).
 		MustImport(&Version, v3.Cluster{}).
 		MustImport(&Version, v3.ClusterRegistrationToken{}).
 		MustImport(&Version, v3.GenerateKubeConfigOutput{}).
