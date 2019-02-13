@@ -24,6 +24,7 @@ const (
 	RancherKubernetesEngineConfigFieldSSHCertPath         = "sshCertPath"
 	RancherKubernetesEngineConfigFieldSSHKeyPath          = "sshKeyPath"
 	RancherKubernetesEngineConfigFieldServices            = "services"
+	RancherKubernetesEngineConfigFieldSystemImages        = "systemImages"
 	RancherKubernetesEngineConfigFieldVersion             = "kubernetesVersion"
 )
 
@@ -50,5 +51,6 @@ type RancherKubernetesEngineConfig struct {
 	SSHCertPath         string              `json:"sshCertPath,omitempty" yaml:"sshCertPath,omitempty"`
 	SSHKeyPath          string              `json:"sshKeyPath,omitempty" yaml:"sshKeyPath,omitempty"`
 	Services            *RKEConfigServices  `json:"services,omitempty" yaml:"services,omitempty"`
+	SystemImages        *RKESystemImages    `json:"systemImages,omitempty" yaml:"systemImages,omitempty"`
 	Version             string              `json:"kubernetesVersion,omitempty" yaml:"kubernetesVersion,omitempty"`
 }
