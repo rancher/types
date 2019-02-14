@@ -45,7 +45,7 @@ var (
 		Init(mgmtSecretTypes)
 
 	TokenSchemas = factory.Schemas(&Version).
-		Init(tokens)
+			Init(tokens)
 )
 
 func rkeTypes(schemas *types.Schemas) *types.Schemas {
