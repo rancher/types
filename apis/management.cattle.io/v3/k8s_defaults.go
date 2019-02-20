@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultK8s = "v1.13.1-rancher1-1"
+	DefaultK8s = "v1.13.1-rancher1-1-1"
 )
 
 var (
@@ -20,8 +20,8 @@ var (
 		"v1.9.7-rancher2-2",
 		"v1.10.12-rancher1-1",
 		"v1.11.6-rancher1-1",
-		"v1.12.5-rancher1-1",
-		"v1.13.1-rancher1-1",
+		"v1.12.5-rancher1-1-1",
+		"v1.13.1-rancher1-1-1",
 	}
 
 	// K8sVersionToRKESystemImages is dynamically populated on init() with the latest versions
@@ -745,13 +745,13 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.3.1"),
 		},
-		"v1.12.5-rancher1-1": {
+		"v1.12.5-rancher1-1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24"),
 			Kubernetes:                m("rancher/hyperkube:v1.12.5-rancher1"),
-			Alpine:                    m("rancher/rke-tools:v0.1.23"),
-			NginxProxy:                m("rancher/rke-tools:v0.1.23"),
-			CertDownloader:            m("rancher/rke-tools:v0.1.23"),
-			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.23"),
+			Alpine:                    m("rancher/rke-tools:v0.1.16"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.16"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.16"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.16"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.13"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.13"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.13"),
@@ -771,13 +771,13 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.3.1"),
 		},
-		"v1.13.1-rancher1-1": {
+		"v1.13.1-rancher1-1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24"),
 			Kubernetes:                m("rancher/hyperkube:v1.13.1-rancher1"),
-			Alpine:                    m("rancher/rke-tools:v0.1.23"),
-			NginxProxy:                m("rancher/rke-tools:v0.1.23"),
-			CertDownloader:            m("rancher/rke-tools:v0.1.23"),
-			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.23"),
+			Alpine:                    m("rancher/rke-tools:v0.1.16"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.16"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.16"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.16"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.15.0"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.15.0"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar-amd64:1.15.0"),
