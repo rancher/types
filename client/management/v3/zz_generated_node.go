@@ -11,7 +11,6 @@ const (
 	NodeFieldCapacity             = "capacity"
 	NodeFieldClusterID            = "clusterId"
 	NodeFieldConditions           = "conditions"
-	NodeFieldConfig               = "config"
 	NodeFieldControlPlane         = "controlPlane"
 	NodeFieldCreated              = "created"
 	NodeFieldCreatorID            = "creatorId"
@@ -58,7 +57,6 @@ type Node struct {
 	Capacity             map[string]string         `json:"capacity,omitempty" yaml:"capacity,omitempty"`
 	ClusterID            string                    `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
 	Conditions           []NodeCondition           `json:"conditions,omitempty" yaml:"conditions,omitempty"`
-	Config               *NodeConfigStatus         `json:"config,omitempty" yaml:"config,omitempty"`
 	ControlPlane         bool                      `json:"controlPlane,omitempty" yaml:"controlPlane,omitempty"`
 	Created              string                    `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID            string                    `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
