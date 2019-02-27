@@ -5,6 +5,7 @@ const (
 	NodeStatusFieldAllocatable       = "allocatable"
 	NodeStatusFieldCapacity          = "capacity"
 	NodeStatusFieldConditions        = "conditions"
+	NodeStatusFieldConfig            = "config"
 	NodeStatusFieldDockerInfo        = "dockerInfo"
 	NodeStatusFieldExternalIPAddress = "externalIpAddress"
 	NodeStatusFieldHostname          = "hostname"
@@ -25,6 +26,7 @@ type NodeStatus struct {
 	Allocatable       map[string]string         `json:"allocatable,omitempty" yaml:"allocatable,omitempty"`
 	Capacity          map[string]string         `json:"capacity,omitempty" yaml:"capacity,omitempty"`
 	Conditions        []NodeCondition           `json:"conditions,omitempty" yaml:"conditions,omitempty"`
+	Config            *NodeConfigStatus         `json:"config,omitempty" yaml:"config,omitempty"`
 	DockerInfo        *DockerInfo               `json:"dockerInfo,omitempty" yaml:"dockerInfo,omitempty"`
 	ExternalIPAddress string                    `json:"externalIpAddress,omitempty" yaml:"externalIpAddress,omitempty"`
 	Hostname          string                    `json:"hostname,omitempty" yaml:"hostname,omitempty"`

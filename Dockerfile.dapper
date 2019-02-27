@@ -14,6 +14,11 @@ ENV GOLANG_ARCH_amd64=amd64 GOLANG_ARCH_arm=armv6l GOLANG_ARCH=GOLANG_ARCH_${ARC
 RUN wget -O - https://storage.googleapis.com/golang/go1.11.linux-${!GOLANG_ARCH}.tar.gz | tar -xzf - -C /usr/local && \
     go get github.com/rancher/trash && go get golang.org/x/lint/golint
 
+RUN go get -d golang.org/x/tools/cmd/goimports && \
+    git -C /go/src/golang.org/x/tools/cmd/goimports checkout -b current 0b24b358f4c7eaa92895f67a3f6cea2a0cf525d5 && \
+    go install golang.org/x/tools/cmd/goimports && \
+    rm -rf /go/src /go/pkg
+
 ENV DOCKER_URL_amd64=https://get.docker.com/builds/Linux/x86_64/docker-1.10.3 \
     DOCKER_URL_arm=https://github.com/rancher/docker/releases/download/v1.10.3-ros1/docker-1.10.3_arm \
     DOCKER_URL=DOCKER_URL_${ARCH}
