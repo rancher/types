@@ -17,8 +17,6 @@ var (
 
 	// k8sVersionsCurrent are the latest versions available for installation
 	k8sVersionsCurrent = []string{
-		"v1.9.7-rancher2-2",
-		"v1.10.12-rancher1-1",
 		"v1.11.6-rancher1-1",
 		"v1.12.5-rancher1-1",
 		"v1.13.1-rancher1-1",
