@@ -790,9 +790,9 @@ var (
 			CoreDNS:                   m("coredns/coredns:1.2.2"),
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler-amd64:1.0.0"),
 		},
-		"v1.12.5-rancher1-2": {
+		"v1.12.6-rancher1-2": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24"),
-			Kubernetes:                m("rancher/hyperkube:v1.12.5-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.12.6-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.24"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.24"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.24"),
@@ -874,9 +874,9 @@ var (
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.3.1"),
 		},
 		// Add a new version with old rke-tools to allow upgrade from 2.1.x clusters
-		"v1.12.5-rancher1-1": {
+		"v1.12.6-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24"),
-			Kubernetes:                m("rancher/hyperkube:v1.12.5-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.12.6-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.16"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.16"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.16"),
