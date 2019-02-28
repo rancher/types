@@ -4,6 +4,27 @@ import "strings"
 
 var Mirrors = map[string]string{}
 
+var (
+	ManifestList = []string{
+		"quay.io/coreos/etcd:v3.2.24",
+		"gcr.io/google_containers/k8s-dns-kube-dns:1.15.0",
+		"gcr.io/google_containers/k8s-dns-dnsmasq-nanny:1.15.0",
+		"gcr.io/google_containers/k8s-dns-sidecar:1.15.0",
+		"gcr.io/google_containers/k8s-dns-kube-dns:1.14.13",
+		"gcr.io/google_containers/k8s-dns-dnsmasq-nanny:1.14.13",
+		"gcr.io/google_containers/k8s-dns-sidecar:1.14.13",
+		"gcr.io/google_containers/cluster-proportional-autoscaler:1.0.0",
+		"quay.io/coreos/flannel:v0.10.0",
+		"gcr.io/google_containers/pause:3.1",
+		"gcr.io/google_containers/metrics-server:v0.3.1",
+		"k8s.gcr.io/defaultbackend:1.4",
+	}
+	ArchitectureList = []string{
+		"amd64",
+		"arm64",
+	}
+)
+
 func Mirror(image string) string {
 	orig := image
 	if strings.HasPrefix(image, "weaveworks") {
