@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultK8s = "v1.13.1-rancher1-2"
+	DefaultK8s = "v1.13.4-rancher1-1"
 )
 
 var (
@@ -24,12 +24,12 @@ var (
 
 	// K8sVersionsCurrent are the latest versions available for installation
 	K8sVersionsCurrent = []string{
-		"v1.11.6-rancher1-1",
+		"v1.11.8-rancher1-1",
 		// When add a new k8s version to 2.2, make sure to add support for it to the 2.1.x branch.
 		// Account for the fact that rke-tools image is different cross branches, and it requires using
 		// different k8s version tag
-		"v1.12.5-rancher1-2",
-		"v1.13.1-rancher1-2",
+		"v1.12.6-rancher1-2",
+		"v1.13.4-rancher1-1",
 	}
 
 	// K8sVersionToRKESystemImages is dynamically populated on init() with the latest versions
@@ -624,9 +624,9 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.2.1"),
 		},
-		"v1.11.6-rancher1-1": {
+		"v1.11.8-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.18"),
-			Kubernetes:                m("rancher/hyperkube:v1.11.6-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.11.8-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.15"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.15"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.15"),
@@ -953,9 +953,9 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.3.1"),
 		},
-		"v1.13.1-rancher1-2": {
+		"v1.13.4-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24"),
-			Kubernetes:                m("rancher/hyperkube:v1.13.1-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.13.4-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.25"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.25"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.25"),
