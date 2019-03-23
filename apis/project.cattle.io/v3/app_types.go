@@ -34,6 +34,7 @@ var (
 	AppConditionMigrated     condition.Cond = "Migrated"
 	AppConditionDeployed     condition.Cond = "Deployed"
 	AppConditionForceUpgrade condition.Cond = "ForceUpgrade"
+	AppConditionUserClick    condition.Cond = "Click"
 )
 
 type AppStatus struct {
