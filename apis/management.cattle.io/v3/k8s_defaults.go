@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultK8s = "v1.13.4-rancher1-2"
+	DefaultK8s = "v1.13.5-rancher1-2"
 )
 
 var (
@@ -24,12 +24,12 @@ var (
 
 	// K8sVersionsCurrent are the latest versions available for installation
 	K8sVersionsCurrent = []string{
-		"v1.11.8-rancher1-1",
+		"v1.11.9-rancher1-1",
 		// When add a new k8s version to 2.2, make sure to add support for it to the 2.1.x branch.
 		// Account for the fact that rke-tools image is different cross branches, and it requires using
 		// different k8s version tag
-		"v1.12.6-rancher1-2",
-		"v1.13.4-rancher1-2",
+		"v1.12.7-rancher1-2",
+		"v1.13.5-rancher1-2",
 	}
 
 	// K8sVersionToRKESystemImages is dynamically populated on init() with the latest versions
@@ -874,9 +874,9 @@ var (
 			CoreDNS:                   m("coredns/coredns:1.2.2"),
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.0.0"),
 		},
-		"v1.12.6-rancher1-2": {
+		"v1.12.7-rancher1-2": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24-rancher1"),
-			Kubernetes:                m("rancher/hyperkube:v1.12.6-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.12.7-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.27"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.27"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.27"),
@@ -958,9 +958,9 @@ var (
 			CoreDNS:                   m("coredns/coredns:1.2.6"),
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.0.0"),
 		},
-		"v1.13.4-rancher1-2": {
+		"v1.13.5-rancher1-2": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24-rancher1"),
-			Kubernetes:                m("rancher/hyperkube:v1.13.4-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.13.5-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.27"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.27"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.27"),
