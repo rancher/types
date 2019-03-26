@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultK8s = "v1.13.4-rancher1-1"
+	DefaultK8s = "v1.13.5-rancher1-1"
 )
 
 var (
@@ -17,9 +17,9 @@ var (
 
 	// k8sVersionsCurrent are the latest versions available for installation
 	k8sVersionsCurrent = []string{
-		"v1.11.8-rancher1-1",
-		"v1.12.6-rancher1-1",
-		"v1.13.4-rancher1-1",
+		"v1.11.9-rancher1-1",
+		"v1.12.7-rancher1-1",
+		"v1.13.5-rancher1-1",
 	}
 
 	// K8sVersionToRKESystemImages is dynamically populated on init() with the latest versions
@@ -665,9 +665,9 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.2.1"),
 		},
-		"v1.11.8-rancher1-1": {
+		"v1.11.9-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.18"),
-			Kubernetes:                m("rancher/hyperkube:v1.11.8-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.11.9-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.15"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.15"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.15"),
@@ -847,9 +847,9 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.3.1"),
 		},
-		"v1.12.6-rancher1-1": {
+		"v1.12.7-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24"),
-			Kubernetes:                m("rancher/hyperkube:v1.12.6-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.12.7-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.16"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.16"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.16"),
@@ -925,9 +925,9 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.3.1"),
 		},
-		"v1.13.4-rancher1-1": {
+		"v1.13.5-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24"),
-			Kubernetes:                m("rancher/hyperkube:v1.13.4-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.13.5-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.16"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.16"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.16"),
