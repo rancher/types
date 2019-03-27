@@ -19,6 +19,7 @@ type GlobalDNS struct {
 
 type GlobalDNSSpec struct {
 	FQDN                string   `json:"fqdn,omitempty" norman:"required"`
+	TTL                 int64    `json:"ttl,omitempty" norman:"default=300"`
 	ProjectNames        []string `json:"projectNames" norman:"type=array[reference[project]],noupdate"`
 	MultiClusterAppName string   `json:"multiClusterAppName,omitempty" norman:"type=reference[multiClusterApp]"`
 	ProviderName        string   `json:"providerName,omitempty" norman:"type=reference[globalDnsProvider],required"`
@@ -31,6 +32,8 @@ type GlobalDNSStatus struct {
 }
 
 type GlobalDNSProvider struct {
+	types.Namespaced
+
 	metav1.TypeMeta `json:",inline"`
 	// Standard object’s metadata. More info:
 	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#metadata
@@ -46,18 +49,17 @@ type GlobalDNSProviderSpec struct {
 	AlidnsProviderConfig     *AlidnsProviderConfig     `json:"alidnsProviderConfig,omitempty"`
 	LinodeProviderConfig     *LinodeProviderConfig     `json:"linodeProviderConfig,omitempty"`
 	Members                  []Member                  `json:"members,omitempty"`
+	RootDomain               string                    `json:"rootDomain"`
 }
 
 type Route53ProviderConfig struct {
-	RootDomain string `json:"rootDomain" norman:"required"`
-	AccessKey  string `json:"accessKey" norman:"notnullable,required,minLength=1"`
-	SecretKey  string `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
+	AccessKey string `json:"accessKey" norman:"notnullable,required,minLength=1"`
+	SecretKey string `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
 }
 
 type CloudflareProviderConfig struct {
-	RootDomain string `json:"rootDomain" norman:"required"`
-	APIKey     string `json:"apiKey" norman:"notnullable,required,minLength=1,type=password"`
-	APIEmail   string `json:"apiEmail" norman:"notnullable,required,minLength=1"`
+	APIKey   string `json:"apiKey" norman:"notnullable,required,minLength=1,type=password"`
+	APIEmail string `json:"apiEmail" norman:"notnullable,required,minLength=1"`
 }
 
 type UpdateGlobalDNSTargetsInput struct {
@@ -65,17 +67,10 @@ type UpdateGlobalDNSTargetsInput struct {
 }
 
 type AlidnsProviderConfig struct {
-	RootDomain string `json:"rootDomain" norman:"required"`
-	AccessKey  string `json:"accessKey" norman:"notnullable,required,minLength=1"`
-	SecretKey  string `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
+	AccessKey string `json:"accessKey" norman:"notnullable,required,minLength=1"`
+	SecretKey string `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
 }
 
 type LinodeProviderConfig struct {
-	RootDomain string `json:"rootDomain" norman:"required"`
-	AccessKey  string `json:"accessKey" norman:"notnullable,required,minLength=1"`
-	SecretKey  string `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
-}
-
-type GlobalDNSSystemImages struct {
-	ExternalDNS string `yaml:"ExternalDns" json:"ExternalDns,omitempty"`
+	APIToken  string `json:"apiToken" norman:"notnullable,required,minLength=1,type=password"`
 }
