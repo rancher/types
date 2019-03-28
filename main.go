@@ -14,6 +14,7 @@ import (
 	batchv1 "k8s.io/api/batch/v1"
 	batchv1beta1 "k8s.io/api/batch/v1beta1"
 
+	scalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 	"k8s.io/api/core/v1"
 	extv1beta1 "k8s.io/api/extensions/v1beta1"
 	knetworkingv1 "k8s.io/api/networking/v1"
@@ -86,6 +87,12 @@ func main() {
 			monitoringv1.Alertmanager{},
 			monitoringv1.PrometheusRule{},
 			monitoringv1.ServiceMonitor{},
+		},
+		[]interface{}{},
+	)
+	generator.GenerateNativeTypes(scalingv2beta2.SchemeGroupVersion,
+		[]interface{}{
+			scalingv2beta2.HorizontalPodAutoscaler{},
 		},
 		[]interface{}{},
 	)
