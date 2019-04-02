@@ -2,13 +2,12 @@ package generator
 
 import (
 	"fmt"
-	"path"
-	"strings"
-
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
+	"strings"
 	"text/template"
 
 	"github.com/rancher/norman/generator"
