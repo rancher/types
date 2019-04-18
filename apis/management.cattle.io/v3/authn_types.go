@@ -319,3 +319,7 @@ type OKTAConfig struct {
 type AuthSystemImages struct {
 	KubeAPIAuth string `json:"kubeAPIAuth,omitempty"`
 }
+
+type GSuiteConfig struct {
+	SamlConfig `json:",inline" mapstructure:",squash"`
+}
