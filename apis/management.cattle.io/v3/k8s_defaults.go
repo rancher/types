@@ -721,6 +721,7 @@ var (
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.4"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server-amd64:v0.2.1"),
 		},
+		// Enabled in Rancher v2.2.3
 		"v1.11.9-rancher1-2": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.18"),
 			Kubernetes:                m("rancher/hyperkube:v1.11.9-rancher1"),
@@ -943,6 +944,7 @@ var (
 			CoreDNS:                   m("coredns/coredns:1.2.2"),
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.0.0"),
 		},
+		// Enabled in Rancher v2.2.3
 		"v1.12.7-rancher1-3": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24-rancher1"),
 			Kubernetes:                m("rancher/hyperkube:v1.12.7-rancher1"),
@@ -1055,6 +1057,7 @@ var (
 			CoreDNS:                   m("coredns/coredns:1.2.6"),
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.0.0"),
 		},
+		// Enabled in Rancher v2.2.3
 		"v1.13.5-rancher1-3": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24-rancher1"),
 			Kubernetes:                m("rancher/hyperkube:v1.13.5-rancher1"),
@@ -1083,6 +1086,7 @@ var (
 			CoreDNS:                   m("coredns/coredns:1.2.6"),
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.0.0"),
 		},
+		// Enabled in Rancher v2.2.2
 		"v1.14.1-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.3.10-rancher1"),
 			Kubernetes:                m("rancher/hyperkube:v1.14.1-rancher1"),
