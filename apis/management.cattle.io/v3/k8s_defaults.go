@@ -30,7 +30,7 @@ var (
 		// different k8s version tag
 		"v1.12.7-rancher1-3",
 		"v1.13.5-rancher1-3",
-		"v1.14.1-rancher1-1",
+		"v1.14.1-rancher1-2",
 	}
 
 	// K8sVersionToRKESystemImages is dynamically populated on init() with the latest versions
