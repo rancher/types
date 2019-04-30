@@ -1114,8 +1114,8 @@ var (
 			MetricsServer:             m("gcr.io/google_containers/metrics-server:v0.3.1"),
 			CoreDNS:                   "coredns/coredns:1.3.1",
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.3.0"),
-		},// Enabled in Rancher v2.2.2
-		"v1.14.1-rancher1-1": {
+		}, // Enabled in Rancher v2.2.3
+		"v1.14.1-rancher1-2": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.3.10-rancher1"),
 			Kubernetes:                m("rancher/hyperkube:v1.14.1-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.28"),
@@ -1140,7 +1140,7 @@ var (
 			Ingress:                   m("rancher/nginx-ingress-controller:0.21.0-rancher3"),
 			IngressBackend:            m("k8s.gcr.io/defaultbackend:1.5-rancher1"),
 			MetricsServer:             m("gcr.io/google_containers/metrics-server:v0.3.1"),
-			CoreDNS:                   "coredns/coredns:1.3.1",
+			CoreDNS:                   m("coredns/coredns:1.3.1"),
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.3.0"),
 		},
 		// k8s version from 2.1.x release with old rke-tools to allow upgrade from 2.1.x clusters
