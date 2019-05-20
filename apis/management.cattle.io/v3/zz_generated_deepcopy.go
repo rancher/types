@@ -7050,6 +7050,11 @@ func (in *RKEConfigNode) DeepCopyInto(out *RKEConfigNode) {
 			(*out)[key] = val
 		}
 	}
+	if in.Taints != nil {
+		in, out := &in.Taints, &out.Taints
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 
@@ -7096,6 +7101,11 @@ func (in *RKEConfigNodePlan) DeepCopyInto(out *RKEConfigNodePlan) {
 		for key, val := range *in {
 			(*out)[key] = val
 		}
+	}
+	if in.Taints != nil {
+		in, out := &in.Taints, &out.Taints
+		*out = make([]string, len(*in))
+		copy(*out, *in)
 	}
 	return
 }
