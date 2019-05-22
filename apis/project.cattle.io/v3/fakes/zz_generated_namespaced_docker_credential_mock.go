@@ -141,6 +141,7 @@ func (mock *NamespacedDockerCredentialListerMock) ListCalls() []struct {
 
 var (
 	lockNamespacedDockerCredentialControllerMockAddClusterScopedHandler sync.RWMutex
+	lockNamespacedDockerCredentialControllerMockAddFeatureHandler       sync.RWMutex
 	lockNamespacedDockerCredentialControllerMockAddHandler              sync.RWMutex
 	lockNamespacedDockerCredentialControllerMockEnqueue                 sync.RWMutex
 	lockNamespacedDockerCredentialControllerMockGeneric                 sync.RWMutex
@@ -162,6 +163,9 @@ var _ v3.NamespacedDockerCredentialController = &NamespacedDockerCredentialContr
 //         mockedNamespacedDockerCredentialController := &NamespacedDockerCredentialControllerMock{
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v3.NamespacedDockerCredentialHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedDockerCredentialHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v3.NamespacedDockerCredentialHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -193,6 +197,9 @@ var _ v3.NamespacedDockerCredentialController = &NamespacedDockerCredentialContr
 type NamespacedDockerCredentialControllerMock struct {
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v3.NamespacedDockerCredentialHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedDockerCredentialHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v3.NamespacedDockerCredentialHandlerFunc)
@@ -227,6 +234,19 @@ type NamespacedDockerCredentialControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v3.NamespacedDockerCredentialHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.NamespacedDockerCredentialHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -308,6 +328,53 @@ func (mock *NamespacedDockerCredentialControllerMock) AddClusterScopedHandlerCal
 	lockNamespacedDockerCredentialControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockNamespacedDockerCredentialControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *NamespacedDockerCredentialControllerMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedDockerCredentialHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("NamespacedDockerCredentialControllerMock.AddFeatureHandlerFunc: method is nil but NamespacedDockerCredentialController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.NamespacedDockerCredentialHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockNamespacedDockerCredentialControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockNamespacedDockerCredentialControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedNamespacedDockerCredentialController.AddFeatureHandlerCalls())
+func (mock *NamespacedDockerCredentialControllerMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.NamespacedDockerCredentialHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.NamespacedDockerCredentialHandlerFunc
+	}
+	lockNamespacedDockerCredentialControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockNamespacedDockerCredentialControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -532,6 +599,8 @@ func (mock *NamespacedDockerCredentialControllerMock) SyncCalls() []struct {
 var (
 	lockNamespacedDockerCredentialInterfaceMockAddClusterScopedHandler   sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockAddClusterScopedLifecycle sync.RWMutex
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureHandler         sync.RWMutex
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureLifecycle       sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockAddHandler                sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockAddLifecycle              sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockController                sync.RWMutex
@@ -562,6 +631,12 @@ var _ v3.NamespacedDockerCredentialInterface = &NamespacedDockerCredentialInterf
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedDockerCredentialLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedDockerCredentialHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.NamespacedDockerCredentialLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v3.NamespacedDockerCredentialHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -614,6 +689,12 @@ type NamespacedDockerCredentialInterfaceMock struct {
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedDockerCredentialLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedDockerCredentialHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.NamespacedDockerCredentialLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v3.NamespacedDockerCredentialHandlerFunc)
@@ -675,6 +756,32 @@ type NamespacedDockerCredentialInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.NamespacedDockerCredentialLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.NamespacedDockerCredentialHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v3.NamespacedDockerCredentialLifecycle
 		}
@@ -847,6 +954,100 @@ func (mock *NamespacedDockerCredentialInterfaceMock) AddClusterScopedLifecycleCa
 	lockNamespacedDockerCredentialInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockNamespacedDockerCredentialInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *NamespacedDockerCredentialInterfaceMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedDockerCredentialHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("NamespacedDockerCredentialInterfaceMock.AddFeatureHandlerFunc: method is nil but NamespacedDockerCredentialInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.NamespacedDockerCredentialHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedNamespacedDockerCredentialInterface.AddFeatureHandlerCalls())
+func (mock *NamespacedDockerCredentialInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.NamespacedDockerCredentialHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.NamespacedDockerCredentialHandlerFunc
+	}
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *NamespacedDockerCredentialInterfaceMock) AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.NamespacedDockerCredentialLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("NamespacedDockerCredentialInterfaceMock.AddFeatureLifecycleFunc: method is nil but NamespacedDockerCredentialInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.NamespacedDockerCredentialLifecycle
+	}{
+		Enabled:   enabled,
+		Feat:      feat,
+		Ctx:       ctx,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(enabled, feat, ctx, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedNamespacedDockerCredentialInterface.AddFeatureLifecycleCalls())
+func (mock *NamespacedDockerCredentialInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Enabled   func(string) bool
+	Feat      string
+	Ctx       context.Context
+	Name      string
+	Lifecycle v3.NamespacedDockerCredentialLifecycle
+} {
+	var calls []struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.NamespacedDockerCredentialLifecycle
+	}
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockNamespacedDockerCredentialInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 

@@ -141,6 +141,7 @@ func (mock *SourceCodeProviderConfigListerMock) ListCalls() []struct {
 
 var (
 	lockSourceCodeProviderConfigControllerMockAddClusterScopedHandler sync.RWMutex
+	lockSourceCodeProviderConfigControllerMockAddFeatureHandler       sync.RWMutex
 	lockSourceCodeProviderConfigControllerMockAddHandler              sync.RWMutex
 	lockSourceCodeProviderConfigControllerMockEnqueue                 sync.RWMutex
 	lockSourceCodeProviderConfigControllerMockGeneric                 sync.RWMutex
@@ -162,6 +163,9 @@ var _ v3.SourceCodeProviderConfigController = &SourceCodeProviderConfigControlle
 //         mockedSourceCodeProviderConfigController := &SourceCodeProviderConfigControllerMock{
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v3.SourceCodeProviderConfigHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeProviderConfigHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v3.SourceCodeProviderConfigHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -193,6 +197,9 @@ var _ v3.SourceCodeProviderConfigController = &SourceCodeProviderConfigControlle
 type SourceCodeProviderConfigControllerMock struct {
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v3.SourceCodeProviderConfigHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeProviderConfigHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v3.SourceCodeProviderConfigHandlerFunc)
@@ -227,6 +234,19 @@ type SourceCodeProviderConfigControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v3.SourceCodeProviderConfigHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.SourceCodeProviderConfigHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -308,6 +328,53 @@ func (mock *SourceCodeProviderConfigControllerMock) AddClusterScopedHandlerCalls
 	lockSourceCodeProviderConfigControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockSourceCodeProviderConfigControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *SourceCodeProviderConfigControllerMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeProviderConfigHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("SourceCodeProviderConfigControllerMock.AddFeatureHandlerFunc: method is nil but SourceCodeProviderConfigController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.SourceCodeProviderConfigHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockSourceCodeProviderConfigControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockSourceCodeProviderConfigControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedSourceCodeProviderConfigController.AddFeatureHandlerCalls())
+func (mock *SourceCodeProviderConfigControllerMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.SourceCodeProviderConfigHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.SourceCodeProviderConfigHandlerFunc
+	}
+	lockSourceCodeProviderConfigControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockSourceCodeProviderConfigControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -532,6 +599,8 @@ func (mock *SourceCodeProviderConfigControllerMock) SyncCalls() []struct {
 var (
 	lockSourceCodeProviderConfigInterfaceMockAddClusterScopedHandler   sync.RWMutex
 	lockSourceCodeProviderConfigInterfaceMockAddClusterScopedLifecycle sync.RWMutex
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureHandler         sync.RWMutex
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureLifecycle       sync.RWMutex
 	lockSourceCodeProviderConfigInterfaceMockAddHandler                sync.RWMutex
 	lockSourceCodeProviderConfigInterfaceMockAddLifecycle              sync.RWMutex
 	lockSourceCodeProviderConfigInterfaceMockController                sync.RWMutex
@@ -562,6 +631,12 @@ var _ v3.SourceCodeProviderConfigInterface = &SourceCodeProviderConfigInterfaceM
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v3.SourceCodeProviderConfigLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeProviderConfigHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.SourceCodeProviderConfigLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v3.SourceCodeProviderConfigHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -614,6 +689,12 @@ type SourceCodeProviderConfigInterfaceMock struct {
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v3.SourceCodeProviderConfigLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeProviderConfigHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.SourceCodeProviderConfigLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v3.SourceCodeProviderConfigHandlerFunc)
@@ -675,6 +756,32 @@ type SourceCodeProviderConfigInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.SourceCodeProviderConfigLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.SourceCodeProviderConfigHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v3.SourceCodeProviderConfigLifecycle
 		}
@@ -847,6 +954,100 @@ func (mock *SourceCodeProviderConfigInterfaceMock) AddClusterScopedLifecycleCall
 	lockSourceCodeProviderConfigInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockSourceCodeProviderConfigInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *SourceCodeProviderConfigInterfaceMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeProviderConfigHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("SourceCodeProviderConfigInterfaceMock.AddFeatureHandlerFunc: method is nil but SourceCodeProviderConfigInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.SourceCodeProviderConfigHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedSourceCodeProviderConfigInterface.AddFeatureHandlerCalls())
+func (mock *SourceCodeProviderConfigInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.SourceCodeProviderConfigHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.SourceCodeProviderConfigHandlerFunc
+	}
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *SourceCodeProviderConfigInterfaceMock) AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.SourceCodeProviderConfigLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("SourceCodeProviderConfigInterfaceMock.AddFeatureLifecycleFunc: method is nil but SourceCodeProviderConfigInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.SourceCodeProviderConfigLifecycle
+	}{
+		Enabled:   enabled,
+		Feat:      feat,
+		Ctx:       ctx,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(enabled, feat, ctx, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedSourceCodeProviderConfigInterface.AddFeatureLifecycleCalls())
+func (mock *SourceCodeProviderConfigInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Enabled   func(string) bool
+	Feat      string
+	Ctx       context.Context
+	Name      string
+	Lifecycle v3.SourceCodeProviderConfigLifecycle
+} {
+	var calls []struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.SourceCodeProviderConfigLifecycle
+	}
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockSourceCodeProviderConfigInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 
