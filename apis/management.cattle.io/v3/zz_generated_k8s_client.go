@@ -63,6 +63,7 @@ type Interface interface {
 	ClusterAlertRulesGetter
 	ProjectAlertRulesGetter
 	ComposeConfigsGetter
+	ExampleConfigsGetter
 	ProjectCatalogsGetter
 	ClusterCatalogsGetter
 	MultiClusterAppsGetter
@@ -123,6 +124,7 @@ type Clients struct {
 	ClusterAlertRule                        ClusterAlertRuleClient
 	ProjectAlertRule                        ProjectAlertRuleClient
 	ComposeConfig                           ComposeConfigClient
+	ExampleConfig                           ExampleConfigClient
 	ProjectCatalog                          ProjectCatalogClient
 	ClusterCatalog                          ClusterCatalogClient
 	MultiClusterApp                         MultiClusterAppClient
@@ -185,6 +187,7 @@ type Client struct {
 	clusterAlertRuleControllers                        map[string]ClusterAlertRuleController
 	projectAlertRuleControllers                        map[string]ProjectAlertRuleController
 	composeConfigControllers                           map[string]ComposeConfigController
+	exampleConfigControllers                           map[string]ExampleConfigController
 	projectCatalogControllers                          map[string]ProjectCatalogController
 	clusterCatalogControllers                          map[string]ClusterCatalogController
 	multiClusterAppControllers                         map[string]MultiClusterAppController
@@ -361,6 +364,9 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		ComposeConfig: &composeConfigClient2{
 			iface: iface.ComposeConfigs(""),
 		},
+		ExampleConfig: &exampleConfigClient2{
+			iface: iface.ExampleConfigs(""),
+		},
 		ProjectCatalog: &projectCatalogClient2{
 			iface: iface.ProjectCatalogs(""),
 		},
@@ -456,6 +462,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		clusterAlertRuleControllers:                        map[string]ClusterAlertRuleController{},
 		projectAlertRuleControllers:                        map[string]ProjectAlertRuleController{},
 		composeConfigControllers:                           map[string]ComposeConfigController{},
+		exampleConfigControllers:                           map[string]ExampleConfigController{},
 		projectCatalogControllers:                          map[string]ProjectCatalogController{},
 		clusterCatalogControllers:                          map[string]ClusterCatalogController{},
 		multiClusterAppControllers:                         map[string]MultiClusterAppController{},
@@ -1036,6 +1043,19 @@ type ComposeConfigsGetter interface {
 func (c *Client) ComposeConfigs(namespace string) ComposeConfigInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ComposeConfigResource, ComposeConfigGroupVersionKind, composeConfigFactory{})
 	return &composeConfigClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type ExampleConfigsGetter interface {
+	ExampleConfigs(namespace string) ExampleConfigInterface
+}
+
+func (c *Client) ExampleConfigs(namespace string) ExampleConfigInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ExampleConfigResource, ExampleConfigGroupVersionKind, exampleConfigFactory{})
+	return &exampleConfigClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

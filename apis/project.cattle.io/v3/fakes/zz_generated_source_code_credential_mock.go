@@ -141,6 +141,7 @@ func (mock *SourceCodeCredentialListerMock) ListCalls() []struct {
 
 var (
 	lockSourceCodeCredentialControllerMockAddClusterScopedHandler sync.RWMutex
+	lockSourceCodeCredentialControllerMockAddFeatureHandler       sync.RWMutex
 	lockSourceCodeCredentialControllerMockAddHandler              sync.RWMutex
 	lockSourceCodeCredentialControllerMockEnqueue                 sync.RWMutex
 	lockSourceCodeCredentialControllerMockGeneric                 sync.RWMutex
@@ -162,6 +163,9 @@ var _ v3.SourceCodeCredentialController = &SourceCodeCredentialControllerMock{}
 //         mockedSourceCodeCredentialController := &SourceCodeCredentialControllerMock{
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v3.SourceCodeCredentialHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeCredentialHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v3.SourceCodeCredentialHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -193,6 +197,9 @@ var _ v3.SourceCodeCredentialController = &SourceCodeCredentialControllerMock{}
 type SourceCodeCredentialControllerMock struct {
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v3.SourceCodeCredentialHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeCredentialHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v3.SourceCodeCredentialHandlerFunc)
@@ -227,6 +234,19 @@ type SourceCodeCredentialControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v3.SourceCodeCredentialHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.SourceCodeCredentialHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -308,6 +328,53 @@ func (mock *SourceCodeCredentialControllerMock) AddClusterScopedHandlerCalls() [
 	lockSourceCodeCredentialControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockSourceCodeCredentialControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *SourceCodeCredentialControllerMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeCredentialHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("SourceCodeCredentialControllerMock.AddFeatureHandlerFunc: method is nil but SourceCodeCredentialController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.SourceCodeCredentialHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockSourceCodeCredentialControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockSourceCodeCredentialControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedSourceCodeCredentialController.AddFeatureHandlerCalls())
+func (mock *SourceCodeCredentialControllerMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.SourceCodeCredentialHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.SourceCodeCredentialHandlerFunc
+	}
+	lockSourceCodeCredentialControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockSourceCodeCredentialControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -532,6 +599,8 @@ func (mock *SourceCodeCredentialControllerMock) SyncCalls() []struct {
 var (
 	lockSourceCodeCredentialInterfaceMockAddClusterScopedHandler   sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockAddClusterScopedLifecycle sync.RWMutex
+	lockSourceCodeCredentialInterfaceMockAddFeatureHandler         sync.RWMutex
+	lockSourceCodeCredentialInterfaceMockAddFeatureLifecycle       sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockAddHandler                sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockAddLifecycle              sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockController                sync.RWMutex
@@ -562,6 +631,12 @@ var _ v3.SourceCodeCredentialInterface = &SourceCodeCredentialInterfaceMock{}
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v3.SourceCodeCredentialLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeCredentialHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.SourceCodeCredentialLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v3.SourceCodeCredentialHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -614,6 +689,12 @@ type SourceCodeCredentialInterfaceMock struct {
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v3.SourceCodeCredentialLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeCredentialHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.SourceCodeCredentialLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v3.SourceCodeCredentialHandlerFunc)
@@ -675,6 +756,32 @@ type SourceCodeCredentialInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.SourceCodeCredentialLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.SourceCodeCredentialHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v3.SourceCodeCredentialLifecycle
 		}
@@ -847,6 +954,100 @@ func (mock *SourceCodeCredentialInterfaceMock) AddClusterScopedLifecycleCalls() 
 	lockSourceCodeCredentialInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockSourceCodeCredentialInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *SourceCodeCredentialInterfaceMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.SourceCodeCredentialHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("SourceCodeCredentialInterfaceMock.AddFeatureHandlerFunc: method is nil but SourceCodeCredentialInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.SourceCodeCredentialHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockSourceCodeCredentialInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockSourceCodeCredentialInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedSourceCodeCredentialInterface.AddFeatureHandlerCalls())
+func (mock *SourceCodeCredentialInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.SourceCodeCredentialHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.SourceCodeCredentialHandlerFunc
+	}
+	lockSourceCodeCredentialInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockSourceCodeCredentialInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *SourceCodeCredentialInterfaceMock) AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.SourceCodeCredentialLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("SourceCodeCredentialInterfaceMock.AddFeatureLifecycleFunc: method is nil but SourceCodeCredentialInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.SourceCodeCredentialLifecycle
+	}{
+		Enabled:   enabled,
+		Feat:      feat,
+		Ctx:       ctx,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockSourceCodeCredentialInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockSourceCodeCredentialInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(enabled, feat, ctx, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedSourceCodeCredentialInterface.AddFeatureLifecycleCalls())
+func (mock *SourceCodeCredentialInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Enabled   func(string) bool
+	Feat      string
+	Ctx       context.Context
+	Name      string
+	Lifecycle v3.SourceCodeCredentialLifecycle
+} {
+	var calls []struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.SourceCodeCredentialLifecycle
+	}
+	lockSourceCodeCredentialInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockSourceCodeCredentialInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 
