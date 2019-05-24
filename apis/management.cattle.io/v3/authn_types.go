@@ -323,6 +323,6 @@ type AuthSystemImages struct {
 	KubeAPIAuth string `json:"kubeAPIAuth,omitempty"`
 }
 
-type GSuiteConfig struct {
+type GsuiteConfig struct {
 	SamlConfig `json:",inline" mapstructure:",squash"`
 }

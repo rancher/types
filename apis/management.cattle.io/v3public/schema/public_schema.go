@@ -126,7 +126,7 @@ func authProvidersTypes(schemas *types.Schemas) *types.Schemas {
 			schema.CollectionMethods = []string{}
 			schema.ResourceMethods = []string{http.MethodGet}
 		}).
-		MustImportAndCustomize(&PublicVersion, v3public.GSuiteProvider{}, func(schema *types.Schema) {
+		MustImportAndCustomize(&PublicVersion, v3public.GsuiteProvider{}, func(schema *types.Schema) {
 			schema.BaseType = "authProvider"
 			schema.ResourceActions = map[string]types.Action{
 				"login": {

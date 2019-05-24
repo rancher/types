@@ -1,20 +1,20 @@
 package client
 
 const (
-	GSuiteProviderType                 = "gSuiteProvider"
-	GSuiteProviderFieldAnnotations     = "annotations"
-	GSuiteProviderFieldCreated         = "created"
-	GSuiteProviderFieldCreatorID       = "creatorId"
-	GSuiteProviderFieldLabels          = "labels"
-	GSuiteProviderFieldName            = "name"
-	GSuiteProviderFieldOwnerReferences = "ownerReferences"
-	GSuiteProviderFieldRedirectURL     = "redirectUrl"
-	GSuiteProviderFieldRemoved         = "removed"
-	GSuiteProviderFieldType            = "type"
-	GSuiteProviderFieldUUID            = "uuid"
+	GsuiteProviderType                 = "gsuiteProvider"
+	GsuiteProviderFieldAnnotations     = "annotations"
+	GsuiteProviderFieldCreated         = "created"
+	GsuiteProviderFieldCreatorID       = "creatorId"
+	GsuiteProviderFieldLabels          = "labels"
+	GsuiteProviderFieldName            = "name"
+	GsuiteProviderFieldOwnerReferences = "ownerReferences"
+	GsuiteProviderFieldRedirectURL     = "redirectUrl"
+	GsuiteProviderFieldRemoved         = "removed"
+	GsuiteProviderFieldType            = "type"
+	GsuiteProviderFieldUUID            = "uuid"
 )
 
-type GSuiteProvider struct {
+type GsuiteProvider struct {
 	Annotations     map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created         string            `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID       string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`

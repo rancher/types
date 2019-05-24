@@ -99,7 +99,7 @@ type OKTAProvider struct {
 	SamlProvider `json:",inline"`
 }
 
-type GSuiteProvider struct {
+type GsuiteProvider struct {
 	SamlProvider `json:",inline"`
 }
 
