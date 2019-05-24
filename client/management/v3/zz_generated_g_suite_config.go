@@ -8,6 +8,8 @@ const (
 	GSuiteConfigFieldCreated             = "created"
 	GSuiteConfigFieldCreatorID           = "creatorId"
 	GSuiteConfigFieldDisplayNameField    = "displayNameField"
+	GSuiteConfigFieldDomain              = "domain"
+	GSuiteConfigFieldEmail               = "email"
 	GSuiteConfigFieldEnabled             = "enabled"
 	GSuiteConfigFieldGroupsField         = "groupsField"
 	GSuiteConfigFieldIDPMetadataContent  = "idpMetadataContent"
@@ -16,6 +18,7 @@ const (
 	GSuiteConfigFieldOwnerReferences     = "ownerReferences"
 	GSuiteConfigFieldRancherAPIHost      = "rancherApiHost"
 	GSuiteConfigFieldRemoved             = "removed"
+	GSuiteConfigFieldServiceAccountFile  = "serviceAccountFile"
 	GSuiteConfigFieldSpCert              = "spCert"
 	GSuiteConfigFieldSpKey               = "spKey"
 	GSuiteConfigFieldType                = "type"
@@ -31,6 +34,8 @@ type GSuiteConfig struct {
 	Created             string            `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID           string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	DisplayNameField    string            `json:"displayNameField,omitempty" yaml:"displayNameField,omitempty"`
+	Domain              string            `json:"domain,omitempty" yaml:"domain,omitempty"`
+	Email               string            `json:"email,omitempty" yaml:"email,omitempty"`
 	Enabled             bool              `json:"enabled,omitempty" yaml:"enabled,omitempty"`
 	GroupsField         string            `json:"groupsField,omitempty" yaml:"groupsField,omitempty"`
 	IDPMetadataContent  string            `json:"idpMetadataContent,omitempty" yaml:"idpMetadataContent,omitempty"`
@@ -39,6 +44,7 @@ type GSuiteConfig struct {
 	OwnerReferences     []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
 	RancherAPIHost      string            `json:"rancherApiHost,omitempty" yaml:"rancherApiHost,omitempty"`
 	Removed             string            `json:"removed,omitempty" yaml:"removed,omitempty"`
+	ServiceAccountFile  string            `json:"serviceAccountFile,omitempty" yaml:"serviceAccountFile,omitempty"`
 	SpCert              string            `json:"spCert,omitempty" yaml:"spCert,omitempty"`
 	SpKey               string            `json:"spKey,omitempty" yaml:"spKey,omitempty"`
 	Type                string            `json:"type,omitempty" yaml:"type,omitempty"`

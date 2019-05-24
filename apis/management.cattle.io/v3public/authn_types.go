@@ -99,6 +99,10 @@ type OKTAProvider struct {
 	SamlProvider `json:",inline"`
 }
 
+type GSuiteProvider struct {
+	SamlProvider `json:",inline"`
+}
+
 type SamlLoginInput struct {
 	FinalRedirectURL string `json:"finalRedirectUrl"`
 }

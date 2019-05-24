@@ -8,6 +8,8 @@ const (
 	PingConfigFieldCreated             = "created"
 	PingConfigFieldCreatorID           = "creatorId"
 	PingConfigFieldDisplayNameField    = "displayNameField"
+	PingConfigFieldDomain              = "domain"
+	PingConfigFieldEmail               = "email"
 	PingConfigFieldEnabled             = "enabled"
 	PingConfigFieldGroupsField         = "groupsField"
 	PingConfigFieldIDPMetadataContent  = "idpMetadataContent"
@@ -16,6 +18,7 @@ const (
 	PingConfigFieldOwnerReferences     = "ownerReferences"
 	PingConfigFieldRancherAPIHost      = "rancherApiHost"
 	PingConfigFieldRemoved             = "removed"
+	PingConfigFieldServiceAccountFile  = "serviceAccountFile"
 	PingConfigFieldSpCert              = "spCert"
 	PingConfigFieldSpKey               = "spKey"
 	PingConfigFieldType                = "type"
@@ -31,6 +34,8 @@ type PingConfig struct {
 	Created             string            `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID           string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	DisplayNameField    string            `json:"displayNameField,omitempty" yaml:"displayNameField,omitempty"`
+	Domain              string            `json:"domain,omitempty" yaml:"domain,omitempty"`
+	Email               string            `json:"email,omitempty" yaml:"email,omitempty"`
 	Enabled             bool              `json:"enabled,omitempty" yaml:"enabled,omitempty"`
 	GroupsField         string            `json:"groupsField,omitempty" yaml:"groupsField,omitempty"`
 	IDPMetadataContent  string            `json:"idpMetadataContent,omitempty" yaml:"idpMetadataContent,omitempty"`
@@ -39,6 +44,7 @@ type PingConfig struct {
 	OwnerReferences     []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
 	RancherAPIHost      string            `json:"rancherApiHost,omitempty" yaml:"rancherApiHost,omitempty"`
 	Removed             string            `json:"removed,omitempty" yaml:"removed,omitempty"`
+	ServiceAccountFile  string            `json:"serviceAccountFile,omitempty" yaml:"serviceAccountFile,omitempty"`
 	SpCert              string            `json:"spCert,omitempty" yaml:"spCert,omitempty"`
 	SpKey               string            `json:"spKey,omitempty" yaml:"spKey,omitempty"`
 	Type                string            `json:"type,omitempty" yaml:"type,omitempty"`
