@@ -33,6 +33,7 @@ type MultiClusterAppSpec struct {
 	Roles                []string        `json:"roles,omitempty" norman:"type=array[reference[roleTemplate]],required"`
 	RevisionHistoryLimit int             `json:"revisionHistoryLimit,omitempty" norman:"default=10"`
 	UpgradeStrategy      UpgradeStrategy `json:"upgradeStrategy,omitempty"`
+	ShareWithAll         bool            `json:"shareWithAll,omitempty"`
 }
 
 type MultiClusterAppStatus struct {
