@@ -63,7 +63,7 @@ type Interface interface {
 	ClusterAlertRulesGetter
 	ProjectAlertRulesGetter
 	ComposeConfigsGetter
-	ExampleConfigsGetter
+	ClusterRandomizersGetter
 	ProjectCatalogsGetter
 	ClusterCatalogsGetter
 	MultiClusterAppsGetter
@@ -124,7 +124,7 @@ type Clients struct {
 	ClusterAlertRule                        ClusterAlertRuleClient
 	ProjectAlertRule                        ProjectAlertRuleClient
 	ComposeConfig                           ComposeConfigClient
-	ExampleConfig                           ExampleConfigClient
+	ClusterRandomizer                       ClusterRandomizerClient
 	ProjectCatalog                          ProjectCatalogClient
 	ClusterCatalog                          ClusterCatalogClient
 	MultiClusterApp                         MultiClusterAppClient
@@ -187,7 +187,7 @@ type Client struct {
 	clusterAlertRuleControllers                        map[string]ClusterAlertRuleController
 	projectAlertRuleControllers                        map[string]ProjectAlertRuleController
 	composeConfigControllers                           map[string]ComposeConfigController
-	exampleConfigControllers                           map[string]ExampleConfigController
+	clusterRandomizerControllers                       map[string]ClusterRandomizerController
 	projectCatalogControllers                          map[string]ProjectCatalogController
 	clusterCatalogControllers                          map[string]ClusterCatalogController
 	multiClusterAppControllers                         map[string]MultiClusterAppController
@@ -364,8 +364,8 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		ComposeConfig: &composeConfigClient2{
 			iface: iface.ComposeConfigs(""),
 		},
-		ExampleConfig: &exampleConfigClient2{
-			iface: iface.ExampleConfigs(""),
+		ClusterRandomizer: &clusterRandomizerClient2{
+			iface: iface.ClusterRandomizers(""),
 		},
 		ProjectCatalog: &projectCatalogClient2{
 			iface: iface.ProjectCatalogs(""),
@@ -462,7 +462,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		clusterAlertRuleControllers:                        map[string]ClusterAlertRuleController{},
 		projectAlertRuleControllers:                        map[string]ProjectAlertRuleController{},
 		composeConfigControllers:                           map[string]ComposeConfigController{},
-		exampleConfigControllers:                           map[string]ExampleConfigController{},
+		clusterRandomizerControllers:                       map[string]ClusterRandomizerController{},
 		projectCatalogControllers:                          map[string]ProjectCatalogController{},
 		clusterCatalogControllers:                          map[string]ClusterCatalogController{},
 		multiClusterAppControllers:                         map[string]MultiClusterAppController{},
@@ -1049,13 +1049,13 @@ func (c *Client) ComposeConfigs(namespace string) ComposeConfigInterface {
 	}
 }
 
-type ExampleConfigsGetter interface {
-	ExampleConfigs(namespace string) ExampleConfigInterface
+type ClusterRandomizersGetter interface {
+	ClusterRandomizers(namespace string) ClusterRandomizerInterface
 }
 
-func (c *Client) ExampleConfigs(namespace string) ExampleConfigInterface {
-	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ExampleConfigResource, ExampleConfigGroupVersionKind, exampleConfigFactory{})
-	return &exampleConfigClient{
+func (c *Client) ClusterRandomizers(namespace string) ClusterRandomizerInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ClusterRandomizerResource, ClusterRandomizerGroupVersionKind, clusterRandomizerFactory{})
+	return &clusterRandomizerClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

@@ -1,35 +1,30 @@
 package v3
 
 import (
-	"github.com/rancher/norman/condition"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-type ExampleConfig struct {
+type ClusterRandomizer struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object’s metadata. More info:
 	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#metadata
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// Specification of the desired behavior of the the cluster. More info:
 	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
-	Spec   ExampleSpec   `json:"spec,omitempty"`
-	Status ExampleStatus `json:"status,omitempty"`
+	Spec   RandomizerSpec   `json:"spec,omitempty"`
+	Status RandomizerStatus `json:"status,omitempty"`
 }
 
-type ExampleSpec struct {
+type RandomizerSpec struct {
 	ExampleString string `json:"rancherCompose,omitempty"`
 }
 
-type ExampleStatus struct {
-	Conditions []ComposeCondition `json:"conditions,omitempty"`
+type RandomizerStatus struct {
+	Conditions []RandomCondition `json:"conditions,omitempty"`
 }
 
-var (
-	ExampleConditionExecuted condition.Cond = "Executed"
-)
-
-type ExampleCondition struct {
+type RandomCondition struct {
 	// Type of cluster condition.
 	Type string `json:"type"`
 	// Status of the condition, one of True, False, Unknown.
