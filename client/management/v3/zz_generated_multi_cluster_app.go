@@ -17,6 +17,7 @@ const (
 	MultiClusterAppFieldRemoved              = "removed"
 	MultiClusterAppFieldRevisionHistoryLimit = "revisionHistoryLimit"
 	MultiClusterAppFieldRoles                = "roles"
+	MultiClusterAppFieldShareWithAll         = "shareWithAll"
 	MultiClusterAppFieldState                = "state"
 	MultiClusterAppFieldStatus               = "status"
 	MultiClusterAppFieldTargets              = "targets"
@@ -40,6 +41,7 @@ type MultiClusterApp struct {
 	Removed              string                 `json:"removed,omitempty" yaml:"removed,omitempty"`
 	RevisionHistoryLimit int64                  `json:"revisionHistoryLimit,omitempty" yaml:"revisionHistoryLimit,omitempty"`
 	Roles                []string               `json:"roles,omitempty" yaml:"roles,omitempty"`
+	ShareWithAll         bool                   `json:"shareWithAll,omitempty" yaml:"shareWithAll,omitempty"`
 	State                string                 `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *MultiClusterAppStatus `json:"status,omitempty" yaml:"status,omitempty"`
 	Targets              []Target               `json:"targets,omitempty" yaml:"targets,omitempty"`
