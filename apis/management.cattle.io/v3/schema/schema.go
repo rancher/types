@@ -34,7 +34,7 @@ var (
 		Init(rkeTypes).
 		Init(alertTypes).
 		Init(composeType).
-		Init(exampleType).
+		Init(ClusterRandomizerType).
 		Init(projectCatalogTypes).
 		Init(clusterCatalogTypes).
 		Init(multiClusterAppTypes).
@@ -653,8 +653,8 @@ func composeType(schemas *types.Schemas) *types.Schemas {
 	return schemas.MustImport(&Version, v3.ComposeConfig{})
 }
 
-func exampleType(schemas *types.Schemas) *types.Schemas {
-	return schemas.MustImport(&Version, v3.ExampleConfig{})
+func ClusterRandomizerType(schemas *types.Schemas) *types.Schemas {
+	return schemas.MustImport(&Version, v3.ClusterRandomizer{})
 }
 
 func projectCatalogTypes(schemas *types.Schemas) *types.Schemas {
