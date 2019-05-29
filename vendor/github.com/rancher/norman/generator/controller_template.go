@@ -326,7 +326,7 @@ func (s *{{.schema.ID}}Client) AddClusterScopedLifecycle(ctx context.Context, na
 	s.Controller().AddClusterScopedHandler(ctx, name, clusterName, sync)
 }
 
-func (s *{{.schema.ID}}Client) AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle {{.schema.CodeName}}Lifecycle) {
+func (s *{{.schema.ID}}Client) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, lifecycle {{.schema.CodeName}}Lifecycle) {
 	sync := New{{.schema.CodeName}}LifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
 	s.Controller().AddClusterScopedFeatureHandler(enabled, feat, ctx, name, clusterName, sync)
 }
