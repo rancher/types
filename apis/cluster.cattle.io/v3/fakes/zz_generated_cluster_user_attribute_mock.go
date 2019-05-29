@@ -140,15 +140,16 @@ func (mock *ClusterUserAttributeListerMock) ListCalls() []struct {
 }
 
 var (
-	lockClusterUserAttributeControllerMockAddClusterScopedHandler sync.RWMutex
-	lockClusterUserAttributeControllerMockAddFeatureHandler       sync.RWMutex
-	lockClusterUserAttributeControllerMockAddHandler              sync.RWMutex
-	lockClusterUserAttributeControllerMockEnqueue                 sync.RWMutex
-	lockClusterUserAttributeControllerMockGeneric                 sync.RWMutex
-	lockClusterUserAttributeControllerMockInformer                sync.RWMutex
-	lockClusterUserAttributeControllerMockLister                  sync.RWMutex
-	lockClusterUserAttributeControllerMockStart                   sync.RWMutex
-	lockClusterUserAttributeControllerMockSync                    sync.RWMutex
+	lockClusterUserAttributeControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockClusterUserAttributeControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockClusterUserAttributeControllerMockAddFeatureHandler              sync.RWMutex
+	lockClusterUserAttributeControllerMockAddHandler                     sync.RWMutex
+	lockClusterUserAttributeControllerMockEnqueue                        sync.RWMutex
+	lockClusterUserAttributeControllerMockGeneric                        sync.RWMutex
+	lockClusterUserAttributeControllerMockInformer                       sync.RWMutex
+	lockClusterUserAttributeControllerMockLister                         sync.RWMutex
+	lockClusterUserAttributeControllerMockStart                          sync.RWMutex
+	lockClusterUserAttributeControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that ClusterUserAttributeControllerMock does implement ClusterUserAttributeController.
@@ -161,6 +162,9 @@ var _ v3.ClusterUserAttributeController = &ClusterUserAttributeControllerMock{}
 //
 //         // make and configure a mocked ClusterUserAttributeController
 //         mockedClusterUserAttributeController := &ClusterUserAttributeControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.ClusterUserAttributeHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v3.ClusterUserAttributeHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -195,6 +199,9 @@ var _ v3.ClusterUserAttributeController = &ClusterUserAttributeControllerMock{}
 //
 //     }
 type ClusterUserAttributeControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.ClusterUserAttributeHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v3.ClusterUserAttributeHandlerFunc)
 
@@ -224,6 +231,21 @@ type ClusterUserAttributeControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v3.ClusterUserAttributeHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -286,6 +308,57 @@ type ClusterUserAttributeControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *ClusterUserAttributeControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.ClusterUserAttributeHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("ClusterUserAttributeControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but ClusterUserAttributeController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.ClusterUserAttributeHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockClusterUserAttributeControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockClusterUserAttributeControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedClusterUserAttributeController.AddClusterScopedFeatureHandlerCalls())
+func (mock *ClusterUserAttributeControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v3.ClusterUserAttributeHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.ClusterUserAttributeHandlerFunc
+	}
+	lockClusterUserAttributeControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockClusterUserAttributeControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -597,23 +670,25 @@ func (mock *ClusterUserAttributeControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockClusterUserAttributeInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockClusterUserAttributeInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockClusterUserAttributeInterfaceMockAddFeatureHandler         sync.RWMutex
-	lockClusterUserAttributeInterfaceMockAddFeatureLifecycle       sync.RWMutex
-	lockClusterUserAttributeInterfaceMockAddHandler                sync.RWMutex
-	lockClusterUserAttributeInterfaceMockAddLifecycle              sync.RWMutex
-	lockClusterUserAttributeInterfaceMockController                sync.RWMutex
-	lockClusterUserAttributeInterfaceMockCreate                    sync.RWMutex
-	lockClusterUserAttributeInterfaceMockDelete                    sync.RWMutex
-	lockClusterUserAttributeInterfaceMockDeleteCollection          sync.RWMutex
-	lockClusterUserAttributeInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockClusterUserAttributeInterfaceMockGet                       sync.RWMutex
-	lockClusterUserAttributeInterfaceMockGetNamespaced             sync.RWMutex
-	lockClusterUserAttributeInterfaceMockList                      sync.RWMutex
-	lockClusterUserAttributeInterfaceMockObjectClient              sync.RWMutex
-	lockClusterUserAttributeInterfaceMockUpdate                    sync.RWMutex
-	lockClusterUserAttributeInterfaceMockWatch                     sync.RWMutex
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockClusterUserAttributeInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockClusterUserAttributeInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockClusterUserAttributeInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockClusterUserAttributeInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockClusterUserAttributeInterfaceMockAddHandler                       sync.RWMutex
+	lockClusterUserAttributeInterfaceMockAddLifecycle                     sync.RWMutex
+	lockClusterUserAttributeInterfaceMockController                       sync.RWMutex
+	lockClusterUserAttributeInterfaceMockCreate                           sync.RWMutex
+	lockClusterUserAttributeInterfaceMockDelete                           sync.RWMutex
+	lockClusterUserAttributeInterfaceMockDeleteCollection                 sync.RWMutex
+	lockClusterUserAttributeInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockClusterUserAttributeInterfaceMockGet                              sync.RWMutex
+	lockClusterUserAttributeInterfaceMockGetNamespaced                    sync.RWMutex
+	lockClusterUserAttributeInterfaceMockList                             sync.RWMutex
+	lockClusterUserAttributeInterfaceMockObjectClient                     sync.RWMutex
+	lockClusterUserAttributeInterfaceMockUpdate                           sync.RWMutex
+	lockClusterUserAttributeInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that ClusterUserAttributeInterfaceMock does implement ClusterUserAttributeInterface.
@@ -626,6 +701,12 @@ var _ v3.ClusterUserAttributeInterface = &ClusterUserAttributeInterfaceMock{}
 //
 //         // make and configure a mocked ClusterUserAttributeInterface
 //         mockedClusterUserAttributeInterface := &ClusterUserAttributeInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.ClusterUserAttributeHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.ClusterUserAttributeLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v3.ClusterUserAttributeHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -684,6 +765,12 @@ var _ v3.ClusterUserAttributeInterface = &ClusterUserAttributeInterfaceMock{}
 //
 //     }
 type ClusterUserAttributeInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.ClusterUserAttributeHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.ClusterUserAttributeLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v3.ClusterUserAttributeHandlerFunc)
 
@@ -737,6 +824,36 @@ type ClusterUserAttributeInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v3.ClusterUserAttributeHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.ClusterUserAttributeLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -869,6 +986,108 @@ type ClusterUserAttributeInterfaceMock struct {
 			Opts v1.ListOptions
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *ClusterUserAttributeInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.ClusterUserAttributeHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("ClusterUserAttributeInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but ClusterUserAttributeInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.ClusterUserAttributeHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedClusterUserAttributeInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *ClusterUserAttributeInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v3.ClusterUserAttributeHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.ClusterUserAttributeHandlerFunc
+	}
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *ClusterUserAttributeInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.ClusterUserAttributeLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("ClusterUserAttributeInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but ClusterUserAttributeInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.ClusterUserAttributeLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedClusterUserAttributeInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *ClusterUserAttributeInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v3.ClusterUserAttributeLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.ClusterUserAttributeLifecycle
+	}
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockClusterUserAttributeInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.

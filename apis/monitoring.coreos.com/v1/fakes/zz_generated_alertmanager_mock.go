@@ -141,15 +141,16 @@ func (mock *AlertmanagerListerMock) ListCalls() []struct {
 }
 
 var (
-	lockAlertmanagerControllerMockAddClusterScopedHandler sync.RWMutex
-	lockAlertmanagerControllerMockAddFeatureHandler       sync.RWMutex
-	lockAlertmanagerControllerMockAddHandler              sync.RWMutex
-	lockAlertmanagerControllerMockEnqueue                 sync.RWMutex
-	lockAlertmanagerControllerMockGeneric                 sync.RWMutex
-	lockAlertmanagerControllerMockInformer                sync.RWMutex
-	lockAlertmanagerControllerMockLister                  sync.RWMutex
-	lockAlertmanagerControllerMockStart                   sync.RWMutex
-	lockAlertmanagerControllerMockSync                    sync.RWMutex
+	lockAlertmanagerControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockAlertmanagerControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockAlertmanagerControllerMockAddFeatureHandler              sync.RWMutex
+	lockAlertmanagerControllerMockAddHandler                     sync.RWMutex
+	lockAlertmanagerControllerMockEnqueue                        sync.RWMutex
+	lockAlertmanagerControllerMockGeneric                        sync.RWMutex
+	lockAlertmanagerControllerMockInformer                       sync.RWMutex
+	lockAlertmanagerControllerMockLister                         sync.RWMutex
+	lockAlertmanagerControllerMockStart                          sync.RWMutex
+	lockAlertmanagerControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that AlertmanagerControllerMock does implement AlertmanagerController.
@@ -162,6 +163,9 @@ var _ v1a.AlertmanagerController = &AlertmanagerControllerMock{}
 //
 //         // make and configure a mocked AlertmanagerController
 //         mockedAlertmanagerController := &AlertmanagerControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.AlertmanagerHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1a.AlertmanagerHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -196,6 +200,9 @@ var _ v1a.AlertmanagerController = &AlertmanagerControllerMock{}
 //
 //     }
 type AlertmanagerControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.AlertmanagerHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1a.AlertmanagerHandlerFunc)
 
@@ -225,6 +232,21 @@ type AlertmanagerControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v1a.AlertmanagerHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -287,6 +309,57 @@ type AlertmanagerControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *AlertmanagerControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.AlertmanagerHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("AlertmanagerControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but AlertmanagerController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1a.AlertmanagerHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockAlertmanagerControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockAlertmanagerControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedAlertmanagerController.AddClusterScopedFeatureHandlerCalls())
+func (mock *AlertmanagerControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v1a.AlertmanagerHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1a.AlertmanagerHandlerFunc
+	}
+	lockAlertmanagerControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockAlertmanagerControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -598,23 +671,25 @@ func (mock *AlertmanagerControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockAlertmanagerInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockAlertmanagerInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockAlertmanagerInterfaceMockAddFeatureHandler         sync.RWMutex
-	lockAlertmanagerInterfaceMockAddFeatureLifecycle       sync.RWMutex
-	lockAlertmanagerInterfaceMockAddHandler                sync.RWMutex
-	lockAlertmanagerInterfaceMockAddLifecycle              sync.RWMutex
-	lockAlertmanagerInterfaceMockController                sync.RWMutex
-	lockAlertmanagerInterfaceMockCreate                    sync.RWMutex
-	lockAlertmanagerInterfaceMockDelete                    sync.RWMutex
-	lockAlertmanagerInterfaceMockDeleteCollection          sync.RWMutex
-	lockAlertmanagerInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockAlertmanagerInterfaceMockGet                       sync.RWMutex
-	lockAlertmanagerInterfaceMockGetNamespaced             sync.RWMutex
-	lockAlertmanagerInterfaceMockList                      sync.RWMutex
-	lockAlertmanagerInterfaceMockObjectClient              sync.RWMutex
-	lockAlertmanagerInterfaceMockUpdate                    sync.RWMutex
-	lockAlertmanagerInterfaceMockWatch                     sync.RWMutex
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockAlertmanagerInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockAlertmanagerInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockAlertmanagerInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockAlertmanagerInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockAlertmanagerInterfaceMockAddHandler                       sync.RWMutex
+	lockAlertmanagerInterfaceMockAddLifecycle                     sync.RWMutex
+	lockAlertmanagerInterfaceMockController                       sync.RWMutex
+	lockAlertmanagerInterfaceMockCreate                           sync.RWMutex
+	lockAlertmanagerInterfaceMockDelete                           sync.RWMutex
+	lockAlertmanagerInterfaceMockDeleteCollection                 sync.RWMutex
+	lockAlertmanagerInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockAlertmanagerInterfaceMockGet                              sync.RWMutex
+	lockAlertmanagerInterfaceMockGetNamespaced                    sync.RWMutex
+	lockAlertmanagerInterfaceMockList                             sync.RWMutex
+	lockAlertmanagerInterfaceMockObjectClient                     sync.RWMutex
+	lockAlertmanagerInterfaceMockUpdate                           sync.RWMutex
+	lockAlertmanagerInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that AlertmanagerInterfaceMock does implement AlertmanagerInterface.
@@ -627,6 +702,12 @@ var _ v1a.AlertmanagerInterface = &AlertmanagerInterfaceMock{}
 //
 //         // make and configure a mocked AlertmanagerInterface
 //         mockedAlertmanagerInterface := &AlertmanagerInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.AlertmanagerHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.AlertmanagerLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1a.AlertmanagerHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -685,6 +766,12 @@ var _ v1a.AlertmanagerInterface = &AlertmanagerInterfaceMock{}
 //
 //     }
 type AlertmanagerInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.AlertmanagerHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.AlertmanagerLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1a.AlertmanagerHandlerFunc)
 
@@ -738,6 +825,36 @@ type AlertmanagerInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v1a.AlertmanagerHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1a.AlertmanagerLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -870,6 +987,108 @@ type AlertmanagerInterfaceMock struct {
 			Opts v1b.ListOptions
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *AlertmanagerInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.AlertmanagerHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("AlertmanagerInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but AlertmanagerInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1a.AlertmanagerHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedAlertmanagerInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *AlertmanagerInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v1a.AlertmanagerHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1a.AlertmanagerHandlerFunc
+	}
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *AlertmanagerInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.AlertmanagerLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("AlertmanagerInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but AlertmanagerInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1a.AlertmanagerLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedAlertmanagerInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *AlertmanagerInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v1a.AlertmanagerLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1a.AlertmanagerLifecycle
+	}
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockAlertmanagerInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.

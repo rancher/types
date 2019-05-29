@@ -140,15 +140,16 @@ func (mock *NamespacedBasicAuthListerMock) ListCalls() []struct {
 }
 
 var (
-	lockNamespacedBasicAuthControllerMockAddClusterScopedHandler sync.RWMutex
-	lockNamespacedBasicAuthControllerMockAddFeatureHandler       sync.RWMutex
-	lockNamespacedBasicAuthControllerMockAddHandler              sync.RWMutex
-	lockNamespacedBasicAuthControllerMockEnqueue                 sync.RWMutex
-	lockNamespacedBasicAuthControllerMockGeneric                 sync.RWMutex
-	lockNamespacedBasicAuthControllerMockInformer                sync.RWMutex
-	lockNamespacedBasicAuthControllerMockLister                  sync.RWMutex
-	lockNamespacedBasicAuthControllerMockStart                   sync.RWMutex
-	lockNamespacedBasicAuthControllerMockSync                    sync.RWMutex
+	lockNamespacedBasicAuthControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockNamespacedBasicAuthControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockNamespacedBasicAuthControllerMockAddFeatureHandler              sync.RWMutex
+	lockNamespacedBasicAuthControllerMockAddHandler                     sync.RWMutex
+	lockNamespacedBasicAuthControllerMockEnqueue                        sync.RWMutex
+	lockNamespacedBasicAuthControllerMockGeneric                        sync.RWMutex
+	lockNamespacedBasicAuthControllerMockInformer                       sync.RWMutex
+	lockNamespacedBasicAuthControllerMockLister                         sync.RWMutex
+	lockNamespacedBasicAuthControllerMockStart                          sync.RWMutex
+	lockNamespacedBasicAuthControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that NamespacedBasicAuthControllerMock does implement NamespacedBasicAuthController.
@@ -161,6 +162,9 @@ var _ v3.NamespacedBasicAuthController = &NamespacedBasicAuthControllerMock{}
 //
 //         // make and configure a mocked NamespacedBasicAuthController
 //         mockedNamespacedBasicAuthController := &NamespacedBasicAuthControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.NamespacedBasicAuthHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v3.NamespacedBasicAuthHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -195,6 +199,9 @@ var _ v3.NamespacedBasicAuthController = &NamespacedBasicAuthControllerMock{}
 //
 //     }
 type NamespacedBasicAuthControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.NamespacedBasicAuthHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v3.NamespacedBasicAuthHandlerFunc)
 
@@ -224,6 +231,21 @@ type NamespacedBasicAuthControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v3.NamespacedBasicAuthHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -286,6 +308,57 @@ type NamespacedBasicAuthControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *NamespacedBasicAuthControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.NamespacedBasicAuthHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("NamespacedBasicAuthControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but NamespacedBasicAuthController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.NamespacedBasicAuthHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockNamespacedBasicAuthControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockNamespacedBasicAuthControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedNamespacedBasicAuthController.AddClusterScopedFeatureHandlerCalls())
+func (mock *NamespacedBasicAuthControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v3.NamespacedBasicAuthHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.NamespacedBasicAuthHandlerFunc
+	}
+	lockNamespacedBasicAuthControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockNamespacedBasicAuthControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -597,23 +670,25 @@ func (mock *NamespacedBasicAuthControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockNamespacedBasicAuthInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockAddFeatureHandler         sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockAddFeatureLifecycle       sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockAddHandler                sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockAddLifecycle              sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockController                sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockCreate                    sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockDelete                    sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockDeleteCollection          sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockGet                       sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockGetNamespaced             sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockList                      sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockObjectClient              sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockUpdate                    sync.RWMutex
-	lockNamespacedBasicAuthInterfaceMockWatch                     sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockAddHandler                       sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockAddLifecycle                     sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockController                       sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockCreate                           sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockDelete                           sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockDeleteCollection                 sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockGet                              sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockGetNamespaced                    sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockList                             sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockObjectClient                     sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockUpdate                           sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that NamespacedBasicAuthInterfaceMock does implement NamespacedBasicAuthInterface.
@@ -626,6 +701,12 @@ var _ v3.NamespacedBasicAuthInterface = &NamespacedBasicAuthInterfaceMock{}
 //
 //         // make and configure a mocked NamespacedBasicAuthInterface
 //         mockedNamespacedBasicAuthInterface := &NamespacedBasicAuthInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.NamespacedBasicAuthHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedBasicAuthLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v3.NamespacedBasicAuthHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -684,6 +765,12 @@ var _ v3.NamespacedBasicAuthInterface = &NamespacedBasicAuthInterfaceMock{}
 //
 //     }
 type NamespacedBasicAuthInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.NamespacedBasicAuthHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedBasicAuthLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v3.NamespacedBasicAuthHandlerFunc)
 
@@ -737,6 +824,36 @@ type NamespacedBasicAuthInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v3.NamespacedBasicAuthHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.NamespacedBasicAuthLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -869,6 +986,108 @@ type NamespacedBasicAuthInterfaceMock struct {
 			Opts v1.ListOptions
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *NamespacedBasicAuthInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.NamespacedBasicAuthHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("NamespacedBasicAuthInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but NamespacedBasicAuthInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.NamespacedBasicAuthHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedNamespacedBasicAuthInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *NamespacedBasicAuthInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v3.NamespacedBasicAuthHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.NamespacedBasicAuthHandlerFunc
+	}
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *NamespacedBasicAuthInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedBasicAuthLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("NamespacedBasicAuthInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but NamespacedBasicAuthInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.NamespacedBasicAuthLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedNamespacedBasicAuthInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *NamespacedBasicAuthInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v3.NamespacedBasicAuthLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.NamespacedBasicAuthLifecycle
+	}
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockNamespacedBasicAuthInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.

@@ -141,15 +141,16 @@ func (mock *StatefulSetListerMock) ListCalls() []struct {
 }
 
 var (
-	lockStatefulSetControllerMockAddClusterScopedHandler sync.RWMutex
-	lockStatefulSetControllerMockAddFeatureHandler       sync.RWMutex
-	lockStatefulSetControllerMockAddHandler              sync.RWMutex
-	lockStatefulSetControllerMockEnqueue                 sync.RWMutex
-	lockStatefulSetControllerMockGeneric                 sync.RWMutex
-	lockStatefulSetControllerMockInformer                sync.RWMutex
-	lockStatefulSetControllerMockLister                  sync.RWMutex
-	lockStatefulSetControllerMockStart                   sync.RWMutex
-	lockStatefulSetControllerMockSync                    sync.RWMutex
+	lockStatefulSetControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockStatefulSetControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockStatefulSetControllerMockAddFeatureHandler              sync.RWMutex
+	lockStatefulSetControllerMockAddHandler                     sync.RWMutex
+	lockStatefulSetControllerMockEnqueue                        sync.RWMutex
+	lockStatefulSetControllerMockGeneric                        sync.RWMutex
+	lockStatefulSetControllerMockInformer                       sync.RWMutex
+	lockStatefulSetControllerMockLister                         sync.RWMutex
+	lockStatefulSetControllerMockStart                          sync.RWMutex
+	lockStatefulSetControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that StatefulSetControllerMock does implement StatefulSetController.
@@ -162,6 +163,9 @@ var _ v1beta2a.StatefulSetController = &StatefulSetControllerMock{}
 //
 //         // make and configure a mocked StatefulSetController
 //         mockedStatefulSetController := &StatefulSetControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -196,6 +200,9 @@ var _ v1beta2a.StatefulSetController = &StatefulSetControllerMock{}
 //
 //     }
 type StatefulSetControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc)
 
@@ -225,6 +232,21 @@ type StatefulSetControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v1beta2a.StatefulSetHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -287,6 +309,57 @@ type StatefulSetControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *StatefulSetControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("StatefulSetControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but StatefulSetController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1beta2a.StatefulSetHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockStatefulSetControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockStatefulSetControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedStatefulSetController.AddClusterScopedFeatureHandlerCalls())
+func (mock *StatefulSetControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v1beta2a.StatefulSetHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1beta2a.StatefulSetHandlerFunc
+	}
+	lockStatefulSetControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockStatefulSetControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -598,23 +671,25 @@ func (mock *StatefulSetControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockStatefulSetInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockStatefulSetInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockStatefulSetInterfaceMockAddFeatureHandler         sync.RWMutex
-	lockStatefulSetInterfaceMockAddFeatureLifecycle       sync.RWMutex
-	lockStatefulSetInterfaceMockAddHandler                sync.RWMutex
-	lockStatefulSetInterfaceMockAddLifecycle              sync.RWMutex
-	lockStatefulSetInterfaceMockController                sync.RWMutex
-	lockStatefulSetInterfaceMockCreate                    sync.RWMutex
-	lockStatefulSetInterfaceMockDelete                    sync.RWMutex
-	lockStatefulSetInterfaceMockDeleteCollection          sync.RWMutex
-	lockStatefulSetInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockStatefulSetInterfaceMockGet                       sync.RWMutex
-	lockStatefulSetInterfaceMockGetNamespaced             sync.RWMutex
-	lockStatefulSetInterfaceMockList                      sync.RWMutex
-	lockStatefulSetInterfaceMockObjectClient              sync.RWMutex
-	lockStatefulSetInterfaceMockUpdate                    sync.RWMutex
-	lockStatefulSetInterfaceMockWatch                     sync.RWMutex
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockStatefulSetInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockStatefulSetInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockStatefulSetInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockStatefulSetInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockStatefulSetInterfaceMockAddHandler                       sync.RWMutex
+	lockStatefulSetInterfaceMockAddLifecycle                     sync.RWMutex
+	lockStatefulSetInterfaceMockController                       sync.RWMutex
+	lockStatefulSetInterfaceMockCreate                           sync.RWMutex
+	lockStatefulSetInterfaceMockDelete                           sync.RWMutex
+	lockStatefulSetInterfaceMockDeleteCollection                 sync.RWMutex
+	lockStatefulSetInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockStatefulSetInterfaceMockGet                              sync.RWMutex
+	lockStatefulSetInterfaceMockGetNamespaced                    sync.RWMutex
+	lockStatefulSetInterfaceMockList                             sync.RWMutex
+	lockStatefulSetInterfaceMockObjectClient                     sync.RWMutex
+	lockStatefulSetInterfaceMockUpdate                           sync.RWMutex
+	lockStatefulSetInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that StatefulSetInterfaceMock does implement StatefulSetInterface.
@@ -627,6 +702,12 @@ var _ v1beta2a.StatefulSetInterface = &StatefulSetInterfaceMock{}
 //
 //         // make and configure a mocked StatefulSetInterface
 //         mockedStatefulSetInterface := &StatefulSetInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -685,6 +766,12 @@ var _ v1beta2a.StatefulSetInterface = &StatefulSetInterfaceMock{}
 //
 //     }
 type StatefulSetInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc)
 
@@ -738,6 +825,36 @@ type StatefulSetInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v1beta2a.StatefulSetHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1beta2a.StatefulSetLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -870,6 +987,108 @@ type StatefulSetInterfaceMock struct {
 			Opts v1.ListOptions
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("StatefulSetInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but StatefulSetInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1beta2a.StatefulSetHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedStatefulSetInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v1beta2a.StatefulSetHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1beta2a.StatefulSetHandlerFunc
+	}
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("StatefulSetInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but StatefulSetInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1beta2a.StatefulSetLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedStatefulSetInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v1beta2a.StatefulSetLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1beta2a.StatefulSetLifecycle
+	}
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockStatefulSetInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.

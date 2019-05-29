@@ -140,15 +140,16 @@ func (mock *PipelineSettingListerMock) ListCalls() []struct {
 }
 
 var (
-	lockPipelineSettingControllerMockAddClusterScopedHandler sync.RWMutex
-	lockPipelineSettingControllerMockAddFeatureHandler       sync.RWMutex
-	lockPipelineSettingControllerMockAddHandler              sync.RWMutex
-	lockPipelineSettingControllerMockEnqueue                 sync.RWMutex
-	lockPipelineSettingControllerMockGeneric                 sync.RWMutex
-	lockPipelineSettingControllerMockInformer                sync.RWMutex
-	lockPipelineSettingControllerMockLister                  sync.RWMutex
-	lockPipelineSettingControllerMockStart                   sync.RWMutex
-	lockPipelineSettingControllerMockSync                    sync.RWMutex
+	lockPipelineSettingControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockPipelineSettingControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockPipelineSettingControllerMockAddFeatureHandler              sync.RWMutex
+	lockPipelineSettingControllerMockAddHandler                     sync.RWMutex
+	lockPipelineSettingControllerMockEnqueue                        sync.RWMutex
+	lockPipelineSettingControllerMockGeneric                        sync.RWMutex
+	lockPipelineSettingControllerMockInformer                       sync.RWMutex
+	lockPipelineSettingControllerMockLister                         sync.RWMutex
+	lockPipelineSettingControllerMockStart                          sync.RWMutex
+	lockPipelineSettingControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that PipelineSettingControllerMock does implement PipelineSettingController.
@@ -161,6 +162,9 @@ var _ v3.PipelineSettingController = &PipelineSettingControllerMock{}
 //
 //         // make and configure a mocked PipelineSettingController
 //         mockedPipelineSettingController := &PipelineSettingControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.PipelineSettingHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v3.PipelineSettingHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -195,6 +199,9 @@ var _ v3.PipelineSettingController = &PipelineSettingControllerMock{}
 //
 //     }
 type PipelineSettingControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.PipelineSettingHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v3.PipelineSettingHandlerFunc)
 
@@ -224,6 +231,21 @@ type PipelineSettingControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v3.PipelineSettingHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -286,6 +308,57 @@ type PipelineSettingControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *PipelineSettingControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.PipelineSettingHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("PipelineSettingControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but PipelineSettingController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.PipelineSettingHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockPipelineSettingControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockPipelineSettingControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedPipelineSettingController.AddClusterScopedFeatureHandlerCalls())
+func (mock *PipelineSettingControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v3.PipelineSettingHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.PipelineSettingHandlerFunc
+	}
+	lockPipelineSettingControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockPipelineSettingControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -597,23 +670,25 @@ func (mock *PipelineSettingControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockPipelineSettingInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockPipelineSettingInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockPipelineSettingInterfaceMockAddFeatureHandler         sync.RWMutex
-	lockPipelineSettingInterfaceMockAddFeatureLifecycle       sync.RWMutex
-	lockPipelineSettingInterfaceMockAddHandler                sync.RWMutex
-	lockPipelineSettingInterfaceMockAddLifecycle              sync.RWMutex
-	lockPipelineSettingInterfaceMockController                sync.RWMutex
-	lockPipelineSettingInterfaceMockCreate                    sync.RWMutex
-	lockPipelineSettingInterfaceMockDelete                    sync.RWMutex
-	lockPipelineSettingInterfaceMockDeleteCollection          sync.RWMutex
-	lockPipelineSettingInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockPipelineSettingInterfaceMockGet                       sync.RWMutex
-	lockPipelineSettingInterfaceMockGetNamespaced             sync.RWMutex
-	lockPipelineSettingInterfaceMockList                      sync.RWMutex
-	lockPipelineSettingInterfaceMockObjectClient              sync.RWMutex
-	lockPipelineSettingInterfaceMockUpdate                    sync.RWMutex
-	lockPipelineSettingInterfaceMockWatch                     sync.RWMutex
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockPipelineSettingInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockPipelineSettingInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockPipelineSettingInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockPipelineSettingInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockPipelineSettingInterfaceMockAddHandler                       sync.RWMutex
+	lockPipelineSettingInterfaceMockAddLifecycle                     sync.RWMutex
+	lockPipelineSettingInterfaceMockController                       sync.RWMutex
+	lockPipelineSettingInterfaceMockCreate                           sync.RWMutex
+	lockPipelineSettingInterfaceMockDelete                           sync.RWMutex
+	lockPipelineSettingInterfaceMockDeleteCollection                 sync.RWMutex
+	lockPipelineSettingInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockPipelineSettingInterfaceMockGet                              sync.RWMutex
+	lockPipelineSettingInterfaceMockGetNamespaced                    sync.RWMutex
+	lockPipelineSettingInterfaceMockList                             sync.RWMutex
+	lockPipelineSettingInterfaceMockObjectClient                     sync.RWMutex
+	lockPipelineSettingInterfaceMockUpdate                           sync.RWMutex
+	lockPipelineSettingInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that PipelineSettingInterfaceMock does implement PipelineSettingInterface.
@@ -626,6 +701,12 @@ var _ v3.PipelineSettingInterface = &PipelineSettingInterfaceMock{}
 //
 //         // make and configure a mocked PipelineSettingInterface
 //         mockedPipelineSettingInterface := &PipelineSettingInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.PipelineSettingHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.PipelineSettingLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v3.PipelineSettingHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -684,6 +765,12 @@ var _ v3.PipelineSettingInterface = &PipelineSettingInterfaceMock{}
 //
 //     }
 type PipelineSettingInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.PipelineSettingHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.PipelineSettingLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v3.PipelineSettingHandlerFunc)
 
@@ -737,6 +824,36 @@ type PipelineSettingInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v3.PipelineSettingHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.PipelineSettingLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -869,6 +986,108 @@ type PipelineSettingInterfaceMock struct {
 			Opts v1.ListOptions
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *PipelineSettingInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.PipelineSettingHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("PipelineSettingInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but PipelineSettingInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.PipelineSettingHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedPipelineSettingInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *PipelineSettingInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v3.PipelineSettingHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.PipelineSettingHandlerFunc
+	}
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *PipelineSettingInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.PipelineSettingLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("PipelineSettingInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but PipelineSettingInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.PipelineSettingLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedPipelineSettingInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *PipelineSettingInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v3.PipelineSettingLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.PipelineSettingLifecycle
+	}
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockPipelineSettingInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
