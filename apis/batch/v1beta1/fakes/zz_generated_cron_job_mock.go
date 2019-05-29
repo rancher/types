@@ -141,15 +141,16 @@ func (mock *CronJobListerMock) ListCalls() []struct {
 }
 
 var (
-	lockCronJobControllerMockAddClusterScopedHandler sync.RWMutex
-	lockCronJobControllerMockAddFeatureHandler       sync.RWMutex
-	lockCronJobControllerMockAddHandler              sync.RWMutex
-	lockCronJobControllerMockEnqueue                 sync.RWMutex
-	lockCronJobControllerMockGeneric                 sync.RWMutex
-	lockCronJobControllerMockInformer                sync.RWMutex
-	lockCronJobControllerMockLister                  sync.RWMutex
-	lockCronJobControllerMockStart                   sync.RWMutex
-	lockCronJobControllerMockSync                    sync.RWMutex
+	lockCronJobControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockCronJobControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockCronJobControllerMockAddFeatureHandler              sync.RWMutex
+	lockCronJobControllerMockAddHandler                     sync.RWMutex
+	lockCronJobControllerMockEnqueue                        sync.RWMutex
+	lockCronJobControllerMockGeneric                        sync.RWMutex
+	lockCronJobControllerMockInformer                       sync.RWMutex
+	lockCronJobControllerMockLister                         sync.RWMutex
+	lockCronJobControllerMockStart                          sync.RWMutex
+	lockCronJobControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that CronJobControllerMock does implement CronJobController.
@@ -162,6 +163,9 @@ var _ v1beta1a.CronJobController = &CronJobControllerMock{}
 //
 //         // make and configure a mocked CronJobController
 //         mockedCronJobController := &CronJobControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1beta1a.CronJobHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1beta1a.CronJobHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -196,6 +200,9 @@ var _ v1beta1a.CronJobController = &CronJobControllerMock{}
 //
 //     }
 type CronJobControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1beta1a.CronJobHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1beta1a.CronJobHandlerFunc)
 
@@ -225,6 +232,21 @@ type CronJobControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v1beta1a.CronJobHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -287,6 +309,57 @@ type CronJobControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *CronJobControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1beta1a.CronJobHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("CronJobControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but CronJobController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1beta1a.CronJobHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockCronJobControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockCronJobControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedCronJobController.AddClusterScopedFeatureHandlerCalls())
+func (mock *CronJobControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v1beta1a.CronJobHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1beta1a.CronJobHandlerFunc
+	}
+	lockCronJobControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockCronJobControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -598,23 +671,25 @@ func (mock *CronJobControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockCronJobInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockCronJobInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockCronJobInterfaceMockAddFeatureHandler         sync.RWMutex
-	lockCronJobInterfaceMockAddFeatureLifecycle       sync.RWMutex
-	lockCronJobInterfaceMockAddHandler                sync.RWMutex
-	lockCronJobInterfaceMockAddLifecycle              sync.RWMutex
-	lockCronJobInterfaceMockController                sync.RWMutex
-	lockCronJobInterfaceMockCreate                    sync.RWMutex
-	lockCronJobInterfaceMockDelete                    sync.RWMutex
-	lockCronJobInterfaceMockDeleteCollection          sync.RWMutex
-	lockCronJobInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockCronJobInterfaceMockGet                       sync.RWMutex
-	lockCronJobInterfaceMockGetNamespaced             sync.RWMutex
-	lockCronJobInterfaceMockList                      sync.RWMutex
-	lockCronJobInterfaceMockObjectClient              sync.RWMutex
-	lockCronJobInterfaceMockUpdate                    sync.RWMutex
-	lockCronJobInterfaceMockWatch                     sync.RWMutex
+	lockCronJobInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockCronJobInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockCronJobInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockCronJobInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockCronJobInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockCronJobInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockCronJobInterfaceMockAddHandler                       sync.RWMutex
+	lockCronJobInterfaceMockAddLifecycle                     sync.RWMutex
+	lockCronJobInterfaceMockController                       sync.RWMutex
+	lockCronJobInterfaceMockCreate                           sync.RWMutex
+	lockCronJobInterfaceMockDelete                           sync.RWMutex
+	lockCronJobInterfaceMockDeleteCollection                 sync.RWMutex
+	lockCronJobInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockCronJobInterfaceMockGet                              sync.RWMutex
+	lockCronJobInterfaceMockGetNamespaced                    sync.RWMutex
+	lockCronJobInterfaceMockList                             sync.RWMutex
+	lockCronJobInterfaceMockObjectClient                     sync.RWMutex
+	lockCronJobInterfaceMockUpdate                           sync.RWMutex
+	lockCronJobInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that CronJobInterfaceMock does implement CronJobInterface.
@@ -627,6 +702,12 @@ var _ v1beta1a.CronJobInterface = &CronJobInterfaceMock{}
 //
 //         // make and configure a mocked CronJobInterface
 //         mockedCronJobInterface := &CronJobInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1beta1a.CronJobHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1beta1a.CronJobLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1beta1a.CronJobHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -685,6 +766,12 @@ var _ v1beta1a.CronJobInterface = &CronJobInterfaceMock{}
 //
 //     }
 type CronJobInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1beta1a.CronJobHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1beta1a.CronJobLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1beta1a.CronJobHandlerFunc)
 
@@ -738,6 +825,36 @@ type CronJobInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v1beta1a.CronJobHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1beta1a.CronJobLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -870,6 +987,108 @@ type CronJobInterfaceMock struct {
 			Opts v1.ListOptions
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *CronJobInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1beta1a.CronJobHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("CronJobInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but CronJobInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1beta1a.CronJobHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockCronJobInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockCronJobInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedCronJobInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *CronJobInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v1beta1a.CronJobHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1beta1a.CronJobHandlerFunc
+	}
+	lockCronJobInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockCronJobInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *CronJobInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1beta1a.CronJobLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("CronJobInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but CronJobInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1beta1a.CronJobLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockCronJobInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockCronJobInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedCronJobInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *CronJobInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v1beta1a.CronJobLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1beta1a.CronJobLifecycle
+	}
+	lockCronJobInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockCronJobInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.

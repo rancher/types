@@ -141,15 +141,16 @@ func (mock *ClusterRoleListerMock) ListCalls() []struct {
 }
 
 var (
-	lockClusterRoleControllerMockAddClusterScopedHandler sync.RWMutex
-	lockClusterRoleControllerMockAddFeatureHandler       sync.RWMutex
-	lockClusterRoleControllerMockAddHandler              sync.RWMutex
-	lockClusterRoleControllerMockEnqueue                 sync.RWMutex
-	lockClusterRoleControllerMockGeneric                 sync.RWMutex
-	lockClusterRoleControllerMockInformer                sync.RWMutex
-	lockClusterRoleControllerMockLister                  sync.RWMutex
-	lockClusterRoleControllerMockStart                   sync.RWMutex
-	lockClusterRoleControllerMockSync                    sync.RWMutex
+	lockClusterRoleControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockClusterRoleControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockClusterRoleControllerMockAddFeatureHandler              sync.RWMutex
+	lockClusterRoleControllerMockAddHandler                     sync.RWMutex
+	lockClusterRoleControllerMockEnqueue                        sync.RWMutex
+	lockClusterRoleControllerMockGeneric                        sync.RWMutex
+	lockClusterRoleControllerMockInformer                       sync.RWMutex
+	lockClusterRoleControllerMockLister                         sync.RWMutex
+	lockClusterRoleControllerMockStart                          sync.RWMutex
+	lockClusterRoleControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that ClusterRoleControllerMock does implement ClusterRoleController.
@@ -162,6 +163,9 @@ var _ v1a.ClusterRoleController = &ClusterRoleControllerMock{}
 //
 //         // make and configure a mocked ClusterRoleController
 //         mockedClusterRoleController := &ClusterRoleControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.ClusterRoleHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1a.ClusterRoleHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -196,6 +200,9 @@ var _ v1a.ClusterRoleController = &ClusterRoleControllerMock{}
 //
 //     }
 type ClusterRoleControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.ClusterRoleHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1a.ClusterRoleHandlerFunc)
 
@@ -225,6 +232,21 @@ type ClusterRoleControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v1a.ClusterRoleHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -287,6 +309,57 @@ type ClusterRoleControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *ClusterRoleControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.ClusterRoleHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("ClusterRoleControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but ClusterRoleController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1a.ClusterRoleHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockClusterRoleControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockClusterRoleControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedClusterRoleController.AddClusterScopedFeatureHandlerCalls())
+func (mock *ClusterRoleControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v1a.ClusterRoleHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1a.ClusterRoleHandlerFunc
+	}
+	lockClusterRoleControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockClusterRoleControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -598,23 +671,25 @@ func (mock *ClusterRoleControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockClusterRoleInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockClusterRoleInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockClusterRoleInterfaceMockAddFeatureHandler         sync.RWMutex
-	lockClusterRoleInterfaceMockAddFeatureLifecycle       sync.RWMutex
-	lockClusterRoleInterfaceMockAddHandler                sync.RWMutex
-	lockClusterRoleInterfaceMockAddLifecycle              sync.RWMutex
-	lockClusterRoleInterfaceMockController                sync.RWMutex
-	lockClusterRoleInterfaceMockCreate                    sync.RWMutex
-	lockClusterRoleInterfaceMockDelete                    sync.RWMutex
-	lockClusterRoleInterfaceMockDeleteCollection          sync.RWMutex
-	lockClusterRoleInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockClusterRoleInterfaceMockGet                       sync.RWMutex
-	lockClusterRoleInterfaceMockGetNamespaced             sync.RWMutex
-	lockClusterRoleInterfaceMockList                      sync.RWMutex
-	lockClusterRoleInterfaceMockObjectClient              sync.RWMutex
-	lockClusterRoleInterfaceMockUpdate                    sync.RWMutex
-	lockClusterRoleInterfaceMockWatch                     sync.RWMutex
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockClusterRoleInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockClusterRoleInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockClusterRoleInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockClusterRoleInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockClusterRoleInterfaceMockAddHandler                       sync.RWMutex
+	lockClusterRoleInterfaceMockAddLifecycle                     sync.RWMutex
+	lockClusterRoleInterfaceMockController                       sync.RWMutex
+	lockClusterRoleInterfaceMockCreate                           sync.RWMutex
+	lockClusterRoleInterfaceMockDelete                           sync.RWMutex
+	lockClusterRoleInterfaceMockDeleteCollection                 sync.RWMutex
+	lockClusterRoleInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockClusterRoleInterfaceMockGet                              sync.RWMutex
+	lockClusterRoleInterfaceMockGetNamespaced                    sync.RWMutex
+	lockClusterRoleInterfaceMockList                             sync.RWMutex
+	lockClusterRoleInterfaceMockObjectClient                     sync.RWMutex
+	lockClusterRoleInterfaceMockUpdate                           sync.RWMutex
+	lockClusterRoleInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that ClusterRoleInterfaceMock does implement ClusterRoleInterface.
@@ -627,6 +702,12 @@ var _ v1a.ClusterRoleInterface = &ClusterRoleInterfaceMock{}
 //
 //         // make and configure a mocked ClusterRoleInterface
 //         mockedClusterRoleInterface := &ClusterRoleInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.ClusterRoleHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.ClusterRoleLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1a.ClusterRoleHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -685,6 +766,12 @@ var _ v1a.ClusterRoleInterface = &ClusterRoleInterfaceMock{}
 //
 //     }
 type ClusterRoleInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.ClusterRoleHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.ClusterRoleLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1a.ClusterRoleHandlerFunc)
 
@@ -738,6 +825,36 @@ type ClusterRoleInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v1a.ClusterRoleHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1a.ClusterRoleLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -870,6 +987,108 @@ type ClusterRoleInterfaceMock struct {
 			Opts v1b.ListOptions
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *ClusterRoleInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.ClusterRoleHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("ClusterRoleInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but ClusterRoleInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1a.ClusterRoleHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedClusterRoleInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *ClusterRoleInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v1a.ClusterRoleHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1a.ClusterRoleHandlerFunc
+	}
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *ClusterRoleInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.ClusterRoleLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("ClusterRoleInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but ClusterRoleInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1a.ClusterRoleLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedClusterRoleInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *ClusterRoleInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v1a.ClusterRoleLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1a.ClusterRoleLifecycle
+	}
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockClusterRoleInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.

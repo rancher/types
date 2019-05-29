@@ -141,15 +141,16 @@ func (mock *NetworkPolicyListerMock) ListCalls() []struct {
 }
 
 var (
-	lockNetworkPolicyControllerMockAddClusterScopedHandler sync.RWMutex
-	lockNetworkPolicyControllerMockAddFeatureHandler       sync.RWMutex
-	lockNetworkPolicyControllerMockAddHandler              sync.RWMutex
-	lockNetworkPolicyControllerMockEnqueue                 sync.RWMutex
-	lockNetworkPolicyControllerMockGeneric                 sync.RWMutex
-	lockNetworkPolicyControllerMockInformer                sync.RWMutex
-	lockNetworkPolicyControllerMockLister                  sync.RWMutex
-	lockNetworkPolicyControllerMockStart                   sync.RWMutex
-	lockNetworkPolicyControllerMockSync                    sync.RWMutex
+	lockNetworkPolicyControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockNetworkPolicyControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockNetworkPolicyControllerMockAddFeatureHandler              sync.RWMutex
+	lockNetworkPolicyControllerMockAddHandler                     sync.RWMutex
+	lockNetworkPolicyControllerMockEnqueue                        sync.RWMutex
+	lockNetworkPolicyControllerMockGeneric                        sync.RWMutex
+	lockNetworkPolicyControllerMockInformer                       sync.RWMutex
+	lockNetworkPolicyControllerMockLister                         sync.RWMutex
+	lockNetworkPolicyControllerMockStart                          sync.RWMutex
+	lockNetworkPolicyControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that NetworkPolicyControllerMock does implement NetworkPolicyController.
@@ -162,6 +163,9 @@ var _ v1a.NetworkPolicyController = &NetworkPolicyControllerMock{}
 //
 //         // make and configure a mocked NetworkPolicyController
 //         mockedNetworkPolicyController := &NetworkPolicyControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.NetworkPolicyHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1a.NetworkPolicyHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -196,6 +200,9 @@ var _ v1a.NetworkPolicyController = &NetworkPolicyControllerMock{}
 //
 //     }
 type NetworkPolicyControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.NetworkPolicyHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1a.NetworkPolicyHandlerFunc)
 
@@ -225,6 +232,21 @@ type NetworkPolicyControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v1a.NetworkPolicyHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -287,6 +309,57 @@ type NetworkPolicyControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *NetworkPolicyControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v1a.NetworkPolicyHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("NetworkPolicyControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but NetworkPolicyController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1a.NetworkPolicyHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockNetworkPolicyControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockNetworkPolicyControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedNetworkPolicyController.AddClusterScopedFeatureHandlerCalls())
+func (mock *NetworkPolicyControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v1a.NetworkPolicyHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v1a.NetworkPolicyHandlerFunc
+	}
+	lockNetworkPolicyControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockNetworkPolicyControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -598,23 +671,25 @@ func (mock *NetworkPolicyControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockNetworkPolicyInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockNetworkPolicyInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockNetworkPolicyInterfaceMockAddFeatureHandler         sync.RWMutex
-	lockNetworkPolicyInterfaceMockAddFeatureLifecycle       sync.RWMutex
-	lockNetworkPolicyInterfaceMockAddHandler                sync.RWMutex
-	lockNetworkPolicyInterfaceMockAddLifecycle              sync.RWMutex
-	lockNetworkPolicyInterfaceMockController                sync.RWMutex
-	lockNetworkPolicyInterfaceMockCreate                    sync.RWMutex
-	lockNetworkPolicyInterfaceMockDelete                    sync.RWMutex
-	lockNetworkPolicyInterfaceMockDeleteCollection          sync.RWMutex
-	lockNetworkPolicyInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockNetworkPolicyInterfaceMockGet                       sync.RWMutex
-	lockNetworkPolicyInterfaceMockGetNamespaced             sync.RWMutex
-	lockNetworkPolicyInterfaceMockList                      sync.RWMutex
-	lockNetworkPolicyInterfaceMockObjectClient              sync.RWMutex
-	lockNetworkPolicyInterfaceMockUpdate                    sync.RWMutex
-	lockNetworkPolicyInterfaceMockWatch                     sync.RWMutex
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockNetworkPolicyInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockNetworkPolicyInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockNetworkPolicyInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockNetworkPolicyInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockNetworkPolicyInterfaceMockAddHandler                       sync.RWMutex
+	lockNetworkPolicyInterfaceMockAddLifecycle                     sync.RWMutex
+	lockNetworkPolicyInterfaceMockController                       sync.RWMutex
+	lockNetworkPolicyInterfaceMockCreate                           sync.RWMutex
+	lockNetworkPolicyInterfaceMockDelete                           sync.RWMutex
+	lockNetworkPolicyInterfaceMockDeleteCollection                 sync.RWMutex
+	lockNetworkPolicyInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockNetworkPolicyInterfaceMockGet                              sync.RWMutex
+	lockNetworkPolicyInterfaceMockGetNamespaced                    sync.RWMutex
+	lockNetworkPolicyInterfaceMockList                             sync.RWMutex
+	lockNetworkPolicyInterfaceMockObjectClient                     sync.RWMutex
+	lockNetworkPolicyInterfaceMockUpdate                           sync.RWMutex
+	lockNetworkPolicyInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that NetworkPolicyInterfaceMock does implement NetworkPolicyInterface.
@@ -627,6 +702,12 @@ var _ v1a.NetworkPolicyInterface = &NetworkPolicyInterfaceMock{}
 //
 //         // make and configure a mocked NetworkPolicyInterface
 //         mockedNetworkPolicyInterface := &NetworkPolicyInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.NetworkPolicyHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.NetworkPolicyLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1a.NetworkPolicyHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
@@ -685,6 +766,12 @@ var _ v1a.NetworkPolicyInterface = &NetworkPolicyInterfaceMock{}
 //
 //     }
 type NetworkPolicyInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.NetworkPolicyHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.NetworkPolicyLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1a.NetworkPolicyHandlerFunc)
 
@@ -738,6 +825,36 @@ type NetworkPolicyInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v1a.NetworkPolicyHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1a.NetworkPolicyLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -870,6 +987,108 @@ type NetworkPolicyInterfaceMock struct {
 			Opts v1b.ListOptions
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *NetworkPolicyInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v1a.NetworkPolicyHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("NetworkPolicyInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but NetworkPolicyInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1a.NetworkPolicyHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedNetworkPolicyInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *NetworkPolicyInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v1a.NetworkPolicyHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v1a.NetworkPolicyHandlerFunc
+	}
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *NetworkPolicyInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v1a.NetworkPolicyLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("NetworkPolicyInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but NetworkPolicyInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1a.NetworkPolicyLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedNetworkPolicyInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *NetworkPolicyInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v1a.NetworkPolicyLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v1a.NetworkPolicyLifecycle
+	}
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
