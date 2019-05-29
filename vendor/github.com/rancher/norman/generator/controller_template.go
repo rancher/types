@@ -318,7 +318,7 @@ func (s *{{.schema.ID}}Client) AddClusterScopedHandler(ctx context.Context, name
 }
 
 func (s *{{.schema.ID}}Client) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, sync {{.schema.CodeName}}HandlerFunc) {
-	s.Controller().AddClusterScopedFeatureHandler(ctx, name, clusterName, sync)
+	s.Controller().AddClusterScopedFeatureHandler(enabled, feat, ctx, name, clusterName, sync)
 }
 
 func (s *{{.schema.ID}}Client) AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle {{.schema.CodeName}}Lifecycle) {
@@ -328,7 +328,7 @@ func (s *{{.schema.ID}}Client) AddClusterScopedLifecycle(ctx context.Context, na
 
 func (s *{{.schema.ID}}Client) AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle {{.schema.CodeName}}Lifecycle) {
 	sync := New{{.schema.CodeName}}LifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
-	s.Controller().AddClusterScopedFeatureHandler(ctx, name, clusterName, sync)
+	s.Controller().AddClusterScopedFeatureHandler(enabled, feat, ctx, name, clusterName, sync)
 }
 
 type {{.schema.CodeName}}Indexer func(obj *{{.prefix}}{{.schema.CodeName}}) ([]string, error)
