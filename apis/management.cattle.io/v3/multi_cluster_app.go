@@ -34,6 +34,7 @@ type MultiClusterAppSpec struct {
 	RevisionHistoryLimit int             `json:"revisionHistoryLimit,omitempty" norman:"default=10"`
 	UpgradeStrategy      UpgradeStrategy `json:"upgradeStrategy,omitempty"`
 	ShareWithAll         bool            `json:"shareWithAll,omitempty"`
+	AllUsersAccessType   string          `json:"allUsersAccessType,omitempty" norman:"type=enum,options=owner|member|read-only"`
 }
 
 type MultiClusterAppStatus struct {

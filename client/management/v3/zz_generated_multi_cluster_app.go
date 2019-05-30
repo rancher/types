@@ -6,6 +6,7 @@ import (
 
 const (
 	MultiClusterAppType                      = "multiClusterApp"
+	MultiClusterAppFieldAllUsersAccessType   = "allUsersAccessType"
 	MultiClusterAppFieldAnnotations          = "annotations"
 	MultiClusterAppFieldAnswers              = "answers"
 	MultiClusterAppFieldCreated              = "created"
@@ -30,6 +31,7 @@ const (
 
 type MultiClusterApp struct {
 	types.Resource
+	AllUsersAccessType   string                 `json:"allUsersAccessType,omitempty" yaml:"allUsersAccessType,omitempty"`
 	Annotations          map[string]string      `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Answers              []Answer               `json:"answers,omitempty" yaml:"answers,omitempty"`
 	Created              string                 `json:"created,omitempty" yaml:"created,omitempty"`
