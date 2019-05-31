@@ -13,6 +13,7 @@ go test ${RACE} -cover -tags=test ${PACKAGES}
 go generate
 if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
     git status
+    git diff
     echo git out of sync with generated code
     exit 1
 fi
