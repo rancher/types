@@ -69,7 +69,9 @@ type HorizontalPodAutoscalerController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() HorizontalPodAutoscalerLister
 	AddHandler(ctx context.Context, name string, handler HorizontalPodAutoscalerHandlerFunc)
+	AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync HorizontalPodAutoscalerHandlerFunc)
 	AddClusterScopedHandler(ctx context.Context, name, clusterName string, handler HorizontalPodAutoscalerHandlerFunc)
+	AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, handler HorizontalPodAutoscalerHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -88,9 +90,13 @@ type HorizontalPodAutoscalerInterface interface {
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
 	Controller() HorizontalPodAutoscalerController
 	AddHandler(ctx context.Context, name string, sync HorizontalPodAutoscalerHandlerFunc)
+	AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync HorizontalPodAutoscalerHandlerFunc)
 	AddLifecycle(ctx context.Context, name string, lifecycle HorizontalPodAutoscalerLifecycle)
+	AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle HorizontalPodAutoscalerLifecycle)
 	AddClusterScopedHandler(ctx context.Context, name, clusterName string, sync HorizontalPodAutoscalerHandlerFunc)
+	AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, sync HorizontalPodAutoscalerHandlerFunc)
 	AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle HorizontalPodAutoscalerLifecycle)
+	AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, lifecycle HorizontalPodAutoscalerLifecycle)
 }
 
 type horizontalPodAutoscalerLister struct {
@@ -150,10 +156,39 @@ func (c *horizontalPodAutoscalerController) AddHandler(ctx context.Context, name
 	})
 }
 
+func (c *horizontalPodAutoscalerController) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, handler HorizontalPodAutoscalerHandlerFunc) {
+	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
+		if !enabled(feat) {
+			return nil, nil
+		} else if obj == nil {
+			return handler(key, nil)
+		} else if v, ok := obj.(*v2beta2.HorizontalPodAutoscaler); ok {
+			return handler(key, v)
+		} else {
+			return nil, nil
+		}
+	})
+}
+
 func (c *horizontalPodAutoscalerController) AddClusterScopedHandler(ctx context.Context, name, cluster string, handler HorizontalPodAutoscalerHandlerFunc) {
 	resource.PutClusterScoped(HorizontalPodAutoscalerGroupVersionResource)
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
 		if obj == nil {
+			return handler(key, nil)
+		} else if v, ok := obj.(*v2beta2.HorizontalPodAutoscaler); ok && controller.ObjectInCluster(cluster, obj) {
+			return handler(key, v)
+		} else {
+			return nil, nil
+		}
+	})
+}
+
+func (c *horizontalPodAutoscalerController) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, cluster string, handler HorizontalPodAutoscalerHandlerFunc) {
+	resource.PutClusterScoped(HorizontalPodAutoscalerGroupVersionResource)
+	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
+		if !enabled(feat) {
+			return nil, nil
+		} else if obj == nil {
 			return handler(key, nil)
 		} else if v, ok := obj.(*v2beta2.HorizontalPodAutoscaler); ok && controller.ObjectInCluster(cluster, obj) {
 			return handler(key, v)
@@ -258,18 +293,36 @@ func (s *horizontalPodAutoscalerClient) AddHandler(ctx context.Context, name str
 	s.Controller().AddHandler(ctx, name, sync)
 }
 
+func (s *horizontalPodAutoscalerClient) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync HorizontalPodAutoscalerHandlerFunc) {
+	s.Controller().AddFeatureHandler(enabled, feat, ctx, name, sync)
+}
+
 func (s *horizontalPodAutoscalerClient) AddLifecycle(ctx context.Context, name string, lifecycle HorizontalPodAutoscalerLifecycle) {
 	sync := NewHorizontalPodAutoscalerLifecycleAdapter(name, false, s, lifecycle)
 	s.Controller().AddHandler(ctx, name, sync)
+}
+
+func (s *horizontalPodAutoscalerClient) AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle HorizontalPodAutoscalerLifecycle) {
+	sync := NewHorizontalPodAutoscalerLifecycleAdapter(name, false, s, lifecycle)
+	s.Controller().AddFeatureHandler(enabled, feat, ctx, name, sync)
 }
 
 func (s *horizontalPodAutoscalerClient) AddClusterScopedHandler(ctx context.Context, name, clusterName string, sync HorizontalPodAutoscalerHandlerFunc) {
 	s.Controller().AddClusterScopedHandler(ctx, name, clusterName, sync)
 }
 
+func (s *horizontalPodAutoscalerClient) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, sync HorizontalPodAutoscalerHandlerFunc) {
+	s.Controller().AddClusterScopedFeatureHandler(enabled, feat, ctx, name, clusterName, sync)
+}
+
 func (s *horizontalPodAutoscalerClient) AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle HorizontalPodAutoscalerLifecycle) {
 	sync := NewHorizontalPodAutoscalerLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
 	s.Controller().AddClusterScopedHandler(ctx, name, clusterName, sync)
+}
+
+func (s *horizontalPodAutoscalerClient) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, lifecycle HorizontalPodAutoscalerLifecycle) {
+	sync := NewHorizontalPodAutoscalerLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.Controller().AddClusterScopedFeatureHandler(enabled, feat, ctx, name, clusterName, sync)
 }
 
 type HorizontalPodAutoscalerIndexer func(obj *v2beta2.HorizontalPodAutoscaler) ([]string, error)
