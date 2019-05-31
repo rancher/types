@@ -140,14 +140,16 @@ func (mock *WorkloadListerMock) ListCalls() []struct {
 }
 
 var (
-	lockWorkloadControllerMockAddClusterScopedHandler sync.RWMutex
-	lockWorkloadControllerMockAddHandler              sync.RWMutex
-	lockWorkloadControllerMockEnqueue                 sync.RWMutex
-	lockWorkloadControllerMockGeneric                 sync.RWMutex
-	lockWorkloadControllerMockInformer                sync.RWMutex
-	lockWorkloadControllerMockLister                  sync.RWMutex
-	lockWorkloadControllerMockStart                   sync.RWMutex
-	lockWorkloadControllerMockSync                    sync.RWMutex
+	lockWorkloadControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockWorkloadControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockWorkloadControllerMockAddFeatureHandler              sync.RWMutex
+	lockWorkloadControllerMockAddHandler                     sync.RWMutex
+	lockWorkloadControllerMockEnqueue                        sync.RWMutex
+	lockWorkloadControllerMockGeneric                        sync.RWMutex
+	lockWorkloadControllerMockInformer                       sync.RWMutex
+	lockWorkloadControllerMockLister                         sync.RWMutex
+	lockWorkloadControllerMockStart                          sync.RWMutex
+	lockWorkloadControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that WorkloadControllerMock does implement WorkloadController.
@@ -160,8 +162,14 @@ var _ v3.WorkloadController = &WorkloadControllerMock{}
 //
 //         // make and configure a mocked WorkloadController
 //         mockedWorkloadController := &WorkloadControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.WorkloadHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v3.WorkloadHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.WorkloadHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v3.WorkloadHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -191,8 +199,14 @@ var _ v3.WorkloadController = &WorkloadControllerMock{}
 //
 //     }
 type WorkloadControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.WorkloadHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v3.WorkloadHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.WorkloadHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v3.WorkloadHandlerFunc)
@@ -217,6 +231,21 @@ type WorkloadControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v3.WorkloadHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -227,6 +256,19 @@ type WorkloadControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v3.WorkloadHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.WorkloadHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -266,6 +308,57 @@ type WorkloadControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *WorkloadControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.WorkloadHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("WorkloadControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but WorkloadController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.WorkloadHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockWorkloadControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockWorkloadControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedWorkloadController.AddClusterScopedFeatureHandlerCalls())
+func (mock *WorkloadControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v3.WorkloadHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.WorkloadHandlerFunc
+	}
+	lockWorkloadControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockWorkloadControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -308,6 +401,53 @@ func (mock *WorkloadControllerMock) AddClusterScopedHandlerCalls() []struct {
 	lockWorkloadControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockWorkloadControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *WorkloadControllerMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.WorkloadHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("WorkloadControllerMock.AddFeatureHandlerFunc: method is nil but WorkloadController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.WorkloadHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockWorkloadControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockWorkloadControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedWorkloadController.AddFeatureHandlerCalls())
+func (mock *WorkloadControllerMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.WorkloadHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.WorkloadHandlerFunc
+	}
+	lockWorkloadControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockWorkloadControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -530,21 +670,25 @@ func (mock *WorkloadControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockWorkloadInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockWorkloadInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockWorkloadInterfaceMockAddHandler                sync.RWMutex
-	lockWorkloadInterfaceMockAddLifecycle              sync.RWMutex
-	lockWorkloadInterfaceMockController                sync.RWMutex
-	lockWorkloadInterfaceMockCreate                    sync.RWMutex
-	lockWorkloadInterfaceMockDelete                    sync.RWMutex
-	lockWorkloadInterfaceMockDeleteCollection          sync.RWMutex
-	lockWorkloadInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockWorkloadInterfaceMockGet                       sync.RWMutex
-	lockWorkloadInterfaceMockGetNamespaced             sync.RWMutex
-	lockWorkloadInterfaceMockList                      sync.RWMutex
-	lockWorkloadInterfaceMockObjectClient              sync.RWMutex
-	lockWorkloadInterfaceMockUpdate                    sync.RWMutex
-	lockWorkloadInterfaceMockWatch                     sync.RWMutex
+	lockWorkloadInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockWorkloadInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockWorkloadInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockWorkloadInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockWorkloadInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockWorkloadInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockWorkloadInterfaceMockAddHandler                       sync.RWMutex
+	lockWorkloadInterfaceMockAddLifecycle                     sync.RWMutex
+	lockWorkloadInterfaceMockController                       sync.RWMutex
+	lockWorkloadInterfaceMockCreate                           sync.RWMutex
+	lockWorkloadInterfaceMockDelete                           sync.RWMutex
+	lockWorkloadInterfaceMockDeleteCollection                 sync.RWMutex
+	lockWorkloadInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockWorkloadInterfaceMockGet                              sync.RWMutex
+	lockWorkloadInterfaceMockGetNamespaced                    sync.RWMutex
+	lockWorkloadInterfaceMockList                             sync.RWMutex
+	lockWorkloadInterfaceMockObjectClient                     sync.RWMutex
+	lockWorkloadInterfaceMockUpdate                           sync.RWMutex
+	lockWorkloadInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that WorkloadInterfaceMock does implement WorkloadInterface.
@@ -557,11 +701,23 @@ var _ v3.WorkloadInterface = &WorkloadInterfaceMock{}
 //
 //         // make and configure a mocked WorkloadInterface
 //         mockedWorkloadInterface := &WorkloadInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.WorkloadHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.WorkloadLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v3.WorkloadHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v3.WorkloadLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.WorkloadHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.WorkloadLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v3.WorkloadHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -609,11 +765,23 @@ var _ v3.WorkloadInterface = &WorkloadInterfaceMock{}
 //
 //     }
 type WorkloadInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.WorkloadHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.WorkloadLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v3.WorkloadHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v3.WorkloadLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.WorkloadHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.WorkloadLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v3.WorkloadHandlerFunc)
@@ -656,6 +824,36 @@ type WorkloadInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v3.WorkloadHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.WorkloadLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -675,6 +873,32 @@ type WorkloadInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.WorkloadLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.WorkloadHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v3.WorkloadLifecycle
 		}
@@ -764,6 +988,108 @@ type WorkloadInterfaceMock struct {
 	}
 }
 
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *WorkloadInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.WorkloadHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("WorkloadInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but WorkloadInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.WorkloadHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockWorkloadInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockWorkloadInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedWorkloadInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *WorkloadInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v3.WorkloadHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.WorkloadHandlerFunc
+	}
+	lockWorkloadInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockWorkloadInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *WorkloadInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.WorkloadLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("WorkloadInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but WorkloadInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.WorkloadLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockWorkloadInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockWorkloadInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedWorkloadInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *WorkloadInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v3.WorkloadLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.WorkloadLifecycle
+	}
+	lockWorkloadInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockWorkloadInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
+}
+
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
 func (mock *WorkloadInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v3.WorkloadHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
@@ -847,6 +1173,100 @@ func (mock *WorkloadInterfaceMock) AddClusterScopedLifecycleCalls() []struct {
 	lockWorkloadInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockWorkloadInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *WorkloadInterfaceMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.WorkloadHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("WorkloadInterfaceMock.AddFeatureHandlerFunc: method is nil but WorkloadInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.WorkloadHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockWorkloadInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockWorkloadInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedWorkloadInterface.AddFeatureHandlerCalls())
+func (mock *WorkloadInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.WorkloadHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.WorkloadHandlerFunc
+	}
+	lockWorkloadInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockWorkloadInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *WorkloadInterfaceMock) AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.WorkloadLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("WorkloadInterfaceMock.AddFeatureLifecycleFunc: method is nil but WorkloadInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.WorkloadLifecycle
+	}{
+		Enabled:   enabled,
+		Feat:      feat,
+		Ctx:       ctx,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockWorkloadInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockWorkloadInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(enabled, feat, ctx, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedWorkloadInterface.AddFeatureLifecycleCalls())
+func (mock *WorkloadInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Enabled   func(string) bool
+	Feat      string
+	Ctx       context.Context
+	Name      string
+	Lifecycle v3.WorkloadLifecycle
+} {
+	var calls []struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.WorkloadLifecycle
+	}
+	lockWorkloadInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockWorkloadInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 

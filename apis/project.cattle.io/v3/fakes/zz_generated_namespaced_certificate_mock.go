@@ -140,14 +140,16 @@ func (mock *NamespacedCertificateListerMock) ListCalls() []struct {
 }
 
 var (
-	lockNamespacedCertificateControllerMockAddClusterScopedHandler sync.RWMutex
-	lockNamespacedCertificateControllerMockAddHandler              sync.RWMutex
-	lockNamespacedCertificateControllerMockEnqueue                 sync.RWMutex
-	lockNamespacedCertificateControllerMockGeneric                 sync.RWMutex
-	lockNamespacedCertificateControllerMockInformer                sync.RWMutex
-	lockNamespacedCertificateControllerMockLister                  sync.RWMutex
-	lockNamespacedCertificateControllerMockStart                   sync.RWMutex
-	lockNamespacedCertificateControllerMockSync                    sync.RWMutex
+	lockNamespacedCertificateControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockNamespacedCertificateControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockNamespacedCertificateControllerMockAddFeatureHandler              sync.RWMutex
+	lockNamespacedCertificateControllerMockAddHandler                     sync.RWMutex
+	lockNamespacedCertificateControllerMockEnqueue                        sync.RWMutex
+	lockNamespacedCertificateControllerMockGeneric                        sync.RWMutex
+	lockNamespacedCertificateControllerMockInformer                       sync.RWMutex
+	lockNamespacedCertificateControllerMockLister                         sync.RWMutex
+	lockNamespacedCertificateControllerMockStart                          sync.RWMutex
+	lockNamespacedCertificateControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that NamespacedCertificateControllerMock does implement NamespacedCertificateController.
@@ -160,8 +162,14 @@ var _ v3.NamespacedCertificateController = &NamespacedCertificateControllerMock{
 //
 //         // make and configure a mocked NamespacedCertificateController
 //         mockedNamespacedCertificateController := &NamespacedCertificateControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.NamespacedCertificateHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v3.NamespacedCertificateHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedCertificateHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v3.NamespacedCertificateHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -191,8 +199,14 @@ var _ v3.NamespacedCertificateController = &NamespacedCertificateControllerMock{
 //
 //     }
 type NamespacedCertificateControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.NamespacedCertificateHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v3.NamespacedCertificateHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedCertificateHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v3.NamespacedCertificateHandlerFunc)
@@ -217,6 +231,21 @@ type NamespacedCertificateControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v3.NamespacedCertificateHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -227,6 +256,19 @@ type NamespacedCertificateControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v3.NamespacedCertificateHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.NamespacedCertificateHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -266,6 +308,57 @@ type NamespacedCertificateControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *NamespacedCertificateControllerMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, handler v3.NamespacedCertificateHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("NamespacedCertificateControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but NamespacedCertificateController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.NamespacedCertificateHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockNamespacedCertificateControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockNamespacedCertificateControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedNamespacedCertificateController.AddClusterScopedFeatureHandlerCalls())
+func (mock *NamespacedCertificateControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Handler     v3.NamespacedCertificateHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Handler     v3.NamespacedCertificateHandlerFunc
+	}
+	lockNamespacedCertificateControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockNamespacedCertificateControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -308,6 +401,53 @@ func (mock *NamespacedCertificateControllerMock) AddClusterScopedHandlerCalls() 
 	lockNamespacedCertificateControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockNamespacedCertificateControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *NamespacedCertificateControllerMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedCertificateHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("NamespacedCertificateControllerMock.AddFeatureHandlerFunc: method is nil but NamespacedCertificateController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.NamespacedCertificateHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockNamespacedCertificateControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockNamespacedCertificateControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedNamespacedCertificateController.AddFeatureHandlerCalls())
+func (mock *NamespacedCertificateControllerMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.NamespacedCertificateHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.NamespacedCertificateHandlerFunc
+	}
+	lockNamespacedCertificateControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockNamespacedCertificateControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -530,21 +670,25 @@ func (mock *NamespacedCertificateControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockNamespacedCertificateInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockNamespacedCertificateInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockNamespacedCertificateInterfaceMockAddHandler                sync.RWMutex
-	lockNamespacedCertificateInterfaceMockAddLifecycle              sync.RWMutex
-	lockNamespacedCertificateInterfaceMockController                sync.RWMutex
-	lockNamespacedCertificateInterfaceMockCreate                    sync.RWMutex
-	lockNamespacedCertificateInterfaceMockDelete                    sync.RWMutex
-	lockNamespacedCertificateInterfaceMockDeleteCollection          sync.RWMutex
-	lockNamespacedCertificateInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockNamespacedCertificateInterfaceMockGet                       sync.RWMutex
-	lockNamespacedCertificateInterfaceMockGetNamespaced             sync.RWMutex
-	lockNamespacedCertificateInterfaceMockList                      sync.RWMutex
-	lockNamespacedCertificateInterfaceMockObjectClient              sync.RWMutex
-	lockNamespacedCertificateInterfaceMockUpdate                    sync.RWMutex
-	lockNamespacedCertificateInterfaceMockWatch                     sync.RWMutex
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockNamespacedCertificateInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockNamespacedCertificateInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockNamespacedCertificateInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockNamespacedCertificateInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockNamespacedCertificateInterfaceMockAddHandler                       sync.RWMutex
+	lockNamespacedCertificateInterfaceMockAddLifecycle                     sync.RWMutex
+	lockNamespacedCertificateInterfaceMockController                       sync.RWMutex
+	lockNamespacedCertificateInterfaceMockCreate                           sync.RWMutex
+	lockNamespacedCertificateInterfaceMockDelete                           sync.RWMutex
+	lockNamespacedCertificateInterfaceMockDeleteCollection                 sync.RWMutex
+	lockNamespacedCertificateInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockNamespacedCertificateInterfaceMockGet                              sync.RWMutex
+	lockNamespacedCertificateInterfaceMockGetNamespaced                    sync.RWMutex
+	lockNamespacedCertificateInterfaceMockList                             sync.RWMutex
+	lockNamespacedCertificateInterfaceMockObjectClient                     sync.RWMutex
+	lockNamespacedCertificateInterfaceMockUpdate                           sync.RWMutex
+	lockNamespacedCertificateInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that NamespacedCertificateInterfaceMock does implement NamespacedCertificateInterface.
@@ -557,11 +701,23 @@ var _ v3.NamespacedCertificateInterface = &NamespacedCertificateInterfaceMock{}
 //
 //         // make and configure a mocked NamespacedCertificateInterface
 //         mockedNamespacedCertificateInterface := &NamespacedCertificateInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.NamespacedCertificateHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedCertificateLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v3.NamespacedCertificateHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedCertificateLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedCertificateHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.NamespacedCertificateLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v3.NamespacedCertificateHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -609,11 +765,23 @@ var _ v3.NamespacedCertificateInterface = &NamespacedCertificateInterfaceMock{}
 //
 //     }
 type NamespacedCertificateInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.NamespacedCertificateHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedCertificateLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v3.NamespacedCertificateHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedCertificateLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedCertificateHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.NamespacedCertificateLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v3.NamespacedCertificateHandlerFunc)
@@ -656,6 +824,36 @@ type NamespacedCertificateInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v3.NamespacedCertificateHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.NamespacedCertificateLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -675,6 +873,32 @@ type NamespacedCertificateInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v3.NamespacedCertificateLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v3.NamespacedCertificateHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Enabled is the enabled argument value.
+			Enabled func(string) bool
+			// Feat is the feat argument value.
+			Feat string
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v3.NamespacedCertificateLifecycle
 		}
@@ -764,6 +988,108 @@ type NamespacedCertificateInterfaceMock struct {
 	}
 }
 
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *NamespacedCertificateInterfaceMock) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, sync v3.NamespacedCertificateHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("NamespacedCertificateInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but NamespacedCertificateInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.NamespacedCertificateHandlerFunc
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(enabled, feat, ctx, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedNamespacedCertificateInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *NamespacedCertificateInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Sync        v3.NamespacedCertificateHandlerFunc
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Sync        v3.NamespacedCertificateHandlerFunc
+	}
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *NamespacedCertificateInterfaceMock) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, clusterName string, lifecycle v3.NamespacedCertificateLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("NamespacedCertificateInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but NamespacedCertificateInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.NamespacedCertificateLifecycle
+	}{
+		Enabled:     enabled,
+		Feat:        feat,
+		Ctx:         ctx,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(enabled, feat, ctx, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedNamespacedCertificateInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *NamespacedCertificateInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Enabled     func(string) bool
+	Feat        string
+	Ctx         context.Context
+	Name        string
+	ClusterName string
+	Lifecycle   v3.NamespacedCertificateLifecycle
+} {
+	var calls []struct {
+		Enabled     func(string) bool
+		Feat        string
+		Ctx         context.Context
+		Name        string
+		ClusterName string
+		Lifecycle   v3.NamespacedCertificateLifecycle
+	}
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockNamespacedCertificateInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
+}
+
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
 func (mock *NamespacedCertificateInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v3.NamespacedCertificateHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
@@ -847,6 +1173,100 @@ func (mock *NamespacedCertificateInterfaceMock) AddClusterScopedLifecycleCalls()
 	lockNamespacedCertificateInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockNamespacedCertificateInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *NamespacedCertificateInterfaceMock) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync v3.NamespacedCertificateHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("NamespacedCertificateInterfaceMock.AddFeatureHandlerFunc: method is nil but NamespacedCertificateInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.NamespacedCertificateHandlerFunc
+	}{
+		Enabled: enabled,
+		Feat:    feat,
+		Ctx:     ctx,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockNamespacedCertificateInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockNamespacedCertificateInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(enabled, feat, ctx, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedNamespacedCertificateInterface.AddFeatureHandlerCalls())
+func (mock *NamespacedCertificateInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Enabled func(string) bool
+	Feat    string
+	Ctx     context.Context
+	Name    string
+	Sync    v3.NamespacedCertificateHandlerFunc
+} {
+	var calls []struct {
+		Enabled func(string) bool
+		Feat    string
+		Ctx     context.Context
+		Name    string
+		Sync    v3.NamespacedCertificateHandlerFunc
+	}
+	lockNamespacedCertificateInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockNamespacedCertificateInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *NamespacedCertificateInterfaceMock) AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle v3.NamespacedCertificateLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("NamespacedCertificateInterfaceMock.AddFeatureLifecycleFunc: method is nil but NamespacedCertificateInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.NamespacedCertificateLifecycle
+	}{
+		Enabled:   enabled,
+		Feat:      feat,
+		Ctx:       ctx,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockNamespacedCertificateInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockNamespacedCertificateInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(enabled, feat, ctx, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedNamespacedCertificateInterface.AddFeatureLifecycleCalls())
+func (mock *NamespacedCertificateInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Enabled   func(string) bool
+	Feat      string
+	Ctx       context.Context
+	Name      string
+	Lifecycle v3.NamespacedCertificateLifecycle
+} {
+	var calls []struct {
+		Enabled   func(string) bool
+		Feat      string
+		Ctx       context.Context
+		Name      string
+		Lifecycle v3.NamespacedCertificateLifecycle
+	}
+	lockNamespacedCertificateInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockNamespacedCertificateInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 

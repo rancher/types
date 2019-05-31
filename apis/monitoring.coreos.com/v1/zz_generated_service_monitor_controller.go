@@ -3,7 +3,7 @@ package v1
 import (
 	"context"
 
-	"github.com/coreos/prometheus-operator/pkg/client/monitoring/v1"
+	v1 "github.com/coreos/prometheus-operator/pkg/client/monitoring/v1"
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
@@ -69,7 +69,9 @@ type ServiceMonitorController interface {
 	Informer() cache.SharedIndexInformer
 	Lister() ServiceMonitorLister
 	AddHandler(ctx context.Context, name string, handler ServiceMonitorHandlerFunc)
+	AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync ServiceMonitorHandlerFunc)
 	AddClusterScopedHandler(ctx context.Context, name, clusterName string, handler ServiceMonitorHandlerFunc)
+	AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, handler ServiceMonitorHandlerFunc)
 	Enqueue(namespace, name string)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
@@ -88,9 +90,13 @@ type ServiceMonitorInterface interface {
 	DeleteCollection(deleteOpts *metav1.DeleteOptions, listOpts metav1.ListOptions) error
 	Controller() ServiceMonitorController
 	AddHandler(ctx context.Context, name string, sync ServiceMonitorHandlerFunc)
+	AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync ServiceMonitorHandlerFunc)
 	AddLifecycle(ctx context.Context, name string, lifecycle ServiceMonitorLifecycle)
+	AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle ServiceMonitorLifecycle)
 	AddClusterScopedHandler(ctx context.Context, name, clusterName string, sync ServiceMonitorHandlerFunc)
+	AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, sync ServiceMonitorHandlerFunc)
 	AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle ServiceMonitorLifecycle)
+	AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, lifecycle ServiceMonitorLifecycle)
 }
 
 type serviceMonitorLister struct {
@@ -150,10 +156,39 @@ func (c *serviceMonitorController) AddHandler(ctx context.Context, name string, 
 	})
 }
 
+func (c *serviceMonitorController) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, handler ServiceMonitorHandlerFunc) {
+	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
+		if !enabled(feat) {
+			return nil, nil
+		} else if obj == nil {
+			return handler(key, nil)
+		} else if v, ok := obj.(*v1.ServiceMonitor); ok {
+			return handler(key, v)
+		} else {
+			return nil, nil
+		}
+	})
+}
+
 func (c *serviceMonitorController) AddClusterScopedHandler(ctx context.Context, name, cluster string, handler ServiceMonitorHandlerFunc) {
 	resource.PutClusterScoped(ServiceMonitorGroupVersionResource)
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
 		if obj == nil {
+			return handler(key, nil)
+		} else if v, ok := obj.(*v1.ServiceMonitor); ok && controller.ObjectInCluster(cluster, obj) {
+			return handler(key, v)
+		} else {
+			return nil, nil
+		}
+	})
+}
+
+func (c *serviceMonitorController) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, cluster string, handler ServiceMonitorHandlerFunc) {
+	resource.PutClusterScoped(ServiceMonitorGroupVersionResource)
+	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
+		if !enabled(feat) {
+			return nil, nil
+		} else if obj == nil {
 			return handler(key, nil)
 		} else if v, ok := obj.(*v1.ServiceMonitor); ok && controller.ObjectInCluster(cluster, obj) {
 			return handler(key, v)
@@ -258,18 +293,36 @@ func (s *serviceMonitorClient) AddHandler(ctx context.Context, name string, sync
 	s.Controller().AddHandler(ctx, name, sync)
 }
 
+func (s *serviceMonitorClient) AddFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name string, sync ServiceMonitorHandlerFunc) {
+	s.Controller().AddFeatureHandler(enabled, feat, ctx, name, sync)
+}
+
 func (s *serviceMonitorClient) AddLifecycle(ctx context.Context, name string, lifecycle ServiceMonitorLifecycle) {
 	sync := NewServiceMonitorLifecycleAdapter(name, false, s, lifecycle)
 	s.Controller().AddHandler(ctx, name, sync)
+}
+
+func (s *serviceMonitorClient) AddFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name string, lifecycle ServiceMonitorLifecycle) {
+	sync := NewServiceMonitorLifecycleAdapter(name, false, s, lifecycle)
+	s.Controller().AddFeatureHandler(enabled, feat, ctx, name, sync)
 }
 
 func (s *serviceMonitorClient) AddClusterScopedHandler(ctx context.Context, name, clusterName string, sync ServiceMonitorHandlerFunc) {
 	s.Controller().AddClusterScopedHandler(ctx, name, clusterName, sync)
 }
 
+func (s *serviceMonitorClient) AddClusterScopedFeatureHandler(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, sync ServiceMonitorHandlerFunc) {
+	s.Controller().AddClusterScopedFeatureHandler(enabled, feat, ctx, name, clusterName, sync)
+}
+
 func (s *serviceMonitorClient) AddClusterScopedLifecycle(ctx context.Context, name, clusterName string, lifecycle ServiceMonitorLifecycle) {
 	sync := NewServiceMonitorLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
 	s.Controller().AddClusterScopedHandler(ctx, name, clusterName, sync)
+}
+
+func (s *serviceMonitorClient) AddClusterScopedFeatureLifecycle(enabled func(string) bool, feat string, ctx context.Context, name, clusterName string, lifecycle ServiceMonitorLifecycle) {
+	sync := NewServiceMonitorLifecycleAdapter(name+"_"+clusterName, true, s, lifecycle)
+	s.Controller().AddClusterScopedFeatureHandler(enabled, feat, ctx, name, clusterName, sync)
 }
 
 type ServiceMonitorIndexer func(obj *v1.ServiceMonitor) ([]string, error)
