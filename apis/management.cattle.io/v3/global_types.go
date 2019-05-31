@@ -14,6 +14,16 @@ type Setting struct {
 	Source     string `json:"source" norman:"nocreate,noupdate,options=db|default|env"`
 }
 
+type Feature struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Value      string `json:"value" norman:"required"`
+	Default    string `json:"default" norman:"nocreate,noupdate"`
+	Customized bool   `json:"customized" norman:"nocreate,noupdate"`
+	Source     string `json:"source" norman:"nocreate,noupdate,options=db|default|env"`
+}
+
 type ListenConfig struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
