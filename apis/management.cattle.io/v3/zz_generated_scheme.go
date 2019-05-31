@@ -119,8 +119,6 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProjectAlertRuleList{},
 		&ComposeConfig{},
 		&ComposeConfigList{},
-		&ClusterRandomizer{},
-		&ClusterRandomizerList{},
 		&ProjectCatalog{},
 		&ProjectCatalogList{},
 		&ClusterCatalog{},
