@@ -55,6 +55,7 @@ type Interface interface {
 	ProjectLoggingsGetter
 	ListenConfigsGetter
 	SettingsGetter
+	FeaturesGetter
 	ClusterAlertsGetter
 	ProjectAlertsGetter
 	NotifiersGetter
@@ -115,6 +116,7 @@ type Clients struct {
 	ProjectLogging                          ProjectLoggingClient
 	ListenConfig                            ListenConfigClient
 	Setting                                 SettingClient
+	Feature                                 FeatureClient
 	ClusterAlert                            ClusterAlertClient
 	ProjectAlert                            ProjectAlertClient
 	Notifier                                NotifierClient
@@ -177,6 +179,7 @@ type Client struct {
 	projectLoggingControllers                          map[string]ProjectLoggingController
 	listenConfigControllers                            map[string]ListenConfigController
 	settingControllers                                 map[string]SettingController
+	featureControllers                                 map[string]FeatureController
 	clusterAlertControllers                            map[string]ClusterAlertController
 	projectAlertControllers                            map[string]ProjectAlertController
 	notifierControllers                                map[string]NotifierController
@@ -337,6 +340,9 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		Setting: &settingClient2{
 			iface: iface.Settings(""),
 		},
+		Feature: &featureClient2{
+			iface: iface.Features(""),
+		},
 		ClusterAlert: &clusterAlertClient2{
 			iface: iface.ClusterAlerts(""),
 		},
@@ -448,6 +454,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		projectLoggingControllers:                          map[string]ProjectLoggingController{},
 		listenConfigControllers:                            map[string]ListenConfigController{},
 		settingControllers:                                 map[string]SettingController{},
+		featureControllers:                                 map[string]FeatureController{},
 		clusterAlertControllers:                            map[string]ClusterAlertController{},
 		projectAlertControllers:                            map[string]ProjectAlertController{},
 		notifierControllers:                                map[string]NotifierController{},
@@ -932,6 +939,19 @@ type SettingsGetter interface {
 func (c *Client) Settings(namespace string) SettingInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &SettingResource, SettingGroupVersionKind, settingFactory{})
 	return &settingClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type FeaturesGetter interface {
+	Features(namespace string) FeatureInterface
+}
+
+func (c *Client) Features(namespace string) FeatureInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &FeatureResource, FeatureGroupVersionKind, featureFactory{})
+	return &featureClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
