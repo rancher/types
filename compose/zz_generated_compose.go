@@ -61,6 +61,9 @@ type Config struct {
 	ProjectMonitorGraphs                     map[string]managementClient.ProjectMonitorGraph                     `json:"projectMonitorGraphs,omitempty" yaml:"projectMonitorGraphs,omitempty"`
 	CloudCredentials                         map[string]managementClient.CloudCredential                         `json:"cloudCredentials,omitempty" yaml:"cloudCredentials,omitempty"`
 	ManagementSecrets                        map[string]managementClient.ManagementSecret                        `json:"managementSecrets,omitempty" yaml:"managementSecrets,omitempty"`
+	RKEK8sSystemImages                       map[string]managementClient.RKEK8sSystemImage                       `json:"rkeK8sSystemImages,omitempty" yaml:"rkeK8sSystemImages,omitempty"`
+	RKEK8sServiceOptions                     map[string]managementClient.RKEK8sServiceOption                     `json:"rkeK8sServiceOptions,omitempty" yaml:"rkeK8sServiceOptions,omitempty"`
+	RKEAddons                                map[string]managementClient.RKEAddon                                `json:"rkeAddons,omitempty" yaml:"rkeAddons,omitempty"`
 
 	// Cluster Client
 	Namespaces        map[string]clusterClient.Namespace        `json:"namespaces,omitempty" yaml:"namespaces,omitempty"`

@@ -62,6 +62,9 @@ type Client struct {
 	ProjectMonitorGraph                     ProjectMonitorGraphOperations
 	CloudCredential                         CloudCredentialOperations
 	ManagementSecret                        ManagementSecretOperations
+	RKEK8sSystemImage                       RKEK8sSystemImageOperations
+	RKEK8sServiceOption                     RKEK8sServiceOptionOperations
+	RKEAddon                                RKEAddonOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -129,6 +132,9 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.ProjectMonitorGraph = newProjectMonitorGraphClient(client)
 	client.CloudCredential = newCloudCredentialClient(client)
 	client.ManagementSecret = newManagementSecretClient(client)
+	client.RKEK8sSystemImage = newRKEK8sSystemImageClient(client)
+	client.RKEK8sServiceOption = newRKEK8sServiceOptionClient(client)
+	client.RKEAddon = newRKEAddonClient(client)
 
 	return client, nil
 }

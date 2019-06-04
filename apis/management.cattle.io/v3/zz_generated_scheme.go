@@ -143,6 +143,12 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProjectMonitorGraphList{},
 		&CloudCredential{},
 		&CloudCredentialList{},
+		&RKEK8sSystemImage{},
+		&RKEK8sSystemImageList{},
+		&RKEK8sServiceOption{},
+		&RKEK8sServiceOptionList{},
+		&RKEAddon{},
+		&RKEAddonList{},
 	)
 	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
 	return nil
