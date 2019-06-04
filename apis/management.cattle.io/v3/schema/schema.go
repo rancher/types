@@ -42,7 +42,8 @@ var (
 		Init(etcdBackupTypes).
 		Init(monitorTypes).
 		Init(credTypes).
-		Init(mgmtSecretTypes)
+		Init(mgmtSecretTypes).
+		Init(driverMetadataTypes)
 
 	TokenSchemas = factory.Schemas(&Version).
 			Init(tokens)
@@ -50,6 +51,16 @@ var (
 
 func rkeTypes(schemas *types.Schemas) *types.Schemas {
 	return schemas.AddMapperForType(&Version, v3.BaseService{}, m.Drop{Field: "image"})
+}
+
+func driverMetadataTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v3.RKEK8sSystemImage{}, m.Drop{Field: "namespaceId"}).
+		AddMapperForType(&Version, v3.RKEK8sServiceOption{}, m.Drop{Field: "namespaceId"}).
+		AddMapperForType(&Version, v3.RKEAddon{}, m.Drop{Field: "namespaceId"}).
+		MustImport(&Version, v3.RKEK8sSystemImage{}).
+		MustImport(&Version, v3.RKEK8sServiceOption{}).
+		MustImport(&Version, v3.RKEAddon{})
 }
 
 func schemaTypes(schemas *types.Schemas) *types.Schemas {
