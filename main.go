@@ -21,6 +21,7 @@ import (
 	knetworkingv1 "k8s.io/api/networking/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	k8sschema "k8s.io/apimachinery/pkg/runtime/schema"
+	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 )
 
 func main() {
@@ -103,5 +104,10 @@ func main() {
 			istiov1alpha3.DestinationRule{},
 		},
 		[]interface{}{},
+	)
+	generator.GenerateNativeTypes(apiregistrationv1.SchemeGroupVersion,
+		[]interface{}{}, []interface{}{
+			apiregistrationv1.APIService{},
+		},
 	)
 }
