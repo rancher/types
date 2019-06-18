@@ -261,6 +261,5 @@ type LocalClusterAuthEndpoint struct {
 }
 
 type CertExpiration struct {
-	DaysRemaining  int    `json:"daysRemaining,omitempty"`
 	ExpirationDate string `json:"expirationDate,omitempty"`
 }
