@@ -64,6 +64,9 @@ type Client struct {
 	ManagementSecret                        ManagementSecretOperations
 	ClusterTemplate                         ClusterTemplateOperations
 	ClusterTemplateRevision                 ClusterTemplateRevisionOperations
+	RKEK8sSystemImage                       RKEK8sSystemImageOperations
+	RKEK8sServiceOption                     RKEK8sServiceOptionOperations
+	RKEAddon                                RKEAddonOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -133,6 +136,9 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.ManagementSecret = newManagementSecretClient(client)
 	client.ClusterTemplate = newClusterTemplateClient(client)
 	client.ClusterTemplateRevision = newClusterTemplateRevisionClient(client)
+	client.RKEK8sSystemImage = newRKEK8sSystemImageClient(client)
+	client.RKEK8sServiceOption = newRKEK8sServiceOptionClient(client)
+	client.RKEAddon = newRKEAddonClient(client)
 
 	return client, nil
 }

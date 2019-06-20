@@ -77,6 +77,9 @@ type Interface interface {
 	CloudCredentialsGetter
 	ClusterTemplatesGetter
 	ClusterTemplateRevisionsGetter
+	RKEK8sSystemImagesGetter
+	RKEK8sServiceOptionsGetter
+	RKEAddonsGetter
 }
 
 type Clients struct {
@@ -139,6 +142,9 @@ type Clients struct {
 	CloudCredential                         CloudCredentialClient
 	ClusterTemplate                         ClusterTemplateClient
 	ClusterTemplateRevision                 ClusterTemplateRevisionClient
+	RKEK8sSystemImage                       RKEK8sSystemImageClient
+	RKEK8sServiceOption                     RKEK8sServiceOptionClient
+	RKEAddon                                RKEAddonClient
 }
 
 type Client struct {
@@ -203,6 +209,9 @@ type Client struct {
 	cloudCredentialControllers                         map[string]CloudCredentialController
 	clusterTemplateControllers                         map[string]ClusterTemplateController
 	clusterTemplateRevisionControllers                 map[string]ClusterTemplateRevisionController
+	rkeK8sSystemImageControllers                       map[string]RKEK8sSystemImageController
+	rkeK8sServiceOptionControllers                     map[string]RKEK8sServiceOptionController
+	rkeAddonControllers                                map[string]RKEAddonController
 }
 
 func Factory(ctx context.Context, config rest.Config) (context.Context, controller.Starter, error) {
@@ -409,6 +418,15 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		ClusterTemplateRevision: &clusterTemplateRevisionClient2{
 			iface: iface.ClusterTemplateRevisions(""),
 		},
+		RKEK8sSystemImage: &rkeK8sSystemImageClient2{
+			iface: iface.RKEK8sSystemImages(""),
+		},
+		RKEK8sServiceOption: &rkeK8sServiceOptionClient2{
+			iface: iface.RKEK8sServiceOptions(""),
+		},
+		RKEAddon: &rkeAddonClient2{
+			iface: iface.RKEAddons(""),
+		},
 	}
 }
 
@@ -482,6 +500,9 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		cloudCredentialControllers:                         map[string]CloudCredentialController{},
 		clusterTemplateControllers:                         map[string]ClusterTemplateController{},
 		clusterTemplateRevisionControllers:                 map[string]ClusterTemplateRevisionController{},
+		rkeK8sSystemImageControllers:                       map[string]RKEK8sSystemImageController{},
+		rkeK8sServiceOptionControllers:                     map[string]RKEK8sServiceOptionController{},
+		rkeAddonControllers:                                map[string]RKEAddonController{},
 	}, nil
 }
 
@@ -1232,6 +1253,45 @@ type ClusterTemplateRevisionsGetter interface {
 func (c *Client) ClusterTemplateRevisions(namespace string) ClusterTemplateRevisionInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ClusterTemplateRevisionResource, ClusterTemplateRevisionGroupVersionKind, clusterTemplateRevisionFactory{})
 	return &clusterTemplateRevisionClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type RKEK8sSystemImagesGetter interface {
+	RKEK8sSystemImages(namespace string) RKEK8sSystemImageInterface
+}
+
+func (c *Client) RKEK8sSystemImages(namespace string) RKEK8sSystemImageInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &RKEK8sSystemImageResource, RKEK8sSystemImageGroupVersionKind, rkeK8sSystemImageFactory{})
+	return &rkeK8sSystemImageClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type RKEK8sServiceOptionsGetter interface {
+	RKEK8sServiceOptions(namespace string) RKEK8sServiceOptionInterface
+}
+
+func (c *Client) RKEK8sServiceOptions(namespace string) RKEK8sServiceOptionInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &RKEK8sServiceOptionResource, RKEK8sServiceOptionGroupVersionKind, rkeK8sServiceOptionFactory{})
+	return &rkeK8sServiceOptionClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type RKEAddonsGetter interface {
+	RKEAddons(namespace string) RKEAddonInterface
+}
+
+func (c *Client) RKEAddons(namespace string) RKEAddonInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &RKEAddonResource, RKEAddonGroupVersionKind, rkeAddonFactory{})
+	return &rkeAddonClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
