@@ -1,5 +1,10 @@
 package v3
 
+import (
+	"github.com/rancher/norman/types"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
+
 type RancherKubernetesEngineConfig struct {
 	// Kubernetes nodes
 	Nodes []RKEConfigNode `yaml:"nodes" json:"nodes,omitempty"`
@@ -167,6 +172,38 @@ type RKEConfigNode struct {
 	SSHCertPath string `yaml:"ssh_cert_path" json:"sshCertPath,omitempty"`
 	// Node Labels
 	Labels map[string]string `yaml:"labels" json:"labels,omitempty"`
+}
+
+type RKEK8sSystemImage struct {
+	types.Namespaced
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	SystemImages RKESystemImages `yaml:"system_images" json:"systemImages,omitempty"`
+}
+
+type RKEK8sServiceOption struct {
+	types.Namespaced
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	ServiceOptions KubernetesServicesOptions `yaml:"service_options" json:"serviceOptions,omitempty"`
+}
+
+type RKEAddon struct {
+	types.Namespaced
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Template string `yaml:"template" json:"template,omitempty"`
+}
+
+type K8sVersionInfo struct {
+	MinRKEVersion string `json:"minRKEVersion"`
+	MaxRKEVersion string `json:"maxRKEVersion"`
+
+	MinRancherVersion string `json:"minRancherVersion"`
+	MaxRancherVersion string `json:"maxRancherVersion"`
 }
 
 type RKEConfigServices struct {
@@ -691,7 +728,7 @@ type RotateCertificates struct {
 
 type DNSConfig struct {
 	// DNS provider
-	Provider string `yaml:"provider" json:"provider,omitempty"`
+	Provider string `yaml:"provider" json:"provider,omitempty" norman:"default=kube-dns"`
 	// Upstream nameservers
 	UpstreamNameservers []string `yaml:"upstreamnameservers" json:"upstreamnameservers,omitempty"`
 	// ReverseCIDRs
