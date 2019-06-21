@@ -380,6 +380,8 @@ type RKEConfigNodePlan struct {
 	Annotations map[string]string `json:"annotations,omitempty"`
 	// Node Labels
 	Labels map[string]string `json:"labels,omitempty"`
+	// Node Taints
+	Taints []v1.Taint `json:"taints,omitempty"`
 }
 
 type Process struct {
