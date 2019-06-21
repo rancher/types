@@ -52,7 +52,19 @@ var (
 )
 
 func rkeTypes(schemas *types.Schemas) *types.Schemas {
-	return schemas.AddMapperForType(&Version, v3.BaseService{}, m.Drop{Field: "image"})
+	return schemas.AddMapperForType(&Version, v3.BaseService{}, m.Drop{Field: "image"}).
+		AddMapperForType(&Version, v1.Taint{},
+			m.Enum{Field: "effect", Options: []string{
+				string(v1.TaintEffectNoSchedule),
+				string(v1.TaintEffectPreferNoSchedule),
+				string(v1.TaintEffectNoExecute),
+			}},
+			m.Required{Fields: []string{
+				"effect",
+				"key",
+			}},
+			m.ReadOnly{Field: "timeAdded"},
+		)
 }
 
 func schemaTypes(schemas *types.Schemas) *types.Schemas {
