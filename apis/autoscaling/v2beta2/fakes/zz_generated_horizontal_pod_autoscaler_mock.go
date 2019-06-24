@@ -141,14 +141,16 @@ func (mock *HorizontalPodAutoscalerListerMock) ListCalls() []struct {
 }
 
 var (
-	lockHorizontalPodAutoscalerControllerMockAddClusterScopedHandler sync.RWMutex
-	lockHorizontalPodAutoscalerControllerMockAddHandler              sync.RWMutex
-	lockHorizontalPodAutoscalerControllerMockEnqueue                 sync.RWMutex
-	lockHorizontalPodAutoscalerControllerMockGeneric                 sync.RWMutex
-	lockHorizontalPodAutoscalerControllerMockInformer                sync.RWMutex
-	lockHorizontalPodAutoscalerControllerMockLister                  sync.RWMutex
-	lockHorizontalPodAutoscalerControllerMockStart                   sync.RWMutex
-	lockHorizontalPodAutoscalerControllerMockSync                    sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockAddFeatureHandler              sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockAddHandler                     sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockEnqueue                        sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockGeneric                        sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockInformer                       sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockLister                         sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockStart                          sync.RWMutex
+	lockHorizontalPodAutoscalerControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that HorizontalPodAutoscalerControllerMock does implement HorizontalPodAutoscalerController.
@@ -161,8 +163,14 @@ var _ v2beta2a.HorizontalPodAutoscalerController = &HorizontalPodAutoscalerContr
 //
 //         // make and configure a mocked HorizontalPodAutoscalerController
 //         mockedHorizontalPodAutoscalerController := &HorizontalPodAutoscalerControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v2beta2a.HorizontalPodAutoscalerHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v2beta2a.HorizontalPodAutoscalerHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v2beta2a.HorizontalPodAutoscalerHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -192,8 +200,14 @@ var _ v2beta2a.HorizontalPodAutoscalerController = &HorizontalPodAutoscalerContr
 //
 //     }
 type HorizontalPodAutoscalerControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v2beta2a.HorizontalPodAutoscalerHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v2beta2a.HorizontalPodAutoscalerHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v2beta2a.HorizontalPodAutoscalerHandlerFunc)
@@ -218,6 +232,19 @@ type HorizontalPodAutoscalerControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v2beta2a.HorizontalPodAutoscalerHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -228,6 +255,17 @@ type HorizontalPodAutoscalerControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v2beta2a.HorizontalPodAutoscalerHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v2beta2a.HorizontalPodAutoscalerHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -267,6 +305,53 @@ type HorizontalPodAutoscalerControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *HorizontalPodAutoscalerControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v2beta2a.HorizontalPodAutoscalerHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("HorizontalPodAutoscalerControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but HorizontalPodAutoscalerController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Handler     v2beta2a.HorizontalPodAutoscalerHandlerFunc
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockHorizontalPodAutoscalerControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockHorizontalPodAutoscalerControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(ctx, enabled, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedHorizontalPodAutoscalerController.AddClusterScopedFeatureHandlerCalls())
+func (mock *HorizontalPodAutoscalerControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Handler     v2beta2a.HorizontalPodAutoscalerHandlerFunc
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Handler     v2beta2a.HorizontalPodAutoscalerHandlerFunc
+	}
+	lockHorizontalPodAutoscalerControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockHorizontalPodAutoscalerControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -309,6 +394,49 @@ func (mock *HorizontalPodAutoscalerControllerMock) AddClusterScopedHandlerCalls(
 	lockHorizontalPodAutoscalerControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockHorizontalPodAutoscalerControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *HorizontalPodAutoscalerControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("HorizontalPodAutoscalerControllerMock.AddFeatureHandlerFunc: method is nil but HorizontalPodAutoscalerController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v2beta2a.HorizontalPodAutoscalerHandlerFunc
+	}{
+		Ctx:     ctx,
+		Enabled: enabled,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockHorizontalPodAutoscalerControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockHorizontalPodAutoscalerControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(ctx, enabled, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedHorizontalPodAutoscalerController.AddFeatureHandlerCalls())
+func (mock *HorizontalPodAutoscalerControllerMock) AddFeatureHandlerCalls() []struct {
+	Ctx     context.Context
+	Enabled func() bool
+	Name    string
+	Sync    v2beta2a.HorizontalPodAutoscalerHandlerFunc
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v2beta2a.HorizontalPodAutoscalerHandlerFunc
+	}
+	lockHorizontalPodAutoscalerControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockHorizontalPodAutoscalerControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -531,21 +659,25 @@ func (mock *HorizontalPodAutoscalerControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockAddHandler                sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockAddLifecycle              sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockController                sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockCreate                    sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockDelete                    sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockDeleteCollection          sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockGet                       sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockGetNamespaced             sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockList                      sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockObjectClient              sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockUpdate                    sync.RWMutex
-	lockHorizontalPodAutoscalerInterfaceMockWatch                     sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockAddHandler                       sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockAddLifecycle                     sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockController                       sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockCreate                           sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockDelete                           sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockDeleteCollection                 sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockGet                              sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockGetNamespaced                    sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockList                             sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockObjectClient                     sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockUpdate                           sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that HorizontalPodAutoscalerInterfaceMock does implement HorizontalPodAutoscalerInterface.
@@ -558,11 +690,23 @@ var _ v2beta2a.HorizontalPodAutoscalerInterface = &HorizontalPodAutoscalerInterf
 //
 //         // make and configure a mocked HorizontalPodAutoscalerInterface
 //         mockedHorizontalPodAutoscalerInterface := &HorizontalPodAutoscalerInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -610,11 +754,23 @@ var _ v2beta2a.HorizontalPodAutoscalerInterface = &HorizontalPodAutoscalerInterf
 //
 //     }
 type HorizontalPodAutoscalerInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc)
@@ -657,6 +813,32 @@ type HorizontalPodAutoscalerInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v2beta2a.HorizontalPodAutoscalerHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -676,6 +858,28 @@ type HorizontalPodAutoscalerInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v2beta2a.HorizontalPodAutoscalerHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle
 		}
@@ -765,6 +969,100 @@ type HorizontalPodAutoscalerInterfaceMock struct {
 	}
 }
 
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *HorizontalPodAutoscalerInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("HorizontalPodAutoscalerInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but HorizontalPodAutoscalerInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Sync        v2beta2a.HorizontalPodAutoscalerHandlerFunc
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(ctx, enabled, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedHorizontalPodAutoscalerInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *HorizontalPodAutoscalerInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Sync        v2beta2a.HorizontalPodAutoscalerHandlerFunc
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Sync        v2beta2a.HorizontalPodAutoscalerHandlerFunc
+	}
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *HorizontalPodAutoscalerInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("HorizontalPodAutoscalerInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but HorizontalPodAutoscalerInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Lifecycle   v2beta2a.HorizontalPodAutoscalerLifecycle
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(ctx, enabled, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedHorizontalPodAutoscalerInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *HorizontalPodAutoscalerInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Lifecycle   v2beta2a.HorizontalPodAutoscalerLifecycle
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Lifecycle   v2beta2a.HorizontalPodAutoscalerLifecycle
+	}
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
+}
+
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
 func (mock *HorizontalPodAutoscalerInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
@@ -848,6 +1146,92 @@ func (mock *HorizontalPodAutoscalerInterfaceMock) AddClusterScopedLifecycleCalls
 	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockHorizontalPodAutoscalerInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *HorizontalPodAutoscalerInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v2beta2a.HorizontalPodAutoscalerHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("HorizontalPodAutoscalerInterfaceMock.AddFeatureHandlerFunc: method is nil but HorizontalPodAutoscalerInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v2beta2a.HorizontalPodAutoscalerHandlerFunc
+	}{
+		Ctx:     ctx,
+		Enabled: enabled,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(ctx, enabled, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedHorizontalPodAutoscalerInterface.AddFeatureHandlerCalls())
+func (mock *HorizontalPodAutoscalerInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Ctx     context.Context
+	Enabled func() bool
+	Name    string
+	Sync    v2beta2a.HorizontalPodAutoscalerHandlerFunc
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v2beta2a.HorizontalPodAutoscalerHandlerFunc
+	}
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *HorizontalPodAutoscalerInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("HorizontalPodAutoscalerInterfaceMock.AddFeatureLifecycleFunc: method is nil but HorizontalPodAutoscalerInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Ctx       context.Context
+		Enabled   func() bool
+		Name      string
+		Lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle
+	}{
+		Ctx:       ctx,
+		Enabled:   enabled,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(ctx, enabled, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedHorizontalPodAutoscalerInterface.AddFeatureLifecycleCalls())
+func (mock *HorizontalPodAutoscalerInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Ctx       context.Context
+	Enabled   func() bool
+	Name      string
+	Lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle
+} {
+	var calls []struct {
+		Ctx       context.Context
+		Enabled   func() bool
+		Name      string
+		Lifecycle v2beta2a.HorizontalPodAutoscalerLifecycle
+	}
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockHorizontalPodAutoscalerInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 

@@ -141,14 +141,16 @@ func (mock *DaemonSetListerMock) ListCalls() []struct {
 }
 
 var (
-	lockDaemonSetControllerMockAddClusterScopedHandler sync.RWMutex
-	lockDaemonSetControllerMockAddHandler              sync.RWMutex
-	lockDaemonSetControllerMockEnqueue                 sync.RWMutex
-	lockDaemonSetControllerMockGeneric                 sync.RWMutex
-	lockDaemonSetControllerMockInformer                sync.RWMutex
-	lockDaemonSetControllerMockLister                  sync.RWMutex
-	lockDaemonSetControllerMockStart                   sync.RWMutex
-	lockDaemonSetControllerMockSync                    sync.RWMutex
+	lockDaemonSetControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockDaemonSetControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockDaemonSetControllerMockAddFeatureHandler              sync.RWMutex
+	lockDaemonSetControllerMockAddHandler                     sync.RWMutex
+	lockDaemonSetControllerMockEnqueue                        sync.RWMutex
+	lockDaemonSetControllerMockGeneric                        sync.RWMutex
+	lockDaemonSetControllerMockInformer                       sync.RWMutex
+	lockDaemonSetControllerMockLister                         sync.RWMutex
+	lockDaemonSetControllerMockStart                          sync.RWMutex
+	lockDaemonSetControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that DaemonSetControllerMock does implement DaemonSetController.
@@ -161,8 +163,14 @@ var _ v1beta2a.DaemonSetController = &DaemonSetControllerMock{}
 //
 //         // make and configure a mocked DaemonSetController
 //         mockedDaemonSetController := &DaemonSetControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v1beta2a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -192,8 +200,14 @@ var _ v1beta2a.DaemonSetController = &DaemonSetControllerMock{}
 //
 //     }
 type DaemonSetControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v1beta2a.DaemonSetHandlerFunc)
@@ -218,6 +232,19 @@ type DaemonSetControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v1beta2a.DaemonSetHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -228,6 +255,17 @@ type DaemonSetControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v1beta2a.DaemonSetHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v1beta2a.DaemonSetHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -267,6 +305,53 @@ type DaemonSetControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *DaemonSetControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("DaemonSetControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but DaemonSetController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Handler     v1beta2a.DaemonSetHandlerFunc
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockDaemonSetControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockDaemonSetControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(ctx, enabled, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedDaemonSetController.AddClusterScopedFeatureHandlerCalls())
+func (mock *DaemonSetControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Handler     v1beta2a.DaemonSetHandlerFunc
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Handler     v1beta2a.DaemonSetHandlerFunc
+	}
+	lockDaemonSetControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockDaemonSetControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -309,6 +394,49 @@ func (mock *DaemonSetControllerMock) AddClusterScopedHandlerCalls() []struct {
 	lockDaemonSetControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockDaemonSetControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *DaemonSetControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("DaemonSetControllerMock.AddFeatureHandlerFunc: method is nil but DaemonSetController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1beta2a.DaemonSetHandlerFunc
+	}{
+		Ctx:     ctx,
+		Enabled: enabled,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockDaemonSetControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockDaemonSetControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(ctx, enabled, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedDaemonSetController.AddFeatureHandlerCalls())
+func (mock *DaemonSetControllerMock) AddFeatureHandlerCalls() []struct {
+	Ctx     context.Context
+	Enabled func() bool
+	Name    string
+	Sync    v1beta2a.DaemonSetHandlerFunc
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1beta2a.DaemonSetHandlerFunc
+	}
+	lockDaemonSetControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockDaemonSetControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -531,21 +659,25 @@ func (mock *DaemonSetControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockDaemonSetInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockDaemonSetInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockDaemonSetInterfaceMockAddHandler                sync.RWMutex
-	lockDaemonSetInterfaceMockAddLifecycle              sync.RWMutex
-	lockDaemonSetInterfaceMockController                sync.RWMutex
-	lockDaemonSetInterfaceMockCreate                    sync.RWMutex
-	lockDaemonSetInterfaceMockDelete                    sync.RWMutex
-	lockDaemonSetInterfaceMockDeleteCollection          sync.RWMutex
-	lockDaemonSetInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockDaemonSetInterfaceMockGet                       sync.RWMutex
-	lockDaemonSetInterfaceMockGetNamespaced             sync.RWMutex
-	lockDaemonSetInterfaceMockList                      sync.RWMutex
-	lockDaemonSetInterfaceMockObjectClient              sync.RWMutex
-	lockDaemonSetInterfaceMockUpdate                    sync.RWMutex
-	lockDaemonSetInterfaceMockWatch                     sync.RWMutex
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockDaemonSetInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockDaemonSetInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockDaemonSetInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockDaemonSetInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockDaemonSetInterfaceMockAddHandler                       sync.RWMutex
+	lockDaemonSetInterfaceMockAddLifecycle                     sync.RWMutex
+	lockDaemonSetInterfaceMockController                       sync.RWMutex
+	lockDaemonSetInterfaceMockCreate                           sync.RWMutex
+	lockDaemonSetInterfaceMockDelete                           sync.RWMutex
+	lockDaemonSetInterfaceMockDeleteCollection                 sync.RWMutex
+	lockDaemonSetInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockDaemonSetInterfaceMockGet                              sync.RWMutex
+	lockDaemonSetInterfaceMockGetNamespaced                    sync.RWMutex
+	lockDaemonSetInterfaceMockList                             sync.RWMutex
+	lockDaemonSetInterfaceMockObjectClient                     sync.RWMutex
+	lockDaemonSetInterfaceMockUpdate                           sync.RWMutex
+	lockDaemonSetInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that DaemonSetInterfaceMock does implement DaemonSetInterface.
@@ -558,11 +690,23 @@ var _ v1beta2a.DaemonSetInterface = &DaemonSetInterfaceMock{}
 //
 //         // make and configure a mocked DaemonSetInterface
 //         mockedDaemonSetInterface := &DaemonSetInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.DaemonSetLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v1beta2a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -610,11 +754,23 @@ var _ v1beta2a.DaemonSetInterface = &DaemonSetInterfaceMock{}
 //
 //     }
 type DaemonSetInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.DaemonSetLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v1beta2a.DaemonSetHandlerFunc)
@@ -657,6 +813,32 @@ type DaemonSetInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v1beta2a.DaemonSetHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1beta2a.DaemonSetLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -676,6 +858,28 @@ type DaemonSetInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1beta2a.DaemonSetLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v1beta2a.DaemonSetHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v1beta2a.DaemonSetLifecycle
 		}
@@ -765,6 +969,100 @@ type DaemonSetInterfaceMock struct {
 	}
 }
 
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("DaemonSetInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but DaemonSetInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Sync        v1beta2a.DaemonSetHandlerFunc
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(ctx, enabled, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedDaemonSetInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Sync        v1beta2a.DaemonSetHandlerFunc
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Sync        v1beta2a.DaemonSetHandlerFunc
+	}
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("DaemonSetInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but DaemonSetInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Lifecycle   v1beta2a.DaemonSetLifecycle
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(ctx, enabled, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedDaemonSetInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Lifecycle   v1beta2a.DaemonSetLifecycle
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Lifecycle   v1beta2a.DaemonSetLifecycle
+	}
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockDaemonSetInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
+}
+
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
 func (mock *DaemonSetInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
@@ -848,6 +1146,92 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedLifecycleCalls() []struct {
 	lockDaemonSetInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockDaemonSetInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *DaemonSetInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("DaemonSetInterfaceMock.AddFeatureHandlerFunc: method is nil but DaemonSetInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1beta2a.DaemonSetHandlerFunc
+	}{
+		Ctx:     ctx,
+		Enabled: enabled,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockDaemonSetInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockDaemonSetInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(ctx, enabled, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedDaemonSetInterface.AddFeatureHandlerCalls())
+func (mock *DaemonSetInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Ctx     context.Context
+	Enabled func() bool
+	Name    string
+	Sync    v1beta2a.DaemonSetHandlerFunc
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1beta2a.DaemonSetHandlerFunc
+	}
+	lockDaemonSetInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockDaemonSetInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *DaemonSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.DaemonSetLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("DaemonSetInterfaceMock.AddFeatureLifecycleFunc: method is nil but DaemonSetInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Ctx       context.Context
+		Enabled   func() bool
+		Name      string
+		Lifecycle v1beta2a.DaemonSetLifecycle
+	}{
+		Ctx:       ctx,
+		Enabled:   enabled,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockDaemonSetInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockDaemonSetInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(ctx, enabled, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedDaemonSetInterface.AddFeatureLifecycleCalls())
+func (mock *DaemonSetInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Ctx       context.Context
+	Enabled   func() bool
+	Name      string
+	Lifecycle v1beta2a.DaemonSetLifecycle
+} {
+	var calls []struct {
+		Ctx       context.Context
+		Enabled   func() bool
+		Name      string
+		Lifecycle v1beta2a.DaemonSetLifecycle
+	}
+	lockDaemonSetInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockDaemonSetInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 
