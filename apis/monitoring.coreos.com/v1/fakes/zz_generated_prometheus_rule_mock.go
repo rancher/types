@@ -141,14 +141,16 @@ func (mock *PrometheusRuleListerMock) ListCalls() []struct {
 }
 
 var (
-	lockPrometheusRuleControllerMockAddClusterScopedHandler sync.RWMutex
-	lockPrometheusRuleControllerMockAddHandler              sync.RWMutex
-	lockPrometheusRuleControllerMockEnqueue                 sync.RWMutex
-	lockPrometheusRuleControllerMockGeneric                 sync.RWMutex
-	lockPrometheusRuleControllerMockInformer                sync.RWMutex
-	lockPrometheusRuleControllerMockLister                  sync.RWMutex
-	lockPrometheusRuleControllerMockStart                   sync.RWMutex
-	lockPrometheusRuleControllerMockSync                    sync.RWMutex
+	lockPrometheusRuleControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockPrometheusRuleControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockPrometheusRuleControllerMockAddFeatureHandler              sync.RWMutex
+	lockPrometheusRuleControllerMockAddHandler                     sync.RWMutex
+	lockPrometheusRuleControllerMockEnqueue                        sync.RWMutex
+	lockPrometheusRuleControllerMockGeneric                        sync.RWMutex
+	lockPrometheusRuleControllerMockInformer                       sync.RWMutex
+	lockPrometheusRuleControllerMockLister                         sync.RWMutex
+	lockPrometheusRuleControllerMockStart                          sync.RWMutex
+	lockPrometheusRuleControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that PrometheusRuleControllerMock does implement PrometheusRuleController.
@@ -161,8 +163,14 @@ var _ v1a.PrometheusRuleController = &PrometheusRuleControllerMock{}
 //
 //         // make and configure a mocked PrometheusRuleController
 //         mockedPrometheusRuleController := &PrometheusRuleControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.PrometheusRuleHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1a.PrometheusRuleHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1a.PrometheusRuleHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v1a.PrometheusRuleHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -192,8 +200,14 @@ var _ v1a.PrometheusRuleController = &PrometheusRuleControllerMock{}
 //
 //     }
 type PrometheusRuleControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.PrometheusRuleHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1a.PrometheusRuleHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1a.PrometheusRuleHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v1a.PrometheusRuleHandlerFunc)
@@ -218,6 +232,19 @@ type PrometheusRuleControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v1a.PrometheusRuleHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -228,6 +255,17 @@ type PrometheusRuleControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v1a.PrometheusRuleHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v1a.PrometheusRuleHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -267,6 +305,53 @@ type PrometheusRuleControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *PrometheusRuleControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.PrometheusRuleHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("PrometheusRuleControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but PrometheusRuleController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Handler     v1a.PrometheusRuleHandlerFunc
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockPrometheusRuleControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockPrometheusRuleControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(ctx, enabled, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedPrometheusRuleController.AddClusterScopedFeatureHandlerCalls())
+func (mock *PrometheusRuleControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Handler     v1a.PrometheusRuleHandlerFunc
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Handler     v1a.PrometheusRuleHandlerFunc
+	}
+	lockPrometheusRuleControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockPrometheusRuleControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -309,6 +394,49 @@ func (mock *PrometheusRuleControllerMock) AddClusterScopedHandlerCalls() []struc
 	lockPrometheusRuleControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockPrometheusRuleControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *PrometheusRuleControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1a.PrometheusRuleHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("PrometheusRuleControllerMock.AddFeatureHandlerFunc: method is nil but PrometheusRuleController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1a.PrometheusRuleHandlerFunc
+	}{
+		Ctx:     ctx,
+		Enabled: enabled,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockPrometheusRuleControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockPrometheusRuleControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(ctx, enabled, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedPrometheusRuleController.AddFeatureHandlerCalls())
+func (mock *PrometheusRuleControllerMock) AddFeatureHandlerCalls() []struct {
+	Ctx     context.Context
+	Enabled func() bool
+	Name    string
+	Sync    v1a.PrometheusRuleHandlerFunc
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1a.PrometheusRuleHandlerFunc
+	}
+	lockPrometheusRuleControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockPrometheusRuleControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -531,21 +659,25 @@ func (mock *PrometheusRuleControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockPrometheusRuleInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockPrometheusRuleInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockPrometheusRuleInterfaceMockAddHandler                sync.RWMutex
-	lockPrometheusRuleInterfaceMockAddLifecycle              sync.RWMutex
-	lockPrometheusRuleInterfaceMockController                sync.RWMutex
-	lockPrometheusRuleInterfaceMockCreate                    sync.RWMutex
-	lockPrometheusRuleInterfaceMockDelete                    sync.RWMutex
-	lockPrometheusRuleInterfaceMockDeleteCollection          sync.RWMutex
-	lockPrometheusRuleInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockPrometheusRuleInterfaceMockGet                       sync.RWMutex
-	lockPrometheusRuleInterfaceMockGetNamespaced             sync.RWMutex
-	lockPrometheusRuleInterfaceMockList                      sync.RWMutex
-	lockPrometheusRuleInterfaceMockObjectClient              sync.RWMutex
-	lockPrometheusRuleInterfaceMockUpdate                    sync.RWMutex
-	lockPrometheusRuleInterfaceMockWatch                     sync.RWMutex
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockPrometheusRuleInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockPrometheusRuleInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockPrometheusRuleInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockPrometheusRuleInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockPrometheusRuleInterfaceMockAddHandler                       sync.RWMutex
+	lockPrometheusRuleInterfaceMockAddLifecycle                     sync.RWMutex
+	lockPrometheusRuleInterfaceMockController                       sync.RWMutex
+	lockPrometheusRuleInterfaceMockCreate                           sync.RWMutex
+	lockPrometheusRuleInterfaceMockDelete                           sync.RWMutex
+	lockPrometheusRuleInterfaceMockDeleteCollection                 sync.RWMutex
+	lockPrometheusRuleInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockPrometheusRuleInterfaceMockGet                              sync.RWMutex
+	lockPrometheusRuleInterfaceMockGetNamespaced                    sync.RWMutex
+	lockPrometheusRuleInterfaceMockList                             sync.RWMutex
+	lockPrometheusRuleInterfaceMockObjectClient                     sync.RWMutex
+	lockPrometheusRuleInterfaceMockUpdate                           sync.RWMutex
+	lockPrometheusRuleInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that PrometheusRuleInterfaceMock does implement PrometheusRuleInterface.
@@ -558,11 +690,23 @@ var _ v1a.PrometheusRuleInterface = &PrometheusRuleInterfaceMock{}
 //
 //         // make and configure a mocked PrometheusRuleInterface
 //         mockedPrometheusRuleInterface := &PrometheusRuleInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.PrometheusRuleHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.PrometheusRuleLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1a.PrometheusRuleHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1a.PrometheusRuleLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1a.PrometheusRuleHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1a.PrometheusRuleLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v1a.PrometheusRuleHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -610,11 +754,23 @@ var _ v1a.PrometheusRuleInterface = &PrometheusRuleInterfaceMock{}
 //
 //     }
 type PrometheusRuleInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.PrometheusRuleHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.PrometheusRuleLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1a.PrometheusRuleHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1a.PrometheusRuleLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1a.PrometheusRuleHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1a.PrometheusRuleLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v1a.PrometheusRuleHandlerFunc)
@@ -657,6 +813,32 @@ type PrometheusRuleInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v1a.PrometheusRuleHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1a.PrometheusRuleLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -676,6 +858,28 @@ type PrometheusRuleInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1a.PrometheusRuleLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v1a.PrometheusRuleHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v1a.PrometheusRuleLifecycle
 		}
@@ -765,6 +969,100 @@ type PrometheusRuleInterfaceMock struct {
 	}
 }
 
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *PrometheusRuleInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.PrometheusRuleHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("PrometheusRuleInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but PrometheusRuleInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Sync        v1a.PrometheusRuleHandlerFunc
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(ctx, enabled, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedPrometheusRuleInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *PrometheusRuleInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Sync        v1a.PrometheusRuleHandlerFunc
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Sync        v1a.PrometheusRuleHandlerFunc
+	}
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *PrometheusRuleInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.PrometheusRuleLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("PrometheusRuleInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but PrometheusRuleInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Lifecycle   v1a.PrometheusRuleLifecycle
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(ctx, enabled, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedPrometheusRuleInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *PrometheusRuleInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Lifecycle   v1a.PrometheusRuleLifecycle
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Lifecycle   v1a.PrometheusRuleLifecycle
+	}
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockPrometheusRuleInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
+}
+
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
 func (mock *PrometheusRuleInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1a.PrometheusRuleHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
@@ -848,6 +1146,92 @@ func (mock *PrometheusRuleInterfaceMock) AddClusterScopedLifecycleCalls() []stru
 	lockPrometheusRuleInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockPrometheusRuleInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *PrometheusRuleInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1a.PrometheusRuleHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("PrometheusRuleInterfaceMock.AddFeatureHandlerFunc: method is nil but PrometheusRuleInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1a.PrometheusRuleHandlerFunc
+	}{
+		Ctx:     ctx,
+		Enabled: enabled,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockPrometheusRuleInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockPrometheusRuleInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(ctx, enabled, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedPrometheusRuleInterface.AddFeatureHandlerCalls())
+func (mock *PrometheusRuleInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Ctx     context.Context
+	Enabled func() bool
+	Name    string
+	Sync    v1a.PrometheusRuleHandlerFunc
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1a.PrometheusRuleHandlerFunc
+	}
+	lockPrometheusRuleInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockPrometheusRuleInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *PrometheusRuleInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1a.PrometheusRuleLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("PrometheusRuleInterfaceMock.AddFeatureLifecycleFunc: method is nil but PrometheusRuleInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Ctx       context.Context
+		Enabled   func() bool
+		Name      string
+		Lifecycle v1a.PrometheusRuleLifecycle
+	}{
+		Ctx:       ctx,
+		Enabled:   enabled,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockPrometheusRuleInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockPrometheusRuleInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(ctx, enabled, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedPrometheusRuleInterface.AddFeatureLifecycleCalls())
+func (mock *PrometheusRuleInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Ctx       context.Context
+	Enabled   func() bool
+	Name      string
+	Lifecycle v1a.PrometheusRuleLifecycle
+} {
+	var calls []struct {
+		Ctx       context.Context
+		Enabled   func() bool
+		Name      string
+		Lifecycle v1a.PrometheusRuleLifecycle
+	}
+	lockPrometheusRuleInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockPrometheusRuleInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 

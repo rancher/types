@@ -141,14 +141,16 @@ func (mock *IngressListerMock) ListCalls() []struct {
 }
 
 var (
-	lockIngressControllerMockAddClusterScopedHandler sync.RWMutex
-	lockIngressControllerMockAddHandler              sync.RWMutex
-	lockIngressControllerMockEnqueue                 sync.RWMutex
-	lockIngressControllerMockGeneric                 sync.RWMutex
-	lockIngressControllerMockInformer                sync.RWMutex
-	lockIngressControllerMockLister                  sync.RWMutex
-	lockIngressControllerMockStart                   sync.RWMutex
-	lockIngressControllerMockSync                    sync.RWMutex
+	lockIngressControllerMockAddClusterScopedFeatureHandler sync.RWMutex
+	lockIngressControllerMockAddClusterScopedHandler        sync.RWMutex
+	lockIngressControllerMockAddFeatureHandler              sync.RWMutex
+	lockIngressControllerMockAddHandler                     sync.RWMutex
+	lockIngressControllerMockEnqueue                        sync.RWMutex
+	lockIngressControllerMockGeneric                        sync.RWMutex
+	lockIngressControllerMockInformer                       sync.RWMutex
+	lockIngressControllerMockLister                         sync.RWMutex
+	lockIngressControllerMockStart                          sync.RWMutex
+	lockIngressControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that IngressControllerMock does implement IngressController.
@@ -161,8 +163,14 @@ var _ v1beta1a.IngressController = &IngressControllerMock{}
 //
 //         // make and configure a mocked IngressController
 //         mockedIngressController := &IngressControllerMock{
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta1a.IngressHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1beta1a.IngressHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
+//             },
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta1a.IngressHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, handler v1beta1a.IngressHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -192,8 +200,14 @@ var _ v1beta1a.IngressController = &IngressControllerMock{}
 //
 //     }
 type IngressControllerMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta1a.IngressHandlerFunc)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1beta1a.IngressHandlerFunc)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta1a.IngressHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, handler v1beta1a.IngressHandlerFunc)
@@ -218,6 +232,19 @@ type IngressControllerMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Handler is the handler argument value.
+			Handler v1beta1a.IngressHandlerFunc
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -228,6 +255,17 @@ type IngressControllerMock struct {
 			ClusterName string
 			// Handler is the handler argument value.
 			Handler v1beta1a.IngressHandlerFunc
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v1beta1a.IngressHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -267,6 +305,53 @@ type IngressControllerMock struct {
 			Ctx context.Context
 		}
 	}
+}
+
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *IngressControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta1a.IngressHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("IngressControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but IngressController.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Handler     v1beta1a.IngressHandlerFunc
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Handler:     handler,
+	}
+	lockIngressControllerMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockIngressControllerMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(ctx, enabled, name, clusterName, handler)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedIngressController.AddClusterScopedFeatureHandlerCalls())
+func (mock *IngressControllerMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Handler     v1beta1a.IngressHandlerFunc
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Handler     v1beta1a.IngressHandlerFunc
+	}
+	lockIngressControllerMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockIngressControllerMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
@@ -309,6 +394,49 @@ func (mock *IngressControllerMock) AddClusterScopedHandlerCalls() []struct {
 	lockIngressControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
 	lockIngressControllerMockAddClusterScopedHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *IngressControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta1a.IngressHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("IngressControllerMock.AddFeatureHandlerFunc: method is nil but IngressController.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1beta1a.IngressHandlerFunc
+	}{
+		Ctx:     ctx,
+		Enabled: enabled,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockIngressControllerMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockIngressControllerMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(ctx, enabled, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedIngressController.AddFeatureHandlerCalls())
+func (mock *IngressControllerMock) AddFeatureHandlerCalls() []struct {
+	Ctx     context.Context
+	Enabled func() bool
+	Name    string
+	Sync    v1beta1a.IngressHandlerFunc
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1beta1a.IngressHandlerFunc
+	}
+	lockIngressControllerMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockIngressControllerMockAddFeatureHandler.RUnlock()
 	return calls
 }
 
@@ -531,21 +659,25 @@ func (mock *IngressControllerMock) SyncCalls() []struct {
 }
 
 var (
-	lockIngressInterfaceMockAddClusterScopedHandler   sync.RWMutex
-	lockIngressInterfaceMockAddClusterScopedLifecycle sync.RWMutex
-	lockIngressInterfaceMockAddHandler                sync.RWMutex
-	lockIngressInterfaceMockAddLifecycle              sync.RWMutex
-	lockIngressInterfaceMockController                sync.RWMutex
-	lockIngressInterfaceMockCreate                    sync.RWMutex
-	lockIngressInterfaceMockDelete                    sync.RWMutex
-	lockIngressInterfaceMockDeleteCollection          sync.RWMutex
-	lockIngressInterfaceMockDeleteNamespaced          sync.RWMutex
-	lockIngressInterfaceMockGet                       sync.RWMutex
-	lockIngressInterfaceMockGetNamespaced             sync.RWMutex
-	lockIngressInterfaceMockList                      sync.RWMutex
-	lockIngressInterfaceMockObjectClient              sync.RWMutex
-	lockIngressInterfaceMockUpdate                    sync.RWMutex
-	lockIngressInterfaceMockWatch                     sync.RWMutex
+	lockIngressInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
+	lockIngressInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
+	lockIngressInterfaceMockAddClusterScopedHandler          sync.RWMutex
+	lockIngressInterfaceMockAddClusterScopedLifecycle        sync.RWMutex
+	lockIngressInterfaceMockAddFeatureHandler                sync.RWMutex
+	lockIngressInterfaceMockAddFeatureLifecycle              sync.RWMutex
+	lockIngressInterfaceMockAddHandler                       sync.RWMutex
+	lockIngressInterfaceMockAddLifecycle                     sync.RWMutex
+	lockIngressInterfaceMockController                       sync.RWMutex
+	lockIngressInterfaceMockCreate                           sync.RWMutex
+	lockIngressInterfaceMockDelete                           sync.RWMutex
+	lockIngressInterfaceMockDeleteCollection                 sync.RWMutex
+	lockIngressInterfaceMockDeleteNamespaced                 sync.RWMutex
+	lockIngressInterfaceMockGet                              sync.RWMutex
+	lockIngressInterfaceMockGetNamespaced                    sync.RWMutex
+	lockIngressInterfaceMockList                             sync.RWMutex
+	lockIngressInterfaceMockObjectClient                     sync.RWMutex
+	lockIngressInterfaceMockUpdate                           sync.RWMutex
+	lockIngressInterfaceMockWatch                            sync.RWMutex
 )
 
 // Ensure, that IngressInterfaceMock does implement IngressInterface.
@@ -558,11 +690,23 @@ var _ v1beta1a.IngressInterface = &IngressInterfaceMock{}
 //
 //         // make and configure a mocked IngressInterface
 //         mockedIngressInterface := &IngressInterfaceMock{
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta1a.IngressHandlerFunc)  {
+// 	               panic("mock out the AddClusterScopedFeatureHandler method")
+//             },
+//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta1a.IngressLifecycle)  {
+// 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
+//             },
 //             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1beta1a.IngressHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
 //             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1beta1a.IngressLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
+//             },
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta1a.IngressHandlerFunc)  {
+// 	               panic("mock out the AddFeatureHandler method")
+//             },
+//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta1a.IngressLifecycle)  {
+// 	               panic("mock out the AddFeatureLifecycle method")
 //             },
 //             AddHandlerFunc: func(ctx context.Context, name string, sync v1beta1a.IngressHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
@@ -610,11 +754,23 @@ var _ v1beta1a.IngressInterface = &IngressInterfaceMock{}
 //
 //     }
 type IngressInterfaceMock struct {
+	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta1a.IngressHandlerFunc)
+
+	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
+	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta1a.IngressLifecycle)
+
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
 	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1beta1a.IngressHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
 	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1beta1a.IngressLifecycle)
+
+	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta1a.IngressHandlerFunc)
+
+	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
+	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta1a.IngressLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
 	AddHandlerFunc func(ctx context.Context, name string, sync v1beta1a.IngressHandlerFunc)
@@ -657,6 +813,32 @@ type IngressInterfaceMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// AddClusterScopedFeatureHandler holds details about calls to the AddClusterScopedFeatureHandler method.
+		AddClusterScopedFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Sync is the sync argument value.
+			Sync v1beta1a.IngressHandlerFunc
+		}
+		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
+		AddClusterScopedFeatureLifecycle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// ClusterName is the clusterName argument value.
+			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1beta1a.IngressLifecycle
+		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
 			// Ctx is the ctx argument value.
@@ -676,6 +858,28 @@ type IngressInterfaceMock struct {
 			Name string
 			// ClusterName is the clusterName argument value.
 			ClusterName string
+			// Lifecycle is the lifecycle argument value.
+			Lifecycle v1beta1a.IngressLifecycle
+		}
+		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
+		AddFeatureHandler []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
+			// Sync is the sync argument value.
+			Sync v1beta1a.IngressHandlerFunc
+		}
+		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
+		AddFeatureLifecycle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Enabled is the enabled argument value.
+			Enabled func() bool
+			// Name is the name argument value.
+			Name string
 			// Lifecycle is the lifecycle argument value.
 			Lifecycle v1beta1a.IngressLifecycle
 		}
@@ -765,6 +969,100 @@ type IngressInterfaceMock struct {
 	}
 }
 
+// AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
+func (mock *IngressInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta1a.IngressHandlerFunc) {
+	if mock.AddClusterScopedFeatureHandlerFunc == nil {
+		panic("IngressInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but IngressInterface.AddClusterScopedFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Sync        v1beta1a.IngressHandlerFunc
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Sync:        sync,
+	}
+	lockIngressInterfaceMockAddClusterScopedFeatureHandler.Lock()
+	mock.calls.AddClusterScopedFeatureHandler = append(mock.calls.AddClusterScopedFeatureHandler, callInfo)
+	lockIngressInterfaceMockAddClusterScopedFeatureHandler.Unlock()
+	mock.AddClusterScopedFeatureHandlerFunc(ctx, enabled, name, clusterName, sync)
+}
+
+// AddClusterScopedFeatureHandlerCalls gets all the calls that were made to AddClusterScopedFeatureHandler.
+// Check the length with:
+//     len(mockedIngressInterface.AddClusterScopedFeatureHandlerCalls())
+func (mock *IngressInterfaceMock) AddClusterScopedFeatureHandlerCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Sync        v1beta1a.IngressHandlerFunc
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Sync        v1beta1a.IngressHandlerFunc
+	}
+	lockIngressInterfaceMockAddClusterScopedFeatureHandler.RLock()
+	calls = mock.calls.AddClusterScopedFeatureHandler
+	lockIngressInterfaceMockAddClusterScopedFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
+func (mock *IngressInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta1a.IngressLifecycle) {
+	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
+		panic("IngressInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but IngressInterface.AddClusterScopedFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Lifecycle   v1beta1a.IngressLifecycle
+	}{
+		Ctx:         ctx,
+		Enabled:     enabled,
+		Name:        name,
+		ClusterName: clusterName,
+		Lifecycle:   lifecycle,
+	}
+	lockIngressInterfaceMockAddClusterScopedFeatureLifecycle.Lock()
+	mock.calls.AddClusterScopedFeatureLifecycle = append(mock.calls.AddClusterScopedFeatureLifecycle, callInfo)
+	lockIngressInterfaceMockAddClusterScopedFeatureLifecycle.Unlock()
+	mock.AddClusterScopedFeatureLifecycleFunc(ctx, enabled, name, clusterName, lifecycle)
+}
+
+// AddClusterScopedFeatureLifecycleCalls gets all the calls that were made to AddClusterScopedFeatureLifecycle.
+// Check the length with:
+//     len(mockedIngressInterface.AddClusterScopedFeatureLifecycleCalls())
+func (mock *IngressInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []struct {
+	Ctx         context.Context
+	Enabled     func() bool
+	Name        string
+	ClusterName string
+	Lifecycle   v1beta1a.IngressLifecycle
+} {
+	var calls []struct {
+		Ctx         context.Context
+		Enabled     func() bool
+		Name        string
+		ClusterName string
+		Lifecycle   v1beta1a.IngressLifecycle
+	}
+	lockIngressInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
+	calls = mock.calls.AddClusterScopedFeatureLifecycle
+	lockIngressInterfaceMockAddClusterScopedFeatureLifecycle.RUnlock()
+	return calls
+}
+
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
 func (mock *IngressInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1beta1a.IngressHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
@@ -848,6 +1146,92 @@ func (mock *IngressInterfaceMock) AddClusterScopedLifecycleCalls() []struct {
 	lockIngressInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
 	lockIngressInterfaceMockAddClusterScopedLifecycle.RUnlock()
+	return calls
+}
+
+// AddFeatureHandler calls AddFeatureHandlerFunc.
+func (mock *IngressInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta1a.IngressHandlerFunc) {
+	if mock.AddFeatureHandlerFunc == nil {
+		panic("IngressInterfaceMock.AddFeatureHandlerFunc: method is nil but IngressInterface.AddFeatureHandler was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1beta1a.IngressHandlerFunc
+	}{
+		Ctx:     ctx,
+		Enabled: enabled,
+		Name:    name,
+		Sync:    sync,
+	}
+	lockIngressInterfaceMockAddFeatureHandler.Lock()
+	mock.calls.AddFeatureHandler = append(mock.calls.AddFeatureHandler, callInfo)
+	lockIngressInterfaceMockAddFeatureHandler.Unlock()
+	mock.AddFeatureHandlerFunc(ctx, enabled, name, sync)
+}
+
+// AddFeatureHandlerCalls gets all the calls that were made to AddFeatureHandler.
+// Check the length with:
+//     len(mockedIngressInterface.AddFeatureHandlerCalls())
+func (mock *IngressInterfaceMock) AddFeatureHandlerCalls() []struct {
+	Ctx     context.Context
+	Enabled func() bool
+	Name    string
+	Sync    v1beta1a.IngressHandlerFunc
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Enabled func() bool
+		Name    string
+		Sync    v1beta1a.IngressHandlerFunc
+	}
+	lockIngressInterfaceMockAddFeatureHandler.RLock()
+	calls = mock.calls.AddFeatureHandler
+	lockIngressInterfaceMockAddFeatureHandler.RUnlock()
+	return calls
+}
+
+// AddFeatureLifecycle calls AddFeatureLifecycleFunc.
+func (mock *IngressInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1beta1a.IngressLifecycle) {
+	if mock.AddFeatureLifecycleFunc == nil {
+		panic("IngressInterfaceMock.AddFeatureLifecycleFunc: method is nil but IngressInterface.AddFeatureLifecycle was just called")
+	}
+	callInfo := struct {
+		Ctx       context.Context
+		Enabled   func() bool
+		Name      string
+		Lifecycle v1beta1a.IngressLifecycle
+	}{
+		Ctx:       ctx,
+		Enabled:   enabled,
+		Name:      name,
+		Lifecycle: lifecycle,
+	}
+	lockIngressInterfaceMockAddFeatureLifecycle.Lock()
+	mock.calls.AddFeatureLifecycle = append(mock.calls.AddFeatureLifecycle, callInfo)
+	lockIngressInterfaceMockAddFeatureLifecycle.Unlock()
+	mock.AddFeatureLifecycleFunc(ctx, enabled, name, lifecycle)
+}
+
+// AddFeatureLifecycleCalls gets all the calls that were made to AddFeatureLifecycle.
+// Check the length with:
+//     len(mockedIngressInterface.AddFeatureLifecycleCalls())
+func (mock *IngressInterfaceMock) AddFeatureLifecycleCalls() []struct {
+	Ctx       context.Context
+	Enabled   func() bool
+	Name      string
+	Lifecycle v1beta1a.IngressLifecycle
+} {
+	var calls []struct {
+		Ctx       context.Context
+		Enabled   func() bool
+		Name      string
+		Lifecycle v1beta1a.IngressLifecycle
+	}
+	lockIngressInterfaceMockAddFeatureLifecycle.RLock()
+	calls = mock.calls.AddFeatureLifecycle
+	lockIngressInterfaceMockAddFeatureLifecycle.RUnlock()
 	return calls
 }
 
