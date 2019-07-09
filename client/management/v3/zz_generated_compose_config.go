@@ -25,16 +25,16 @@ type ComposeConfig struct {
 	types.Resource
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	RancherCompose       string            `json:"rancherCompose,omitempty" yaml:"rancherCompose,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	RancherCompose       string            `json:"rancherCompose,omitempty" yaml:"rancher_compose,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *ComposeStatus    `json:"status,omitempty" yaml:"status,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

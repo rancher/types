@@ -11,10 +11,10 @@ const (
 )
 
 type S3BackupConfig struct {
-	AccessKey  string `json:"accessKey,omitempty" yaml:"accessKey,omitempty"`
-	BucketName string `json:"bucketName,omitempty" yaml:"bucketName,omitempty"`
-	CustomCA   string `json:"customCa,omitempty" yaml:"customCa,omitempty"`
+	AccessKey  string `json:"accessKey,omitempty" yaml:"access_key,omitempty"`
+	BucketName string `json:"bucketName,omitempty" yaml:"bucket_name,omitempty"`
+	CustomCA   string `json:"customCa,omitempty" yaml:"custom_ca,omitempty"`
 	Endpoint   string `json:"endpoint,omitempty" yaml:"endpoint,omitempty"`
 	Region     string `json:"region,omitempty" yaml:"region,omitempty"`
-	SecretKey  string `json:"secretKey,omitempty" yaml:"secretKey,omitempty"`
+	SecretKey  string `json:"secretKey,omitempty" yaml:"secret_key,omitempty"`
 }

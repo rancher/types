@@ -30,21 +30,21 @@ type GlobalDNS struct {
 	types.Resource
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	FQDN                 string            `json:"fqdn,omitempty" yaml:"fqdn,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Members              []Member          `json:"members,omitempty" yaml:"members,omitempty"`
-	MultiClusterAppID    string            `json:"multiClusterAppId,omitempty" yaml:"multiClusterAppId,omitempty"`
+	MultiClusterAppID    string            `json:"multiClusterAppId,omitempty" yaml:"multi_cluster_app_id,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectIDs           []string          `json:"projectIds,omitempty" yaml:"projectIds,omitempty"`
-	ProviderID           string            `json:"providerId,omitempty" yaml:"providerId,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectIDs           []string          `json:"projectIds,omitempty" yaml:"project_ids,omitempty"`
+	ProviderID           string            `json:"providerId,omitempty" yaml:"provider_id,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *GlobalDNSStatus  `json:"status,omitempty" yaml:"status,omitempty"`
 	TTL                  int64             `json:"ttl,omitempty" yaml:"ttl,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

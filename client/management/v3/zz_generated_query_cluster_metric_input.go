@@ -10,7 +10,7 @@ const (
 )
 
 type QueryClusterMetricInput struct {
-	ClusterName string `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterName string `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Expr        string `json:"expr,omitempty" yaml:"expr,omitempty"`
 	From        string `json:"from,omitempty" yaml:"from,omitempty"`
 	Interval    string `json:"interval,omitempty" yaml:"interval,omitempty"`

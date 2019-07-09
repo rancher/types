@@ -8,7 +8,7 @@ const (
 )
 
 type SlackConfig struct {
-	DefaultRecipient string `json:"defaultRecipient,omitempty" yaml:"defaultRecipient,omitempty"`
-	ProxyURL         string `json:"proxyUrl,omitempty" yaml:"proxyUrl,omitempty"`
+	DefaultRecipient string `json:"defaultRecipient,omitempty" yaml:"default_recipient,omitempty"`
+	ProxyURL         string `json:"proxyUrl,omitempty" yaml:"proxy_url,omitempty"`
 	URL              string `json:"url,omitempty" yaml:"url,omitempty"`
 }

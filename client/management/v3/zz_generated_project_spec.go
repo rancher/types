@@ -12,11 +12,11 @@ const (
 )
 
 type ProjectSpec struct {
-	ClusterID                     string                  `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
-	ContainerDefaultResourceLimit *ContainerResourceLimit `json:"containerDefaultResourceLimit,omitempty" yaml:"containerDefaultResourceLimit,omitempty"`
+	ClusterID                     string                  `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
+	ContainerDefaultResourceLimit *ContainerResourceLimit `json:"containerDefaultResourceLimit,omitempty" yaml:"container_default_resource_limit,omitempty"`
 	Description                   string                  `json:"description,omitempty" yaml:"description,omitempty"`
-	DisplayName                   string                  `json:"displayName,omitempty" yaml:"displayName,omitempty"`
-	EnableProjectMonitoring       bool                    `json:"enableProjectMonitoring,omitempty" yaml:"enableProjectMonitoring,omitempty"`
-	NamespaceDefaultResourceQuota *NamespaceResourceQuota `json:"namespaceDefaultResourceQuota,omitempty" yaml:"namespaceDefaultResourceQuota,omitempty"`
-	ResourceQuota                 *ProjectResourceQuota   `json:"resourceQuota,omitempty" yaml:"resourceQuota,omitempty"`
+	DisplayName                   string                  `json:"displayName,omitempty" yaml:"display_name,omitempty"`
+	EnableProjectMonitoring       bool                    `json:"enableProjectMonitoring,omitempty" yaml:"enable_project_monitoring,omitempty"`
+	NamespaceDefaultResourceQuota *NamespaceResourceQuota `json:"namespaceDefaultResourceQuota,omitempty" yaml:"namespace_default_resource_quota,omitempty"`
+	ResourceQuota                 *ProjectResourceQuota   `json:"resourceQuota,omitempty" yaml:"resource_quota,omitempty"`
 }

@@ -15,14 +15,14 @@ const (
 )
 
 type KafkaConfig struct {
-	BrokerEndpoints    []string `json:"brokerEndpoints,omitempty" yaml:"brokerEndpoints,omitempty"`
+	BrokerEndpoints    []string `json:"brokerEndpoints,omitempty" yaml:"broker_endpoints,omitempty"`
 	Certificate        string   `json:"certificate,omitempty" yaml:"certificate,omitempty"`
-	ClientCert         string   `json:"clientCert,omitempty" yaml:"clientCert,omitempty"`
-	ClientKey          string   `json:"clientKey,omitempty" yaml:"clientKey,omitempty"`
-	SaslPassword       string   `json:"saslPassword,omitempty" yaml:"saslPassword,omitempty"`
-	SaslScramMechanism string   `json:"saslScramMechanism,omitempty" yaml:"saslScramMechanism,omitempty"`
-	SaslType           string   `json:"saslType,omitempty" yaml:"saslType,omitempty"`
-	SaslUsername       string   `json:"saslUsername,omitempty" yaml:"saslUsername,omitempty"`
+	ClientCert         string   `json:"clientCert,omitempty" yaml:"client_cert,omitempty"`
+	ClientKey          string   `json:"clientKey,omitempty" yaml:"client_key,omitempty"`
+	SaslPassword       string   `json:"saslPassword,omitempty" yaml:"sasl_password,omitempty"`
+	SaslScramMechanism string   `json:"saslScramMechanism,omitempty" yaml:"sasl_scram_mechanism,omitempty"`
+	SaslType           string   `json:"saslType,omitempty" yaml:"sasl_type,omitempty"`
+	SaslUsername       string   `json:"saslUsername,omitempty" yaml:"sasl_username,omitempty"`
 	Topic              string   `json:"topic,omitempty" yaml:"topic,omitempty"`
-	ZookeeperEndpoint  string   `json:"zookeeperEndpoint,omitempty" yaml:"zookeeperEndpoint,omitempty"`
+	ZookeeperEndpoint  string   `json:"zookeeperEndpoint,omitempty" yaml:"zookeeper_endpoint,omitempty"`
 }

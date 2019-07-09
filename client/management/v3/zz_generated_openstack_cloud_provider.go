@@ -10,9 +10,9 @@ const (
 )
 
 type OpenstackCloudProvider struct {
-	BlockStorage *BlockStorageOpenstackOpts `json:"blockStorage,omitempty" yaml:"blockStorage,omitempty"`
+	BlockStorage *BlockStorageOpenstackOpts `json:"blockStorage,omitempty" yaml:"block_storage,omitempty"`
 	Global       *GlobalOpenstackOpts       `json:"global,omitempty" yaml:"global,omitempty"`
-	LoadBalancer *LoadBalancerOpenstackOpts `json:"loadBalancer,omitempty" yaml:"loadBalancer,omitempty"`
+	LoadBalancer *LoadBalancerOpenstackOpts `json:"loadBalancer,omitempty" yaml:"load_balancer,omitempty"`
 	Metadata     *MetadataOpenstackOpts     `json:"metadata,omitempty" yaml:"metadata,omitempty"`
 	Route        *RouteOpenstackOpts        `json:"route,omitempty" yaml:"route,omitempty"`
 }

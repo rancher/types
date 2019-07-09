@@ -18,9 +18,9 @@ type NodeDriverSpec struct {
 	Builtin          bool     `json:"builtin,omitempty" yaml:"builtin,omitempty"`
 	Checksum         string   `json:"checksum,omitempty" yaml:"checksum,omitempty"`
 	Description      string   `json:"description,omitempty" yaml:"description,omitempty"`
-	DisplayName      string   `json:"displayName,omitempty" yaml:"displayName,omitempty"`
-	ExternalID       string   `json:"externalId,omitempty" yaml:"externalId,omitempty"`
-	UIURL            string   `json:"uiUrl,omitempty" yaml:"uiUrl,omitempty"`
+	DisplayName      string   `json:"displayName,omitempty" yaml:"display_name,omitempty"`
+	ExternalID       string   `json:"externalId,omitempty" yaml:"external_id,omitempty"`
+	UIURL            string   `json:"uiUrl,omitempty" yaml:"ui_url,omitempty"`
 	URL              string   `json:"url,omitempty" yaml:"url,omitempty"`
-	WhitelistDomains []string `json:"whitelistDomains,omitempty" yaml:"whitelistDomains,omitempty"`
+	WhitelistDomains []string `json:"whitelistDomains,omitempty" yaml:"whitelist_domains,omitempty"`
 }

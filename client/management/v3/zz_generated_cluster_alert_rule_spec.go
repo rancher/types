@@ -17,16 +17,16 @@ const (
 )
 
 type ClusterAlertRuleSpec struct {
-	ClusterID             string             `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
-	DisplayName           string             `json:"displayName,omitempty" yaml:"displayName,omitempty"`
-	EventRule             *EventRule         `json:"eventRule,omitempty" yaml:"eventRule,omitempty"`
-	GroupID               string             `json:"groupId,omitempty" yaml:"groupId,omitempty"`
-	GroupIntervalSeconds  int64              `json:"groupIntervalSeconds,omitempty" yaml:"groupIntervalSeconds,omitempty"`
-	GroupWaitSeconds      int64              `json:"groupWaitSeconds,omitempty" yaml:"groupWaitSeconds,omitempty"`
+	ClusterID             string             `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
+	DisplayName           string             `json:"displayName,omitempty" yaml:"display_name,omitempty"`
+	EventRule             *EventRule         `json:"eventRule,omitempty" yaml:"event_rule,omitempty"`
+	GroupID               string             `json:"groupId,omitempty" yaml:"group_id,omitempty"`
+	GroupIntervalSeconds  int64              `json:"groupIntervalSeconds,omitempty" yaml:"group_interval_seconds,omitempty"`
+	GroupWaitSeconds      int64              `json:"groupWaitSeconds,omitempty" yaml:"group_wait_seconds,omitempty"`
 	Inherited             *bool              `json:"inherited,omitempty" yaml:"inherited,omitempty"`
-	MetricRule            *MetricRule        `json:"metricRule,omitempty" yaml:"metricRule,omitempty"`
-	NodeRule              *NodeRule          `json:"nodeRule,omitempty" yaml:"nodeRule,omitempty"`
-	RepeatIntervalSeconds int64              `json:"repeatIntervalSeconds,omitempty" yaml:"repeatIntervalSeconds,omitempty"`
+	MetricRule            *MetricRule        `json:"metricRule,omitempty" yaml:"metric_rule,omitempty"`
+	NodeRule              *NodeRule          `json:"nodeRule,omitempty" yaml:"node_rule,omitempty"`
+	RepeatIntervalSeconds int64              `json:"repeatIntervalSeconds,omitempty" yaml:"repeat_interval_seconds,omitempty"`
 	Severity              string             `json:"severity,omitempty" yaml:"severity,omitempty"`
-	SystemServiceRule     *SystemServiceRule `json:"systemServiceRule,omitempty" yaml:"systemServiceRule,omitempty"`
+	SystemServiceRule     *SystemServiceRule `json:"systemServiceRule,omitempty" yaml:"system_service_rule,omitempty"`
 }

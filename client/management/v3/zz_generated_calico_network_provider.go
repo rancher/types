@@ -6,5 +6,5 @@ const (
 )
 
 type CalicoNetworkProvider struct {
-	CloudProvider string `json:"cloudProvider,omitempty" yaml:"cloudProvider,omitempty"`
+	CloudProvider string `json:"cloudProvider,omitempty" yaml:"cloud_provider,omitempty"`
 }

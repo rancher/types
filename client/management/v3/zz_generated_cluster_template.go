@@ -24,14 +24,14 @@ type ClusterTemplate struct {
 	types.Resource
 	Annotations       map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created           string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID         string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DefaultRevisionID string            `json:"defaultRevisionId,omitempty" yaml:"defaultRevisionId,omitempty"`
+	CreatorID         string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	DefaultRevisionID string            `json:"defaultRevisionId,omitempty" yaml:"default_revision_id,omitempty"`
 	Description       string            `json:"description,omitempty" yaml:"description,omitempty"`
 	Enforced          bool              `json:"enforced,omitempty" yaml:"enforced,omitempty"`
 	Labels            map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Members           []Member          `json:"members,omitempty" yaml:"members,omitempty"`
 	Name              string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences   []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences   []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Removed           string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	UUID              string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }

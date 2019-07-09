@@ -34,30 +34,30 @@ const (
 
 type SourceCodeCredential struct {
 	types.Resource
-	AccessToken          string            `json:"accessToken,omitempty" yaml:"accessToken,omitempty"`
+	AccessToken          string            `json:"accessToken,omitempty" yaml:"access_token,omitempty"`
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	AvatarURL            string            `json:"avatarUrl,omitempty" yaml:"avatarUrl,omitempty"`
+	AvatarURL            string            `json:"avatarUrl,omitempty" yaml:"avatar_url,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DisplayName          string            `json:"displayName,omitempty" yaml:"displayName,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	DisplayName          string            `json:"displayName,omitempty" yaml:"display_name,omitempty"`
 	Expiry               string            `json:"expiry,omitempty" yaml:"expiry,omitempty"`
-	GitCloneToken        string            `json:"gitCloneToken,omitempty" yaml:"gitCloneToken,omitempty"`
-	GitLoginName         string            `json:"gitLoginName,omitempty" yaml:"gitLoginName,omitempty"`
-	HTMLURL              string            `json:"htmlUrl,omitempty" yaml:"htmlUrl,omitempty"`
+	GitCloneToken        string            `json:"gitCloneToken,omitempty" yaml:"git_clone_token,omitempty"`
+	GitLoginName         string            `json:"gitLoginName,omitempty" yaml:"git_login_name,omitempty"`
+	HTMLURL              string            `json:"htmlUrl,omitempty" yaml:"html_url,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
-	LoginName            string            `json:"loginName,omitempty" yaml:"loginName,omitempty"`
+	LoginName            string            `json:"loginName,omitempty" yaml:"login_name,omitempty"`
 	Logout               bool              `json:"logout,omitempty" yaml:"logout,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectID            string            `json:"projectId,omitempty" yaml:"projectId,omitempty"`
-	RefreshToken         string            `json:"refreshToken,omitempty" yaml:"refreshToken,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectID            string            `json:"projectId,omitempty" yaml:"project_id,omitempty"`
+	RefreshToken         string            `json:"refreshToken,omitempty" yaml:"refresh_token,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
-	SourceCodeType       string            `json:"sourceCodeType,omitempty" yaml:"sourceCodeType,omitempty"`
+	SourceCodeType       string            `json:"sourceCodeType,omitempty" yaml:"source_code_type,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	UserID               string            `json:"userId,omitempty" yaml:"userId,omitempty"`
+	UserID               string            `json:"userId,omitempty" yaml:"user_id,omitempty"`
 }
 
 type SourceCodeCredentialCollection struct {

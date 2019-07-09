@@ -21,8 +21,8 @@ type ObjectMeta struct {
 	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`
 	Namespace       string            `json:"namespace,omitempty" yaml:"namespace,omitempty"`
-	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Removed         string            `json:"removed,omitempty" yaml:"removed,omitempty"`
-	SelfLink        string            `json:"selfLink,omitempty" yaml:"selfLink,omitempty"`
+	SelfLink        string            `json:"selfLink,omitempty" yaml:"self_link,omitempty"`
 	UUID            string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }

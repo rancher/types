@@ -9,8 +9,8 @@ const (
 )
 
 type GCEPersistentDiskVolumeSource struct {
-	FSType    string `json:"fsType,omitempty" yaml:"fsType,omitempty"`
-	PDName    string `json:"pdName,omitempty" yaml:"pdName,omitempty"`
+	FSType    string `json:"fsType,omitempty" yaml:"fs_type,omitempty"`
+	PDName    string `json:"pdName,omitempty" yaml:"pd_name,omitempty"`
 	Partition int64  `json:"partition,omitempty" yaml:"partition,omitempty"`
-	ReadOnly  bool   `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
+	ReadOnly  bool   `json:"readOnly,omitempty" yaml:"read_only,omitempty"`
 }

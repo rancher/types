@@ -9,8 +9,8 @@ const (
 )
 
 type EnvVarSource struct {
-	ConfigMapKeyRef  *ConfigMapKeySelector  `json:"configMapKeyRef,omitempty" yaml:"configMapKeyRef,omitempty"`
-	FieldRef         *ObjectFieldSelector   `json:"fieldRef,omitempty" yaml:"fieldRef,omitempty"`
-	ResourceFieldRef *ResourceFieldSelector `json:"resourceFieldRef,omitempty" yaml:"resourceFieldRef,omitempty"`
-	SecretKeyRef     *SecretKeySelector     `json:"secretKeyRef,omitempty" yaml:"secretKeyRef,omitempty"`
+	ConfigMapKeyRef  *ConfigMapKeySelector  `json:"configMapKeyRef,omitempty" yaml:"config_map_key_ref,omitempty"`
+	FieldRef         *ObjectFieldSelector   `json:"fieldRef,omitempty" yaml:"field_ref,omitempty"`
+	ResourceFieldRef *ResourceFieldSelector `json:"resourceFieldRef,omitempty" yaml:"resource_field_ref,omitempty"`
+	SecretKeyRef     *SecretKeySelector     `json:"secretKeyRef,omitempty" yaml:"secret_key_ref,omitempty"`
 }

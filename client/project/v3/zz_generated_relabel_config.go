@@ -17,6 +17,6 @@ type RelabelConfig struct {
 	Regex        string   `json:"regex,omitempty" yaml:"regex,omitempty"`
 	Replacement  string   `json:"replacement,omitempty" yaml:"replacement,omitempty"`
 	Separator    string   `json:"separator,omitempty" yaml:"separator,omitempty"`
-	SourceLabels []string `json:"sourceLabels,omitempty" yaml:"sourceLabels,omitempty"`
-	TargetLabel  string   `json:"targetLabel,omitempty" yaml:"targetLabel,omitempty"`
+	SourceLabels []string `json:"sourceLabels,omitempty" yaml:"source_labels,omitempty"`
+	TargetLabel  string   `json:"targetLabel,omitempty" yaml:"target_label,omitempty"`
 }

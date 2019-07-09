@@ -10,9 +10,9 @@ const (
 )
 
 type ConfigMapNodeConfigSource struct {
-	KubeletConfigKey string `json:"kubeletConfigKey,omitempty" yaml:"kubeletConfigKey,omitempty"`
+	KubeletConfigKey string `json:"kubeletConfigKey,omitempty" yaml:"kubelet_config_key,omitempty"`
 	Name             string `json:"name,omitempty" yaml:"name,omitempty"`
 	Namespace        string `json:"namespace,omitempty" yaml:"namespace,omitempty"`
-	ResourceVersion  string `json:"resourceVersion,omitempty" yaml:"resourceVersion,omitempty"`
+	ResourceVersion  string `json:"resourceVersion,omitempty" yaml:"resource_version,omitempty"`
 	UID              string `json:"uid,omitempty" yaml:"uid,omitempty"`
 }

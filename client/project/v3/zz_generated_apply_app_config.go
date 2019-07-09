@@ -11,8 +11,8 @@ const (
 
 type ApplyAppConfig struct {
 	Answers         map[string]string `json:"answers,omitempty" yaml:"answers,omitempty"`
-	CatalogTemplate string            `json:"catalogTemplate,omitempty" yaml:"catalogTemplate,omitempty"`
+	CatalogTemplate string            `json:"catalogTemplate,omitempty" yaml:"catalog_template,omitempty"`
 	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`
-	TargetNamespace string            `json:"targetNamespace,omitempty" yaml:"targetNamespace,omitempty"`
+	TargetNamespace string            `json:"targetNamespace,omitempty" yaml:"target_namespace,omitempty"`
 	Version         string            `json:"version,omitempty" yaml:"version,omitempty"`
 }

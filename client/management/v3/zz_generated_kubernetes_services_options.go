@@ -11,7 +11,7 @@ const (
 
 type KubernetesServicesOptions struct {
 	KubeAPI        map[string]string `json:"kubeapi,omitempty" yaml:"kubeapi,omitempty"`
-	KubeController map[string]string `json:"kubeController,omitempty" yaml:"kubeController,omitempty"`
+	KubeController map[string]string `json:"kubeController,omitempty" yaml:"kube_controller,omitempty"`
 	Kubelet        map[string]string `json:"kubelet,omitempty" yaml:"kubelet,omitempty"`
 	Kubeproxy      map[string]string `json:"kubeproxy,omitempty" yaml:"kubeproxy,omitempty"`
 	Scheduler      map[string]string `json:"scheduler,omitempty" yaml:"scheduler,omitempty"`

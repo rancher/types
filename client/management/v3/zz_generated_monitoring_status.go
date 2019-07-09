@@ -8,5 +8,5 @@ const (
 
 type MonitoringStatus struct {
 	Conditions      []MonitoringCondition `json:"conditions,omitempty" yaml:"conditions,omitempty"`
-	GrafanaEndpoint string                `json:"grafanaEndpoint,omitempty" yaml:"grafanaEndpoint,omitempty"`
+	GrafanaEndpoint string                `json:"grafanaEndpoint,omitempty" yaml:"grafana_endpoint,omitempty"`
 }

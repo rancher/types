@@ -9,8 +9,8 @@ const (
 )
 
 type DownwardAPIVolumeFile struct {
-	FieldRef         *ObjectFieldSelector   `json:"fieldRef,omitempty" yaml:"fieldRef,omitempty"`
+	FieldRef         *ObjectFieldSelector   `json:"fieldRef,omitempty" yaml:"field_ref,omitempty"`
 	Mode             *int64                 `json:"mode,omitempty" yaml:"mode,omitempty"`
 	Path             string                 `json:"path,omitempty" yaml:"path,omitempty"`
-	ResourceFieldRef *ResourceFieldSelector `json:"resourceFieldRef,omitempty" yaml:"resourceFieldRef,omitempty"`
+	ResourceFieldRef *ResourceFieldSelector `json:"resourceFieldRef,omitempty" yaml:"resource_field_ref,omitempty"`
 }

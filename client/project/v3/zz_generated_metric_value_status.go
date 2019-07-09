@@ -8,7 +8,7 @@ const (
 )
 
 type MetricValueStatus struct {
-	AverageValue string `json:"averageValue,omitempty" yaml:"averageValue,omitempty"`
+	AverageValue string `json:"averageValue,omitempty" yaml:"average_value,omitempty"`
 	Utilization  *int64 `json:"utilization,omitempty" yaml:"utilization,omitempty"`
 	Value        string `json:"value,omitempty" yaml:"value,omitempty"`
 }

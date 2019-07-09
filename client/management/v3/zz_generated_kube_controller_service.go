@@ -11,10 +11,10 @@ const (
 )
 
 type KubeControllerService struct {
-	ClusterCIDR           string            `json:"clusterCidr,omitempty" yaml:"clusterCidr,omitempty"`
-	ExtraArgs             map[string]string `json:"extraArgs,omitempty" yaml:"extraArgs,omitempty"`
-	ExtraBinds            []string          `json:"extraBinds,omitempty" yaml:"extraBinds,omitempty"`
-	ExtraEnv              []string          `json:"extraEnv,omitempty" yaml:"extraEnv,omitempty"`
+	ClusterCIDR           string            `json:"clusterCidr,omitempty" yaml:"cluster_cidr,omitempty"`
+	ExtraArgs             map[string]string `json:"extraArgs,omitempty" yaml:"extra_args,omitempty"`
+	ExtraBinds            []string          `json:"extraBinds,omitempty" yaml:"extra_binds,omitempty"`
+	ExtraEnv              []string          `json:"extraEnv,omitempty" yaml:"extra_env,omitempty"`
 	Image                 string            `json:"image,omitempty" yaml:"image,omitempty"`
-	ServiceClusterIPRange string            `json:"serviceClusterIpRange,omitempty" yaml:"serviceClusterIpRange,omitempty"`
+	ServiceClusterIPRange string            `json:"serviceClusterIpRange,omitempty" yaml:"service_cluster_ip_range,omitempty"`
 }

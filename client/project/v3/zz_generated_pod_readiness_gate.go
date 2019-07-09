@@ -6,5 +6,5 @@ const (
 )
 
 type PodReadinessGate struct {
-	ConditionType string `json:"conditionType,omitempty" yaml:"conditionType,omitempty"`
+	ConditionType string `json:"conditionType,omitempty" yaml:"condition_type,omitempty"`
 }

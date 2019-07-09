@@ -32,25 +32,25 @@ const (
 type Project struct {
 	types.Resource
 	Annotations                   map[string]string       `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	ClusterID                     string                  `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterID                     string                  `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Conditions                    []ProjectCondition      `json:"conditions,omitempty" yaml:"conditions,omitempty"`
-	ContainerDefaultResourceLimit *ContainerResourceLimit `json:"containerDefaultResourceLimit,omitempty" yaml:"containerDefaultResourceLimit,omitempty"`
+	ContainerDefaultResourceLimit *ContainerResourceLimit `json:"containerDefaultResourceLimit,omitempty" yaml:"container_default_resource_limit,omitempty"`
 	Created                       string                  `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID                     string                  `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID                     string                  `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description                   string                  `json:"description,omitempty" yaml:"description,omitempty"`
-	EnableProjectMonitoring       bool                    `json:"enableProjectMonitoring,omitempty" yaml:"enableProjectMonitoring,omitempty"`
+	EnableProjectMonitoring       bool                    `json:"enableProjectMonitoring,omitempty" yaml:"enable_project_monitoring,omitempty"`
 	Labels                        map[string]string       `json:"labels,omitempty" yaml:"labels,omitempty"`
-	MonitoringStatus              *MonitoringStatus       `json:"monitoringStatus,omitempty" yaml:"monitoringStatus,omitempty"`
+	MonitoringStatus              *MonitoringStatus       `json:"monitoringStatus,omitempty" yaml:"monitoring_status,omitempty"`
 	Name                          string                  `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceDefaultResourceQuota *NamespaceResourceQuota `json:"namespaceDefaultResourceQuota,omitempty" yaml:"namespaceDefaultResourceQuota,omitempty"`
-	NamespaceId                   string                  `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences               []OwnerReference        `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	PodSecurityPolicyTemplateName string                  `json:"podSecurityPolicyTemplateId,omitempty" yaml:"podSecurityPolicyTemplateId,omitempty"`
+	NamespaceDefaultResourceQuota *NamespaceResourceQuota `json:"namespaceDefaultResourceQuota,omitempty" yaml:"namespace_default_resource_quota,omitempty"`
+	NamespaceId                   string                  `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences               []OwnerReference        `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	PodSecurityPolicyTemplateName string                  `json:"podSecurityPolicyTemplateId,omitempty" yaml:"pod_security_policy_template_id,omitempty"`
 	Removed                       string                  `json:"removed,omitempty" yaml:"removed,omitempty"`
-	ResourceQuota                 *ProjectResourceQuota   `json:"resourceQuota,omitempty" yaml:"resourceQuota,omitempty"`
+	ResourceQuota                 *ProjectResourceQuota   `json:"resourceQuota,omitempty" yaml:"resource_quota,omitempty"`
 	State                         string                  `json:"state,omitempty" yaml:"state,omitempty"`
 	Transitioning                 string                  `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage          string                  `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage          string                  `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                          string                  `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

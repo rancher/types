@@ -29,23 +29,23 @@ const (
 type ClusterMonitorGraph struct {
 	types.Resource
 	Annotations            map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	ClusterID              string            `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterID              string            `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Created                string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID              string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID              string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description            string            `json:"description,omitempty" yaml:"description,omitempty"`
-	DetailsMetricsSelector map[string]string `json:"detailsMetricsSelector,omitempty" yaml:"detailsMetricsSelector,omitempty"`
-	DisplayResourceType    string            `json:"displayResourceType,omitempty" yaml:"displayResourceType,omitempty"`
-	GraphType              string            `json:"graphType,omitempty" yaml:"graphType,omitempty"`
+	DetailsMetricsSelector map[string]string `json:"detailsMetricsSelector,omitempty" yaml:"details_metrics_selector,omitempty"`
+	DisplayResourceType    string            `json:"displayResourceType,omitempty" yaml:"display_resource_type,omitempty"`
+	GraphType              string            `json:"graphType,omitempty" yaml:"graph_type,omitempty"`
 	Labels                 map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
-	MetricsSelector        map[string]string `json:"metricsSelector,omitempty" yaml:"metricsSelector,omitempty"`
+	MetricsSelector        map[string]string `json:"metricsSelector,omitempty" yaml:"metrics_selector,omitempty"`
 	Name                   string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId            string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences        []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	NamespaceId            string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences        []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Priority               int64             `json:"priority,omitempty" yaml:"priority,omitempty"`
 	Removed                string            `json:"removed,omitempty" yaml:"removed,omitempty"`
-	ResourceType           string            `json:"resourceType,omitempty" yaml:"resourceType,omitempty"`
+	ResourceType           string            `json:"resourceType,omitempty" yaml:"resource_type,omitempty"`
 	UUID                   string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	YAxis                  *YAxis            `json:"yAxis,omitempty" yaml:"yAxis,omitempty"`
+	YAxis                  *YAxis            `json:"yAxis,omitempty" yaml:"y_axis,omitempty"`
 }
 
 type ClusterMonitorGraphCollection struct {

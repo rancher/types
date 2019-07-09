@@ -6,5 +6,5 @@ const (
 )
 
 type RouteOpenstackOpts struct {
-	RouterID string `json:"router-id,omitempty" yaml:"router-id,omitempty"`
+	RouterID string `json:"router-id,omitempty" yaml:"router_id,omitempty"`
 }

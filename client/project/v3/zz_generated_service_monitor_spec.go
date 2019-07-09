@@ -13,10 +13,10 @@ const (
 
 type ServiceMonitorSpec struct {
 	Endpoints         []Endpoint     `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
-	JobLabel          string         `json:"jobLabel,omitempty" yaml:"jobLabel,omitempty"`
-	NamespaceSelector []string       `json:"namespaceSelector,omitempty" yaml:"namespaceSelector,omitempty"`
-	PodTargetLabels   []string       `json:"podTargetLabels,omitempty" yaml:"podTargetLabels,omitempty"`
-	SampleLimit       int64          `json:"sampleLimit,omitempty" yaml:"sampleLimit,omitempty"`
+	JobLabel          string         `json:"jobLabel,omitempty" yaml:"job_label,omitempty"`
+	NamespaceSelector []string       `json:"namespaceSelector,omitempty" yaml:"namespace_selector,omitempty"`
+	PodTargetLabels   []string       `json:"podTargetLabels,omitempty" yaml:"pod_target_labels,omitempty"`
+	SampleLimit       int64          `json:"sampleLimit,omitempty" yaml:"sample_limit,omitempty"`
 	Selector          *LabelSelector `json:"selector,omitempty" yaml:"selector,omitempty"`
-	TargetLabels      []string       `json:"targetLabels,omitempty" yaml:"targetLabels,omitempty"`
+	TargetLabels      []string       `json:"targetLabels,omitempty" yaml:"target_labels,omitempty"`
 }

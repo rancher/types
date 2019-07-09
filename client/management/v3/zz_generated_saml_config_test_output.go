@@ -6,5 +6,5 @@ const (
 )
 
 type SamlConfigTestOutput struct {
-	IdpRedirectURL string `json:"idpRedirectUrl,omitempty" yaml:"idpRedirectUrl,omitempty"`
+	IdpRedirectURL string `json:"idpRedirectUrl,omitempty" yaml:"idp_redirect_url,omitempty"`
 }

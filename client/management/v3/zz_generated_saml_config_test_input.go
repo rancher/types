@@ -6,5 +6,5 @@ const (
 )
 
 type SamlConfigTestInput struct {
-	FinalRedirectURL string `json:"finalRedirectUrl,omitempty" yaml:"finalRedirectUrl,omitempty"`
+	FinalRedirectURL string `json:"finalRedirectUrl,omitempty" yaml:"final_redirect_url,omitempty"`
 }

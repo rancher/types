@@ -32,20 +32,20 @@ type RoleTemplate struct {
 	Administrative        bool              `json:"administrative,omitempty" yaml:"administrative,omitempty"`
 	Annotations           map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Builtin               bool              `json:"builtin,omitempty" yaml:"builtin,omitempty"`
-	ClusterCreatorDefault bool              `json:"clusterCreatorDefault,omitempty" yaml:"clusterCreatorDefault,omitempty"`
+	ClusterCreatorDefault bool              `json:"clusterCreatorDefault,omitempty" yaml:"cluster_creator_default,omitempty"`
 	Context               string            `json:"context,omitempty" yaml:"context,omitempty"`
 	Created               string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID             string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID             string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description           string            `json:"description,omitempty" yaml:"description,omitempty"`
 	External              bool              `json:"external,omitempty" yaml:"external,omitempty"`
 	Hidden                bool              `json:"hidden,omitempty" yaml:"hidden,omitempty"`
 	Labels                map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Locked                bool              `json:"locked,omitempty" yaml:"locked,omitempty"`
 	Name                  string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences       []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectCreatorDefault bool              `json:"projectCreatorDefault,omitempty" yaml:"projectCreatorDefault,omitempty"`
+	OwnerReferences       []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectCreatorDefault bool              `json:"projectCreatorDefault,omitempty" yaml:"project_creator_default,omitempty"`
 	Removed               string            `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RoleTemplateIDs       []string          `json:"roleTemplateIds,omitempty" yaml:"roleTemplateIds,omitempty"`
+	RoleTemplateIDs       []string          `json:"roleTemplateIds,omitempty" yaml:"role_template_ids,omitempty"`
 	Rules                 []PolicyRule      `json:"rules,omitempty" yaml:"rules,omitempty"`
 	UUID                  string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }

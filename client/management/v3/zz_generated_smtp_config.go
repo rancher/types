@@ -12,7 +12,7 @@ const (
 )
 
 type SMTPConfig struct {
-	DefaultRecipient string `json:"defaultRecipient,omitempty" yaml:"defaultRecipient,omitempty"`
+	DefaultRecipient string `json:"defaultRecipient,omitempty" yaml:"default_recipient,omitempty"`
 	Host             string `json:"host,omitempty" yaml:"host,omitempty"`
 	Password         string `json:"password,omitempty" yaml:"password,omitempty"`
 	Port             int64  `json:"port,omitempty" yaml:"port,omitempty"`

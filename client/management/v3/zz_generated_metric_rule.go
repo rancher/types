@@ -14,5 +14,5 @@ type MetricRule struct {
 	Description    string  `json:"description,omitempty" yaml:"description,omitempty"`
 	Duration       string  `json:"duration,omitempty" yaml:"duration,omitempty"`
 	Expression     string  `json:"expression,omitempty" yaml:"expression,omitempty"`
-	ThresholdValue float64 `json:"thresholdValue,omitempty" yaml:"thresholdValue,omitempty"`
+	ThresholdValue float64 `json:"thresholdValue,omitempty" yaml:"threshold_value,omitempty"`
 }

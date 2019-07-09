@@ -6,5 +6,5 @@ const (
 )
 
 type NodeConfigSource struct {
-	ConfigMap *ConfigMapNodeConfigSource `json:"configMap,omitempty" yaml:"configMap,omitempty"`
+	ConfigMap *ConfigMapNodeConfigSource `json:"configMap,omitempty" yaml:"config_map,omitempty"`
 }

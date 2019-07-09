@@ -32,20 +32,20 @@ type User struct {
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Conditions           []UserCondition   `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description          string            `json:"description,omitempty" yaml:"description,omitempty"`
 	Enabled              *bool             `json:"enabled,omitempty" yaml:"enabled,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Me                   bool              `json:"me,omitempty" yaml:"me,omitempty"`
-	MustChangePassword   bool              `json:"mustChangePassword,omitempty" yaml:"mustChangePassword,omitempty"`
+	MustChangePassword   bool              `json:"mustChangePassword,omitempty" yaml:"must_change_password,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Password             string            `json:"password,omitempty" yaml:"password,omitempty"`
-	PrincipalIDs         []string          `json:"principalIds,omitempty" yaml:"principalIds,omitempty"`
+	PrincipalIDs         []string          `json:"principalIds,omitempty" yaml:"principal_ids,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Username             string            `json:"username,omitempty" yaml:"username,omitempty"`
 }

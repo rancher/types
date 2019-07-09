@@ -13,11 +13,11 @@ const (
 )
 
 type ThanosSpec struct {
-	BaseImage string                `json:"baseImage,omitempty" yaml:"baseImage,omitempty"`
+	BaseImage string                `json:"baseImage,omitempty" yaml:"base_image,omitempty"`
 	GCS       *ThanosGCSSpec        `json:"gcs,omitempty" yaml:"gcs,omitempty"`
 	Peers     string                `json:"peers,omitempty" yaml:"peers,omitempty"`
 	Resources *ResourceRequirements `json:"resources,omitempty" yaml:"resources,omitempty"`
-	S3        *ThanosS3Spec         `json:"s3,omitempty" yaml:"s3,omitempty"`
+	S3        *ThanosS3Spec         `json:"s3,omitempty" yaml:"s_3,omitempty"`
 	SHA       string                `json:"sha,omitempty" yaml:"sha,omitempty"`
 	Tag       string                `json:"tag,omitempty" yaml:"tag,omitempty"`
 	Version   string                `json:"version,omitempty" yaml:"version,omitempty"`

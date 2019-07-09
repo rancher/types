@@ -28,20 +28,20 @@ type ProjectRoleTemplateBinding struct {
 	types.Resource
 	Annotations      map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created          string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID        string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	GroupID          string            `json:"groupId,omitempty" yaml:"groupId,omitempty"`
-	GroupPrincipalID string            `json:"groupPrincipalId,omitempty" yaml:"groupPrincipalId,omitempty"`
+	CreatorID        string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	GroupID          string            `json:"groupId,omitempty" yaml:"group_id,omitempty"`
+	GroupPrincipalID string            `json:"groupPrincipalId,omitempty" yaml:"group_principal_id,omitempty"`
 	Labels           map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name             string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId      string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences  []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectID        string            `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	NamespaceId      string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences  []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectID        string            `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed          string            `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RoleTemplateID   string            `json:"roleTemplateId,omitempty" yaml:"roleTemplateId,omitempty"`
-	ServiceAccount   string            `json:"serviceAccount,omitempty" yaml:"serviceAccount,omitempty"`
+	RoleTemplateID   string            `json:"roleTemplateId,omitempty" yaml:"role_template_id,omitempty"`
+	ServiceAccount   string            `json:"serviceAccount,omitempty" yaml:"service_account,omitempty"`
 	UUID             string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	UserID           string            `json:"userId,omitempty" yaml:"userId,omitempty"`
-	UserPrincipalID  string            `json:"userPrincipalId,omitempty" yaml:"userPrincipalId,omitempty"`
+	UserID           string            `json:"userId,omitempty" yaml:"user_id,omitempty"`
+	UserPrincipalID  string            `json:"userPrincipalId,omitempty" yaml:"user_principal_id,omitempty"`
 }
 
 type ProjectRoleTemplateBindingCollection struct {

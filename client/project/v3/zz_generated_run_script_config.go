@@ -8,5 +8,5 @@ const (
 
 type RunScriptConfig struct {
 	Image       string `json:"image,omitempty" yaml:"image,omitempty"`
-	ShellScript string `json:"shellScript,omitempty" yaml:"shellScript,omitempty"`
+	ShellScript string `json:"shellScript,omitempty" yaml:"shell_script,omitempty"`
 }

@@ -9,6 +9,6 @@ const (
 
 type NFSVolumeSource struct {
 	Path     string `json:"path,omitempty" yaml:"path,omitempty"`
-	ReadOnly bool   `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
+	ReadOnly bool   `json:"readOnly,omitempty" yaml:"read_only,omitempty"`
 	Server   string `json:"server,omitempty" yaml:"server,omitempty"`
 }

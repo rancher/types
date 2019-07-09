@@ -7,6 +7,6 @@ const (
 )
 
 type RollbackRevision struct {
-	ForceUpgrade bool   `json:"forceUpgrade,omitempty" yaml:"forceUpgrade,omitempty"`
-	RevisionID   string `json:"revisionId,omitempty" yaml:"revisionId,omitempty"`
+	ForceUpgrade bool   `json:"forceUpgrade,omitempty" yaml:"force_upgrade,omitempty"`
+	RevisionID   string `json:"revisionId,omitempty" yaml:"revision_id,omitempty"`
 }

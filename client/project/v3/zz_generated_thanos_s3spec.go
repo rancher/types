@@ -12,11 +12,11 @@ const (
 )
 
 type ThanosS3Spec struct {
-	AccessKey         *SecretKeySelector `json:"accessKey,omitempty" yaml:"accessKey,omitempty"`
+	AccessKey         *SecretKeySelector `json:"accessKey,omitempty" yaml:"access_key,omitempty"`
 	Bucket            string             `json:"bucket,omitempty" yaml:"bucket,omitempty"`
 	EncryptSSE        *bool              `json:"encryptsse,omitempty" yaml:"encryptsse,omitempty"`
 	Endpoint          string             `json:"endpoint,omitempty" yaml:"endpoint,omitempty"`
 	Insecure          *bool              `json:"insecure,omitempty" yaml:"insecure,omitempty"`
-	SecretKey         *SecretKeySelector `json:"secretKey,omitempty" yaml:"secretKey,omitempty"`
-	SignatureVersion2 *bool              `json:"signatureVersion2,omitempty" yaml:"signatureVersion2,omitempty"`
+	SecretKey         *SecretKeySelector `json:"secretKey,omitempty" yaml:"secret_key,omitempty"`
+	SignatureVersion2 *bool              `json:"signatureVersion2,omitempty" yaml:"signature_version_2,omitempty"`
 }

@@ -10,5 +10,5 @@ const (
 type MonitorMetricSpec struct {
 	Description  string `json:"description,omitempty" yaml:"description,omitempty"`
 	Expression   string `json:"expression,omitempty" yaml:"expression,omitempty"`
-	LegendFormat string `json:"legendFormat,omitempty" yaml:"legendFormat,omitempty"`
+	LegendFormat string `json:"legendFormat,omitempty" yaml:"legend_format,omitempty"`
 }

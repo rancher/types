@@ -23,14 +23,14 @@ const (
 type ClusterTemplateRevision struct {
 	types.Resource
 	Annotations       map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	ClusterConfig     *ClusterSpecBase  `json:"clusterConfig,omitempty" yaml:"clusterConfig,omitempty"`
-	ClusterTemplateID string            `json:"clusterTemplateId,omitempty" yaml:"clusterTemplateId,omitempty"`
+	ClusterConfig     *ClusterSpecBase  `json:"clusterConfig,omitempty" yaml:"cluster_config,omitempty"`
+	ClusterTemplateID string            `json:"clusterTemplateId,omitempty" yaml:"cluster_template_id,omitempty"`
 	Created           string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID         string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID         string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Enabled           *bool             `json:"enabled,omitempty" yaml:"enabled,omitempty"`
 	Labels            map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name              string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences   []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences   []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Questions         []Question        `json:"questions,omitempty" yaml:"questions,omitempty"`
 	Removed           string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	UUID              string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`

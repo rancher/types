@@ -6,5 +6,5 @@ const (
 )
 
 type TopologySelectorTerm struct {
-	MatchLabelExpressions []TopologySelectorLabelRequirement `json:"matchLabelExpressions,omitempty" yaml:"matchLabelExpressions,omitempty"`
+	MatchLabelExpressions []TopologySelectorLabelRequirement `json:"matchLabelExpressions,omitempty" yaml:"match_label_expressions,omitempty"`
 }

@@ -8,7 +8,7 @@ const (
 )
 
 type CrossVersionObjectReference struct {
-	APIVersion string `json:"apiVersion,omitempty" yaml:"apiVersion,omitempty"`
+	APIVersion string `json:"apiVersion,omitempty" yaml:"api_version,omitempty"`
 	Kind       string `json:"kind,omitempty" yaml:"kind,omitempty"`
 	Name       string `json:"name,omitempty" yaml:"name,omitempty"`
 }

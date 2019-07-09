@@ -15,14 +15,14 @@ const (
 )
 
 type ScaleIOVolumeSource struct {
-	FSType           string                `json:"fsType,omitempty" yaml:"fsType,omitempty"`
+	FSType           string                `json:"fsType,omitempty" yaml:"fs_type,omitempty"`
 	Gateway          string                `json:"gateway,omitempty" yaml:"gateway,omitempty"`
-	ProtectionDomain string                `json:"protectionDomain,omitempty" yaml:"protectionDomain,omitempty"`
-	ReadOnly         bool                  `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
-	SSLEnabled       bool                  `json:"sslEnabled,omitempty" yaml:"sslEnabled,omitempty"`
-	SecretRef        *LocalObjectReference `json:"secretRef,omitempty" yaml:"secretRef,omitempty"`
-	StorageMode      string                `json:"storageMode,omitempty" yaml:"storageMode,omitempty"`
-	StoragePool      string                `json:"storagePool,omitempty" yaml:"storagePool,omitempty"`
+	ProtectionDomain string                `json:"protectionDomain,omitempty" yaml:"protection_domain,omitempty"`
+	ReadOnly         bool                  `json:"readOnly,omitempty" yaml:"read_only,omitempty"`
+	SSLEnabled       bool                  `json:"sslEnabled,omitempty" yaml:"ssl_enabled,omitempty"`
+	SecretRef        *LocalObjectReference `json:"secretRef,omitempty" yaml:"secret_ref,omitempty"`
+	StorageMode      string                `json:"storageMode,omitempty" yaml:"storage_mode,omitempty"`
+	StoragePool      string                `json:"storagePool,omitempty" yaml:"storage_pool,omitempty"`
 	System           string                `json:"system,omitempty" yaml:"system,omitempty"`
-	VolumeName       string                `json:"volumeName,omitempty" yaml:"volumeName,omitempty"`
+	VolumeName       string                `json:"volumeName,omitempty" yaml:"volume_name,omitempty"`
 }

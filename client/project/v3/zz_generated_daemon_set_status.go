@@ -15,14 +15,14 @@ const (
 )
 
 type DaemonSetStatus struct {
-	CollisionCount         *int64               `json:"collisionCount,omitempty" yaml:"collisionCount,omitempty"`
+	CollisionCount         *int64               `json:"collisionCount,omitempty" yaml:"collision_count,omitempty"`
 	Conditions             []DaemonSetCondition `json:"conditions,omitempty" yaml:"conditions,omitempty"`
-	CurrentNumberScheduled int64                `json:"currentNumberScheduled,omitempty" yaml:"currentNumberScheduled,omitempty"`
-	DesiredNumberScheduled int64                `json:"desiredNumberScheduled,omitempty" yaml:"desiredNumberScheduled,omitempty"`
-	NumberAvailable        int64                `json:"numberAvailable,omitempty" yaml:"numberAvailable,omitempty"`
-	NumberMisscheduled     int64                `json:"numberMisscheduled,omitempty" yaml:"numberMisscheduled,omitempty"`
-	NumberReady            int64                `json:"numberReady,omitempty" yaml:"numberReady,omitempty"`
-	NumberUnavailable      int64                `json:"numberUnavailable,omitempty" yaml:"numberUnavailable,omitempty"`
-	ObservedGeneration     int64                `json:"observedGeneration,omitempty" yaml:"observedGeneration,omitempty"`
-	UpdatedNumberScheduled int64                `json:"updatedNumberScheduled,omitempty" yaml:"updatedNumberScheduled,omitempty"`
+	CurrentNumberScheduled int64                `json:"currentNumberScheduled,omitempty" yaml:"current_number_scheduled,omitempty"`
+	DesiredNumberScheduled int64                `json:"desiredNumberScheduled,omitempty" yaml:"desired_number_scheduled,omitempty"`
+	NumberAvailable        int64                `json:"numberAvailable,omitempty" yaml:"number_available,omitempty"`
+	NumberMisscheduled     int64                `json:"numberMisscheduled,omitempty" yaml:"number_misscheduled,omitempty"`
+	NumberReady            int64                `json:"numberReady,omitempty" yaml:"number_ready,omitempty"`
+	NumberUnavailable      int64                `json:"numberUnavailable,omitempty" yaml:"number_unavailable,omitempty"`
+	ObservedGeneration     int64                `json:"observedGeneration,omitempty" yaml:"observed_generation,omitempty"`
+	UpdatedNumberScheduled int64                `json:"updatedNumberScheduled,omitempty" yaml:"updated_number_scheduled,omitempty"`
 }

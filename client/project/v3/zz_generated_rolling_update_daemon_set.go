@@ -8,5 +8,5 @@ const (
 )
 
 type RollingUpdateDaemonSet struct {
-	MaxUnavailable intstr.IntOrString `json:"maxUnavailable,omitempty" yaml:"maxUnavailable,omitempty"`
+	MaxUnavailable intstr.IntOrString `json:"maxUnavailable,omitempty" yaml:"max_unavailable,omitempty"`
 }

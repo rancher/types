@@ -8,7 +8,7 @@ const (
 )
 
 type WorkloadRule struct {
-	AvailablePercentage int64             `json:"availablePercentage,omitempty" yaml:"availablePercentage,omitempty"`
+	AvailablePercentage int64             `json:"availablePercentage,omitempty" yaml:"available_percentage,omitempty"`
 	Selector            map[string]string `json:"selector,omitempty" yaml:"selector,omitempty"`
-	WorkloadID          string            `json:"workloadId,omitempty" yaml:"workloadId,omitempty"`
+	WorkloadID          string            `json:"workloadId,omitempty" yaml:"workload_id,omitempty"`
 }

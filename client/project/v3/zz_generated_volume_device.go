@@ -7,6 +7,6 @@ const (
 )
 
 type VolumeDevice struct {
-	DevicePath string `json:"devicePath,omitempty" yaml:"devicePath,omitempty"`
+	DevicePath string `json:"devicePath,omitempty" yaml:"device_path,omitempty"`
 	Name       string `json:"name,omitempty" yaml:"name,omitempty"`
 }

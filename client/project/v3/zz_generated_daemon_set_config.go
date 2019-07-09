@@ -11,8 +11,8 @@ const (
 )
 
 type DaemonSetConfig struct {
-	MaxUnavailable       intstr.IntOrString `json:"maxUnavailable,omitempty" yaml:"maxUnavailable,omitempty"`
-	MinReadySeconds      int64              `json:"minReadySeconds,omitempty" yaml:"minReadySeconds,omitempty"`
-	RevisionHistoryLimit *int64             `json:"revisionHistoryLimit,omitempty" yaml:"revisionHistoryLimit,omitempty"`
+	MaxUnavailable       intstr.IntOrString `json:"maxUnavailable,omitempty" yaml:"max_unavailable,omitempty"`
+	MinReadySeconds      int64              `json:"minReadySeconds,omitempty" yaml:"min_ready_seconds,omitempty"`
+	RevisionHistoryLimit *int64             `json:"revisionHistoryLimit,omitempty" yaml:"revision_history_limit,omitempty"`
 	Strategy             string             `json:"strategy,omitempty" yaml:"strategy,omitempty"`
 }

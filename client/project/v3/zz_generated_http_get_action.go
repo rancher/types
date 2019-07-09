@@ -11,7 +11,7 @@ const (
 )
 
 type HTTPGetAction struct {
-	HTTPHeaders []HTTPHeader       `json:"httpHeaders,omitempty" yaml:"httpHeaders,omitempty"`
+	HTTPHeaders []HTTPHeader       `json:"httpHeaders,omitempty" yaml:"http_headers,omitempty"`
 	Path        string             `json:"path,omitempty" yaml:"path,omitempty"`
 	Port        intstr.IntOrString `json:"port,omitempty" yaml:"port,omitempty"`
 	Scheme      string             `json:"scheme,omitempty" yaml:"scheme,omitempty"`

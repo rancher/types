@@ -6,5 +6,5 @@ const (
 )
 
 type MemoryInfo struct {
-	MemTotalKiB int64 `json:"memTotalKiB,omitempty" yaml:"memTotalKiB,omitempty"`
+	MemTotalKiB int64 `json:"memTotalKiB,omitempty" yaml:"mem_total_ki_b,omitempty"`
 }

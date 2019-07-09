@@ -46,37 +46,37 @@ type PipelineExecution struct {
 	types.Resource
 	Annotations          map[string]string   `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Author               string              `json:"author,omitempty" yaml:"author,omitempty"`
-	AvatarURL            string              `json:"avatarUrl,omitempty" yaml:"avatarUrl,omitempty"`
+	AvatarURL            string              `json:"avatarUrl,omitempty" yaml:"avatar_url,omitempty"`
 	Branch               string              `json:"branch,omitempty" yaml:"branch,omitempty"`
 	Commit               string              `json:"commit,omitempty" yaml:"commit,omitempty"`
 	Conditions           []PipelineCondition `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created              string              `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string              `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string              `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Email                string              `json:"email,omitempty" yaml:"email,omitempty"`
 	Ended                string              `json:"ended,omitempty" yaml:"ended,omitempty"`
 	Event                string              `json:"event,omitempty" yaml:"event,omitempty"`
-	ExecutionState       string              `json:"executionState,omitempty" yaml:"executionState,omitempty"`
-	HTMLLink             string              `json:"htmlLink,omitempty" yaml:"htmlLink,omitempty"`
+	ExecutionState       string              `json:"executionState,omitempty" yaml:"execution_state,omitempty"`
+	HTMLLink             string              `json:"htmlLink,omitempty" yaml:"html_link,omitempty"`
 	Labels               map[string]string   `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Message              string              `json:"message,omitempty" yaml:"message,omitempty"`
 	Name                 string              `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string              `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences      []OwnerReference    `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	PipelineConfig       *PipelineConfig     `json:"pipelineConfig,omitempty" yaml:"pipelineConfig,omitempty"`
-	PipelineID           string              `json:"pipelineId,omitempty" yaml:"pipelineId,omitempty"`
-	ProjectID            string              `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	NamespaceId          string              `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences      []OwnerReference    `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	PipelineConfig       *PipelineConfig     `json:"pipelineConfig,omitempty" yaml:"pipeline_config,omitempty"`
+	PipelineID           string              `json:"pipelineId,omitempty" yaml:"pipeline_id,omitempty"`
+	ProjectID            string              `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Ref                  string              `json:"ref,omitempty" yaml:"ref,omitempty"`
 	Removed              string              `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RepositoryURL        string              `json:"repositoryUrl,omitempty" yaml:"repositoryUrl,omitempty"`
+	RepositoryURL        string              `json:"repositoryUrl,omitempty" yaml:"repository_url,omitempty"`
 	Run                  int64               `json:"run,omitempty" yaml:"run,omitempty"`
 	Stages               []StageStatus       `json:"stages,omitempty" yaml:"stages,omitempty"`
 	Started              string              `json:"started,omitempty" yaml:"started,omitempty"`
 	State                string              `json:"state,omitempty" yaml:"state,omitempty"`
 	Title                string              `json:"title,omitempty" yaml:"title,omitempty"`
 	Transitioning        string              `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string              `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
-	TriggerUserID        string              `json:"triggerUserId,omitempty" yaml:"triggerUserId,omitempty"`
-	TriggeredBy          string              `json:"triggeredBy,omitempty" yaml:"triggeredBy,omitempty"`
+	TransitioningMessage string              `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
+	TriggerUserID        string              `json:"triggerUserId,omitempty" yaml:"trigger_user_id,omitempty"`
+	TriggeredBy          string              `json:"triggeredBy,omitempty" yaml:"triggered_by,omitempty"`
 	UUID                 string              `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

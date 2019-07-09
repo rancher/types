@@ -25,14 +25,14 @@ type NamespacedBasicAuth struct {
 	types.Resource
 	Annotations     map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created         string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID       string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID       string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description     string            `json:"description,omitempty" yaml:"description,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId     string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	NamespaceId     string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Password        string            `json:"password,omitempty" yaml:"password,omitempty"`
-	ProjectID       string            `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	ProjectID       string            `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed         string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	UUID            string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Username        string            `json:"username,omitempty" yaml:"username,omitempty"`

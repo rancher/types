@@ -7,6 +7,6 @@ const (
 )
 
 type ChangePasswordInput struct {
-	CurrentPassword string `json:"currentPassword,omitempty" yaml:"currentPassword,omitempty"`
-	NewPassword     string `json:"newPassword,omitempty" yaml:"newPassword,omitempty"`
+	CurrentPassword string `json:"currentPassword,omitempty" yaml:"current_password,omitempty"`
+	NewPassword     string `json:"newPassword,omitempty" yaml:"new_password,omitempty"`
 }

@@ -39,31 +39,31 @@ type Pipeline struct {
 	types.Resource
 	Annotations            map[string]string     `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created                string                `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID              string                `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID              string                `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Labels                 map[string]string     `json:"labels,omitempty" yaml:"labels,omitempty"`
-	LastExecutionID        string                `json:"lastExecutionId,omitempty" yaml:"lastExecutionId,omitempty"`
-	LastRunState           string                `json:"lastRunState,omitempty" yaml:"lastRunState,omitempty"`
-	LastStarted            string                `json:"lastStarted,omitempty" yaml:"lastStarted,omitempty"`
+	LastExecutionID        string                `json:"lastExecutionId,omitempty" yaml:"last_execution_id,omitempty"`
+	LastRunState           string                `json:"lastRunState,omitempty" yaml:"last_run_state,omitempty"`
+	LastStarted            string                `json:"lastStarted,omitempty" yaml:"last_started,omitempty"`
 	Name                   string                `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId            string                `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	NextRun                int64                 `json:"nextRun,omitempty" yaml:"nextRun,omitempty"`
-	NextStart              string                `json:"nextStart,omitempty" yaml:"nextStart,omitempty"`
-	OwnerReferences        []OwnerReference      `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	PipelineState          string                `json:"pipelineState,omitempty" yaml:"pipelineState,omitempty"`
-	ProjectID              string                `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	NamespaceId            string                `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	NextRun                int64                 `json:"nextRun,omitempty" yaml:"next_run,omitempty"`
+	NextStart              string                `json:"nextStart,omitempty" yaml:"next_start,omitempty"`
+	OwnerReferences        []OwnerReference      `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	PipelineState          string                `json:"pipelineState,omitempty" yaml:"pipeline_state,omitempty"`
+	ProjectID              string                `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed                string                `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RepositoryURL          string                `json:"repositoryUrl,omitempty" yaml:"repositoryUrl,omitempty"`
-	SourceCodeCredential   *SourceCodeCredential `json:"sourceCodeCredential,omitempty" yaml:"sourceCodeCredential,omitempty"`
-	SourceCodeCredentialID string                `json:"sourceCodeCredentialId,omitempty" yaml:"sourceCodeCredentialId,omitempty"`
+	RepositoryURL          string                `json:"repositoryUrl,omitempty" yaml:"repository_url,omitempty"`
+	SourceCodeCredential   *SourceCodeCredential `json:"sourceCodeCredential,omitempty" yaml:"source_code_credential,omitempty"`
+	SourceCodeCredentialID string                `json:"sourceCodeCredentialId,omitempty" yaml:"source_code_credential_id,omitempty"`
 	State                  string                `json:"state,omitempty" yaml:"state,omitempty"`
 	Token                  string                `json:"token,omitempty" yaml:"token,omitempty"`
 	Transitioning          string                `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage   string                `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
-	TriggerWebhookPr       bool                  `json:"triggerWebhookPr,omitempty" yaml:"triggerWebhookPr,omitempty"`
-	TriggerWebhookPush     bool                  `json:"triggerWebhookPush,omitempty" yaml:"triggerWebhookPush,omitempty"`
-	TriggerWebhookTag      bool                  `json:"triggerWebhookTag,omitempty" yaml:"triggerWebhookTag,omitempty"`
+	TransitioningMessage   string                `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
+	TriggerWebhookPr       bool                  `json:"triggerWebhookPr,omitempty" yaml:"trigger_webhook_pr,omitempty"`
+	TriggerWebhookPush     bool                  `json:"triggerWebhookPush,omitempty" yaml:"trigger_webhook_push,omitempty"`
+	TriggerWebhookTag      bool                  `json:"triggerWebhookTag,omitempty" yaml:"trigger_webhook_tag,omitempty"`
 	UUID                   string                `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	WebHookID              string                `json:"webhookId,omitempty" yaml:"webhookId,omitempty"`
+	WebHookID              string                `json:"webhookId,omitempty" yaml:"webhook_id,omitempty"`
 }
 
 type PipelineCollection struct {

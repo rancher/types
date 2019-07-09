@@ -28,21 +28,21 @@ const (
 type EtcdBackup struct {
 	types.Resource
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	BackupConfig         *BackupConfig     `json:"backupConfig,omitempty" yaml:"backupConfig,omitempty"`
-	ClusterID            string            `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	BackupConfig         *BackupConfig     `json:"backupConfig,omitempty" yaml:"backup_config,omitempty"`
+	ClusterID            string            `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Filename             string            `json:"filename,omitempty" yaml:"filename,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Manual               bool              `json:"manual,omitempty" yaml:"manual,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *EtcdBackupStatus `json:"status,omitempty" yaml:"status,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

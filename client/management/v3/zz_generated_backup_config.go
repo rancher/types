@@ -10,7 +10,7 @@ const (
 
 type BackupConfig struct {
 	Enabled        *bool           `json:"enabled,omitempty" yaml:"enabled,omitempty"`
-	IntervalHours  int64           `json:"intervalHours,omitempty" yaml:"intervalHours,omitempty"`
+	IntervalHours  int64           `json:"intervalHours,omitempty" yaml:"interval_hours,omitempty"`
 	Retention      int64           `json:"retention,omitempty" yaml:"retention,omitempty"`
-	S3BackupConfig *S3BackupConfig `json:"s3BackupConfig,omitempty" yaml:"s3BackupConfig,omitempty"`
+	S3BackupConfig *S3BackupConfig `json:"s3BackupConfig,omitempty" yaml:"s_3_backup_config,omitempty"`
 }

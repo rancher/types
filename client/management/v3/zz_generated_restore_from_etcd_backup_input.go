@@ -6,5 +6,5 @@ const (
 )
 
 type RestoreFromEtcdBackupInput struct {
-	EtcdBackupID string `json:"etcdBackupId,omitempty" yaml:"etcdBackupId,omitempty"`
+	EtcdBackupID string `json:"etcdBackupId,omitempty" yaml:"etcd_backup_id,omitempty"`
 }

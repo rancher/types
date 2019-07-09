@@ -37,20 +37,20 @@ type ProjectCatalog struct {
 	Commit               string             `json:"commit,omitempty" yaml:"commit,omitempty"`
 	Conditions           []CatalogCondition `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created              string             `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string             `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string             `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description          string             `json:"description,omitempty" yaml:"description,omitempty"`
 	Kind                 string             `json:"kind,omitempty" yaml:"kind,omitempty"`
 	Labels               map[string]string  `json:"labels,omitempty" yaml:"labels,omitempty"`
-	LastRefreshTimestamp string             `json:"lastRefreshTimestamp,omitempty" yaml:"lastRefreshTimestamp,omitempty"`
+	LastRefreshTimestamp string             `json:"lastRefreshTimestamp,omitempty" yaml:"last_refresh_timestamp,omitempty"`
 	Name                 string             `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string             `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences      []OwnerReference   `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	NamespaceId          string             `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences      []OwnerReference   `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Password             string             `json:"password,omitempty" yaml:"password,omitempty"`
-	ProjectID            string             `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	ProjectID            string             `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed              string             `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                string             `json:"state,omitempty" yaml:"state,omitempty"`
 	Transitioning        string             `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string             `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string             `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	URL                  string             `json:"url,omitempty" yaml:"url,omitempty"`
 	UUID                 string             `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Username             string             `json:"username,omitempty" yaml:"username,omitempty"`

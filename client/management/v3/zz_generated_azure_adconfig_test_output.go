@@ -6,5 +6,5 @@ const (
 )
 
 type AzureADConfigTestOutput struct {
-	RedirectURL string `json:"redirectUrl,omitempty" yaml:"redirectUrl,omitempty"`
+	RedirectURL string `json:"redirectUrl,omitempty" yaml:"redirect_url,omitempty"`
 }

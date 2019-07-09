@@ -10,9 +10,9 @@ const (
 )
 
 type TLSConfig struct {
-	CAFile             string `json:"caFile,omitempty" yaml:"caFile,omitempty"`
-	CertFile           string `json:"certFile,omitempty" yaml:"certFile,omitempty"`
-	InsecureSkipVerify bool   `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
-	KeyFile            string `json:"keyFile,omitempty" yaml:"keyFile,omitempty"`
-	ServerName         string `json:"serverName,omitempty" yaml:"serverName,omitempty"`
+	CAFile             string `json:"caFile,omitempty" yaml:"ca_file,omitempty"`
+	CertFile           string `json:"certFile,omitempty" yaml:"cert_file,omitempty"`
+	InsecureSkipVerify bool   `json:"insecureSkipVerify,omitempty" yaml:"insecure_skip_verify,omitempty"`
+	KeyFile            string `json:"keyFile,omitempty" yaml:"key_file,omitempty"`
+	ServerName         string `json:"serverName,omitempty" yaml:"server_name,omitempty"`
 }

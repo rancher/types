@@ -10,7 +10,7 @@ const (
 )
 
 type DNSConfig struct {
-	NodeSelector        map[string]string   `json:"nodeSelector,omitempty" yaml:"nodeSelector,omitempty"`
+	NodeSelector        map[string]string   `json:"nodeSelector,omitempty" yaml:"node_selector,omitempty"`
 	Provider            string              `json:"provider,omitempty" yaml:"provider,omitempty"`
 	ReverseCIDRs        []string            `json:"reversecidrs,omitempty" yaml:"reversecidrs,omitempty"`
 	StubDomains         map[string][]string `json:"stubdomains,omitempty" yaml:"stubdomains,omitempty"`

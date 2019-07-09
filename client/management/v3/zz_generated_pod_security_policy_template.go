@@ -40,34 +40,34 @@ const (
 
 type PodSecurityPolicyTemplate struct {
 	types.Resource
-	AllowPrivilegeEscalation        *bool                              `json:"allowPrivilegeEscalation,omitempty" yaml:"allowPrivilegeEscalation,omitempty"`
-	AllowedCapabilities             []string                           `json:"allowedCapabilities,omitempty" yaml:"allowedCapabilities,omitempty"`
-	AllowedFlexVolumes              []AllowedFlexVolume                `json:"allowedFlexVolumes,omitempty" yaml:"allowedFlexVolumes,omitempty"`
-	AllowedHostPaths                []AllowedHostPath                  `json:"allowedHostPaths,omitempty" yaml:"allowedHostPaths,omitempty"`
-	AllowedProcMountTypes           []string                           `json:"allowedProcMountTypes,omitempty" yaml:"allowedProcMountTypes,omitempty"`
-	AllowedUnsafeSysctls            []string                           `json:"allowedUnsafeSysctls,omitempty" yaml:"allowedUnsafeSysctls,omitempty"`
+	AllowPrivilegeEscalation        *bool                              `json:"allowPrivilegeEscalation,omitempty" yaml:"allow_privilege_escalation,omitempty"`
+	AllowedCapabilities             []string                           `json:"allowedCapabilities,omitempty" yaml:"allowed_capabilities,omitempty"`
+	AllowedFlexVolumes              []AllowedFlexVolume                `json:"allowedFlexVolumes,omitempty" yaml:"allowed_flex_volumes,omitempty"`
+	AllowedHostPaths                []AllowedHostPath                  `json:"allowedHostPaths,omitempty" yaml:"allowed_host_paths,omitempty"`
+	AllowedProcMountTypes           []string                           `json:"allowedProcMountTypes,omitempty" yaml:"allowed_proc_mount_types,omitempty"`
+	AllowedUnsafeSysctls            []string                           `json:"allowedUnsafeSysctls,omitempty" yaml:"allowed_unsafe_sysctls,omitempty"`
 	Annotations                     map[string]string                  `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created                         string                             `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID                       string                             `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DefaultAddCapabilities          []string                           `json:"defaultAddCapabilities,omitempty" yaml:"defaultAddCapabilities,omitempty"`
-	DefaultAllowPrivilegeEscalation *bool                              `json:"defaultAllowPrivilegeEscalation,omitempty" yaml:"defaultAllowPrivilegeEscalation,omitempty"`
+	CreatorID                       string                             `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	DefaultAddCapabilities          []string                           `json:"defaultAddCapabilities,omitempty" yaml:"default_add_capabilities,omitempty"`
+	DefaultAllowPrivilegeEscalation *bool                              `json:"defaultAllowPrivilegeEscalation,omitempty" yaml:"default_allow_privilege_escalation,omitempty"`
 	Description                     string                             `json:"description,omitempty" yaml:"description,omitempty"`
-	FSGroup                         *FSGroupStrategyOptions            `json:"fsGroup,omitempty" yaml:"fsGroup,omitempty"`
-	ForbiddenSysctls                []string                           `json:"forbiddenSysctls,omitempty" yaml:"forbiddenSysctls,omitempty"`
-	HostIPC                         bool                               `json:"hostIPC,omitempty" yaml:"hostIPC,omitempty"`
-	HostNetwork                     bool                               `json:"hostNetwork,omitempty" yaml:"hostNetwork,omitempty"`
-	HostPID                         bool                               `json:"hostPID,omitempty" yaml:"hostPID,omitempty"`
-	HostPorts                       []HostPortRange                    `json:"hostPorts,omitempty" yaml:"hostPorts,omitempty"`
+	FSGroup                         *FSGroupStrategyOptions            `json:"fsGroup,omitempty" yaml:"fs_group,omitempty"`
+	ForbiddenSysctls                []string                           `json:"forbiddenSysctls,omitempty" yaml:"forbidden_sysctls,omitempty"`
+	HostIPC                         bool                               `json:"hostIPC,omitempty" yaml:"host_ipc,omitempty"`
+	HostNetwork                     bool                               `json:"hostNetwork,omitempty" yaml:"host_network,omitempty"`
+	HostPID                         bool                               `json:"hostPID,omitempty" yaml:"host_pid,omitempty"`
+	HostPorts                       []HostPortRange                    `json:"hostPorts,omitempty" yaml:"host_ports,omitempty"`
 	Labels                          map[string]string                  `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                            string                             `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences                 []OwnerReference                   `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences                 []OwnerReference                   `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Privileged                      bool                               `json:"privileged,omitempty" yaml:"privileged,omitempty"`
-	ReadOnlyRootFilesystem          bool                               `json:"readOnlyRootFilesystem,omitempty" yaml:"readOnlyRootFilesystem,omitempty"`
+	ReadOnlyRootFilesystem          bool                               `json:"readOnlyRootFilesystem,omitempty" yaml:"read_only_root_filesystem,omitempty"`
 	Removed                         string                             `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RequiredDropCapabilities        []string                           `json:"requiredDropCapabilities,omitempty" yaml:"requiredDropCapabilities,omitempty"`
-	RunAsUser                       *RunAsUserStrategyOptions          `json:"runAsUser,omitempty" yaml:"runAsUser,omitempty"`
-	SELinux                         *SELinuxStrategyOptions            `json:"seLinux,omitempty" yaml:"seLinux,omitempty"`
-	SupplementalGroups              *SupplementalGroupsStrategyOptions `json:"supplementalGroups,omitempty" yaml:"supplementalGroups,omitempty"`
+	RequiredDropCapabilities        []string                           `json:"requiredDropCapabilities,omitempty" yaml:"required_drop_capabilities,omitempty"`
+	RunAsUser                       *RunAsUserStrategyOptions          `json:"runAsUser,omitempty" yaml:"run_as_user,omitempty"`
+	SELinux                         *SELinuxStrategyOptions            `json:"seLinux,omitempty" yaml:"se_linux,omitempty"`
+	SupplementalGroups              *SupplementalGroupsStrategyOptions `json:"supplementalGroups,omitempty" yaml:"supplemental_groups,omitempty"`
 	UUID                            string                             `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Volumes                         []string                           `json:"volumes,omitempty" yaml:"volumes,omitempty"`
 }

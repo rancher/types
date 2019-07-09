@@ -9,8 +9,8 @@ const (
 )
 
 type ImportClusterYamlInput struct {
-	DefaultNamespace string `json:"defaultNamespace,omitempty" yaml:"defaultNamespace,omitempty"`
+	DefaultNamespace string `json:"defaultNamespace,omitempty" yaml:"default_namespace,omitempty"`
 	Namespace        string `json:"namespace,omitempty" yaml:"namespace,omitempty"`
-	ProjectID        string `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	ProjectID        string `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	YAML             string `json:"yaml,omitempty" yaml:"yaml,omitempty"`
 }

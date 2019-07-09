@@ -14,13 +14,13 @@ const (
 )
 
 type RemoteWriteSpec struct {
-	BasicAuth           *BasicAuth      `json:"basicAuth,omitempty" yaml:"basicAuth,omitempty"`
-	BearerToken         string          `json:"bearerToken,omitempty" yaml:"bearerToken,omitempty"`
-	BearerTokenFile     string          `json:"bearerTokenFile,omitempty" yaml:"bearerTokenFile,omitempty"`
-	ProxyURL            string          `json:"proxyUrl,omitempty" yaml:"proxyUrl,omitempty"`
-	QueueConfig         *QueueConfig    `json:"queueConfig,omitempty" yaml:"queueConfig,omitempty"`
-	RemoteTimeout       string          `json:"remoteTimeout,omitempty" yaml:"remoteTimeout,omitempty"`
-	TLSConfig           *TLSConfig      `json:"tlsConfig,omitempty" yaml:"tlsConfig,omitempty"`
+	BasicAuth           *BasicAuth      `json:"basicAuth,omitempty" yaml:"basic_auth,omitempty"`
+	BearerToken         string          `json:"bearerToken,omitempty" yaml:"bearer_token,omitempty"`
+	BearerTokenFile     string          `json:"bearerTokenFile,omitempty" yaml:"bearer_token_file,omitempty"`
+	ProxyURL            string          `json:"proxyUrl,omitempty" yaml:"proxy_url,omitempty"`
+	QueueConfig         *QueueConfig    `json:"queueConfig,omitempty" yaml:"queue_config,omitempty"`
+	RemoteTimeout       string          `json:"remoteTimeout,omitempty" yaml:"remote_timeout,omitempty"`
+	TLSConfig           *TLSConfig      `json:"tlsConfig,omitempty" yaml:"tls_config,omitempty"`
 	URL                 string          `json:"url,omitempty" yaml:"url,omitempty"`
-	WriteRelabelConfigs []RelabelConfig `json:"writeRelabelConfigs,omitempty" yaml:"writeRelabelConfigs,omitempty"`
+	WriteRelabelConfigs []RelabelConfig `json:"writeRelabelConfigs,omitempty" yaml:"write_relabel_configs,omitempty"`
 }

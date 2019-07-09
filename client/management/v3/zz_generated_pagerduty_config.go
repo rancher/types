@@ -7,6 +7,6 @@ const (
 )
 
 type PagerdutyConfig struct {
-	ProxyURL   string `json:"proxyUrl,omitempty" yaml:"proxyUrl,omitempty"`
-	ServiceKey string `json:"serviceKey,omitempty" yaml:"serviceKey,omitempty"`
+	ProxyURL   string `json:"proxyUrl,omitempty" yaml:"proxy_url,omitempty"`
+	ServiceKey string `json:"serviceKey,omitempty" yaml:"service_key,omitempty"`
 }

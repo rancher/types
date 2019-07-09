@@ -8,7 +8,7 @@ const (
 )
 
 type ObjectMetricSource struct {
-	DescribedObject *CrossVersionObjectReference `json:"describedObject,omitempty" yaml:"describedObject,omitempty"`
+	DescribedObject *CrossVersionObjectReference `json:"describedObject,omitempty" yaml:"described_object,omitempty"`
 	Metric          *MetricIdentifier            `json:"metric,omitempty" yaml:"metric,omitempty"`
 	Target          *MetricTarget                `json:"target,omitempty" yaml:"target,omitempty"`
 }

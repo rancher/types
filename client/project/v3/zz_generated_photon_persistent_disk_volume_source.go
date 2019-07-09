@@ -7,6 +7,6 @@ const (
 )
 
 type PhotonPersistentDiskVolumeSource struct {
-	FSType string `json:"fsType,omitempty" yaml:"fsType,omitempty"`
-	PdID   string `json:"pdID,omitempty" yaml:"pdID,omitempty"`
+	FSType string `json:"fsType,omitempty" yaml:"fs_type,omitempty"`
+	PdID   string `json:"pdID,omitempty" yaml:"pd_id,omitempty"`
 }

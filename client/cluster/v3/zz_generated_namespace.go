@@ -26,19 +26,19 @@ const (
 type Namespace struct {
 	types.Resource
 	Annotations                   map[string]string       `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	ContainerDefaultResourceLimit *ContainerResourceLimit `json:"containerDefaultResourceLimit,omitempty" yaml:"containerDefaultResourceLimit,omitempty"`
+	ContainerDefaultResourceLimit *ContainerResourceLimit `json:"containerDefaultResourceLimit,omitempty" yaml:"container_default_resource_limit,omitempty"`
 	Created                       string                  `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID                     string                  `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID                     string                  `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description                   string                  `json:"description,omitempty" yaml:"description,omitempty"`
 	Labels                        map[string]string       `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                          string                  `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences               []OwnerReference        `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectID                     string                  `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	OwnerReferences               []OwnerReference        `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectID                     string                  `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed                       string                  `json:"removed,omitempty" yaml:"removed,omitempty"`
-	ResourceQuota                 *NamespaceResourceQuota `json:"resourceQuota,omitempty" yaml:"resourceQuota,omitempty"`
+	ResourceQuota                 *NamespaceResourceQuota `json:"resourceQuota,omitempty" yaml:"resource_quota,omitempty"`
 	State                         string                  `json:"state,omitempty" yaml:"state,omitempty"`
 	Transitioning                 string                  `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage          string                  `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage          string                  `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                          string                  `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

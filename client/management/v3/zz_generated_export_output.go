@@ -6,5 +6,5 @@ const (
 )
 
 type ExportOutput struct {
-	YAMLOutput string `json:"yamlOutput,omitempty" yaml:"yamlOutput,omitempty"`
+	YAMLOutput string `json:"yamlOutput,omitempty" yaml:"yaml_output,omitempty"`
 }

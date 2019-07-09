@@ -6,5 +6,5 @@ const (
 )
 
 type BitbucketServerRequestLoginOutput struct {
-	LoginURL string `json:"loginUrl,omitempty" yaml:"loginUrl,omitempty"`
+	LoginURL string `json:"loginUrl,omitempty" yaml:"login_url,omitempty"`
 }

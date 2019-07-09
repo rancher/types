@@ -6,5 +6,5 @@ const (
 )
 
 type NodeDaemonEndpoints struct {
-	KubeletEndpoint *DaemonEndpoint `json:"kubeletEndpoint,omitempty" yaml:"kubeletEndpoint,omitempty"`
+	KubeletEndpoint *DaemonEndpoint `json:"kubeletEndpoint,omitempty" yaml:"kubelet_endpoint,omitempty"`
 }

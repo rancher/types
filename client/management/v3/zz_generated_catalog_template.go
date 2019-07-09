@@ -43,36 +43,36 @@ const (
 type CatalogTemplate struct {
 	types.Resource
 	Annotations              map[string]string     `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	CatalogID                string                `json:"catalogId,omitempty" yaml:"catalogId,omitempty"`
+	CatalogID                string                `json:"catalogId,omitempty" yaml:"catalog_id,omitempty"`
 	Categories               []string              `json:"categories,omitempty" yaml:"categories,omitempty"`
 	Category                 string                `json:"category,omitempty" yaml:"category,omitempty"`
-	ClusterCatalogID         string                `json:"clusterCatalogId,omitempty" yaml:"clusterCatalogId,omitempty"`
-	ClusterID                string                `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterCatalogID         string                `json:"clusterCatalogId,omitempty" yaml:"cluster_catalog_id,omitempty"`
+	ClusterID                string                `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Created                  string                `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID                string                `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DefaultTemplateVersionID string                `json:"defaultTemplateVersionId,omitempty" yaml:"defaultTemplateVersionId,omitempty"`
-	DefaultVersion           string                `json:"defaultVersion,omitempty" yaml:"defaultVersion,omitempty"`
+	CreatorID                string                `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	DefaultTemplateVersionID string                `json:"defaultTemplateVersionId,omitempty" yaml:"default_template_version_id,omitempty"`
+	DefaultVersion           string                `json:"defaultVersion,omitempty" yaml:"default_version,omitempty"`
 	Description              string                `json:"description,omitempty" yaml:"description,omitempty"`
-	FolderName               string                `json:"folderName,omitempty" yaml:"folderName,omitempty"`
+	FolderName               string                `json:"folderName,omitempty" yaml:"folder_name,omitempty"`
 	Icon                     string                `json:"icon,omitempty" yaml:"icon,omitempty"`
-	IconFilename             string                `json:"iconFilename,omitempty" yaml:"iconFilename,omitempty"`
+	IconFilename             string                `json:"iconFilename,omitempty" yaml:"icon_filename,omitempty"`
 	Labels                   map[string]string     `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Maintainer               string                `json:"maintainer,omitempty" yaml:"maintainer,omitempty"`
 	Name                     string                `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences          []OwnerReference      `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences          []OwnerReference      `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Path                     string                `json:"path,omitempty" yaml:"path,omitempty"`
-	ProjectCatalogID         string                `json:"projectCatalogId,omitempty" yaml:"projectCatalogId,omitempty"`
-	ProjectID                string                `json:"projectId,omitempty" yaml:"projectId,omitempty"`
-	ProjectURL               string                `json:"projectURL,omitempty" yaml:"projectURL,omitempty"`
+	ProjectCatalogID         string                `json:"projectCatalogId,omitempty" yaml:"project_catalog_id,omitempty"`
+	ProjectID                string                `json:"projectId,omitempty" yaml:"project_id,omitempty"`
+	ProjectURL               string                `json:"projectURL,omitempty" yaml:"project_url,omitempty"`
 	Readme                   string                `json:"readme,omitempty" yaml:"readme,omitempty"`
 	Removed                  string                `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                    string                `json:"state,omitempty" yaml:"state,omitempty"`
 	Status                   *TemplateStatus       `json:"status,omitempty" yaml:"status,omitempty"`
 	Transitioning            string                `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage     string                `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage     string                `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                     string                `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	UpgradeFrom              string                `json:"upgradeFrom,omitempty" yaml:"upgradeFrom,omitempty"`
-	VersionLinks             map[string]string     `json:"versionLinks,omitempty" yaml:"versionLinks,omitempty"`
+	UpgradeFrom              string                `json:"upgradeFrom,omitempty" yaml:"upgrade_from,omitempty"`
+	VersionLinks             map[string]string     `json:"versionLinks,omitempty" yaml:"version_links,omitempty"`
 	Versions                 []TemplateVersionSpec `json:"versions,omitempty" yaml:"versions,omitempty"`
 }
 

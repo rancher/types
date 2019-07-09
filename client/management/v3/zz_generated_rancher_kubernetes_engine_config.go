@@ -28,27 +28,27 @@ const (
 )
 
 type RancherKubernetesEngineConfig struct {
-	AddonJobTimeout     int64               `json:"addonJobTimeout,omitempty" yaml:"addonJobTimeout,omitempty"`
+	AddonJobTimeout     int64               `json:"addonJobTimeout,omitempty" yaml:"addon_job_timeout,omitempty"`
 	Addons              string              `json:"addons,omitempty" yaml:"addons,omitempty"`
-	AddonsInclude       []string            `json:"addonsInclude,omitempty" yaml:"addonsInclude,omitempty"`
+	AddonsInclude       []string            `json:"addonsInclude,omitempty" yaml:"addons_include,omitempty"`
 	Authentication      *AuthnConfig        `json:"authentication,omitempty" yaml:"authentication,omitempty"`
 	Authorization       *AuthzConfig        `json:"authorization,omitempty" yaml:"authorization,omitempty"`
-	BastionHost         *BastionHost        `json:"bastionHost,omitempty" yaml:"bastionHost,omitempty"`
-	CloudProvider       *CloudProvider      `json:"cloudProvider,omitempty" yaml:"cloudProvider,omitempty"`
-	ClusterName         string              `json:"clusterName,omitempty" yaml:"clusterName,omitempty"`
+	BastionHost         *BastionHost        `json:"bastionHost,omitempty" yaml:"bastion_host,omitempty"`
+	CloudProvider       *CloudProvider      `json:"cloudProvider,omitempty" yaml:"cloud_provider,omitempty"`
+	ClusterName         string              `json:"clusterName,omitempty" yaml:"cluster_name,omitempty"`
 	DNS                 *DNSConfig          `json:"dns,omitempty" yaml:"dns,omitempty"`
-	IgnoreDockerVersion bool                `json:"ignoreDockerVersion,omitempty" yaml:"ignoreDockerVersion,omitempty"`
+	IgnoreDockerVersion bool                `json:"ignoreDockerVersion,omitempty" yaml:"ignore_docker_version,omitempty"`
 	Ingress             *IngressConfig      `json:"ingress,omitempty" yaml:"ingress,omitempty"`
 	Monitoring          *MonitoringConfig   `json:"monitoring,omitempty" yaml:"monitoring,omitempty"`
 	Network             *NetworkConfig      `json:"network,omitempty" yaml:"network,omitempty"`
 	Nodes               []RKEConfigNode     `json:"nodes,omitempty" yaml:"nodes,omitempty"`
-	PrefixPath          string              `json:"prefixPath,omitempty" yaml:"prefixPath,omitempty"`
-	PrivateRegistries   []PrivateRegistry   `json:"privateRegistries,omitempty" yaml:"privateRegistries,omitempty"`
+	PrefixPath          string              `json:"prefixPath,omitempty" yaml:"prefix_path,omitempty"`
+	PrivateRegistries   []PrivateRegistry   `json:"privateRegistries,omitempty" yaml:"private_registries,omitempty"`
 	Restore             *RestoreConfig      `json:"restore,omitempty" yaml:"restore,omitempty"`
-	RotateCertificates  *RotateCertificates `json:"rotateCertificates,omitempty" yaml:"rotateCertificates,omitempty"`
-	SSHAgentAuth        bool                `json:"sshAgentAuth,omitempty" yaml:"sshAgentAuth,omitempty"`
-	SSHCertPath         string              `json:"sshCertPath,omitempty" yaml:"sshCertPath,omitempty"`
-	SSHKeyPath          string              `json:"sshKeyPath,omitempty" yaml:"sshKeyPath,omitempty"`
+	RotateCertificates  *RotateCertificates `json:"rotateCertificates,omitempty" yaml:"rotate_certificates,omitempty"`
+	SSHAgentAuth        bool                `json:"sshAgentAuth,omitempty" yaml:"ssh_agent_auth,omitempty"`
+	SSHCertPath         string              `json:"sshCertPath,omitempty" yaml:"ssh_cert_path,omitempty"`
+	SSHKeyPath          string              `json:"sshKeyPath,omitempty" yaml:"ssh_key_path,omitempty"`
 	Services            *RKEConfigServices  `json:"services,omitempty" yaml:"services,omitempty"`
-	Version             string              `json:"kubernetesVersion,omitempty" yaml:"kubernetesVersion,omitempty"`
+	Version             string              `json:"kubernetesVersion,omitempty" yaml:"kubernetes_version,omitempty"`
 }

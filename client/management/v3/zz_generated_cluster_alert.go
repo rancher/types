@@ -34,27 +34,27 @@ const (
 type ClusterAlert struct {
 	types.Resource
 	Annotations           map[string]string    `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	ClusterID             string               `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterID             string               `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Created               string               `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID             string               `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID             string               `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description           string               `json:"description,omitempty" yaml:"description,omitempty"`
-	DisplayName           string               `json:"displayName,omitempty" yaml:"displayName,omitempty"`
-	InitialWaitSeconds    int64                `json:"initialWaitSeconds,omitempty" yaml:"initialWaitSeconds,omitempty"`
+	DisplayName           string               `json:"displayName,omitempty" yaml:"display_name,omitempty"`
+	InitialWaitSeconds    int64                `json:"initialWaitSeconds,omitempty" yaml:"initial_wait_seconds,omitempty"`
 	Labels                map[string]string    `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                  string               `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId           string               `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences       []OwnerReference     `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	NamespaceId           string               `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences       []OwnerReference     `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Recipients            []Recipient          `json:"recipients,omitempty" yaml:"recipients,omitempty"`
 	Removed               string               `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RepeatIntervalSeconds int64                `json:"repeatIntervalSeconds,omitempty" yaml:"repeatIntervalSeconds,omitempty"`
+	RepeatIntervalSeconds int64                `json:"repeatIntervalSeconds,omitempty" yaml:"repeat_interval_seconds,omitempty"`
 	Severity              string               `json:"severity,omitempty" yaml:"severity,omitempty"`
 	State                 string               `json:"state,omitempty" yaml:"state,omitempty"`
 	Status                *AlertStatus         `json:"status,omitempty" yaml:"status,omitempty"`
-	TargetEvent           *TargetEvent         `json:"targetEvent,omitempty" yaml:"targetEvent,omitempty"`
-	TargetNode            *TargetNode          `json:"targetNode,omitempty" yaml:"targetNode,omitempty"`
-	TargetSystemService   *TargetSystemService `json:"targetSystemService,omitempty" yaml:"targetSystemService,omitempty"`
+	TargetEvent           *TargetEvent         `json:"targetEvent,omitempty" yaml:"target_event,omitempty"`
+	TargetNode            *TargetNode          `json:"targetNode,omitempty" yaml:"target_node,omitempty"`
+	TargetSystemService   *TargetSystemService `json:"targetSystemService,omitempty" yaml:"target_system_service,omitempty"`
 	Transitioning         string               `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage  string               `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage  string               `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                  string               `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

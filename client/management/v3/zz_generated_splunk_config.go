@@ -15,12 +15,12 @@ const (
 
 type SplunkConfig struct {
 	Certificate   string `json:"certificate,omitempty" yaml:"certificate,omitempty"`
-	ClientCert    string `json:"clientCert,omitempty" yaml:"clientCert,omitempty"`
-	ClientKey     string `json:"clientKey,omitempty" yaml:"clientKey,omitempty"`
-	ClientKeyPass string `json:"clientKeyPass,omitempty" yaml:"clientKeyPass,omitempty"`
+	ClientCert    string `json:"clientCert,omitempty" yaml:"client_cert,omitempty"`
+	ClientKey     string `json:"clientKey,omitempty" yaml:"client_key,omitempty"`
+	ClientKeyPass string `json:"clientKeyPass,omitempty" yaml:"client_key_pass,omitempty"`
 	Endpoint      string `json:"endpoint,omitempty" yaml:"endpoint,omitempty"`
 	Index         string `json:"index,omitempty" yaml:"index,omitempty"`
-	SSLVerify     bool   `json:"sslVerify,omitempty" yaml:"sslVerify,omitempty"`
+	SSLVerify     bool   `json:"sslVerify,omitempty" yaml:"ssl_verify,omitempty"`
 	Source        string `json:"source,omitempty" yaml:"source,omitempty"`
 	Token         string `json:"token,omitempty" yaml:"token,omitempty"`
 }

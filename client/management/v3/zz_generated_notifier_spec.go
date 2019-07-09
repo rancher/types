@@ -13,12 +13,12 @@ const (
 )
 
 type NotifierSpec struct {
-	ClusterID       string           `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterID       string           `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Description     string           `json:"description,omitempty" yaml:"description,omitempty"`
-	DisplayName     string           `json:"displayName,omitempty" yaml:"displayName,omitempty"`
-	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty" yaml:"pagerdutyConfig,omitempty"`
-	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty" yaml:"smtpConfig,omitempty"`
-	SlackConfig     *SlackConfig     `json:"slackConfig,omitempty" yaml:"slackConfig,omitempty"`
-	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty" yaml:"webhookConfig,omitempty"`
-	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty" yaml:"wechatConfig,omitempty"`
+	DisplayName     string           `json:"displayName,omitempty" yaml:"display_name,omitempty"`
+	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty" yaml:"pagerduty_config,omitempty"`
+	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty" yaml:"smtp_config,omitempty"`
+	SlackConfig     *SlackConfig     `json:"slackConfig,omitempty" yaml:"slack_config,omitempty"`
+	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty" yaml:"webhook_config,omitempty"`
+	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty" yaml:"wechat_config,omitempty"`
 }

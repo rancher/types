@@ -10,9 +10,9 @@ const (
 )
 
 type GlobalDNSProviderSpec struct {
-	AlidnsProviderConfig     *AlidnsProviderConfig     `json:"alidnsProviderConfig,omitempty" yaml:"alidnsProviderConfig,omitempty"`
-	CloudflareProviderConfig *CloudflareProviderConfig `json:"cloudflareProviderConfig,omitempty" yaml:"cloudflareProviderConfig,omitempty"`
+	AlidnsProviderConfig     *AlidnsProviderConfig     `json:"alidnsProviderConfig,omitempty" yaml:"alidns_provider_config,omitempty"`
+	CloudflareProviderConfig *CloudflareProviderConfig `json:"cloudflareProviderConfig,omitempty" yaml:"cloudflare_provider_config,omitempty"`
 	Members                  []Member                  `json:"members,omitempty" yaml:"members,omitempty"`
-	RootDomain               string                    `json:"rootDomain,omitempty" yaml:"rootDomain,omitempty"`
-	Route53ProviderConfig    *Route53ProviderConfig    `json:"route53ProviderConfig,omitempty" yaml:"route53ProviderConfig,omitempty"`
+	RootDomain               string                    `json:"rootDomain,omitempty" yaml:"root_domain,omitempty"`
+	Route53ProviderConfig    *Route53ProviderConfig    `json:"route53ProviderConfig,omitempty" yaml:"route_53_provider_config,omitempty"`
 }

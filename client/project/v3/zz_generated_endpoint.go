@@ -19,6 +19,6 @@ type Endpoint struct {
 	Path           string              `json:"path,omitempty" yaml:"path,omitempty"`
 	RelabelConfigs []RelabelConfig     `json:"relabelings,omitempty" yaml:"relabelings,omitempty"`
 	Scheme         string              `json:"scheme,omitempty" yaml:"scheme,omitempty"`
-	ScrapeTimeout  string              `json:"scrapeTimeout,omitempty" yaml:"scrapeTimeout,omitempty"`
-	TargetPort     intstr.IntOrString  `json:"targetPort,omitempty" yaml:"targetPort,omitempty"`
+	ScrapeTimeout  string              `json:"scrapeTimeout,omitempty" yaml:"scrape_timeout,omitempty"`
+	TargetPort     intstr.IntOrString  `json:"targetPort,omitempty" yaml:"target_port,omitempty"`
 }

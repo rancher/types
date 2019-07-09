@@ -23,18 +23,18 @@ const (
 
 type GitlabPipelineConfig struct {
 	Annotations     map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	ClientID        string            `json:"clientId,omitempty" yaml:"clientId,omitempty"`
-	ClientSecret    string            `json:"clientSecret,omitempty" yaml:"clientSecret,omitempty"`
+	ClientID        string            `json:"clientId,omitempty" yaml:"client_id,omitempty"`
+	ClientSecret    string            `json:"clientSecret,omitempty" yaml:"client_secret,omitempty"`
 	Created         string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID       string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID       string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Enabled         bool              `json:"enabled,omitempty" yaml:"enabled,omitempty"`
 	Hostname        string            `json:"hostname,omitempty" yaml:"hostname,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId     string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectID       string            `json:"projectId,omitempty" yaml:"projectId,omitempty"`
-	RedirectURL     string            `json:"redirectUrl,omitempty" yaml:"redirectUrl,omitempty"`
+	NamespaceId     string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectID       string            `json:"projectId,omitempty" yaml:"project_id,omitempty"`
+	RedirectURL     string            `json:"redirectUrl,omitempty" yaml:"redirect_url,omitempty"`
 	Removed         string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	TLS             bool              `json:"tls,omitempty" yaml:"tls,omitempty"`
 	Type            string            `json:"type,omitempty" yaml:"type,omitempty"`

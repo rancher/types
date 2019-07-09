@@ -9,7 +9,7 @@ const (
 )
 
 type MetricTarget struct {
-	AverageValue string `json:"averageValue,omitempty" yaml:"averageValue,omitempty"`
+	AverageValue string `json:"averageValue,omitempty" yaml:"average_value,omitempty"`
 	Type         string `json:"type,omitempty" yaml:"type,omitempty"`
 	Utilization  *int64 `json:"utilization,omitempty" yaml:"utilization,omitempty"`
 	Value        string `json:"value,omitempty" yaml:"value,omitempty"`

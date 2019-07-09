@@ -14,12 +14,12 @@ const (
 )
 
 type Info struct {
-	BuildDate    string `json:"buildDate,omitempty" yaml:"buildDate,omitempty"`
+	BuildDate    string `json:"buildDate,omitempty" yaml:"build_date,omitempty"`
 	Compiler     string `json:"compiler,omitempty" yaml:"compiler,omitempty"`
-	GitCommit    string `json:"gitCommit,omitempty" yaml:"gitCommit,omitempty"`
-	GitTreeState string `json:"gitTreeState,omitempty" yaml:"gitTreeState,omitempty"`
-	GitVersion   string `json:"gitVersion,omitempty" yaml:"gitVersion,omitempty"`
-	GoVersion    string `json:"goVersion,omitempty" yaml:"goVersion,omitempty"`
+	GitCommit    string `json:"gitCommit,omitempty" yaml:"git_commit,omitempty"`
+	GitTreeState string `json:"gitTreeState,omitempty" yaml:"git_tree_state,omitempty"`
+	GitVersion   string `json:"gitVersion,omitempty" yaml:"git_version,omitempty"`
+	GoVersion    string `json:"goVersion,omitempty" yaml:"go_version,omitempty"`
 	Major        string `json:"major,omitempty" yaml:"major,omitempty"`
 	Minor        string `json:"minor,omitempty" yaml:"minor,omitempty"`
 	Platform     string `json:"platform,omitempty" yaml:"platform,omitempty"`

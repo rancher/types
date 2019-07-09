@@ -15,7 +15,7 @@ const (
 
 type Handler struct {
 	Command     []string           `json:"command,omitempty" yaml:"command,omitempty"`
-	HTTPHeaders []HTTPHeader       `json:"httpHeaders,omitempty" yaml:"httpHeaders,omitempty"`
+	HTTPHeaders []HTTPHeader       `json:"httpHeaders,omitempty" yaml:"http_headers,omitempty"`
 	Host        string             `json:"host,omitempty" yaml:"host,omitempty"`
 	Path        string             `json:"path,omitempty" yaml:"path,omitempty"`
 	Port        intstr.IntOrString `json:"port,omitempty" yaml:"port,omitempty"`

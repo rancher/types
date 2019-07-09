@@ -39,33 +39,33 @@ const (
 type TemplateVersion struct {
 	types.Resource
 	Annotations          map[string]string      `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	AppReadme            string                 `json:"appReadme,omitempty" yaml:"appReadme,omitempty"`
+	AppReadme            string                 `json:"appReadme,omitempty" yaml:"app_readme,omitempty"`
 	Created              string                 `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string                 `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string                 `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Digest               string                 `json:"digest,omitempty" yaml:"digest,omitempty"`
-	ExternalID           string                 `json:"externalId,omitempty" yaml:"externalId,omitempty"`
+	ExternalID           string                 `json:"externalId,omitempty" yaml:"external_id,omitempty"`
 	Files                map[string]string      `json:"files,omitempty" yaml:"files,omitempty"`
-	KubeVersion          string                 `json:"kubeVersion,omitempty" yaml:"kubeVersion,omitempty"`
+	KubeVersion          string                 `json:"kubeVersion,omitempty" yaml:"kube_version,omitempty"`
 	Labels               map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string                 `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences      []OwnerReference       `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences      []OwnerReference       `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Questions            []Question             `json:"questions,omitempty" yaml:"questions,omitempty"`
-	RancherMaxVersion    string                 `json:"rancherMaxVersion,omitempty" yaml:"rancherMaxVersion,omitempty"`
-	RancherMinVersion    string                 `json:"rancherMinVersion,omitempty" yaml:"rancherMinVersion,omitempty"`
-	RancherVersion       string                 `json:"rancherVersion,omitempty" yaml:"rancherVersion,omitempty"`
+	RancherMaxVersion    string                 `json:"rancherMaxVersion,omitempty" yaml:"rancher_max_version,omitempty"`
+	RancherMinVersion    string                 `json:"rancherMinVersion,omitempty" yaml:"rancher_min_version,omitempty"`
+	RancherVersion       string                 `json:"rancherVersion,omitempty" yaml:"rancher_version,omitempty"`
 	Readme               string                 `json:"readme,omitempty" yaml:"readme,omitempty"`
 	Removed              string                 `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RequiredNamespace    string                 `json:"requiredNamespace,omitempty" yaml:"requiredNamespace,omitempty"`
+	RequiredNamespace    string                 `json:"requiredNamespace,omitempty" yaml:"required_namespace,omitempty"`
 	State                string                 `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *TemplateVersionStatus `json:"status,omitempty" yaml:"status,omitempty"`
 	Transitioning        string                 `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string                 `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string                 `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string                 `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	UpgradeVersionLinks  map[string]string      `json:"upgradeVersionLinks,omitempty" yaml:"upgradeVersionLinks,omitempty"`
+	UpgradeVersionLinks  map[string]string      `json:"upgradeVersionLinks,omitempty" yaml:"upgrade_version_links,omitempty"`
 	Version              string                 `json:"version,omitempty" yaml:"version,omitempty"`
-	VersionDir           string                 `json:"versionDir,omitempty" yaml:"versionDir,omitempty"`
-	VersionName          string                 `json:"versionName,omitempty" yaml:"versionName,omitempty"`
-	VersionURLs          []string               `json:"versionUrls,omitempty" yaml:"versionUrls,omitempty"`
+	VersionDir           string                 `json:"versionDir,omitempty" yaml:"version_dir,omitempty"`
+	VersionName          string                 `json:"versionName,omitempty" yaml:"version_name,omitempty"`
+	VersionURLs          []string               `json:"versionUrls,omitempty" yaml:"version_urls,omitempty"`
 }
 
 type TemplateVersionCollection struct {

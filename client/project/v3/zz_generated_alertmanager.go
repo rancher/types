@@ -48,42 +48,42 @@ const (
 
 type Alertmanager struct {
 	types.Resource
-	AdditionalPeers      []string               `json:"additionalPeers,omitempty" yaml:"additionalPeers,omitempty"`
+	AdditionalPeers      []string               `json:"additionalPeers,omitempty" yaml:"additional_peers,omitempty"`
 	Affinity             *Affinity              `json:"affinity,omitempty" yaml:"affinity,omitempty"`
 	Annotations          map[string]string      `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	BaseImage            string                 `json:"baseImage,omitempty" yaml:"baseImage,omitempty"`
-	ConfigMaps           []string               `json:"configMaps,omitempty" yaml:"configMaps,omitempty"`
+	BaseImage            string                 `json:"baseImage,omitempty" yaml:"base_image,omitempty"`
+	ConfigMaps           []string               `json:"configMaps,omitempty" yaml:"config_maps,omitempty"`
 	Containers           []Container            `json:"containers,omitempty" yaml:"containers,omitempty"`
 	Created              string                 `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string                 `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	ExternalURL          string                 `json:"externalUrl,omitempty" yaml:"externalUrl,omitempty"`
-	ImagePullSecrets     []LocalObjectReference `json:"imagePullSecrets,omitempty" yaml:"imagePullSecrets,omitempty"`
+	CreatorID            string                 `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	ExternalURL          string                 `json:"externalUrl,omitempty" yaml:"external_url,omitempty"`
+	ImagePullSecrets     []LocalObjectReference `json:"imagePullSecrets,omitempty" yaml:"image_pull_secrets,omitempty"`
 	Labels               map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
-	ListenLocal          bool                   `json:"listenLocal,omitempty" yaml:"listenLocal,omitempty"`
-	LogLevel             string                 `json:"logLevel,omitempty" yaml:"logLevel,omitempty"`
+	ListenLocal          bool                   `json:"listenLocal,omitempty" yaml:"listen_local,omitempty"`
+	LogLevel             string                 `json:"logLevel,omitempty" yaml:"log_level,omitempty"`
 	Name                 string                 `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string                 `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	NodeSelector         map[string]string      `json:"nodeSelector,omitempty" yaml:"nodeSelector,omitempty"`
-	OwnerReferences      []OwnerReference       `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	NamespaceId          string                 `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	NodeSelector         map[string]string      `json:"nodeSelector,omitempty" yaml:"node_selector,omitempty"`
+	OwnerReferences      []OwnerReference       `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Paused               bool                   `json:"paused,omitempty" yaml:"paused,omitempty"`
-	PodMetadata          *ObjectMeta            `json:"podMetadata,omitempty" yaml:"podMetadata,omitempty"`
-	PriorityClassName    string                 `json:"priorityClassName,omitempty" yaml:"priorityClassName,omitempty"`
-	ProjectID            string                 `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	PodMetadata          *ObjectMeta            `json:"podMetadata,omitempty" yaml:"pod_metadata,omitempty"`
+	PriorityClassName    string                 `json:"priorityClassName,omitempty" yaml:"priority_class_name,omitempty"`
+	ProjectID            string                 `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed              string                 `json:"removed,omitempty" yaml:"removed,omitempty"`
 	Replicas             *int64                 `json:"replicas,omitempty" yaml:"replicas,omitempty"`
 	Resources            *ResourceRequirements  `json:"resources,omitempty" yaml:"resources,omitempty"`
 	Retention            string                 `json:"retention,omitempty" yaml:"retention,omitempty"`
-	RoutePrefix          string                 `json:"routePrefix,omitempty" yaml:"routePrefix,omitempty"`
+	RoutePrefix          string                 `json:"routePrefix,omitempty" yaml:"route_prefix,omitempty"`
 	SHA                  string                 `json:"sha,omitempty" yaml:"sha,omitempty"`
 	Secrets              []string               `json:"secrets,omitempty" yaml:"secrets,omitempty"`
-	SecurityContext      *PodSecurityContext    `json:"securityContext,omitempty" yaml:"securityContext,omitempty"`
-	ServiceAccountName   string                 `json:"serviceAccountName,omitempty" yaml:"serviceAccountName,omitempty"`
+	SecurityContext      *PodSecurityContext    `json:"securityContext,omitempty" yaml:"security_context,omitempty"`
+	ServiceAccountName   string                 `json:"serviceAccountName,omitempty" yaml:"service_account_name,omitempty"`
 	State                string                 `json:"state,omitempty" yaml:"state,omitempty"`
 	Storage              *StorageSpec           `json:"storage,omitempty" yaml:"storage,omitempty"`
 	Tag                  string                 `json:"tag,omitempty" yaml:"tag,omitempty"`
 	Tolerations          []Toleration           `json:"tolerations,omitempty" yaml:"tolerations,omitempty"`
 	Transitioning        string                 `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string                 `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string                 `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string                 `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Version              string                 `json:"version,omitempty" yaml:"version,omitempty"`
 }

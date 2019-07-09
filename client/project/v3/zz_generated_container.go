@@ -41,40 +41,40 @@ const (
 )
 
 type Container struct {
-	AllowPrivilegeEscalation *bool                 `json:"allowPrivilegeEscalation,omitempty" yaml:"allowPrivilegeEscalation,omitempty"`
-	CapAdd                   []string              `json:"capAdd,omitempty" yaml:"capAdd,omitempty"`
-	CapDrop                  []string              `json:"capDrop,omitempty" yaml:"capDrop,omitempty"`
+	AllowPrivilegeEscalation *bool                 `json:"allowPrivilegeEscalation,omitempty" yaml:"allow_privilege_escalation,omitempty"`
+	CapAdd                   []string              `json:"capAdd,omitempty" yaml:"cap_add,omitempty"`
+	CapDrop                  []string              `json:"capDrop,omitempty" yaml:"cap_drop,omitempty"`
 	Command                  []string              `json:"command,omitempty" yaml:"command,omitempty"`
 	Entrypoint               []string              `json:"entrypoint,omitempty" yaml:"entrypoint,omitempty"`
 	Environment              map[string]string     `json:"environment,omitempty" yaml:"environment,omitempty"`
-	EnvironmentFrom          []EnvironmentFrom     `json:"environmentFrom,omitempty" yaml:"environmentFrom,omitempty"`
-	ExitCode                 *int64                `json:"exitCode,omitempty" yaml:"exitCode,omitempty"`
+	EnvironmentFrom          []EnvironmentFrom     `json:"environmentFrom,omitempty" yaml:"environment_from,omitempty"`
+	ExitCode                 *int64                `json:"exitCode,omitempty" yaml:"exit_code,omitempty"`
 	Image                    string                `json:"image,omitempty" yaml:"image,omitempty"`
-	ImagePullPolicy          string                `json:"imagePullPolicy,omitempty" yaml:"imagePullPolicy,omitempty"`
-	InitContainer            bool                  `json:"initContainer,omitempty" yaml:"initContainer,omitempty"`
-	LivenessProbe            *Probe                `json:"livenessProbe,omitempty" yaml:"livenessProbe,omitempty"`
+	ImagePullPolicy          string                `json:"imagePullPolicy,omitempty" yaml:"image_pull_policy,omitempty"`
+	InitContainer            bool                  `json:"initContainer,omitempty" yaml:"init_container,omitempty"`
+	LivenessProbe            *Probe                `json:"livenessProbe,omitempty" yaml:"liveness_probe,omitempty"`
 	Name                     string                `json:"name,omitempty" yaml:"name,omitempty"`
 	Ports                    []ContainerPort       `json:"ports,omitempty" yaml:"ports,omitempty"`
-	PostStart                *Handler              `json:"postStart,omitempty" yaml:"postStart,omitempty"`
-	PreStop                  *Handler              `json:"preStop,omitempty" yaml:"preStop,omitempty"`
+	PostStart                *Handler              `json:"postStart,omitempty" yaml:"post_start,omitempty"`
+	PreStop                  *Handler              `json:"preStop,omitempty" yaml:"pre_stop,omitempty"`
 	Privileged               *bool                 `json:"privileged,omitempty" yaml:"privileged,omitempty"`
-	ProcMount                string                `json:"procMount,omitempty" yaml:"procMount,omitempty"`
-	ReadOnly                 *bool                 `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
-	ReadinessProbe           *Probe                `json:"readinessProbe,omitempty" yaml:"readinessProbe,omitempty"`
+	ProcMount                string                `json:"procMount,omitempty" yaml:"proc_mount,omitempty"`
+	ReadOnly                 *bool                 `json:"readOnly,omitempty" yaml:"read_only,omitempty"`
+	ReadinessProbe           *Probe                `json:"readinessProbe,omitempty" yaml:"readiness_probe,omitempty"`
 	Resources                *ResourceRequirements `json:"resources,omitempty" yaml:"resources,omitempty"`
-	RestartCount             int64                 `json:"restartCount,omitempty" yaml:"restartCount,omitempty"`
-	RunAsGroup               *int64                `json:"runAsGroup,omitempty" yaml:"runAsGroup,omitempty"`
-	RunAsNonRoot             *bool                 `json:"runAsNonRoot,omitempty" yaml:"runAsNonRoot,omitempty"`
+	RestartCount             int64                 `json:"restartCount,omitempty" yaml:"restart_count,omitempty"`
+	RunAsGroup               *int64                `json:"runAsGroup,omitempty" yaml:"run_as_group,omitempty"`
+	RunAsNonRoot             *bool                 `json:"runAsNonRoot,omitempty" yaml:"run_as_non_root,omitempty"`
 	State                    string                `json:"state,omitempty" yaml:"state,omitempty"`
 	Stdin                    bool                  `json:"stdin,omitempty" yaml:"stdin,omitempty"`
-	StdinOnce                bool                  `json:"stdinOnce,omitempty" yaml:"stdinOnce,omitempty"`
+	StdinOnce                bool                  `json:"stdinOnce,omitempty" yaml:"stdin_once,omitempty"`
 	TTY                      bool                  `json:"tty,omitempty" yaml:"tty,omitempty"`
-	TerminationMessagePath   string                `json:"terminationMessagePath,omitempty" yaml:"terminationMessagePath,omitempty"`
-	TerminationMessagePolicy string                `json:"terminationMessagePolicy,omitempty" yaml:"terminationMessagePolicy,omitempty"`
+	TerminationMessagePath   string                `json:"terminationMessagePath,omitempty" yaml:"termination_message_path,omitempty"`
+	TerminationMessagePolicy string                `json:"terminationMessagePolicy,omitempty" yaml:"termination_message_policy,omitempty"`
 	Transitioning            string                `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage     string                `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage     string                `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	Uid                      *int64                `json:"uid,omitempty" yaml:"uid,omitempty"`
-	VolumeDevices            []VolumeDevice        `json:"volumeDevices,omitempty" yaml:"volumeDevices,omitempty"`
-	VolumeMounts             []VolumeMount         `json:"volumeMounts,omitempty" yaml:"volumeMounts,omitempty"`
-	WorkingDir               string                `json:"workingDir,omitempty" yaml:"workingDir,omitempty"`
+	VolumeDevices            []VolumeDevice        `json:"volumeDevices,omitempty" yaml:"volume_devices,omitempty"`
+	VolumeMounts             []VolumeMount         `json:"volumeMounts,omitempty" yaml:"volume_mounts,omitempty"`
+	WorkingDir               string                `json:"workingDir,omitempty" yaml:"working_dir,omitempty"`
 }

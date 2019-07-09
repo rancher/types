@@ -6,5 +6,5 @@ const (
 )
 
 type DeploymentRollbackInput struct {
-	ReplicaSetID string `json:"replicaSetId,omitempty" yaml:"replicaSetId,omitempty"`
+	ReplicaSetID string `json:"replicaSetId,omitempty" yaml:"replica_set_id,omitempty"`
 }

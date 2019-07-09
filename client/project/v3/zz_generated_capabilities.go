@@ -7,6 +7,6 @@ const (
 )
 
 type Capabilities struct {
-	CapAdd  []string `json:"capAdd,omitempty" yaml:"capAdd,omitempty"`
-	CapDrop []string `json:"capDrop,omitempty" yaml:"capDrop,omitempty"`
+	CapAdd  []string `json:"capAdd,omitempty" yaml:"cap_add,omitempty"`
+	CapDrop []string `json:"capDrop,omitempty" yaml:"cap_drop,omitempty"`
 }

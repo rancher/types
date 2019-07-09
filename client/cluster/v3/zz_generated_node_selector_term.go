@@ -7,6 +7,6 @@ const (
 )
 
 type NodeSelectorTerm struct {
-	MatchExpressions []NodeSelectorRequirement `json:"matchExpressions,omitempty" yaml:"matchExpressions,omitempty"`
-	MatchFields      []NodeSelectorRequirement `json:"matchFields,omitempty" yaml:"matchFields,omitempty"`
+	MatchExpressions []NodeSelectorRequirement `json:"matchExpressions,omitempty" yaml:"match_expressions,omitempty"`
+	MatchFields      []NodeSelectorRequirement `json:"matchFields,omitempty" yaml:"match_fields,omitempty"`
 }

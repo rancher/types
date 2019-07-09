@@ -16,15 +16,15 @@ const (
 )
 
 type NodePoolSpec struct {
-	ClusterID               string            `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
-	ControlPlane            bool              `json:"controlPlane,omitempty" yaml:"controlPlane,omitempty"`
-	DeleteNotReadyAfterSecs int64             `json:"deleteNotReadyAfterSecs,omitempty" yaml:"deleteNotReadyAfterSecs,omitempty"`
-	DisplayName             string            `json:"displayName,omitempty" yaml:"displayName,omitempty"`
+	ClusterID               string            `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
+	ControlPlane            bool              `json:"controlPlane,omitempty" yaml:"control_plane,omitempty"`
+	DeleteNotReadyAfterSecs int64             `json:"deleteNotReadyAfterSecs,omitempty" yaml:"delete_not_ready_after_secs,omitempty"`
+	DisplayName             string            `json:"displayName,omitempty" yaml:"display_name,omitempty"`
 	Etcd                    bool              `json:"etcd,omitempty" yaml:"etcd,omitempty"`
-	HostnamePrefix          string            `json:"hostnamePrefix,omitempty" yaml:"hostnamePrefix,omitempty"`
-	NodeAnnotations         map[string]string `json:"nodeAnnotations,omitempty" yaml:"nodeAnnotations,omitempty"`
-	NodeLabels              map[string]string `json:"nodeLabels,omitempty" yaml:"nodeLabels,omitempty"`
-	NodeTemplateID          string            `json:"nodeTemplateId,omitempty" yaml:"nodeTemplateId,omitempty"`
+	HostnamePrefix          string            `json:"hostnamePrefix,omitempty" yaml:"hostname_prefix,omitempty"`
+	NodeAnnotations         map[string]string `json:"nodeAnnotations,omitempty" yaml:"node_annotations,omitempty"`
+	NodeLabels              map[string]string `json:"nodeLabels,omitempty" yaml:"node_labels,omitempty"`
+	NodeTemplateID          string            `json:"nodeTemplateId,omitempty" yaml:"node_template_id,omitempty"`
 	Quantity                int64             `json:"quantity,omitempty" yaml:"quantity,omitempty"`
 	Worker                  bool              `json:"worker,omitempty" yaml:"worker,omitempty"`
 }

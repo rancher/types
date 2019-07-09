@@ -12,9 +12,9 @@ const (
 
 type Notification struct {
 	Message         string           `json:"message,omitempty" yaml:"message,omitempty"`
-	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty" yaml:"pagerdutyConfig,omitempty"`
-	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty" yaml:"smtpConfig,omitempty"`
-	SlackConfig     *SlackConfig     `json:"slackConfig,omitempty" yaml:"slackConfig,omitempty"`
-	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty" yaml:"webhookConfig,omitempty"`
-	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty" yaml:"wechatConfig,omitempty"`
+	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty" yaml:"pagerduty_config,omitempty"`
+	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty" yaml:"smtp_config,omitempty"`
+	SlackConfig     *SlackConfig     `json:"slackConfig,omitempty" yaml:"slack_config,omitempty"`
+	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty" yaml:"webhook_config,omitempty"`
+	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty" yaml:"wechat_config,omitempty"`
 }

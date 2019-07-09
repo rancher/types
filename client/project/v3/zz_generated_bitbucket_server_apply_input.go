@@ -11,8 +11,8 @@ const (
 
 type BitbucketServerApplyInput struct {
 	Hostname      string `json:"hostname,omitempty" yaml:"hostname,omitempty"`
-	OAuthToken    string `json:"oauthToken,omitempty" yaml:"oauthToken,omitempty"`
-	OAuthVerifier string `json:"oauthVerifier,omitempty" yaml:"oauthVerifier,omitempty"`
-	RedirectURL   string `json:"redirectUrl,omitempty" yaml:"redirectUrl,omitempty"`
+	OAuthToken    string `json:"oauthToken,omitempty" yaml:"oauth_token,omitempty"`
+	OAuthVerifier string `json:"oauthVerifier,omitempty" yaml:"oauth_verifier,omitempty"`
+	RedirectURL   string `json:"redirectUrl,omitempty" yaml:"redirect_url,omitempty"`
 	TLS           bool   `json:"tls,omitempty" yaml:"tls,omitempty"`
 }

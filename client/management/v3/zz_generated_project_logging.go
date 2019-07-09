@@ -34,25 +34,25 @@ type ProjectLogging struct {
 	types.Resource
 	Annotations           map[string]string      `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created               string                 `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID             string                 `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	CustomTargetConfig    *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"customTargetConfig,omitempty"`
-	ElasticsearchConfig   *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`
-	FluentForwarderConfig *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
-	KafkaConfig           *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
+	CreatorID             string                 `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	CustomTargetConfig    *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"custom_target_config,omitempty"`
+	ElasticsearchConfig   *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearch_config,omitempty"`
+	FluentForwarderConfig *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluent_forwarder_config,omitempty"`
+	KafkaConfig           *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafka_config,omitempty"`
 	Labels                map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                  string                 `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId           string                 `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OutputFlushInterval   int64                  `json:"outputFlushInterval,omitempty" yaml:"outputFlushInterval,omitempty"`
-	OutputTags            map[string]string      `json:"outputTags,omitempty" yaml:"outputTags,omitempty"`
-	OwnerReferences       []OwnerReference       `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectID             string                 `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	NamespaceId           string                 `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OutputFlushInterval   int64                  `json:"outputFlushInterval,omitempty" yaml:"output_flush_interval,omitempty"`
+	OutputTags            map[string]string      `json:"outputTags,omitempty" yaml:"output_tags,omitempty"`
+	OwnerReferences       []OwnerReference       `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectID             string                 `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed               string                 `json:"removed,omitempty" yaml:"removed,omitempty"`
-	SplunkConfig          *SplunkConfig          `json:"splunkConfig,omitempty" yaml:"splunkConfig,omitempty"`
+	SplunkConfig          *SplunkConfig          `json:"splunkConfig,omitempty" yaml:"splunk_config,omitempty"`
 	State                 string                 `json:"state,omitempty" yaml:"state,omitempty"`
 	Status                *ProjectLoggingStatus  `json:"status,omitempty" yaml:"status,omitempty"`
-	SyslogConfig          *SyslogConfig          `json:"syslogConfig,omitempty" yaml:"syslogConfig,omitempty"`
+	SyslogConfig          *SyslogConfig          `json:"syslogConfig,omitempty" yaml:"syslog_config,omitempty"`
 	Transitioning         string                 `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage  string                 `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage  string                 `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                  string                 `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

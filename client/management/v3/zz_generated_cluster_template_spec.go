@@ -10,9 +10,9 @@ const (
 )
 
 type ClusterTemplateSpec struct {
-	DefaultRevisionID string   `json:"defaultRevisionId,omitempty" yaml:"defaultRevisionId,omitempty"`
+	DefaultRevisionID string   `json:"defaultRevisionId,omitempty" yaml:"default_revision_id,omitempty"`
 	Description       string   `json:"description,omitempty" yaml:"description,omitempty"`
-	DisplayName       string   `json:"displayName,omitempty" yaml:"displayName,omitempty"`
+	DisplayName       string   `json:"displayName,omitempty" yaml:"display_name,omitempty"`
 	Enforced          bool     `json:"enforced,omitempty" yaml:"enforced,omitempty"`
 	Members           []Member `json:"members,omitempty" yaml:"members,omitempty"`
 }

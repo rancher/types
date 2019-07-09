@@ -32,22 +32,22 @@ type MultiClusterApp struct {
 	Annotations          map[string]string      `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Answers              []Answer               `json:"answers,omitempty" yaml:"answers,omitempty"`
 	Created              string                 `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string                 `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string                 `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Labels               map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Members              []Member               `json:"members,omitempty" yaml:"members,omitempty"`
 	Name                 string                 `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences      []OwnerReference       `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences      []OwnerReference       `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Removed              string                 `json:"removed,omitempty" yaml:"removed,omitempty"`
-	RevisionHistoryLimit int64                  `json:"revisionHistoryLimit,omitempty" yaml:"revisionHistoryLimit,omitempty"`
+	RevisionHistoryLimit int64                  `json:"revisionHistoryLimit,omitempty" yaml:"revision_history_limit,omitempty"`
 	Roles                []string               `json:"roles,omitempty" yaml:"roles,omitempty"`
 	State                string                 `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *MultiClusterAppStatus `json:"status,omitempty" yaml:"status,omitempty"`
 	Targets              []Target               `json:"targets,omitempty" yaml:"targets,omitempty"`
-	TemplateVersionID    string                 `json:"templateVersionId,omitempty" yaml:"templateVersionId,omitempty"`
+	TemplateVersionID    string                 `json:"templateVersionId,omitempty" yaml:"template_version_id,omitempty"`
 	Transitioning        string                 `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string                 `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string                 `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string                 `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	UpgradeStrategy      *UpgradeStrategy       `json:"upgradeStrategy,omitempty" yaml:"upgradeStrategy,omitempty"`
+	UpgradeStrategy      *UpgradeStrategy       `json:"upgradeStrategy,omitempty" yaml:"upgrade_strategy,omitempty"`
 }
 
 type MultiClusterAppCollection struct {

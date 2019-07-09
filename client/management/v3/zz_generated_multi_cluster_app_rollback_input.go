@@ -6,5 +6,5 @@ const (
 )
 
 type MultiClusterAppRollbackInput struct {
-	RevisionID string `json:"revisionId,omitempty" yaml:"revisionId,omitempty"`
+	RevisionID string `json:"revisionId,omitempty" yaml:"revision_id,omitempty"`
 }

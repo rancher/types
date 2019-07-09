@@ -13,8 +13,8 @@ const (
 type ServiceOverride struct {
 	Region        string `json:"region,omitempty" yaml:"region,omitempty"`
 	Service       string `json:"service,omitempty" yaml:"service,omitempty"`
-	SigningMethod string `json:"signing-method,omitempty" yaml:"signing-method,omitempty"`
-	SigningName   string `json:"signing-name,omitempty" yaml:"signing-name,omitempty"`
-	SigningRegion string `json:"signing-region,omitempty" yaml:"signing-region,omitempty"`
+	SigningMethod string `json:"signing-method,omitempty" yaml:"signing_method,omitempty"`
+	SigningName   string `json:"signing-name,omitempty" yaml:"signing_name,omitempty"`
+	SigningRegion string `json:"signing-region,omitempty" yaml:"signing_region,omitempty"`
 	URL           string `json:"url,omitempty" yaml:"url,omitempty"`
 }

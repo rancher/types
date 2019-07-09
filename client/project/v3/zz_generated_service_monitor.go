@@ -31,22 +31,22 @@ type ServiceMonitor struct {
 	types.Resource
 	Annotations       map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created           string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID         string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID         string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Endpoints         []Endpoint        `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
-	JobLabel          string            `json:"jobLabel,omitempty" yaml:"jobLabel,omitempty"`
+	JobLabel          string            `json:"jobLabel,omitempty" yaml:"job_label,omitempty"`
 	Labels            map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name              string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId       string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	NamespaceSelector []string          `json:"namespaceSelector,omitempty" yaml:"namespaceSelector,omitempty"`
-	OwnerReferences   []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	PodTargetLabels   []string          `json:"podTargetLabels,omitempty" yaml:"podTargetLabels,omitempty"`
-	ProjectID         string            `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	NamespaceId       string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	NamespaceSelector []string          `json:"namespaceSelector,omitempty" yaml:"namespace_selector,omitempty"`
+	OwnerReferences   []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	PodTargetLabels   []string          `json:"podTargetLabels,omitempty" yaml:"pod_target_labels,omitempty"`
+	ProjectID         string            `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed           string            `json:"removed,omitempty" yaml:"removed,omitempty"`
-	SampleLimit       int64             `json:"sampleLimit,omitempty" yaml:"sampleLimit,omitempty"`
+	SampleLimit       int64             `json:"sampleLimit,omitempty" yaml:"sample_limit,omitempty"`
 	Selector          *LabelSelector    `json:"selector,omitempty" yaml:"selector,omitempty"`
-	TargetLabels      []string          `json:"targetLabels,omitempty" yaml:"targetLabels,omitempty"`
-	TargetService     string            `json:"targetService,omitempty" yaml:"targetService,omitempty"`
-	TargetWorkload    string            `json:"targetWorkload,omitempty" yaml:"targetWorkload,omitempty"`
+	TargetLabels      []string          `json:"targetLabels,omitempty" yaml:"target_labels,omitempty"`
+	TargetService     string            `json:"targetService,omitempty" yaml:"target_service,omitempty"`
+	TargetWorkload    string            `json:"targetWorkload,omitempty" yaml:"target_workload,omitempty"`
 	UUID              string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

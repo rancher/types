@@ -16,13 +16,13 @@ const (
 
 type PublicEndpoint struct {
 	Addresses []string `json:"addresses,omitempty" yaml:"addresses,omitempty"`
-	AllNodes  bool     `json:"allNodes,omitempty" yaml:"allNodes,omitempty"`
+	AllNodes  bool     `json:"allNodes,omitempty" yaml:"all_nodes,omitempty"`
 	Hostname  string   `json:"hostname,omitempty" yaml:"hostname,omitempty"`
-	IngressID string   `json:"ingressId,omitempty" yaml:"ingressId,omitempty"`
-	NodeID    string   `json:"nodeId,omitempty" yaml:"nodeId,omitempty"`
+	IngressID string   `json:"ingressId,omitempty" yaml:"ingress_id,omitempty"`
+	NodeID    string   `json:"nodeId,omitempty" yaml:"node_id,omitempty"`
 	Path      string   `json:"path,omitempty" yaml:"path,omitempty"`
-	PodID     string   `json:"podId,omitempty" yaml:"podId,omitempty"`
+	PodID     string   `json:"podId,omitempty" yaml:"pod_id,omitempty"`
 	Port      int64    `json:"port,omitempty" yaml:"port,omitempty"`
 	Protocol  string   `json:"protocol,omitempty" yaml:"protocol,omitempty"`
-	ServiceID string   `json:"serviceId,omitempty" yaml:"serviceId,omitempty"`
+	ServiceID string   `json:"serviceId,omitempty" yaml:"service_id,omitempty"`
 }

@@ -7,6 +7,6 @@ const (
 )
 
 type ProjectedVolumeSource struct {
-	DefaultMode *int64             `json:"defaultMode,omitempty" yaml:"defaultMode,omitempty"`
+	DefaultMode *int64             `json:"defaultMode,omitempty" yaml:"default_mode,omitempty"`
 	Sources     []VolumeProjection `json:"sources,omitempty" yaml:"sources,omitempty"`
 }

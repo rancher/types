@@ -9,8 +9,8 @@ const (
 )
 
 type ContainerResourceLimit struct {
-	LimitsCPU      string `json:"limitsCpu,omitempty" yaml:"limitsCpu,omitempty"`
-	LimitsMemory   string `json:"limitsMemory,omitempty" yaml:"limitsMemory,omitempty"`
-	RequestsCPU    string `json:"requestsCpu,omitempty" yaml:"requestsCpu,omitempty"`
-	RequestsMemory string `json:"requestsMemory,omitempty" yaml:"requestsMemory,omitempty"`
+	LimitsCPU      string `json:"limitsCpu,omitempty" yaml:"limits_cpu,omitempty"`
+	LimitsMemory   string `json:"limitsMemory,omitempty" yaml:"limits_memory,omitempty"`
+	RequestsCPU    string `json:"requestsCpu,omitempty" yaml:"requests_cpu,omitempty"`
+	RequestsMemory string `json:"requestsMemory,omitempty" yaml:"requests_memory,omitempty"`
 }

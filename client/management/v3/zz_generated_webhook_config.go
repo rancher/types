@@ -7,6 +7,6 @@ const (
 )
 
 type WebhookConfig struct {
-	ProxyURL string `json:"proxyUrl,omitempty" yaml:"proxyUrl,omitempty"`
+	ProxyURL string `json:"proxyUrl,omitempty" yaml:"proxy_url,omitempty"`
 	URL      string `json:"url,omitempty" yaml:"url,omitempty"`
 }

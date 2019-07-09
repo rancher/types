@@ -6,5 +6,5 @@ const (
 )
 
 type NodeSelector struct {
-	NodeSelectorTerms []NodeSelectorTerm `json:"nodeSelectorTerms,omitempty" yaml:"nodeSelectorTerms,omitempty"`
+	NodeSelectorTerms []NodeSelectorTerm `json:"nodeSelectorTerms,omitempty" yaml:"node_selector_terms,omitempty"`
 }

@@ -16,15 +16,15 @@ const (
 )
 
 type ClusterLoggingSpec struct {
-	ClusterID              string                 `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
-	CustomTargetConfig     *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"customTargetConfig,omitempty"`
-	DisplayName            string                 `json:"displayName,omitempty" yaml:"displayName,omitempty"`
-	ElasticsearchConfig    *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`
-	FluentForwarderConfig  *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
-	IncludeSystemComponent *bool                  `json:"includeSystemComponent,omitempty" yaml:"includeSystemComponent,omitempty"`
-	KafkaConfig            *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
-	OutputFlushInterval    int64                  `json:"outputFlushInterval,omitempty" yaml:"outputFlushInterval,omitempty"`
-	OutputTags             map[string]string      `json:"outputTags,omitempty" yaml:"outputTags,omitempty"`
-	SplunkConfig           *SplunkConfig          `json:"splunkConfig,omitempty" yaml:"splunkConfig,omitempty"`
-	SyslogConfig           *SyslogConfig          `json:"syslogConfig,omitempty" yaml:"syslogConfig,omitempty"`
+	ClusterID              string                 `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
+	CustomTargetConfig     *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"custom_target_config,omitempty"`
+	DisplayName            string                 `json:"displayName,omitempty" yaml:"display_name,omitempty"`
+	ElasticsearchConfig    *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearch_config,omitempty"`
+	FluentForwarderConfig  *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluent_forwarder_config,omitempty"`
+	IncludeSystemComponent *bool                  `json:"includeSystemComponent,omitempty" yaml:"include_system_component,omitempty"`
+	KafkaConfig            *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafka_config,omitempty"`
+	OutputFlushInterval    int64                  `json:"outputFlushInterval,omitempty" yaml:"output_flush_interval,omitempty"`
+	OutputTags             map[string]string      `json:"outputTags,omitempty" yaml:"output_tags,omitempty"`
+	SplunkConfig           *SplunkConfig          `json:"splunkConfig,omitempty" yaml:"splunk_config,omitempty"`
+	SyslogConfig           *SyslogConfig          `json:"syslogConfig,omitempty" yaml:"syslog_config,omitempty"`
 }

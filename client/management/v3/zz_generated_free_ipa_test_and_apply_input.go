@@ -8,7 +8,7 @@ const (
 )
 
 type FreeIpaTestAndApplyInput struct {
-	LdapConfig *LdapConfig `json:"ldapConfig,omitempty" yaml:"ldapConfig,omitempty"`
+	LdapConfig *LdapConfig `json:"ldapConfig,omitempty" yaml:"ldap_config,omitempty"`
 	Password   string      `json:"password,omitempty" yaml:"password,omitempty"`
 	Username   string      `json:"username,omitempty" yaml:"username,omitempty"`
 }

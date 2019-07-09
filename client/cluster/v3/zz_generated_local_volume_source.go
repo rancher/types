@@ -7,6 +7,6 @@ const (
 )
 
 type LocalVolumeSource struct {
-	FSType string `json:"fsType,omitempty" yaml:"fsType,omitempty"`
+	FSType string `json:"fsType,omitempty" yaml:"fs_type,omitempty"`
 	Path   string `json:"path,omitempty" yaml:"path,omitempty"`
 }

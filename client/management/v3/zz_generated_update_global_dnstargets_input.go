@@ -6,5 +6,5 @@ const (
 )
 
 type UpdateGlobalDNSTargetsInput struct {
-	ProjectIDs []string `json:"projectIds,omitempty" yaml:"projectIds,omitempty"`
+	ProjectIDs []string `json:"projectIds,omitempty" yaml:"project_ids,omitempty"`
 }

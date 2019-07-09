@@ -31,22 +31,22 @@ type Ingress struct {
 	types.Resource
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DefaultBackend       *IngressBackend   `json:"defaultBackend,omitempty" yaml:"defaultBackend,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	DefaultBackend       *IngressBackend   `json:"defaultBackend,omitempty" yaml:"default_backend,omitempty"`
 	Description          string            `json:"description,omitempty" yaml:"description,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectID            string            `json:"projectId,omitempty" yaml:"projectId,omitempty"`
-	PublicEndpoints      []PublicEndpoint  `json:"publicEndpoints,omitempty" yaml:"publicEndpoints,omitempty"`
+	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectID            string            `json:"projectId,omitempty" yaml:"project_id,omitempty"`
+	PublicEndpoints      []PublicEndpoint  `json:"publicEndpoints,omitempty" yaml:"public_endpoints,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	Rules                []IngressRule     `json:"rules,omitempty" yaml:"rules,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *IngressStatus    `json:"status,omitempty" yaml:"status,omitempty"`
 	TLS                  []IngressTLS      `json:"tls,omitempty" yaml:"tls,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

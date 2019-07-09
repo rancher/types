@@ -8,5 +8,5 @@ const (
 
 type NamespaceSelector struct {
 	Any        bool     `json:"any,omitempty" yaml:"any,omitempty"`
-	MatchNames []string `json:"matchNames,omitempty" yaml:"matchNames,omitempty"`
+	MatchNames []string `json:"matchNames,omitempty" yaml:"match_names,omitempty"`
 }

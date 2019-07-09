@@ -7,6 +7,6 @@ const (
 )
 
 type ProjectLoggingStatus struct {
-	AppliedSpec *ProjectLoggingSpec `json:"appliedSpec,omitempty" yaml:"appliedSpec,omitempty"`
+	AppliedSpec *ProjectLoggingSpec `json:"appliedSpec,omitempty" yaml:"applied_spec,omitempty"`
 	Conditions  []LoggingCondition  `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 }

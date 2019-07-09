@@ -12,5 +12,5 @@ type NodeConfigStatus struct {
 	Active        *NodeConfigSource `json:"active,omitempty" yaml:"active,omitempty"`
 	Assigned      *NodeConfigSource `json:"assigned,omitempty" yaml:"assigned,omitempty"`
 	Error         string            `json:"error,omitempty" yaml:"error,omitempty"`
-	LastKnownGood *NodeConfigSource `json:"lastKnownGood,omitempty" yaml:"lastKnownGood,omitempty"`
+	LastKnownGood *NodeConfigSource `json:"lastKnownGood,omitempty" yaml:"last_known_good,omitempty"`
 }

@@ -7,6 +7,6 @@ const (
 )
 
 type GlobalDNSStatus struct {
-	ClusterEndpoints map[string][]string `json:"clusterEndpoints,omitempty" yaml:"clusterEndpoints,omitempty"`
+	ClusterEndpoints map[string][]string `json:"clusterEndpoints,omitempty" yaml:"cluster_endpoints,omitempty"`
 	Endpoints        []string            `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
 }

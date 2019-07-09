@@ -55,44 +55,44 @@ type Node struct {
 	Allocatable          map[string]string         `json:"allocatable,omitempty" yaml:"allocatable,omitempty"`
 	Annotations          map[string]string         `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Capacity             map[string]string         `json:"capacity,omitempty" yaml:"capacity,omitempty"`
-	ClusterID            string                    `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterID            string                    `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Conditions           []NodeCondition           `json:"conditions,omitempty" yaml:"conditions,omitempty"`
-	ControlPlane         bool                      `json:"controlPlane,omitempty" yaml:"controlPlane,omitempty"`
+	ControlPlane         bool                      `json:"controlPlane,omitempty" yaml:"control_plane,omitempty"`
 	Created              string                    `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string                    `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	CustomConfig         *CustomConfig             `json:"customConfig,omitempty" yaml:"customConfig,omitempty"`
+	CreatorID            string                    `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	CustomConfig         *CustomConfig             `json:"customConfig,omitempty" yaml:"custom_config,omitempty"`
 	Description          string                    `json:"description,omitempty" yaml:"description,omitempty"`
-	DockerInfo           *DockerInfo               `json:"dockerInfo,omitempty" yaml:"dockerInfo,omitempty"`
+	DockerInfo           *DockerInfo               `json:"dockerInfo,omitempty" yaml:"docker_info,omitempty"`
 	Etcd                 bool                      `json:"etcd,omitempty" yaml:"etcd,omitempty"`
-	ExternalIPAddress    string                    `json:"externalIpAddress,omitempty" yaml:"externalIpAddress,omitempty"`
+	ExternalIPAddress    string                    `json:"externalIpAddress,omitempty" yaml:"external_ip_address,omitempty"`
 	Hostname             string                    `json:"hostname,omitempty" yaml:"hostname,omitempty"`
-	IPAddress            string                    `json:"ipAddress,omitempty" yaml:"ipAddress,omitempty"`
+	IPAddress            string                    `json:"ipAddress,omitempty" yaml:"ip_address,omitempty"`
 	Imported             bool                      `json:"imported,omitempty" yaml:"imported,omitempty"`
 	Info                 *NodeInfo                 `json:"info,omitempty" yaml:"info,omitempty"`
 	Labels               map[string]string         `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Limits               map[string]string         `json:"limits,omitempty" yaml:"limits,omitempty"`
 	Name                 string                    `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string                    `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	NodeName             string                    `json:"nodeName,omitempty" yaml:"nodeName,omitempty"`
-	NodePoolID           string                    `json:"nodePoolId,omitempty" yaml:"nodePoolId,omitempty"`
-	NodeTaints           []Taint                   `json:"nodeTaints,omitempty" yaml:"nodeTaints,omitempty"`
-	NodeTemplateID       string                    `json:"nodeTemplateId,omitempty" yaml:"nodeTemplateId,omitempty"`
-	OwnerReferences      []OwnerReference          `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	PodCidr              string                    `json:"podCidr,omitempty" yaml:"podCidr,omitempty"`
-	ProviderId           string                    `json:"providerId,omitempty" yaml:"providerId,omitempty"`
-	PublicEndpoints      []PublicEndpoint          `json:"publicEndpoints,omitempty" yaml:"publicEndpoints,omitempty"`
+	NamespaceId          string                    `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	NodeName             string                    `json:"nodeName,omitempty" yaml:"node_name,omitempty"`
+	NodePoolID           string                    `json:"nodePoolId,omitempty" yaml:"node_pool_id,omitempty"`
+	NodeTaints           []Taint                   `json:"nodeTaints,omitempty" yaml:"node_taints,omitempty"`
+	NodeTemplateID       string                    `json:"nodeTemplateId,omitempty" yaml:"node_template_id,omitempty"`
+	OwnerReferences      []OwnerReference          `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	PodCidr              string                    `json:"podCidr,omitempty" yaml:"pod_cidr,omitempty"`
+	ProviderId           string                    `json:"providerId,omitempty" yaml:"provider_id,omitempty"`
+	PublicEndpoints      []PublicEndpoint          `json:"publicEndpoints,omitempty" yaml:"public_endpoints,omitempty"`
 	Removed              string                    `json:"removed,omitempty" yaml:"removed,omitempty"`
 	Requested            map[string]string         `json:"requested,omitempty" yaml:"requested,omitempty"`
-	RequestedHostname    string                    `json:"requestedHostname,omitempty" yaml:"requestedHostname,omitempty"`
-	SshUser              string                    `json:"sshUser,omitempty" yaml:"sshUser,omitempty"`
+	RequestedHostname    string                    `json:"requestedHostname,omitempty" yaml:"requested_hostname,omitempty"`
+	SshUser              string                    `json:"sshUser,omitempty" yaml:"ssh_user,omitempty"`
 	State                string                    `json:"state,omitempty" yaml:"state,omitempty"`
 	Taints               []Taint                   `json:"taints,omitempty" yaml:"taints,omitempty"`
 	Transitioning        string                    `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string                    `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string                    `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string                    `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Unschedulable        bool                      `json:"unschedulable,omitempty" yaml:"unschedulable,omitempty"`
-	VolumesAttached      map[string]AttachedVolume `json:"volumesAttached,omitempty" yaml:"volumesAttached,omitempty"`
-	VolumesInUse         []string                  `json:"volumesInUse,omitempty" yaml:"volumesInUse,omitempty"`
+	VolumesAttached      map[string]AttachedVolume `json:"volumesAttached,omitempty" yaml:"volumes_attached,omitempty"`
+	VolumesInUse         []string                  `json:"volumesInUse,omitempty" yaml:"volumes_in_use,omitempty"`
 	Worker               bool                      `json:"worker,omitempty" yaml:"worker,omitempty"`
 }
 

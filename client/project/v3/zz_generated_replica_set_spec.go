@@ -9,7 +9,7 @@ const (
 )
 
 type ReplicaSetSpec struct {
-	ReplicaSetConfig *ReplicaSetConfig `json:"replicaSetConfig,omitempty" yaml:"replicaSetConfig,omitempty"`
+	ReplicaSetConfig *ReplicaSetConfig `json:"replicaSetConfig,omitempty" yaml:"replica_set_config,omitempty"`
 	Scale            *int64            `json:"scale,omitempty" yaml:"scale,omitempty"`
 	Selector         *LabelSelector    `json:"selector,omitempty" yaml:"selector,omitempty"`
 	Template         *PodTemplateSpec  `json:"template,omitempty" yaml:"template,omitempty"`

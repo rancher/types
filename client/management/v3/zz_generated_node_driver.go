@@ -35,21 +35,21 @@ type NodeDriver struct {
 	Builtin              bool              `json:"builtin,omitempty" yaml:"builtin,omitempty"`
 	Checksum             string            `json:"checksum,omitempty" yaml:"checksum,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description          string            `json:"description,omitempty" yaml:"description,omitempty"`
-	ExternalID           string            `json:"externalId,omitempty" yaml:"externalId,omitempty"`
+	ExternalID           string            `json:"externalId,omitempty" yaml:"external_id,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *NodeDriverStatus `json:"status,omitempty" yaml:"status,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
-	UIURL                string            `json:"uiUrl,omitempty" yaml:"uiUrl,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
+	UIURL                string            `json:"uiUrl,omitempty" yaml:"ui_url,omitempty"`
 	URL                  string            `json:"url,omitempty" yaml:"url,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	WhitelistDomains     []string          `json:"whitelistDomains,omitempty" yaml:"whitelistDomains,omitempty"`
+	WhitelistDomains     []string          `json:"whitelistDomains,omitempty" yaml:"whitelist_domains,omitempty"`
 }
 
 type NodeDriverCollection struct {

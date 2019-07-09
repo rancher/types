@@ -9,8 +9,8 @@ const (
 )
 
 type SecretVolumeSource struct {
-	DefaultMode *int64      `json:"defaultMode,omitempty" yaml:"defaultMode,omitempty"`
+	DefaultMode *int64      `json:"defaultMode,omitempty" yaml:"default_mode,omitempty"`
 	Items       []KeyToPath `json:"items,omitempty" yaml:"items,omitempty"`
 	Optional    *bool       `json:"optional,omitempty" yaml:"optional,omitempty"`
-	SecretName  string      `json:"secretName,omitempty" yaml:"secretName,omitempty"`
+	SecretName  string      `json:"secretName,omitempty" yaml:"secret_name,omitempty"`
 }

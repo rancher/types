@@ -36,26 +36,26 @@ type HorizontalPodAutoscaler struct {
 	Annotations          map[string]string                  `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Conditions           []HorizontalPodAutoscalerCondition `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created              string                             `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string                             `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	CurrentReplicas      int64                              `json:"currentReplicas,omitempty" yaml:"currentReplicas,omitempty"`
+	CreatorID            string                             `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	CurrentReplicas      int64                              `json:"currentReplicas,omitempty" yaml:"current_replicas,omitempty"`
 	Description          string                             `json:"description,omitempty" yaml:"description,omitempty"`
-	DesiredReplicas      int64                              `json:"desiredReplicas,omitempty" yaml:"desiredReplicas,omitempty"`
+	DesiredReplicas      int64                              `json:"desiredReplicas,omitempty" yaml:"desired_replicas,omitempty"`
 	Labels               map[string]string                  `json:"labels,omitempty" yaml:"labels,omitempty"`
-	LastScaleTime        string                             `json:"lastScaleTime,omitempty" yaml:"lastScaleTime,omitempty"`
-	MaxReplicas          int64                              `json:"maxReplicas,omitempty" yaml:"maxReplicas,omitempty"`
+	LastScaleTime        string                             `json:"lastScaleTime,omitempty" yaml:"last_scale_time,omitempty"`
+	MaxReplicas          int64                              `json:"maxReplicas,omitempty" yaml:"max_replicas,omitempty"`
 	Metrics              []Metric                           `json:"metrics,omitempty" yaml:"metrics,omitempty"`
-	MinReplicas          *int64                             `json:"minReplicas,omitempty" yaml:"minReplicas,omitempty"`
+	MinReplicas          *int64                             `json:"minReplicas,omitempty" yaml:"min_replicas,omitempty"`
 	Name                 string                             `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string                             `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	ObservedGeneration   *int64                             `json:"observedGeneration,omitempty" yaml:"observedGeneration,omitempty"`
-	OwnerReferences      []OwnerReference                   `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectID            string                             `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	NamespaceId          string                             `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	ObservedGeneration   *int64                             `json:"observedGeneration,omitempty" yaml:"observed_generation,omitempty"`
+	OwnerReferences      []OwnerReference                   `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectID            string                             `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed              string                             `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                string                             `json:"state,omitempty" yaml:"state,omitempty"`
 	Transitioning        string                             `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string                             `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string                             `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string                             `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	WorkloadId           string                             `json:"workloadId,omitempty" yaml:"workloadId,omitempty"`
+	WorkloadId           string                             `json:"workloadId,omitempty" yaml:"workload_id,omitempty"`
 }
 
 type HorizontalPodAutoscalerCollection struct {

@@ -15,10 +15,10 @@ const (
 type BastionHost struct {
 	Address      string `json:"address,omitempty" yaml:"address,omitempty"`
 	Port         string `json:"port,omitempty" yaml:"port,omitempty"`
-	SSHAgentAuth bool   `json:"sshAgentAuth,omitempty" yaml:"sshAgentAuth,omitempty"`
-	SSHCert      string `json:"sshCert,omitempty" yaml:"sshCert,omitempty"`
-	SSHCertPath  string `json:"sshCertPath,omitempty" yaml:"sshCertPath,omitempty"`
-	SSHKey       string `json:"sshKey,omitempty" yaml:"sshKey,omitempty"`
-	SSHKeyPath   string `json:"sshKeyPath,omitempty" yaml:"sshKeyPath,omitempty"`
+	SSHAgentAuth bool   `json:"sshAgentAuth,omitempty" yaml:"ssh_agent_auth,omitempty"`
+	SSHCert      string `json:"sshCert,omitempty" yaml:"ssh_cert,omitempty"`
+	SSHCertPath  string `json:"sshCertPath,omitempty" yaml:"ssh_cert_path,omitempty"`
+	SSHKey       string `json:"sshKey,omitempty" yaml:"ssh_key,omitempty"`
+	SSHKeyPath   string `json:"sshKeyPath,omitempty" yaml:"ssh_key_path,omitempty"`
 	User         string `json:"user,omitempty" yaml:"user,omitempty"`
 }

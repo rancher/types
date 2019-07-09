@@ -36,29 +36,29 @@ const (
 type DynamicSchema struct {
 	types.Resource
 	Annotations          map[string]string    `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	CollectionActions    map[string]Action    `json:"collectionActions,omitempty" yaml:"collectionActions,omitempty"`
-	CollectionFields     map[string]Field     `json:"collectionFields,omitempty" yaml:"collectionFields,omitempty"`
-	CollectionFilters    map[string]Filter    `json:"collectionFilters,omitempty" yaml:"collectionFilters,omitempty"`
-	CollectionMethods    []string             `json:"collectionMethods,omitempty" yaml:"collectionMethods,omitempty"`
+	CollectionActions    map[string]Action    `json:"collectionActions,omitempty" yaml:"collection_actions,omitempty"`
+	CollectionFields     map[string]Field     `json:"collectionFields,omitempty" yaml:"collection_fields,omitempty"`
+	CollectionFilters    map[string]Filter    `json:"collectionFilters,omitempty" yaml:"collection_filters,omitempty"`
+	CollectionMethods    []string             `json:"collectionMethods,omitempty" yaml:"collection_methods,omitempty"`
 	Created              string               `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string               `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DynamicSchemaVersion string               `json:"dynamicSchemaVersion,omitempty" yaml:"dynamicSchemaVersion,omitempty"`
+	CreatorID            string               `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	DynamicSchemaVersion string               `json:"dynamicSchemaVersion,omitempty" yaml:"dynamic_schema_version,omitempty"`
 	Embed                bool                 `json:"embed,omitempty" yaml:"embed,omitempty"`
-	EmbedType            string               `json:"embedType,omitempty" yaml:"embedType,omitempty"`
-	IncludeableLinks     []string             `json:"includeableLinks,omitempty" yaml:"includeableLinks,omitempty"`
+	EmbedType            string               `json:"embedType,omitempty" yaml:"embed_type,omitempty"`
+	IncludeableLinks     []string             `json:"includeableLinks,omitempty" yaml:"includeable_links,omitempty"`
 	Labels               map[string]string    `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string               `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences      []OwnerReference     `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	PluralName           string               `json:"pluralName,omitempty" yaml:"pluralName,omitempty"`
+	OwnerReferences      []OwnerReference     `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	PluralName           string               `json:"pluralName,omitempty" yaml:"plural_name,omitempty"`
 	Removed              string               `json:"removed,omitempty" yaml:"removed,omitempty"`
-	ResourceActions      map[string]Action    `json:"resourceActions,omitempty" yaml:"resourceActions,omitempty"`
-	ResourceFields       map[string]Field     `json:"resourceFields,omitempty" yaml:"resourceFields,omitempty"`
-	ResourceMethods      []string             `json:"resourceMethods,omitempty" yaml:"resourceMethods,omitempty"`
-	SchemaName           string               `json:"schemaName,omitempty" yaml:"schemaName,omitempty"`
+	ResourceActions      map[string]Action    `json:"resourceActions,omitempty" yaml:"resource_actions,omitempty"`
+	ResourceFields       map[string]Field     `json:"resourceFields,omitempty" yaml:"resource_fields,omitempty"`
+	ResourceMethods      []string             `json:"resourceMethods,omitempty" yaml:"resource_methods,omitempty"`
+	SchemaName           string               `json:"schemaName,omitempty" yaml:"schema_name,omitempty"`
 	State                string               `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *DynamicSchemaStatus `json:"status,omitempty" yaml:"status,omitempty"`
 	Transitioning        string               `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string               `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string               `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string               `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 

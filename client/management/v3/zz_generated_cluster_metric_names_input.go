@@ -6,5 +6,5 @@ const (
 )
 
 type ClusterMetricNamesInput struct {
-	ClusterName string `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterName string `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 }

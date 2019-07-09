@@ -6,5 +6,5 @@ const (
 )
 
 type UpgradeStrategy struct {
-	RollingUpdate *RollingUpdate `json:"rollingUpdate,omitempty" yaml:"rollingUpdate,omitempty"`
+	RollingUpdate *RollingUpdate `json:"rollingUpdate,omitempty" yaml:"rolling_update,omitempty"`
 }

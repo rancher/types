@@ -10,9 +10,9 @@ const (
 )
 
 type VolumeMount struct {
-	MountPath        string `json:"mountPath,omitempty" yaml:"mountPath,omitempty"`
-	MountPropagation string `json:"mountPropagation,omitempty" yaml:"mountPropagation,omitempty"`
+	MountPath        string `json:"mountPath,omitempty" yaml:"mount_path,omitempty"`
+	MountPropagation string `json:"mountPropagation,omitempty" yaml:"mount_propagation,omitempty"`
 	Name             string `json:"name,omitempty" yaml:"name,omitempty"`
-	ReadOnly         bool   `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
-	SubPath          string `json:"subPath,omitempty" yaml:"subPath,omitempty"`
+	ReadOnly         bool   `json:"readOnly,omitempty" yaml:"read_only,omitempty"`
+	SubPath          string `json:"subPath,omitempty" yaml:"sub_path,omitempty"`
 }

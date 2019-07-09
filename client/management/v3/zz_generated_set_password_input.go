@@ -6,5 +6,5 @@ const (
 )
 
 type SetPasswordInput struct {
-	NewPassword string `json:"newPassword,omitempty" yaml:"newPassword,omitempty"`
+	NewPassword string `json:"newPassword,omitempty" yaml:"new_password,omitempty"`
 }

@@ -13,6 +13,6 @@ type VsphereCloudProvider struct {
 	Disk          *DiskVsphereOpts               `json:"disk,omitempty" yaml:"disk,omitempty"`
 	Global        *GlobalVsphereOpts             `json:"global,omitempty" yaml:"global,omitempty"`
 	Network       *NetworkVshpereOpts            `json:"network,omitempty" yaml:"network,omitempty"`
-	VirtualCenter map[string]VirtualCenterConfig `json:"virtualCenter,omitempty" yaml:"virtualCenter,omitempty"`
+	VirtualCenter map[string]VirtualCenterConfig `json:"virtualCenter,omitempty" yaml:"virtual_center,omitempty"`
 	Workspace     *WorkspaceVsphereOpts          `json:"workspace,omitempty" yaml:"workspace,omitempty"`
 }

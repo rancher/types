@@ -10,7 +10,7 @@ const (
 )
 
 type DaemonSetCondition struct {
-	LastTransitionTime string `json:"lastTransitionTime,omitempty" yaml:"lastTransitionTime,omitempty"`
+	LastTransitionTime string `json:"lastTransitionTime,omitempty" yaml:"last_transition_time,omitempty"`
 	Message            string `json:"message,omitempty" yaml:"message,omitempty"`
 	Reason             string `json:"reason,omitempty" yaml:"reason,omitempty"`
 	Status             string `json:"status,omitempty" yaml:"status,omitempty"`

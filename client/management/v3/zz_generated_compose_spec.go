@@ -6,5 +6,5 @@ const (
 )
 
 type ComposeSpec struct {
-	RancherCompose string `json:"rancherCompose,omitempty" yaml:"rancherCompose,omitempty"`
+	RancherCompose string `json:"rancherCompose,omitempty" yaml:"rancher_compose,omitempty"`
 }

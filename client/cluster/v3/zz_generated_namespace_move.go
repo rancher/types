@@ -6,5 +6,5 @@ const (
 )
 
 type NamespaceMove struct {
-	ProjectID string `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	ProjectID string `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 }

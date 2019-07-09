@@ -11,6 +11,6 @@ const (
 type FluentForwarderConfig struct {
 	Certificate   string         `json:"certificate,omitempty" yaml:"certificate,omitempty"`
 	Compress      bool           `json:"compress,omitempty" yaml:"compress,omitempty"`
-	EnableTLS     bool           `json:"enableTls,omitempty" yaml:"enableTls,omitempty"`
-	FluentServers []FluentServer `json:"fluentServers,omitempty" yaml:"fluentServers,omitempty"`
+	EnableTLS     bool           `json:"enableTls,omitempty" yaml:"enable_tls,omitempty"`
+	FluentServers []FluentServer `json:"fluentServers,omitempty" yaml:"fluent_servers,omitempty"`
 }

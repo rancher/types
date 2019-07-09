@@ -28,17 +28,17 @@ type Principal struct {
 	types.Resource
 	Annotations     map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created         string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID       string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	ExtraInfo       map[string]string `json:"extraInfo,omitempty" yaml:"extraInfo,omitempty"`
+	CreatorID       string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	ExtraInfo       map[string]string `json:"extraInfo,omitempty" yaml:"extra_info,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
-	LoginName       string            `json:"loginName,omitempty" yaml:"loginName,omitempty"`
+	LoginName       string            `json:"loginName,omitempty" yaml:"login_name,omitempty"`
 	Me              bool              `json:"me,omitempty" yaml:"me,omitempty"`
-	MemberOf        bool              `json:"memberOf,omitempty" yaml:"memberOf,omitempty"`
+	MemberOf        bool              `json:"memberOf,omitempty" yaml:"member_of,omitempty"`
 	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	PrincipalType   string            `json:"principalType,omitempty" yaml:"principalType,omitempty"`
-	ProfilePicture  string            `json:"profilePicture,omitempty" yaml:"profilePicture,omitempty"`
-	ProfileURL      string            `json:"profileURL,omitempty" yaml:"profileURL,omitempty"`
+	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	PrincipalType   string            `json:"principalType,omitempty" yaml:"principal_type,omitempty"`
+	ProfilePicture  string            `json:"profilePicture,omitempty" yaml:"profile_picture,omitempty"`
+	ProfileURL      string            `json:"profileURL,omitempty" yaml:"profile_url,omitempty"`
 	Provider        string            `json:"provider,omitempty" yaml:"provider,omitempty"`
 	Removed         string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	UUID            string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`

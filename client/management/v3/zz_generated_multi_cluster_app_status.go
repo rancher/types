@@ -8,5 +8,5 @@ const (
 
 type MultiClusterAppStatus struct {
 	Conditions []AppCondition `json:"conditions,omitempty" yaml:"conditions,omitempty"`
-	RevisionID string         `json:"revisionId,omitempty" yaml:"revisionId,omitempty"`
+	RevisionID string         `json:"revisionId,omitempty" yaml:"revision_id,omitempty"`
 }

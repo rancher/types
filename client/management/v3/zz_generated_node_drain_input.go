@@ -10,9 +10,9 @@ const (
 )
 
 type NodeDrainInput struct {
-	DeleteLocalData  bool  `json:"deleteLocalData,omitempty" yaml:"deleteLocalData,omitempty"`
+	DeleteLocalData  bool  `json:"deleteLocalData,omitempty" yaml:"delete_local_data,omitempty"`
 	Force            bool  `json:"force,omitempty" yaml:"force,omitempty"`
-	GracePeriod      int64 `json:"gracePeriod,omitempty" yaml:"gracePeriod,omitempty"`
-	IgnoreDaemonSets bool  `json:"ignoreDaemonSets,omitempty" yaml:"ignoreDaemonSets,omitempty"`
+	GracePeriod      int64 `json:"gracePeriod,omitempty" yaml:"grace_period,omitempty"`
+	IgnoreDaemonSets bool  `json:"ignoreDaemonSets,omitempty" yaml:"ignore_daemon_sets,omitempty"`
 	Timeout          int64 `json:"timeout,omitempty" yaml:"timeout,omitempty"`
 }

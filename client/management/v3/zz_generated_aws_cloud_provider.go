@@ -8,5 +8,5 @@ const (
 
 type AWSCloudProvider struct {
 	Global          *GlobalAwsOpts             `json:"global,omitempty" yaml:"global,omitempty"`
-	ServiceOverride map[string]ServiceOverride `json:"serviceOverride,omitempty" yaml:"serviceOverride,omitempty"`
+	ServiceOverride map[string]ServiceOverride `json:"serviceOverride,omitempty" yaml:"service_override,omitempty"`
 }

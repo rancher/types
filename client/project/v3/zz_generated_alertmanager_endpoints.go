@@ -14,11 +14,11 @@ const (
 )
 
 type AlertmanagerEndpoints struct {
-	BearerTokenFile string             `json:"bearerTokenFile,omitempty" yaml:"bearerTokenFile,omitempty"`
+	BearerTokenFile string             `json:"bearerTokenFile,omitempty" yaml:"bearer_token_file,omitempty"`
 	Name            string             `json:"name,omitempty" yaml:"name,omitempty"`
 	Namespace       string             `json:"namespace,omitempty" yaml:"namespace,omitempty"`
-	PathPrefix      string             `json:"pathPrefix,omitempty" yaml:"pathPrefix,omitempty"`
+	PathPrefix      string             `json:"pathPrefix,omitempty" yaml:"path_prefix,omitempty"`
 	Port            intstr.IntOrString `json:"port,omitempty" yaml:"port,omitempty"`
 	Scheme          string             `json:"scheme,omitempty" yaml:"scheme,omitempty"`
-	TLSConfig       *TLSConfig         `json:"tlsConfig,omitempty" yaml:"tlsConfig,omitempty"`
+	TLSConfig       *TLSConfig         `json:"tlsConfig,omitempty" yaml:"tls_config,omitempty"`
 }

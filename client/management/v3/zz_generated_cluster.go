@@ -57,51 +57,51 @@ const (
 
 type Cluster struct {
 	types.Resource
-	APIEndpoint                          string                         `json:"apiEndpoint,omitempty" yaml:"apiEndpoint,omitempty"`
-	AgentImage                           string                         `json:"agentImage,omitempty" yaml:"agentImage,omitempty"`
+	APIEndpoint                          string                         `json:"apiEndpoint,omitempty" yaml:"api_endpoint,omitempty"`
+	AgentImage                           string                         `json:"agentImage,omitempty" yaml:"agent_image,omitempty"`
 	Allocatable                          map[string]string              `json:"allocatable,omitempty" yaml:"allocatable,omitempty"`
 	Annotations                          map[string]string              `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	AppliedEnableNetworkPolicy           bool                           `json:"appliedEnableNetworkPolicy,omitempty" yaml:"appliedEnableNetworkPolicy,omitempty"`
-	AppliedPodSecurityPolicyTemplateName string                         `json:"appliedPodSecurityPolicyTemplateId,omitempty" yaml:"appliedPodSecurityPolicyTemplateId,omitempty"`
-	AppliedSpec                          *ClusterSpec                   `json:"appliedSpec,omitempty" yaml:"appliedSpec,omitempty"`
-	AuthImage                            string                         `json:"authImage,omitempty" yaml:"authImage,omitempty"`
-	CACert                               string                         `json:"caCert,omitempty" yaml:"caCert,omitempty"`
+	AppliedEnableNetworkPolicy           bool                           `json:"appliedEnableNetworkPolicy,omitempty" yaml:"applied_enable_network_policy,omitempty"`
+	AppliedPodSecurityPolicyTemplateName string                         `json:"appliedPodSecurityPolicyTemplateId,omitempty" yaml:"applied_pod_security_policy_template_id,omitempty"`
+	AppliedSpec                          *ClusterSpec                   `json:"appliedSpec,omitempty" yaml:"applied_spec,omitempty"`
+	AuthImage                            string                         `json:"authImage,omitempty" yaml:"auth_image,omitempty"`
+	CACert                               string                         `json:"caCert,omitempty" yaml:"ca_cert,omitempty"`
 	Capabilities                         *Capabilities                  `json:"capabilities,omitempty" yaml:"capabilities,omitempty"`
 	Capacity                             map[string]string              `json:"capacity,omitempty" yaml:"capacity,omitempty"`
-	CertificatesExpiration               map[string]CertExpiration      `json:"certificatesExpiration,omitempty" yaml:"certificatesExpiration,omitempty"`
+	CertificatesExpiration               map[string]CertExpiration      `json:"certificatesExpiration,omitempty" yaml:"certificates_expiration,omitempty"`
 	ClusterTemplateAnswers               *Answer                        `json:"answers,omitempty" yaml:"answers,omitempty"`
-	ClusterTemplateID                    string                         `json:"clusterTemplateId,omitempty" yaml:"clusterTemplateId,omitempty"`
-	ClusterTemplateRevisionID            string                         `json:"clusterTemplateRevisionId,omitempty" yaml:"clusterTemplateRevisionId,omitempty"`
-	ComponentStatuses                    []ClusterComponentStatus       `json:"componentStatuses,omitempty" yaml:"componentStatuses,omitempty"`
+	ClusterTemplateID                    string                         `json:"clusterTemplateId,omitempty" yaml:"cluster_template_id,omitempty"`
+	ClusterTemplateRevisionID            string                         `json:"clusterTemplateRevisionId,omitempty" yaml:"cluster_template_revision_id,omitempty"`
+	ComponentStatuses                    []ClusterComponentStatus       `json:"componentStatuses,omitempty" yaml:"component_statuses,omitempty"`
 	Conditions                           []ClusterCondition             `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created                              string                         `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID                            string                         `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DefaultClusterRoleForProjectMembers  string                         `json:"defaultClusterRoleForProjectMembers,omitempty" yaml:"defaultClusterRoleForProjectMembers,omitempty"`
-	DefaultPodSecurityPolicyTemplateID   string                         `json:"defaultPodSecurityPolicyTemplateId,omitempty" yaml:"defaultPodSecurityPolicyTemplateId,omitempty"`
+	CreatorID                            string                         `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	DefaultClusterRoleForProjectMembers  string                         `json:"defaultClusterRoleForProjectMembers,omitempty" yaml:"default_cluster_role_for_project_members,omitempty"`
+	DefaultPodSecurityPolicyTemplateID   string                         `json:"defaultPodSecurityPolicyTemplateId,omitempty" yaml:"default_pod_security_policy_template_id,omitempty"`
 	Description                          string                         `json:"description,omitempty" yaml:"description,omitempty"`
-	DesiredAgentImage                    string                         `json:"desiredAgentImage,omitempty" yaml:"desiredAgentImage,omitempty"`
-	DesiredAuthImage                     string                         `json:"desiredAuthImage,omitempty" yaml:"desiredAuthImage,omitempty"`
-	DockerRootDir                        string                         `json:"dockerRootDir,omitempty" yaml:"dockerRootDir,omitempty"`
+	DesiredAgentImage                    string                         `json:"desiredAgentImage,omitempty" yaml:"desired_agent_image,omitempty"`
+	DesiredAuthImage                     string                         `json:"desiredAuthImage,omitempty" yaml:"desired_auth_image,omitempty"`
+	DockerRootDir                        string                         `json:"dockerRootDir,omitempty" yaml:"docker_root_dir,omitempty"`
 	Driver                               string                         `json:"driver,omitempty" yaml:"driver,omitempty"`
-	EnableClusterAlerting                bool                           `json:"enableClusterAlerting,omitempty" yaml:"enableClusterAlerting,omitempty"`
-	EnableClusterMonitoring              bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enableClusterMonitoring,omitempty"`
-	EnableNetworkPolicy                  *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
-	FailedSpec                           *ClusterSpec                   `json:"failedSpec,omitempty" yaml:"failedSpec,omitempty"`
-	ImportedConfig                       *ImportedConfig                `json:"importedConfig,omitempty" yaml:"importedConfig,omitempty"`
+	EnableClusterAlerting                bool                           `json:"enableClusterAlerting,omitempty" yaml:"enable_cluster_alerting,omitempty"`
+	EnableClusterMonitoring              bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enable_cluster_monitoring,omitempty"`
+	EnableNetworkPolicy                  *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enable_network_policy,omitempty"`
+	FailedSpec                           *ClusterSpec                   `json:"failedSpec,omitempty" yaml:"failed_spec,omitempty"`
+	ImportedConfig                       *ImportedConfig                `json:"importedConfig,omitempty" yaml:"imported_config,omitempty"`
 	Internal                             bool                           `json:"internal,omitempty" yaml:"internal,omitempty"`
-	IstioEnabled                         bool                           `json:"istioEnabled,omitempty" yaml:"istioEnabled,omitempty"`
+	IstioEnabled                         bool                           `json:"istioEnabled,omitempty" yaml:"istio_enabled,omitempty"`
 	Labels                               map[string]string              `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Limits                               map[string]string              `json:"limits,omitempty" yaml:"limits,omitempty"`
-	LocalClusterAuthEndpoint             *LocalClusterAuthEndpoint      `json:"localClusterAuthEndpoint,omitempty" yaml:"localClusterAuthEndpoint,omitempty"`
-	MonitoringStatus                     *MonitoringStatus              `json:"monitoringStatus,omitempty" yaml:"monitoringStatus,omitempty"`
+	LocalClusterAuthEndpoint             *LocalClusterAuthEndpoint      `json:"localClusterAuthEndpoint,omitempty" yaml:"local_cluster_auth_endpoint,omitempty"`
+	MonitoringStatus                     *MonitoringStatus              `json:"monitoringStatus,omitempty" yaml:"monitoring_status,omitempty"`
 	Name                                 string                         `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences                      []OwnerReference               `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	RancherKubernetesEngineConfig        *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty" yaml:"rancherKubernetesEngineConfig,omitempty"`
+	OwnerReferences                      []OwnerReference               `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	RancherKubernetesEngineConfig        *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty" yaml:"rancher_kubernetes_engine_config,omitempty"`
 	Removed                              string                         `json:"removed,omitempty" yaml:"removed,omitempty"`
 	Requested                            map[string]string              `json:"requested,omitempty" yaml:"requested,omitempty"`
 	State                                string                         `json:"state,omitempty" yaml:"state,omitempty"`
 	Transitioning                        string                         `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage                 string                         `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage                 string                         `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                                 string                         `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Version                              *Info                          `json:"version,omitempty" yaml:"version,omitempty"`
 }

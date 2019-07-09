@@ -11,6 +11,6 @@ const (
 type Taint struct {
 	Effect    string `json:"effect,omitempty" yaml:"effect,omitempty"`
 	Key       string `json:"key,omitempty" yaml:"key,omitempty"`
-	TimeAdded string `json:"timeAdded,omitempty" yaml:"timeAdded,omitempty"`
+	TimeAdded string `json:"timeAdded,omitempty" yaml:"time_added,omitempty"`
 	Value     string `json:"value,omitempty" yaml:"value,omitempty"`
 }

@@ -9,6 +9,6 @@ const (
 
 type ObjectMetricStatus struct {
 	Current         *MetricValueStatus           `json:"current,omitempty" yaml:"current,omitempty"`
-	DescribedObject *CrossVersionObjectReference `json:"describedObject,omitempty" yaml:"describedObject,omitempty"`
+	DescribedObject *CrossVersionObjectReference `json:"describedObject,omitempty" yaml:"described_object,omitempty"`
 	Metric          *MetricIdentifier            `json:"metric,omitempty" yaml:"metric,omitempty"`
 }

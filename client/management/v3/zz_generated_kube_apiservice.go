@@ -13,12 +13,12 @@ const (
 )
 
 type KubeAPIService struct {
-	AlwaysPullImages      bool              `json:"alwaysPullImages,omitempty" yaml:"alwaysPullImages,omitempty"`
-	ExtraArgs             map[string]string `json:"extraArgs,omitempty" yaml:"extraArgs,omitempty"`
-	ExtraBinds            []string          `json:"extraBinds,omitempty" yaml:"extraBinds,omitempty"`
-	ExtraEnv              []string          `json:"extraEnv,omitempty" yaml:"extraEnv,omitempty"`
+	AlwaysPullImages      bool              `json:"alwaysPullImages,omitempty" yaml:"always_pull_images,omitempty"`
+	ExtraArgs             map[string]string `json:"extraArgs,omitempty" yaml:"extra_args,omitempty"`
+	ExtraBinds            []string          `json:"extraBinds,omitempty" yaml:"extra_binds,omitempty"`
+	ExtraEnv              []string          `json:"extraEnv,omitempty" yaml:"extra_env,omitempty"`
 	Image                 string            `json:"image,omitempty" yaml:"image,omitempty"`
-	PodSecurityPolicy     bool              `json:"podSecurityPolicy,omitempty" yaml:"podSecurityPolicy,omitempty"`
-	ServiceClusterIPRange string            `json:"serviceClusterIpRange,omitempty" yaml:"serviceClusterIpRange,omitempty"`
-	ServiceNodePortRange  string            `json:"serviceNodePortRange,omitempty" yaml:"serviceNodePortRange,omitempty"`
+	PodSecurityPolicy     bool              `json:"podSecurityPolicy,omitempty" yaml:"pod_security_policy,omitempty"`
+	ServiceClusterIPRange string            `json:"serviceClusterIpRange,omitempty" yaml:"service_cluster_ip_range,omitempty"`
+	ServiceNodePortRange  string            `json:"serviceNodePortRange,omitempty" yaml:"service_node_port_range,omitempty"`
 }

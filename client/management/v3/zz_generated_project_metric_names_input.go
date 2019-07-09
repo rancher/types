@@ -6,5 +6,5 @@ const (
 )
 
 type ProjectMetricNamesInput struct {
-	ProjectName string `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	ProjectName string `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 }

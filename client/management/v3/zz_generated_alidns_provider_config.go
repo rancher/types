@@ -7,6 +7,6 @@ const (
 )
 
 type AlidnsProviderConfig struct {
-	AccessKey string `json:"accessKey,omitempty" yaml:"accessKey,omitempty"`
-	SecretKey string `json:"secretKey,omitempty" yaml:"secretKey,omitempty"`
+	AccessKey string `json:"accessKey,omitempty" yaml:"access_key,omitempty"`
+	SecretKey string `json:"secretKey,omitempty" yaml:"secret_key,omitempty"`
 }

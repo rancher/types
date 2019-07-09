@@ -31,25 +31,25 @@ const (
 type Notifier struct {
 	types.Resource
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	ClusterID            string            `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	ClusterID            string            `json:"clusterId,omitempty" yaml:"cluster_id,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description          string            `json:"description,omitempty" yaml:"description,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	PagerdutyConfig      *PagerdutyConfig  `json:"pagerdutyConfig,omitempty" yaml:"pagerdutyConfig,omitempty"`
+	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	PagerdutyConfig      *PagerdutyConfig  `json:"pagerdutyConfig,omitempty" yaml:"pagerduty_config,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
-	SMTPConfig           *SMTPConfig       `json:"smtpConfig,omitempty" yaml:"smtpConfig,omitempty"`
-	SlackConfig          *SlackConfig      `json:"slackConfig,omitempty" yaml:"slackConfig,omitempty"`
+	SMTPConfig           *SMTPConfig       `json:"smtpConfig,omitempty" yaml:"smtp_config,omitempty"`
+	SlackConfig          *SlackConfig      `json:"slackConfig,omitempty" yaml:"slack_config,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *NotifierStatus   `json:"status,omitempty" yaml:"status,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	WebhookConfig        *WebhookConfig    `json:"webhookConfig,omitempty" yaml:"webhookConfig,omitempty"`
-	WechatConfig         *WechatConfig     `json:"wechatConfig,omitempty" yaml:"wechatConfig,omitempty"`
+	WebhookConfig        *WebhookConfig    `json:"webhookConfig,omitempty" yaml:"webhook_config,omitempty"`
+	WechatConfig         *WechatConfig     `json:"wechatConfig,omitempty" yaml:"wechat_config,omitempty"`
 }
 
 type NotifierCollection struct {

@@ -8,7 +8,7 @@ const (
 )
 
 type TypedLocalObjectReference struct {
-	APIGroup string `json:"apiGroup,omitempty" yaml:"apiGroup,omitempty"`
+	APIGroup string `json:"apiGroup,omitempty" yaml:"api_group,omitempty"`
 	Kind     string `json:"kind,omitempty" yaml:"kind,omitempty"`
 	Name     string `json:"name,omitempty" yaml:"name,omitempty"`
 }

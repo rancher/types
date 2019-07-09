@@ -13,7 +13,7 @@ const (
 )
 
 type Status struct {
-	APIVersion string         `json:"apiVersion,omitempty" yaml:"apiVersion,omitempty"`
+	APIVersion string         `json:"apiVersion,omitempty" yaml:"api_version,omitempty"`
 	Code       int64          `json:"code,omitempty" yaml:"code,omitempty"`
 	Details    *StatusDetails `json:"details,omitempty" yaml:"details,omitempty"`
 	Kind       string         `json:"kind,omitempty" yaml:"kind,omitempty"`

@@ -11,10 +11,10 @@ const (
 )
 
 type Route53ProviderConfig struct {
-	AccessKey       string `json:"accessKey,omitempty" yaml:"accessKey,omitempty"`
-	CredentialsPath string `json:"credentialsPath,omitempty" yaml:"credentialsPath,omitempty"`
+	AccessKey       string `json:"accessKey,omitempty" yaml:"access_key,omitempty"`
+	CredentialsPath string `json:"credentialsPath,omitempty" yaml:"credentials_path,omitempty"`
 	Region          string `json:"region,omitempty" yaml:"region,omitempty"`
-	RoleArn         string `json:"roleArn,omitempty" yaml:"roleArn,omitempty"`
-	SecretKey       string `json:"secretKey,omitempty" yaml:"secretKey,omitempty"`
-	ZoneType        string `json:"zoneType,omitempty" yaml:"zoneType,omitempty"`
+	RoleArn         string `json:"roleArn,omitempty" yaml:"role_arn,omitempty"`
+	SecretKey       string `json:"secretKey,omitempty" yaml:"secret_key,omitempty"`
+	ZoneType        string `json:"zoneType,omitempty" yaml:"zone_type,omitempty"`
 }

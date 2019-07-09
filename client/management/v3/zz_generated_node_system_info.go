@@ -16,13 +16,13 @@ const (
 
 type NodeSystemInfo struct {
 	Architecture            string `json:"architecture,omitempty" yaml:"architecture,omitempty"`
-	BootID                  string `json:"bootID,omitempty" yaml:"bootID,omitempty"`
-	ContainerRuntimeVersion string `json:"containerRuntimeVersion,omitempty" yaml:"containerRuntimeVersion,omitempty"`
-	KernelVersion           string `json:"kernelVersion,omitempty" yaml:"kernelVersion,omitempty"`
-	KubeProxyVersion        string `json:"kubeProxyVersion,omitempty" yaml:"kubeProxyVersion,omitempty"`
-	KubeletVersion          string `json:"kubeletVersion,omitempty" yaml:"kubeletVersion,omitempty"`
-	MachineID               string `json:"machineID,omitempty" yaml:"machineID,omitempty"`
-	OSImage                 string `json:"osImage,omitempty" yaml:"osImage,omitempty"`
-	OperatingSystem         string `json:"operatingSystem,omitempty" yaml:"operatingSystem,omitempty"`
-	SystemUUID              string `json:"systemUUID,omitempty" yaml:"systemUUID,omitempty"`
+	BootID                  string `json:"bootID,omitempty" yaml:"boot_id,omitempty"`
+	ContainerRuntimeVersion string `json:"containerRuntimeVersion,omitempty" yaml:"container_runtime_version,omitempty"`
+	KernelVersion           string `json:"kernelVersion,omitempty" yaml:"kernel_version,omitempty"`
+	KubeProxyVersion        string `json:"kubeProxyVersion,omitempty" yaml:"kube_proxy_version,omitempty"`
+	KubeletVersion          string `json:"kubeletVersion,omitempty" yaml:"kubelet_version,omitempty"`
+	MachineID               string `json:"machineID,omitempty" yaml:"machine_id,omitempty"`
+	OSImage                 string `json:"osImage,omitempty" yaml:"os_image,omitempty"`
+	OperatingSystem         string `json:"operatingSystem,omitempty" yaml:"operating_system,omitempty"`
+	SystemUUID              string `json:"systemUUID,omitempty" yaml:"system_uuid,omitempty"`
 }

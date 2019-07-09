@@ -8,5 +8,5 @@ const (
 
 type EmptyDirVolumeSource struct {
 	Medium    string `json:"medium,omitempty" yaml:"medium,omitempty"`
-	SizeLimit string `json:"sizeLimit,omitempty" yaml:"sizeLimit,omitempty"`
+	SizeLimit string `json:"sizeLimit,omitempty" yaml:"size_limit,omitempty"`
 }

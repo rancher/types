@@ -8,5 +8,5 @@ const (
 
 type SELinuxStrategyOptions struct {
 	Rule           string          `json:"rule,omitempty" yaml:"rule,omitempty"`
-	SELinuxOptions *SELinuxOptions `json:"seLinuxOptions,omitempty" yaml:"seLinuxOptions,omitempty"`
+	SELinuxOptions *SELinuxOptions `json:"seLinuxOptions,omitempty" yaml:"se_linux_options,omitempty"`
 }

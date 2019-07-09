@@ -9,6 +9,6 @@ const (
 
 type BitbucketServerRequestLoginInput struct {
 	Hostname    string `json:"hostname,omitempty" yaml:"hostname,omitempty"`
-	RedirectURL string `json:"redirectUrl,omitempty" yaml:"redirectUrl,omitempty"`
+	RedirectURL string `json:"redirectUrl,omitempty" yaml:"redirect_url,omitempty"`
 	TLS         bool   `json:"tls,omitempty" yaml:"tls,omitempty"`
 }

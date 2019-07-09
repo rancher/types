@@ -12,7 +12,7 @@ const (
 
 type CatalogSpec struct {
 	Branch      string `json:"branch,omitempty" yaml:"branch,omitempty"`
-	CatalogKind string `json:"catalogKind,omitempty" yaml:"catalogKind,omitempty"`
+	CatalogKind string `json:"catalogKind,omitempty" yaml:"catalog_kind,omitempty"`
 	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 	Password    string `json:"password,omitempty" yaml:"password,omitempty"`
 	URL         string `json:"url,omitempty" yaml:"url,omitempty"`

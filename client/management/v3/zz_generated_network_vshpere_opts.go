@@ -6,5 +6,5 @@ const (
 )
 
 type NetworkVshpereOpts struct {
-	PublicNetwork string `json:"public-network,omitempty" yaml:"public-network,omitempty"`
+	PublicNetwork string `json:"public-network,omitempty" yaml:"public_network,omitempty"`
 }

@@ -12,7 +12,7 @@ const (
 type PipelineExecutionStatus struct {
 	Conditions     []PipelineCondition `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Ended          string              `json:"ended,omitempty" yaml:"ended,omitempty"`
-	ExecutionState string              `json:"executionState,omitempty" yaml:"executionState,omitempty"`
+	ExecutionState string              `json:"executionState,omitempty" yaml:"execution_state,omitempty"`
 	Stages         []StageStatus       `json:"stages,omitempty" yaml:"stages,omitempty"`
 	Started        string              `json:"started,omitempty" yaml:"started,omitempty"`
 }

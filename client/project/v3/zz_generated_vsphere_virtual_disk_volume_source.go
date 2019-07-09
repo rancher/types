@@ -9,8 +9,8 @@ const (
 )
 
 type VsphereVirtualDiskVolumeSource struct {
-	FSType            string `json:"fsType,omitempty" yaml:"fsType,omitempty"`
-	StoragePolicyID   string `json:"storagePolicyID,omitempty" yaml:"storagePolicyID,omitempty"`
-	StoragePolicyName string `json:"storagePolicyName,omitempty" yaml:"storagePolicyName,omitempty"`
-	VolumePath        string `json:"volumePath,omitempty" yaml:"volumePath,omitempty"`
+	FSType            string `json:"fsType,omitempty" yaml:"fs_type,omitempty"`
+	StoragePolicyID   string `json:"storagePolicyID,omitempty" yaml:"storage_policy_id,omitempty"`
+	StoragePolicyName string `json:"storagePolicyName,omitempty" yaml:"storage_policy_name,omitempty"`
+	VolumePath        string `json:"volumePath,omitempty" yaml:"volume_path,omitempty"`
 }

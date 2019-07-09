@@ -7,6 +7,6 @@ const (
 )
 
 type IngressCapabilities struct {
-	CustomDefaultBackend bool   `json:"customDefaultBackend,omitempty" yaml:"customDefaultBackend,omitempty"`
-	IngressProvider      string `json:"ingressProvider,omitempty" yaml:"ingressProvider,omitempty"`
+	CustomDefaultBackend bool   `json:"customDefaultBackend,omitempty" yaml:"custom_default_backend,omitempty"`
+	IngressProvider      string `json:"ingressProvider,omitempty" yaml:"ingress_provider,omitempty"`
 }

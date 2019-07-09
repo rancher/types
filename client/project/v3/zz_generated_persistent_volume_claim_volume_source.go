@@ -7,6 +7,6 @@ const (
 )
 
 type PersistentVolumeClaimVolumeSource struct {
-	PersistentVolumeClaimID string `json:"persistentVolumeClaimId,omitempty" yaml:"persistentVolumeClaimId,omitempty"`
-	ReadOnly                bool   `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
+	PersistentVolumeClaimID string `json:"persistentVolumeClaimId,omitempty" yaml:"persistent_volume_claim_id,omitempty"`
+	ReadOnly                bool   `json:"readOnly,omitempty" yaml:"read_only,omitempty"`
 }

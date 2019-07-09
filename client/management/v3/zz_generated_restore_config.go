@@ -8,5 +8,5 @@ const (
 
 type RestoreConfig struct {
 	Restore      bool   `json:"restore,omitempty" yaml:"restore,omitempty"`
-	SnapshotName string `json:"snapshotName,omitempty" yaml:"snapshotName,omitempty"`
+	SnapshotName string `json:"snapshotName,omitempty" yaml:"snapshot_name,omitempty"`
 }

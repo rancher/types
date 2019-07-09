@@ -12,11 +12,11 @@ const (
 )
 
 type PublishCatalogConfig struct {
-	CatalogTemplate string `json:"catalogTemplate,omitempty" yaml:"catalogTemplate,omitempty"`
-	GitAuthor       string `json:"gitAuthor,omitempty" yaml:"gitAuthor,omitempty"`
-	GitBranch       string `json:"gitBranch,omitempty" yaml:"gitBranch,omitempty"`
-	GitEmail        string `json:"gitEmail,omitempty" yaml:"gitEmail,omitempty"`
-	GitURL          string `json:"gitUrl,omitempty" yaml:"gitUrl,omitempty"`
+	CatalogTemplate string `json:"catalogTemplate,omitempty" yaml:"catalog_template,omitempty"`
+	GitAuthor       string `json:"gitAuthor,omitempty" yaml:"git_author,omitempty"`
+	GitBranch       string `json:"gitBranch,omitempty" yaml:"git_branch,omitempty"`
+	GitEmail        string `json:"gitEmail,omitempty" yaml:"git_email,omitempty"`
+	GitURL          string `json:"gitUrl,omitempty" yaml:"git_url,omitempty"`
 	Path            string `json:"path,omitempty" yaml:"path,omitempty"`
 	Version         string `json:"version,omitempty" yaml:"version,omitempty"`
 }

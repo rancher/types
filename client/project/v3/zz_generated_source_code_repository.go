@@ -32,24 +32,24 @@ type SourceCodeRepository struct {
 	types.Resource
 	Annotations            map[string]string           `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created                string                      `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID              string                      `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
-	DefaultBranch          string                      `json:"defaultBranch,omitempty" yaml:"defaultBranch,omitempty"`
+	CreatorID              string                      `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
+	DefaultBranch          string                      `json:"defaultBranch,omitempty" yaml:"default_branch,omitempty"`
 	Labels                 map[string]string           `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Language               string                      `json:"language,omitempty" yaml:"language,omitempty"`
 	Name                   string                      `json:"name,omitempty" yaml:"name,omitempty"`
-	OwnerReferences        []OwnerReference            `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	OwnerReferences        []OwnerReference            `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
 	Permissions            *RepoPerm                   `json:"permissions,omitempty" yaml:"permissions,omitempty"`
-	ProjectID              string                      `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	ProjectID              string                      `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Removed                string                      `json:"removed,omitempty" yaml:"removed,omitempty"`
-	SourceCodeCredentialID string                      `json:"sourceCodeCredentialId,omitempty" yaml:"sourceCodeCredentialId,omitempty"`
-	SourceCodeType         string                      `json:"sourceCodeType,omitempty" yaml:"sourceCodeType,omitempty"`
+	SourceCodeCredentialID string                      `json:"sourceCodeCredentialId,omitempty" yaml:"source_code_credential_id,omitempty"`
+	SourceCodeType         string                      `json:"sourceCodeType,omitempty" yaml:"source_code_type,omitempty"`
 	State                  string                      `json:"state,omitempty" yaml:"state,omitempty"`
 	Status                 *SourceCodeRepositoryStatus `json:"status,omitempty" yaml:"status,omitempty"`
 	Transitioning          string                      `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage   string                      `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage   string                      `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	URL                    string                      `json:"url,omitempty" yaml:"url,omitempty"`
 	UUID                   string                      `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	UserID                 string                      `json:"userId,omitempty" yaml:"userId,omitempty"`
+	UserID                 string                      `json:"userId,omitempty" yaml:"user_id,omitempty"`
 }
 
 type SourceCodeRepositoryCollection struct {

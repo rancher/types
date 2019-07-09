@@ -11,8 +11,8 @@ const (
 
 type WorkspaceVsphereOpts struct {
 	Datacenter       string `json:"datacenter,omitempty" yaml:"datacenter,omitempty"`
-	DefaultDatastore string `json:"default-datastore,omitempty" yaml:"default-datastore,omitempty"`
+	DefaultDatastore string `json:"default-datastore,omitempty" yaml:"default_datastore,omitempty"`
 	Folder           string `json:"folder,omitempty" yaml:"folder,omitempty"`
-	ResourcePoolPath string `json:"resourcepool-path,omitempty" yaml:"resourcepool-path,omitempty"`
+	ResourcePoolPath string `json:"resourcepool-path,omitempty" yaml:"resourcepool_path,omitempty"`
 	VCenterIP        string `json:"server,omitempty" yaml:"server,omitempty"`
 }

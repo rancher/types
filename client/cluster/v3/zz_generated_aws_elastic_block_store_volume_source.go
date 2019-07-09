@@ -9,8 +9,8 @@ const (
 )
 
 type AWSElasticBlockStoreVolumeSource struct {
-	FSType    string `json:"fsType,omitempty" yaml:"fsType,omitempty"`
+	FSType    string `json:"fsType,omitempty" yaml:"fs_type,omitempty"`
 	Partition int64  `json:"partition,omitempty" yaml:"partition,omitempty"`
-	ReadOnly  bool   `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
-	VolumeID  string `json:"volumeID,omitempty" yaml:"volumeID,omitempty"`
+	ReadOnly  bool   `json:"readOnly,omitempty" yaml:"read_only,omitempty"`
+	VolumeID  string `json:"volumeID,omitempty" yaml:"volume_id,omitempty"`
 }

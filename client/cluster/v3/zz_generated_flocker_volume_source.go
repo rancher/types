@@ -7,6 +7,6 @@ const (
 )
 
 type FlockerVolumeSource struct {
-	DatasetName string `json:"datasetName,omitempty" yaml:"datasetName,omitempty"`
-	DatasetUUID string `json:"datasetUUID,omitempty" yaml:"datasetUUID,omitempty"`
+	DatasetName string `json:"datasetName,omitempty" yaml:"dataset_name,omitempty"`
+	DatasetUUID string `json:"datasetUUID,omitempty" yaml:"dataset_uuid,omitempty"`
 }

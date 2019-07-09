@@ -10,7 +10,7 @@ const (
 
 type CustomTargetConfig struct {
 	Certificate string `json:"certificate,omitempty" yaml:"certificate,omitempty"`
-	ClientCert  string `json:"clientCert,omitempty" yaml:"clientCert,omitempty"`
-	ClientKey   string `json:"clientKey,omitempty" yaml:"clientKey,omitempty"`
+	ClientCert  string `json:"clientCert,omitempty" yaml:"client_cert,omitempty"`
+	ClientKey   string `json:"clientKey,omitempty" yaml:"client_key,omitempty"`
 	Content     string `json:"content,omitempty" yaml:"content,omitempty"`
 }

@@ -12,7 +12,7 @@ const (
 
 type Metric struct {
 	Current         *MetricValueStatus           `json:"current,omitempty" yaml:"current,omitempty"`
-	DescribedObject *CrossVersionObjectReference `json:"describedObject,omitempty" yaml:"describedObject,omitempty"`
+	DescribedObject *CrossVersionObjectReference `json:"describedObject,omitempty" yaml:"described_object,omitempty"`
 	Name            string                       `json:"name,omitempty" yaml:"name,omitempty"`
 	Selector        *LabelSelector               `json:"selector,omitempty" yaml:"selector,omitempty"`
 	Target          *MetricTarget                `json:"target,omitempty" yaml:"target,omitempty"`

@@ -9,8 +9,8 @@ const (
 )
 
 type InternalNodeSpec struct {
-	PodCidr       string  `json:"podCidr,omitempty" yaml:"podCidr,omitempty"`
-	ProviderId    string  `json:"providerId,omitempty" yaml:"providerId,omitempty"`
+	PodCidr       string  `json:"podCidr,omitempty" yaml:"pod_cidr,omitempty"`
+	ProviderId    string  `json:"providerId,omitempty" yaml:"provider_id,omitempty"`
 	Taints        []Taint `json:"taints,omitempty" yaml:"taints,omitempty"`
 	Unschedulable bool    `json:"unschedulable,omitempty" yaml:"unschedulable,omitempty"`
 }

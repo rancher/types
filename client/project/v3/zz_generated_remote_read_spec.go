@@ -14,13 +14,13 @@ const (
 )
 
 type RemoteReadSpec struct {
-	BasicAuth        *BasicAuth        `json:"basicAuth,omitempty" yaml:"basicAuth,omitempty"`
-	BearerToken      string            `json:"bearerToken,omitempty" yaml:"bearerToken,omitempty"`
-	BearerTokenFile  string            `json:"bearerTokenFile,omitempty" yaml:"bearerTokenFile,omitempty"`
-	ProxyURL         string            `json:"proxyUrl,omitempty" yaml:"proxyUrl,omitempty"`
-	ReadRecent       bool              `json:"readRecent,omitempty" yaml:"readRecent,omitempty"`
-	RemoteTimeout    string            `json:"remoteTimeout,omitempty" yaml:"remoteTimeout,omitempty"`
-	RequiredMatchers map[string]string `json:"requiredMatchers,omitempty" yaml:"requiredMatchers,omitempty"`
-	TLSConfig        *TLSConfig        `json:"tlsConfig,omitempty" yaml:"tlsConfig,omitempty"`
+	BasicAuth        *BasicAuth        `json:"basicAuth,omitempty" yaml:"basic_auth,omitempty"`
+	BearerToken      string            `json:"bearerToken,omitempty" yaml:"bearer_token,omitempty"`
+	BearerTokenFile  string            `json:"bearerTokenFile,omitempty" yaml:"bearer_token_file,omitempty"`
+	ProxyURL         string            `json:"proxyUrl,omitempty" yaml:"proxy_url,omitempty"`
+	ReadRecent       bool              `json:"readRecent,omitempty" yaml:"read_recent,omitempty"`
+	RemoteTimeout    string            `json:"remoteTimeout,omitempty" yaml:"remote_timeout,omitempty"`
+	RequiredMatchers map[string]string `json:"requiredMatchers,omitempty" yaml:"required_matchers,omitempty"`
+	TLSConfig        *TLSConfig        `json:"tlsConfig,omitempty" yaml:"tls_config,omitempty"`
 	URL              string            `json:"url,omitempty" yaml:"url,omitempty"`
 }

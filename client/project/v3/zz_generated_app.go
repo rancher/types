@@ -38,30 +38,30 @@ type App struct {
 	types.Resource
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Answers              map[string]string `json:"answers,omitempty" yaml:"answers,omitempty"`
-	AppRevisionID        string            `json:"appRevisionId,omitempty" yaml:"appRevisionId,omitempty"`
-	AppliedFiles         map[string]string `json:"appliedFiles,omitempty" yaml:"appliedFiles,omitempty"`
+	AppRevisionID        string            `json:"appRevisionId,omitempty" yaml:"app_revision_id,omitempty"`
+	AppliedFiles         map[string]string `json:"appliedFiles,omitempty" yaml:"applied_files,omitempty"`
 	Conditions           []AppCondition    `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
-	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CreatorID            string            `json:"creatorId,omitempty" yaml:"creator_id,omitempty"`
 	Description          string            `json:"description,omitempty" yaml:"description,omitempty"`
-	ExternalID           string            `json:"externalId,omitempty" yaml:"externalId,omitempty"`
+	ExternalID           string            `json:"externalId,omitempty" yaml:"external_id,omitempty"`
 	Files                map[string]string `json:"files,omitempty" yaml:"files,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
-	LastAppliedTemplates string            `json:"lastAppliedTemplate,omitempty" yaml:"lastAppliedTemplate,omitempty"`
-	MultiClusterAppID    string            `json:"multiClusterAppId,omitempty" yaml:"multiClusterAppId,omitempty"`
+	LastAppliedTemplates string            `json:"lastAppliedTemplate,omitempty" yaml:"last_applied_template,omitempty"`
+	MultiClusterAppID    string            `json:"multiClusterAppId,omitempty" yaml:"multi_cluster_app_id,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
-	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
+	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespace_id,omitempty"`
 	Notes                string            `json:"notes,omitempty" yaml:"notes,omitempty"`
-	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
-	ProjectID            string            `json:"projectId,omitempty" yaml:"projectId,omitempty"`
+	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"owner_references,omitempty"`
+	ProjectID            string            `json:"projectId,omitempty" yaml:"project_id,omitempty"`
 	Prune                bool              `json:"prune,omitempty" yaml:"prune,omitempty"`
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
-	TargetNamespace      string            `json:"targetNamespace,omitempty" yaml:"targetNamespace,omitempty"`
+	TargetNamespace      string            `json:"targetNamespace,omitempty" yaml:"target_namespace,omitempty"`
 	Transitioning        string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
-	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
+	TransitioningMessage string            `json:"transitioningMessage,omitempty" yaml:"transitioning_message,omitempty"`
 	UUID                 string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	ValuesYaml           string            `json:"valuesYaml,omitempty" yaml:"valuesYaml,omitempty"`
+	ValuesYaml           string            `json:"valuesYaml,omitempty" yaml:"values_yaml,omitempty"`
 }
 
 type AppCollection struct {

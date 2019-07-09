@@ -18,11 +18,11 @@ type InternalNodeStatus struct {
 	Allocatable       map[string]string         `json:"allocatable,omitempty" yaml:"allocatable,omitempty"`
 	Capacity          map[string]string         `json:"capacity,omitempty" yaml:"capacity,omitempty"`
 	Config            *NodeConfigStatus         `json:"config,omitempty" yaml:"config,omitempty"`
-	ExternalIPAddress string                    `json:"externalIpAddress,omitempty" yaml:"externalIpAddress,omitempty"`
+	ExternalIPAddress string                    `json:"externalIpAddress,omitempty" yaml:"external_ip_address,omitempty"`
 	Hostname          string                    `json:"hostname,omitempty" yaml:"hostname,omitempty"`
-	IPAddress         string                    `json:"ipAddress,omitempty" yaml:"ipAddress,omitempty"`
+	IPAddress         string                    `json:"ipAddress,omitempty" yaml:"ip_address,omitempty"`
 	Info              *NodeInfo                 `json:"info,omitempty" yaml:"info,omitempty"`
-	NodeConditions    []NodeCondition           `json:"nodeConditions,omitempty" yaml:"nodeConditions,omitempty"`
-	VolumesAttached   map[string]AttachedVolume `json:"volumesAttached,omitempty" yaml:"volumesAttached,omitempty"`
-	VolumesInUse      []string                  `json:"volumesInUse,omitempty" yaml:"volumesInUse,omitempty"`
+	NodeConditions    []NodeCondition           `json:"nodeConditions,omitempty" yaml:"node_conditions,omitempty"`
+	VolumesAttached   map[string]AttachedVolume `json:"volumesAttached,omitempty" yaml:"volumes_attached,omitempty"`
+	VolumesInUse      []string                  `json:"volumesInUse,omitempty" yaml:"volumes_in_use,omitempty"`
 }
