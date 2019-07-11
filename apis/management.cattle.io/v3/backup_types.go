@@ -22,6 +22,8 @@ type BackupConfig struct {
 	Retention int `yaml:"retention" json:"retention,omitempty" norman:"default=6"`
 	// s3 target
 	S3BackupConfig *S3BackupConfig `yaml:",omitempty" json:"s3BackupConfig"`
+	// Timestamp is appended to snapshot names, defaults to false
+	Timestamp bool `yaml:"timestamp" json:"timestamp,omitempty"`
 }
 
 type S3BackupConfig struct {
