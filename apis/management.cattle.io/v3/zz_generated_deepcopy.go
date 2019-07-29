@@ -8167,6 +8167,13 @@ func (in *RoleTemplate) DeepCopyInto(out *RoleTemplate) {
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
+	if in.ReferencedRoles != nil {
+		in, out := &in.ReferencedRoles, &out.ReferencedRoles
+		*out = make(map[string]bool, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
+	}
 	return
 }
 

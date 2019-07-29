@@ -21,6 +21,7 @@ const (
 	RoleTemplateFieldName                  = "name"
 	RoleTemplateFieldOwnerReferences       = "ownerReferences"
 	RoleTemplateFieldProjectCreatorDefault = "projectCreatorDefault"
+	RoleTemplateFieldReferencedRoles       = "referencedRoles"
 	RoleTemplateFieldRemoved               = "removed"
 	RoleTemplateFieldRoleTemplateIDs       = "roleTemplateIds"
 	RoleTemplateFieldRules                 = "rules"
@@ -44,6 +45,7 @@ type RoleTemplate struct {
 	Name                  string            `json:"name,omitempty" yaml:"name,omitempty"`
 	OwnerReferences       []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
 	ProjectCreatorDefault bool              `json:"projectCreatorDefault,omitempty" yaml:"projectCreatorDefault,omitempty"`
+	ReferencedRoles       map[string]bool   `json:"referencedRoles,omitempty" yaml:"referencedRoles,omitempty"`
 	Removed               string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	RoleTemplateIDs       []string          `json:"roleTemplateIds,omitempty" yaml:"roleTemplateIds,omitempty"`
 	Rules                 []PolicyRule      `json:"rules,omitempty" yaml:"rules,omitempty"`
