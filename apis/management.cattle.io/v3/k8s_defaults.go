@@ -27,7 +27,7 @@ var (
 		// When add a new k8s version to 2.2, make sure to add support for it to the 2.1.x branch.
 		// Account for the fact that rke-tools image is different cross branches, and it requires using
 		// different k8s version tag
-		"v1.12.9-rancher1-1",
+		"v1.12.10-rancher1-1",
 		"v1.13.8-rancher1-1",
 		"v1.14.4-rancher1-1",
 		"v1.15.0-rancher1-2",
@@ -1019,14 +1019,14 @@ var (
 			CoreDNS:                   m("coredns/coredns:1.2.2"),
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.0.0"),
 		},
-		// Enabled in Rancher v2.2.5
-		"v1.12.9-rancher1-1": {
+		// Enabled in Rancher v2.2.7
+		"v1.12.10-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24-rancher1"),
-			Kubernetes:                m("rancher/hyperkube:v1.12.9-rancher1"),
-			Alpine:                    m("rancher/rke-tools:v0.1.34"),
-			NginxProxy:                m("rancher/rke-tools:v0.1.34"),
-			CertDownloader:            m("rancher/rke-tools:v0.1.34"),
-			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.34"),
+			Kubernetes:                m("rancher/hyperkube:v1.12.10-rancher1"),
+			Alpine:                    m("rancher/rke-tools:v0.1.39"),
+			NginxProxy:                m("rancher/rke-tools:v0.1.39"),
+			CertDownloader:            m("rancher/rke-tools:v0.1.39"),
+			KubernetesServicesSidecar: m("rancher/rke-tools:v0.1.39"),
 			KubeDNS:                   m("gcr.io/google_containers/k8s-dns-kube-dns:1.14.13"),
 			DNSmasq:                   m("gcr.io/google_containers/k8s-dns-dnsmasq-nanny:1.14.13"),
 			KubeDNSSidecar:            m("gcr.io/google_containers/k8s-dns-sidecar:1.14.13"),
