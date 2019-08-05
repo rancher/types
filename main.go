@@ -16,10 +16,11 @@ import (
 	batchv1beta1 "k8s.io/api/batch/v1beta1"
 
 	scalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	extv1beta1 "k8s.io/api/extensions/v1beta1"
 	knetworkingv1 "k8s.io/api/networking/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	storagev1 "k8s.io/api/storage/v1"
 	k8sschema "k8s.io/apimachinery/pkg/runtime/schema"
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 )
@@ -82,6 +83,9 @@ func main() {
 			extv1beta1.PodSecurityPolicy{},
 		},
 	)
+	generator.GenerateNativeTypes(storagev1.SchemeGroupVersion, nil, []interface{}{
+		storagev1.StorageClass{},
+	})
 	generator.GenerateNativeTypes(
 		k8sschema.GroupVersion{Group: monitoringv1.Group, Version: monitoringv1.Version},
 		[]interface{}{
