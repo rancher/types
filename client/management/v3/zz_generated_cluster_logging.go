@@ -8,6 +8,7 @@ const (
 	ClusterLoggingType                        = "clusterLogging"
 	ClusterLoggingFieldAnnotations            = "annotations"
 	ClusterLoggingFieldAppliedSpec            = "appliedSpec"
+	ClusterLoggingFieldCloudWatchConfig       = "cloudwatchConfig"
 	ClusterLoggingFieldClusterID              = "clusterId"
 	ClusterLoggingFieldConditions             = "conditions"
 	ClusterLoggingFieldCreated                = "created"
@@ -37,6 +38,7 @@ type ClusterLogging struct {
 	types.Resource
 	Annotations            map[string]string      `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	AppliedSpec            *ClusterLoggingSpec    `json:"appliedSpec,omitempty" yaml:"appliedSpec,omitempty"`
+	CloudWatchConfig       *CloudWatchConfig      `json:"cloudwatchConfig,omitempty" yaml:"cloudwatchConfig,omitempty"`
 	ClusterID              string                 `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
 	Conditions             []LoggingCondition     `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created                string                 `json:"created,omitempty" yaml:"created,omitempty"`
