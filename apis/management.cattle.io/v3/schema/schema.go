@@ -868,6 +868,11 @@ func clusterTemplateTypes(schemas *types.Schemas) *types.Schemas {
 		TypeName("clusterTemplateRevision", v3.ClusterTemplateRevision{}).
 		AddMapperForType(&Version, v3.ClusterTemplate{}, m.Drop{Field: "namespaceId"}, m.DisplayName{}).
 		AddMapperForType(&Version, v3.ClusterTemplateRevision{}, m.Drop{Field: "namespaceId"}, m.DisplayName{}).
+		AddMapperForType(&Version, v3.Member{},
+			m.Enum{Field: "accessType", Options: []string{
+				"owner",
+				"read-only",
+			}}).
 		MustImport(&Version, v3.ClusterTemplateQuestionsOutput{}).
 		MustImport(&Version, v3.ClusterTemplate{}).
 		MustImportAndCustomize(&Version, v3.ClusterTemplateRevision{}, func(schema *types.Schema) {
