@@ -54,13 +54,13 @@ type EtcdBackup struct {
 
 type EtcdBackupSpec struct {
 	// cluster ID
-	ClusterID string `json:"clusterId,omitempty" norman:"required,type=reference[cluster]"`
+	ClusterID string `json:"clusterId,omitempty" norman:"required,type=reference[cluster],noupdate"`
 	// manual backup flag
 	Manual bool `yaml:"manual" json:"manual,omitempty"`
 	// actual file name on the target
-	Filename string `yaml:"filename" json:"filename,omitempty"`
+	Filename string `yaml:"filename" json:"filename,omitempty" norman:"noupdate"`
 	// backupConfig
-	BackupConfig BackupConfig `yaml:",omitempty" json:"backupConfig,omitempty"`
+	BackupConfig BackupConfig `yaml:",omitempty" json:"backupConfig,omitempty" norman:"noupdate"`
 }
 
 type EtcdBackupStatus struct {
