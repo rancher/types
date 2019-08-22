@@ -12,7 +12,7 @@ require (
 	github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/pkg/errors v0.8.1
-	github.com/rancher/norman v0.0.0-20190819172543-9c5479f6e5ca
+	github.com/rancher/norman v0.0.0-20190821234528-20a936b685b0
 	github.com/sirupsen/logrus v1.4.2
 	k8s.io/api v0.0.0-20190805182251-6c9aa3caf3d6
 	k8s.io/apiextensions-apiserver v0.0.0-20190805184801-2defa3e98ef1
