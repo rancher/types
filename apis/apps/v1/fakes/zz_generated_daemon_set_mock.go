@@ -9,9 +9,9 @@ import (
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
-	v1beta2a "github.com/rancher/types/apis/apps/v1beta2"
-	v1beta2 "k8s.io/api/apps/v1beta2"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1a "github.com/rancher/types/apis/apps/v1"
+	v1 "k8s.io/api/apps/v1"
+	v1b "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
@@ -24,7 +24,7 @@ var (
 
 // Ensure, that DaemonSetListerMock does implement DaemonSetLister.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.DaemonSetLister = &DaemonSetListerMock{}
+var _ v1a.DaemonSetLister = &DaemonSetListerMock{}
 
 // DaemonSetListerMock is a mock implementation of DaemonSetLister.
 //
@@ -32,10 +32,10 @@ var _ v1beta2a.DaemonSetLister = &DaemonSetListerMock{}
 //
 //         // make and configure a mocked DaemonSetLister
 //         mockedDaemonSetLister := &DaemonSetListerMock{
-//             GetFunc: func(namespace string, name string) (*v1beta2.DaemonSet, error) {
+//             GetFunc: func(namespace string, name string) (*v1.DaemonSet, error) {
 // 	               panic("mock out the Get method")
 //             },
-//             ListFunc: func(namespace string, selector labels.Selector) ([]*v1beta2.DaemonSet, error) {
+//             ListFunc: func(namespace string, selector labels.Selector) ([]*v1.DaemonSet, error) {
 // 	               panic("mock out the List method")
 //             },
 //         }
@@ -46,10 +46,10 @@ var _ v1beta2a.DaemonSetLister = &DaemonSetListerMock{}
 //     }
 type DaemonSetListerMock struct {
 	// GetFunc mocks the Get method.
-	GetFunc func(namespace string, name string) (*v1beta2.DaemonSet, error)
+	GetFunc func(namespace string, name string) (*v1.DaemonSet, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(namespace string, selector labels.Selector) ([]*v1beta2.DaemonSet, error)
+	ListFunc func(namespace string, selector labels.Selector) ([]*v1.DaemonSet, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -71,7 +71,7 @@ type DaemonSetListerMock struct {
 }
 
 // Get calls GetFunc.
-func (mock *DaemonSetListerMock) Get(namespace string, name string) (*v1beta2.DaemonSet, error) {
+func (mock *DaemonSetListerMock) Get(namespace string, name string) (*v1.DaemonSet, error) {
 	if mock.GetFunc == nil {
 		panic("DaemonSetListerMock.GetFunc: method is nil but DaemonSetLister.Get was just called")
 	}
@@ -106,7 +106,7 @@ func (mock *DaemonSetListerMock) GetCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *DaemonSetListerMock) List(namespace string, selector labels.Selector) ([]*v1beta2.DaemonSet, error) {
+func (mock *DaemonSetListerMock) List(namespace string, selector labels.Selector) ([]*v1.DaemonSet, error) {
 	if mock.ListFunc == nil {
 		panic("DaemonSetListerMock.ListFunc: method is nil but DaemonSetLister.List was just called")
 	}
@@ -155,7 +155,7 @@ var (
 
 // Ensure, that DaemonSetControllerMock does implement DaemonSetController.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.DaemonSetController = &DaemonSetControllerMock{}
+var _ v1a.DaemonSetController = &DaemonSetControllerMock{}
 
 // DaemonSetControllerMock is a mock implementation of DaemonSetController.
 //
@@ -163,16 +163,16 @@ var _ v1beta2a.DaemonSetController = &DaemonSetControllerMock{}
 //
 //         // make and configure a mocked DaemonSetController
 //         mockedDaemonSetController := &DaemonSetControllerMock{
-//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc)  {
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedFeatureHandler method")
 //             },
-//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc)  {
+//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
-//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc)  {
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddFeatureHandler method")
 //             },
-//             AddHandlerFunc: func(ctx context.Context, name string, handler v1beta2a.DaemonSetHandlerFunc)  {
+//             AddHandlerFunc: func(ctx context.Context, name string, handler v1a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
@@ -184,7 +184,7 @@ var _ v1beta2a.DaemonSetController = &DaemonSetControllerMock{}
 //             InformerFunc: func() cache.SharedIndexInformer {
 // 	               panic("mock out the Informer method")
 //             },
-//             ListerFunc: func() v1beta2a.DaemonSetLister {
+//             ListerFunc: func() v1a.DaemonSetLister {
 // 	               panic("mock out the Lister method")
 //             },
 //             StartFunc: func(ctx context.Context, threadiness int) error {
@@ -201,16 +201,16 @@ var _ v1beta2a.DaemonSetController = &DaemonSetControllerMock{}
 //     }
 type DaemonSetControllerMock struct {
 	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
-	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc)
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.DaemonSetHandlerFunc)
 
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
-	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc)
+	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1a.DaemonSetHandlerFunc)
 
 	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
-	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc)
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1a.DaemonSetHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
-	AddHandlerFunc func(ctx context.Context, name string, handler v1beta2a.DaemonSetHandlerFunc)
+	AddHandlerFunc func(ctx context.Context, name string, handler v1a.DaemonSetHandlerFunc)
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
@@ -222,7 +222,7 @@ type DaemonSetControllerMock struct {
 	InformerFunc func() cache.SharedIndexInformer
 
 	// ListerFunc mocks the Lister method.
-	ListerFunc func() v1beta2a.DaemonSetLister
+	ListerFunc func() v1a.DaemonSetLister
 
 	// StartFunc mocks the Start method.
 	StartFunc func(ctx context.Context, threadiness int) error
@@ -243,7 +243,7 @@ type DaemonSetControllerMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Handler is the handler argument value.
-			Handler v1beta2a.DaemonSetHandlerFunc
+			Handler v1a.DaemonSetHandlerFunc
 		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
@@ -254,7 +254,7 @@ type DaemonSetControllerMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Handler is the handler argument value.
-			Handler v1beta2a.DaemonSetHandlerFunc
+			Handler v1a.DaemonSetHandlerFunc
 		}
 		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
 		AddFeatureHandler []struct {
@@ -265,7 +265,7 @@ type DaemonSetControllerMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.DaemonSetHandlerFunc
+			Sync v1a.DaemonSetHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -274,7 +274,7 @@ type DaemonSetControllerMock struct {
 			// Name is the name argument value.
 			Name string
 			// Handler is the handler argument value.
-			Handler v1beta2a.DaemonSetHandlerFunc
+			Handler v1a.DaemonSetHandlerFunc
 		}
 		// Enqueue holds details about calls to the Enqueue method.
 		Enqueue []struct {
@@ -308,7 +308,7 @@ type DaemonSetControllerMock struct {
 }
 
 // AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
-func (mock *DaemonSetControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc) {
+func (mock *DaemonSetControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.DaemonSetHandlerFunc) {
 	if mock.AddClusterScopedFeatureHandlerFunc == nil {
 		panic("DaemonSetControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but DaemonSetController.AddClusterScopedFeatureHandler was just called")
 	}
@@ -317,7 +317,7 @@ func (mock *DaemonSetControllerMock) AddClusterScopedFeatureHandler(ctx context.
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.DaemonSetHandlerFunc
+		Handler     v1a.DaemonSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -339,14 +339,14 @@ func (mock *DaemonSetControllerMock) AddClusterScopedFeatureHandlerCalls() []str
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Handler     v1beta2a.DaemonSetHandlerFunc
+	Handler     v1a.DaemonSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.DaemonSetHandlerFunc
+		Handler     v1a.DaemonSetHandlerFunc
 	}
 	lockDaemonSetControllerMockAddClusterScopedFeatureHandler.RLock()
 	calls = mock.calls.AddClusterScopedFeatureHandler
@@ -355,7 +355,7 @@ func (mock *DaemonSetControllerMock) AddClusterScopedFeatureHandlerCalls() []str
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
-func (mock *DaemonSetControllerMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, handler v1beta2a.DaemonSetHandlerFunc) {
+func (mock *DaemonSetControllerMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, handler v1a.DaemonSetHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
 		panic("DaemonSetControllerMock.AddClusterScopedHandlerFunc: method is nil but DaemonSetController.AddClusterScopedHandler was just called")
 	}
@@ -363,7 +363,7 @@ func (mock *DaemonSetControllerMock) AddClusterScopedHandler(ctx context.Context
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.DaemonSetHandlerFunc
+		Handler     v1a.DaemonSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -383,13 +383,13 @@ func (mock *DaemonSetControllerMock) AddClusterScopedHandlerCalls() []struct {
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Handler     v1beta2a.DaemonSetHandlerFunc
+	Handler     v1a.DaemonSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.DaemonSetHandlerFunc
+		Handler     v1a.DaemonSetHandlerFunc
 	}
 	lockDaemonSetControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
@@ -398,7 +398,7 @@ func (mock *DaemonSetControllerMock) AddClusterScopedHandlerCalls() []struct {
 }
 
 // AddFeatureHandler calls AddFeatureHandlerFunc.
-func (mock *DaemonSetControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc) {
+func (mock *DaemonSetControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1a.DaemonSetHandlerFunc) {
 	if mock.AddFeatureHandlerFunc == nil {
 		panic("DaemonSetControllerMock.AddFeatureHandlerFunc: method is nil but DaemonSetController.AddFeatureHandler was just called")
 	}
@@ -406,7 +406,7 @@ func (mock *DaemonSetControllerMock) AddFeatureHandler(ctx context.Context, enab
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.DaemonSetHandlerFunc
+		Sync    v1a.DaemonSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Enabled: enabled,
@@ -426,13 +426,13 @@ func (mock *DaemonSetControllerMock) AddFeatureHandlerCalls() []struct {
 	Ctx     context.Context
 	Enabled func() bool
 	Name    string
-	Sync    v1beta2a.DaemonSetHandlerFunc
+	Sync    v1a.DaemonSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.DaemonSetHandlerFunc
+		Sync    v1a.DaemonSetHandlerFunc
 	}
 	lockDaemonSetControllerMockAddFeatureHandler.RLock()
 	calls = mock.calls.AddFeatureHandler
@@ -441,14 +441,14 @@ func (mock *DaemonSetControllerMock) AddFeatureHandlerCalls() []struct {
 }
 
 // AddHandler calls AddHandlerFunc.
-func (mock *DaemonSetControllerMock) AddHandler(ctx context.Context, name string, handler v1beta2a.DaemonSetHandlerFunc) {
+func (mock *DaemonSetControllerMock) AddHandler(ctx context.Context, name string, handler v1a.DaemonSetHandlerFunc) {
 	if mock.AddHandlerFunc == nil {
 		panic("DaemonSetControllerMock.AddHandlerFunc: method is nil but DaemonSetController.AddHandler was just called")
 	}
 	callInfo := struct {
 		Ctx     context.Context
 		Name    string
-		Handler v1beta2a.DaemonSetHandlerFunc
+		Handler v1a.DaemonSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Name:    name,
@@ -466,12 +466,12 @@ func (mock *DaemonSetControllerMock) AddHandler(ctx context.Context, name string
 func (mock *DaemonSetControllerMock) AddHandlerCalls() []struct {
 	Ctx     context.Context
 	Name    string
-	Handler v1beta2a.DaemonSetHandlerFunc
+	Handler v1a.DaemonSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Name    string
-		Handler v1beta2a.DaemonSetHandlerFunc
+		Handler v1a.DaemonSetHandlerFunc
 	}
 	lockDaemonSetControllerMockAddHandler.RLock()
 	calls = mock.calls.AddHandler
@@ -567,7 +567,7 @@ func (mock *DaemonSetControllerMock) InformerCalls() []struct {
 }
 
 // Lister calls ListerFunc.
-func (mock *DaemonSetControllerMock) Lister() v1beta2a.DaemonSetLister {
+func (mock *DaemonSetControllerMock) Lister() v1a.DaemonSetLister {
 	if mock.ListerFunc == nil {
 		panic("DaemonSetControllerMock.ListerFunc: method is nil but DaemonSetController.Lister was just called")
 	}
@@ -682,7 +682,7 @@ var (
 
 // Ensure, that DaemonSetInterfaceMock does implement DaemonSetInterface.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.DaemonSetInterface = &DaemonSetInterfaceMock{}
+var _ v1a.DaemonSetInterface = &DaemonSetInterfaceMock{}
 
 // DaemonSetInterfaceMock is a mock implementation of DaemonSetInterface.
 //
@@ -690,61 +690,61 @@ var _ v1beta2a.DaemonSetInterface = &DaemonSetInterfaceMock{}
 //
 //         // make and configure a mocked DaemonSetInterface
 //         mockedDaemonSetInterface := &DaemonSetInterfaceMock{
-//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc)  {
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedFeatureHandler method")
 //             },
-//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle)  {
+//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.DaemonSetLifecycle)  {
 // 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
 //             },
-//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc)  {
+//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
-//             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle)  {
+//             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1a.DaemonSetLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
 //             },
-//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc)  {
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddFeatureHandler method")
 //             },
-//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.DaemonSetLifecycle)  {
+//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1a.DaemonSetLifecycle)  {
 // 	               panic("mock out the AddFeatureLifecycle method")
 //             },
-//             AddHandlerFunc: func(ctx context.Context, name string, sync v1beta2a.DaemonSetHandlerFunc)  {
+//             AddHandlerFunc: func(ctx context.Context, name string, sync v1a.DaemonSetHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
 //             },
-//             AddLifecycleFunc: func(ctx context.Context, name string, lifecycle v1beta2a.DaemonSetLifecycle)  {
+//             AddLifecycleFunc: func(ctx context.Context, name string, lifecycle v1a.DaemonSetLifecycle)  {
 // 	               panic("mock out the AddLifecycle method")
 //             },
-//             ControllerFunc: func() v1beta2a.DaemonSetController {
+//             ControllerFunc: func() v1a.DaemonSetController {
 // 	               panic("mock out the Controller method")
 //             },
-//             CreateFunc: func(in1 *v1beta2.DaemonSet) (*v1beta2.DaemonSet, error) {
+//             CreateFunc: func(in1 *v1.DaemonSet) (*v1.DaemonSet, error) {
 // 	               panic("mock out the Create method")
 //             },
-//             DeleteFunc: func(name string, options *v1.DeleteOptions) error {
+//             DeleteFunc: func(name string, options *v1b.DeleteOptions) error {
 // 	               panic("mock out the Delete method")
 //             },
-//             DeleteCollectionFunc: func(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error {
+//             DeleteCollectionFunc: func(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error {
 // 	               panic("mock out the DeleteCollection method")
 //             },
-//             DeleteNamespacedFunc: func(namespace string, name string, options *v1.DeleteOptions) error {
+//             DeleteNamespacedFunc: func(namespace string, name string, options *v1b.DeleteOptions) error {
 // 	               panic("mock out the DeleteNamespaced method")
 //             },
-//             GetFunc: func(name string, opts v1.GetOptions) (*v1beta2.DaemonSet, error) {
+//             GetFunc: func(name string, opts v1b.GetOptions) (*v1.DaemonSet, error) {
 // 	               panic("mock out the Get method")
 //             },
-//             GetNamespacedFunc: func(namespace string, name string, opts v1.GetOptions) (*v1beta2.DaemonSet, error) {
+//             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.DaemonSet, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1.ListOptions) (*v1beta2a.DaemonSetList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1a.DaemonSetList, error) {
 // 	               panic("mock out the List method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
 //             },
-//             UpdateFunc: func(in1 *v1beta2.DaemonSet) (*v1beta2.DaemonSet, error) {
+//             UpdateFunc: func(in1 *v1.DaemonSet) (*v1.DaemonSet, error) {
 // 	               panic("mock out the Update method")
 //             },
-//             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
+//             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
 //         }
@@ -755,61 +755,61 @@ var _ v1beta2a.DaemonSetInterface = &DaemonSetInterfaceMock{}
 //     }
 type DaemonSetInterfaceMock struct {
 	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
-	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc)
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.DaemonSetHandlerFunc)
 
 	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
-	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle)
+	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.DaemonSetLifecycle)
 
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
-	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc)
+	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1a.DaemonSetHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
-	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle)
+	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1a.DaemonSetLifecycle)
 
 	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
-	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc)
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1a.DaemonSetHandlerFunc)
 
 	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
-	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.DaemonSetLifecycle)
+	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1a.DaemonSetLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
-	AddHandlerFunc func(ctx context.Context, name string, sync v1beta2a.DaemonSetHandlerFunc)
+	AddHandlerFunc func(ctx context.Context, name string, sync v1a.DaemonSetHandlerFunc)
 
 	// AddLifecycleFunc mocks the AddLifecycle method.
-	AddLifecycleFunc func(ctx context.Context, name string, lifecycle v1beta2a.DaemonSetLifecycle)
+	AddLifecycleFunc func(ctx context.Context, name string, lifecycle v1a.DaemonSetLifecycle)
 
 	// ControllerFunc mocks the Controller method.
-	ControllerFunc func() v1beta2a.DaemonSetController
+	ControllerFunc func() v1a.DaemonSetController
 
 	// CreateFunc mocks the Create method.
-	CreateFunc func(in1 *v1beta2.DaemonSet) (*v1beta2.DaemonSet, error)
+	CreateFunc func(in1 *v1.DaemonSet) (*v1.DaemonSet, error)
 
 	// DeleteFunc mocks the Delete method.
-	DeleteFunc func(name string, options *v1.DeleteOptions) error
+	DeleteFunc func(name string, options *v1b.DeleteOptions) error
 
 	// DeleteCollectionFunc mocks the DeleteCollection method.
-	DeleteCollectionFunc func(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error
+	DeleteCollectionFunc func(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error
 
 	// DeleteNamespacedFunc mocks the DeleteNamespaced method.
-	DeleteNamespacedFunc func(namespace string, name string, options *v1.DeleteOptions) error
+	DeleteNamespacedFunc func(namespace string, name string, options *v1b.DeleteOptions) error
 
 	// GetFunc mocks the Get method.
-	GetFunc func(name string, opts v1.GetOptions) (*v1beta2.DaemonSet, error)
+	GetFunc func(name string, opts v1b.GetOptions) (*v1.DaemonSet, error)
 
 	// GetNamespacedFunc mocks the GetNamespaced method.
-	GetNamespacedFunc func(namespace string, name string, opts v1.GetOptions) (*v1beta2.DaemonSet, error)
+	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.DaemonSet, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1.ListOptions) (*v1beta2a.DaemonSetList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1a.DaemonSetList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
 
 	// UpdateFunc mocks the Update method.
-	UpdateFunc func(in1 *v1beta2.DaemonSet) (*v1beta2.DaemonSet, error)
+	UpdateFunc func(in1 *v1.DaemonSet) (*v1.DaemonSet, error)
 
 	// WatchFunc mocks the Watch method.
-	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
+	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -824,7 +824,7 @@ type DaemonSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Sync is the sync argument value.
-			Sync v1beta2a.DaemonSetHandlerFunc
+			Sync v1a.DaemonSetHandlerFunc
 		}
 		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
 		AddClusterScopedFeatureLifecycle []struct {
@@ -837,7 +837,7 @@ type DaemonSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.DaemonSetLifecycle
+			Lifecycle v1a.DaemonSetLifecycle
 		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
@@ -848,7 +848,7 @@ type DaemonSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Sync is the sync argument value.
-			Sync v1beta2a.DaemonSetHandlerFunc
+			Sync v1a.DaemonSetHandlerFunc
 		}
 		// AddClusterScopedLifecycle holds details about calls to the AddClusterScopedLifecycle method.
 		AddClusterScopedLifecycle []struct {
@@ -859,7 +859,7 @@ type DaemonSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.DaemonSetLifecycle
+			Lifecycle v1a.DaemonSetLifecycle
 		}
 		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
 		AddFeatureHandler []struct {
@@ -870,7 +870,7 @@ type DaemonSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.DaemonSetHandlerFunc
+			Sync v1a.DaemonSetHandlerFunc
 		}
 		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
 		AddFeatureLifecycle []struct {
@@ -881,7 +881,7 @@ type DaemonSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.DaemonSetLifecycle
+			Lifecycle v1a.DaemonSetLifecycle
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -890,7 +890,7 @@ type DaemonSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.DaemonSetHandlerFunc
+			Sync v1a.DaemonSetHandlerFunc
 		}
 		// AddLifecycle holds details about calls to the AddLifecycle method.
 		AddLifecycle []struct {
@@ -899,7 +899,7 @@ type DaemonSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.DaemonSetLifecycle
+			Lifecycle v1a.DaemonSetLifecycle
 		}
 		// Controller holds details about calls to the Controller method.
 		Controller []struct {
@@ -907,21 +907,21 @@ type DaemonSetInterfaceMock struct {
 		// Create holds details about calls to the Create method.
 		Create []struct {
 			// In1 is the in1 argument value.
-			In1 *v1beta2.DaemonSet
+			In1 *v1.DaemonSet
 		}
 		// Delete holds details about calls to the Delete method.
 		Delete []struct {
 			// Name is the name argument value.
 			Name string
 			// Options is the options argument value.
-			Options *v1.DeleteOptions
+			Options *v1b.DeleteOptions
 		}
 		// DeleteCollection holds details about calls to the DeleteCollection method.
 		DeleteCollection []struct {
 			// DeleteOpts is the deleteOpts argument value.
-			DeleteOpts *v1.DeleteOptions
+			DeleteOpts *v1b.DeleteOptions
 			// ListOpts is the listOpts argument value.
-			ListOpts v1.ListOptions
+			ListOpts v1b.ListOptions
 		}
 		// DeleteNamespaced holds details about calls to the DeleteNamespaced method.
 		DeleteNamespaced []struct {
@@ -930,14 +930,14 @@ type DaemonSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Options is the options argument value.
-			Options *v1.DeleteOptions
+			Options *v1b.DeleteOptions
 		}
 		// Get holds details about calls to the Get method.
 		Get []struct {
 			// Name is the name argument value.
 			Name string
 			// Opts is the opts argument value.
-			Opts v1.GetOptions
+			Opts v1b.GetOptions
 		}
 		// GetNamespaced holds details about calls to the GetNamespaced method.
 		GetNamespaced []struct {
@@ -946,12 +946,12 @@ type DaemonSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Opts is the opts argument value.
-			Opts v1.GetOptions
+			Opts v1b.GetOptions
 		}
 		// List holds details about calls to the List method.
 		List []struct {
 			// Opts is the opts argument value.
-			Opts v1.ListOptions
+			Opts v1b.ListOptions
 		}
 		// ObjectClient holds details about calls to the ObjectClient method.
 		ObjectClient []struct {
@@ -959,18 +959,18 @@ type DaemonSetInterfaceMock struct {
 		// Update holds details about calls to the Update method.
 		Update []struct {
 			// In1 is the in1 argument value.
-			In1 *v1beta2.DaemonSet
+			In1 *v1.DaemonSet
 		}
 		// Watch holds details about calls to the Watch method.
 		Watch []struct {
 			// Opts is the opts argument value.
-			Opts v1.ListOptions
+			Opts v1b.ListOptions
 		}
 	}
 }
 
 // AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
-func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc) {
+func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.DaemonSetHandlerFunc) {
 	if mock.AddClusterScopedFeatureHandlerFunc == nil {
 		panic("DaemonSetInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but DaemonSetInterface.AddClusterScopedFeatureHandler was just called")
 	}
@@ -979,7 +979,7 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.C
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.DaemonSetHandlerFunc
+		Sync        v1a.DaemonSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -1001,14 +1001,14 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureHandlerCalls() []stru
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Sync        v1beta2a.DaemonSetHandlerFunc
+	Sync        v1a.DaemonSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.DaemonSetHandlerFunc
+		Sync        v1a.DaemonSetHandlerFunc
 	}
 	lockDaemonSetInterfaceMockAddClusterScopedFeatureHandler.RLock()
 	calls = mock.calls.AddClusterScopedFeatureHandler
@@ -1017,7 +1017,7 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureHandlerCalls() []stru
 }
 
 // AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
-func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle) {
+func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.DaemonSetLifecycle) {
 	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
 		panic("DaemonSetInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but DaemonSetInterface.AddClusterScopedFeatureLifecycle was just called")
 	}
@@ -1026,7 +1026,7 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.DaemonSetLifecycle
+		Lifecycle   v1a.DaemonSetLifecycle
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -1048,14 +1048,14 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []st
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Lifecycle   v1beta2a.DaemonSetLifecycle
+	Lifecycle   v1a.DaemonSetLifecycle
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.DaemonSetLifecycle
+		Lifecycle   v1a.DaemonSetLifecycle
 	}
 	lockDaemonSetInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedFeatureLifecycle
@@ -1064,7 +1064,7 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []st
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
-func (mock *DaemonSetInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1beta2a.DaemonSetHandlerFunc) {
+func (mock *DaemonSetInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1a.DaemonSetHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
 		panic("DaemonSetInterfaceMock.AddClusterScopedHandlerFunc: method is nil but DaemonSetInterface.AddClusterScopedHandler was just called")
 	}
@@ -1072,7 +1072,7 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedHandler(ctx context.Context,
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.DaemonSetHandlerFunc
+		Sync        v1a.DaemonSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -1092,13 +1092,13 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedHandlerCalls() []struct {
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Sync        v1beta2a.DaemonSetHandlerFunc
+	Sync        v1a.DaemonSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.DaemonSetHandlerFunc
+		Sync        v1a.DaemonSetHandlerFunc
 	}
 	lockDaemonSetInterfaceMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
@@ -1107,7 +1107,7 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedHandlerCalls() []struct {
 }
 
 // AddClusterScopedLifecycle calls AddClusterScopedLifecycleFunc.
-func (mock *DaemonSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.DaemonSetLifecycle) {
+func (mock *DaemonSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Context, name string, clusterName string, lifecycle v1a.DaemonSetLifecycle) {
 	if mock.AddClusterScopedLifecycleFunc == nil {
 		panic("DaemonSetInterfaceMock.AddClusterScopedLifecycleFunc: method is nil but DaemonSetInterface.AddClusterScopedLifecycle was just called")
 	}
@@ -1115,7 +1115,7 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Contex
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.DaemonSetLifecycle
+		Lifecycle   v1a.DaemonSetLifecycle
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -1135,13 +1135,13 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedLifecycleCalls() []struct {
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Lifecycle   v1beta2a.DaemonSetLifecycle
+	Lifecycle   v1a.DaemonSetLifecycle
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.DaemonSetLifecycle
+		Lifecycle   v1a.DaemonSetLifecycle
 	}
 	lockDaemonSetInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
@@ -1150,7 +1150,7 @@ func (mock *DaemonSetInterfaceMock) AddClusterScopedLifecycleCalls() []struct {
 }
 
 // AddFeatureHandler calls AddFeatureHandlerFunc.
-func (mock *DaemonSetInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta2a.DaemonSetHandlerFunc) {
+func (mock *DaemonSetInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1a.DaemonSetHandlerFunc) {
 	if mock.AddFeatureHandlerFunc == nil {
 		panic("DaemonSetInterfaceMock.AddFeatureHandlerFunc: method is nil but DaemonSetInterface.AddFeatureHandler was just called")
 	}
@@ -1158,7 +1158,7 @@ func (mock *DaemonSetInterfaceMock) AddFeatureHandler(ctx context.Context, enabl
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.DaemonSetHandlerFunc
+		Sync    v1a.DaemonSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Enabled: enabled,
@@ -1178,13 +1178,13 @@ func (mock *DaemonSetInterfaceMock) AddFeatureHandlerCalls() []struct {
 	Ctx     context.Context
 	Enabled func() bool
 	Name    string
-	Sync    v1beta2a.DaemonSetHandlerFunc
+	Sync    v1a.DaemonSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.DaemonSetHandlerFunc
+		Sync    v1a.DaemonSetHandlerFunc
 	}
 	lockDaemonSetInterfaceMockAddFeatureHandler.RLock()
 	calls = mock.calls.AddFeatureHandler
@@ -1193,7 +1193,7 @@ func (mock *DaemonSetInterfaceMock) AddFeatureHandlerCalls() []struct {
 }
 
 // AddFeatureLifecycle calls AddFeatureLifecycleFunc.
-func (mock *DaemonSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.DaemonSetLifecycle) {
+func (mock *DaemonSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1a.DaemonSetLifecycle) {
 	if mock.AddFeatureLifecycleFunc == nil {
 		panic("DaemonSetInterfaceMock.AddFeatureLifecycleFunc: method is nil but DaemonSetInterface.AddFeatureLifecycle was just called")
 	}
@@ -1201,7 +1201,7 @@ func (mock *DaemonSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, ena
 		Ctx       context.Context
 		Enabled   func() bool
 		Name      string
-		Lifecycle v1beta2a.DaemonSetLifecycle
+		Lifecycle v1a.DaemonSetLifecycle
 	}{
 		Ctx:       ctx,
 		Enabled:   enabled,
@@ -1221,13 +1221,13 @@ func (mock *DaemonSetInterfaceMock) AddFeatureLifecycleCalls() []struct {
 	Ctx       context.Context
 	Enabled   func() bool
 	Name      string
-	Lifecycle v1beta2a.DaemonSetLifecycle
+	Lifecycle v1a.DaemonSetLifecycle
 } {
 	var calls []struct {
 		Ctx       context.Context
 		Enabled   func() bool
 		Name      string
-		Lifecycle v1beta2a.DaemonSetLifecycle
+		Lifecycle v1a.DaemonSetLifecycle
 	}
 	lockDaemonSetInterfaceMockAddFeatureLifecycle.RLock()
 	calls = mock.calls.AddFeatureLifecycle
@@ -1236,14 +1236,14 @@ func (mock *DaemonSetInterfaceMock) AddFeatureLifecycleCalls() []struct {
 }
 
 // AddHandler calls AddHandlerFunc.
-func (mock *DaemonSetInterfaceMock) AddHandler(ctx context.Context, name string, sync v1beta2a.DaemonSetHandlerFunc) {
+func (mock *DaemonSetInterfaceMock) AddHandler(ctx context.Context, name string, sync v1a.DaemonSetHandlerFunc) {
 	if mock.AddHandlerFunc == nil {
 		panic("DaemonSetInterfaceMock.AddHandlerFunc: method is nil but DaemonSetInterface.AddHandler was just called")
 	}
 	callInfo := struct {
 		Ctx  context.Context
 		Name string
-		Sync v1beta2a.DaemonSetHandlerFunc
+		Sync v1a.DaemonSetHandlerFunc
 	}{
 		Ctx:  ctx,
 		Name: name,
@@ -1261,12 +1261,12 @@ func (mock *DaemonSetInterfaceMock) AddHandler(ctx context.Context, name string,
 func (mock *DaemonSetInterfaceMock) AddHandlerCalls() []struct {
 	Ctx  context.Context
 	Name string
-	Sync v1beta2a.DaemonSetHandlerFunc
+	Sync v1a.DaemonSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx  context.Context
 		Name string
-		Sync v1beta2a.DaemonSetHandlerFunc
+		Sync v1a.DaemonSetHandlerFunc
 	}
 	lockDaemonSetInterfaceMockAddHandler.RLock()
 	calls = mock.calls.AddHandler
@@ -1275,14 +1275,14 @@ func (mock *DaemonSetInterfaceMock) AddHandlerCalls() []struct {
 }
 
 // AddLifecycle calls AddLifecycleFunc.
-func (mock *DaemonSetInterfaceMock) AddLifecycle(ctx context.Context, name string, lifecycle v1beta2a.DaemonSetLifecycle) {
+func (mock *DaemonSetInterfaceMock) AddLifecycle(ctx context.Context, name string, lifecycle v1a.DaemonSetLifecycle) {
 	if mock.AddLifecycleFunc == nil {
 		panic("DaemonSetInterfaceMock.AddLifecycleFunc: method is nil but DaemonSetInterface.AddLifecycle was just called")
 	}
 	callInfo := struct {
 		Ctx       context.Context
 		Name      string
-		Lifecycle v1beta2a.DaemonSetLifecycle
+		Lifecycle v1a.DaemonSetLifecycle
 	}{
 		Ctx:       ctx,
 		Name:      name,
@@ -1300,12 +1300,12 @@ func (mock *DaemonSetInterfaceMock) AddLifecycle(ctx context.Context, name strin
 func (mock *DaemonSetInterfaceMock) AddLifecycleCalls() []struct {
 	Ctx       context.Context
 	Name      string
-	Lifecycle v1beta2a.DaemonSetLifecycle
+	Lifecycle v1a.DaemonSetLifecycle
 } {
 	var calls []struct {
 		Ctx       context.Context
 		Name      string
-		Lifecycle v1beta2a.DaemonSetLifecycle
+		Lifecycle v1a.DaemonSetLifecycle
 	}
 	lockDaemonSetInterfaceMockAddLifecycle.RLock()
 	calls = mock.calls.AddLifecycle
@@ -1314,7 +1314,7 @@ func (mock *DaemonSetInterfaceMock) AddLifecycleCalls() []struct {
 }
 
 // Controller calls ControllerFunc.
-func (mock *DaemonSetInterfaceMock) Controller() v1beta2a.DaemonSetController {
+func (mock *DaemonSetInterfaceMock) Controller() v1a.DaemonSetController {
 	if mock.ControllerFunc == nil {
 		panic("DaemonSetInterfaceMock.ControllerFunc: method is nil but DaemonSetInterface.Controller was just called")
 	}
@@ -1340,12 +1340,12 @@ func (mock *DaemonSetInterfaceMock) ControllerCalls() []struct {
 }
 
 // Create calls CreateFunc.
-func (mock *DaemonSetInterfaceMock) Create(in1 *v1beta2.DaemonSet) (*v1beta2.DaemonSet, error) {
+func (mock *DaemonSetInterfaceMock) Create(in1 *v1.DaemonSet) (*v1.DaemonSet, error) {
 	if mock.CreateFunc == nil {
 		panic("DaemonSetInterfaceMock.CreateFunc: method is nil but DaemonSetInterface.Create was just called")
 	}
 	callInfo := struct {
-		In1 *v1beta2.DaemonSet
+		In1 *v1.DaemonSet
 	}{
 		In1: in1,
 	}
@@ -1359,10 +1359,10 @@ func (mock *DaemonSetInterfaceMock) Create(in1 *v1beta2.DaemonSet) (*v1beta2.Dae
 // Check the length with:
 //     len(mockedDaemonSetInterface.CreateCalls())
 func (mock *DaemonSetInterfaceMock) CreateCalls() []struct {
-	In1 *v1beta2.DaemonSet
+	In1 *v1.DaemonSet
 } {
 	var calls []struct {
-		In1 *v1beta2.DaemonSet
+		In1 *v1.DaemonSet
 	}
 	lockDaemonSetInterfaceMockCreate.RLock()
 	calls = mock.calls.Create
@@ -1371,13 +1371,13 @@ func (mock *DaemonSetInterfaceMock) CreateCalls() []struct {
 }
 
 // Delete calls DeleteFunc.
-func (mock *DaemonSetInterfaceMock) Delete(name string, options *v1.DeleteOptions) error {
+func (mock *DaemonSetInterfaceMock) Delete(name string, options *v1b.DeleteOptions) error {
 	if mock.DeleteFunc == nil {
 		panic("DaemonSetInterfaceMock.DeleteFunc: method is nil but DaemonSetInterface.Delete was just called")
 	}
 	callInfo := struct {
 		Name    string
-		Options *v1.DeleteOptions
+		Options *v1b.DeleteOptions
 	}{
 		Name:    name,
 		Options: options,
@@ -1393,11 +1393,11 @@ func (mock *DaemonSetInterfaceMock) Delete(name string, options *v1.DeleteOption
 //     len(mockedDaemonSetInterface.DeleteCalls())
 func (mock *DaemonSetInterfaceMock) DeleteCalls() []struct {
 	Name    string
-	Options *v1.DeleteOptions
+	Options *v1b.DeleteOptions
 } {
 	var calls []struct {
 		Name    string
-		Options *v1.DeleteOptions
+		Options *v1b.DeleteOptions
 	}
 	lockDaemonSetInterfaceMockDelete.RLock()
 	calls = mock.calls.Delete
@@ -1406,13 +1406,13 @@ func (mock *DaemonSetInterfaceMock) DeleteCalls() []struct {
 }
 
 // DeleteCollection calls DeleteCollectionFunc.
-func (mock *DaemonSetInterfaceMock) DeleteCollection(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (mock *DaemonSetInterfaceMock) DeleteCollection(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error {
 	if mock.DeleteCollectionFunc == nil {
 		panic("DaemonSetInterfaceMock.DeleteCollectionFunc: method is nil but DaemonSetInterface.DeleteCollection was just called")
 	}
 	callInfo := struct {
-		DeleteOpts *v1.DeleteOptions
-		ListOpts   v1.ListOptions
+		DeleteOpts *v1b.DeleteOptions
+		ListOpts   v1b.ListOptions
 	}{
 		DeleteOpts: deleteOpts,
 		ListOpts:   listOpts,
@@ -1427,12 +1427,12 @@ func (mock *DaemonSetInterfaceMock) DeleteCollection(deleteOpts *v1.DeleteOption
 // Check the length with:
 //     len(mockedDaemonSetInterface.DeleteCollectionCalls())
 func (mock *DaemonSetInterfaceMock) DeleteCollectionCalls() []struct {
-	DeleteOpts *v1.DeleteOptions
-	ListOpts   v1.ListOptions
+	DeleteOpts *v1b.DeleteOptions
+	ListOpts   v1b.ListOptions
 } {
 	var calls []struct {
-		DeleteOpts *v1.DeleteOptions
-		ListOpts   v1.ListOptions
+		DeleteOpts *v1b.DeleteOptions
+		ListOpts   v1b.ListOptions
 	}
 	lockDaemonSetInterfaceMockDeleteCollection.RLock()
 	calls = mock.calls.DeleteCollection
@@ -1441,14 +1441,14 @@ func (mock *DaemonSetInterfaceMock) DeleteCollectionCalls() []struct {
 }
 
 // DeleteNamespaced calls DeleteNamespacedFunc.
-func (mock *DaemonSetInterfaceMock) DeleteNamespaced(namespace string, name string, options *v1.DeleteOptions) error {
+func (mock *DaemonSetInterfaceMock) DeleteNamespaced(namespace string, name string, options *v1b.DeleteOptions) error {
 	if mock.DeleteNamespacedFunc == nil {
 		panic("DaemonSetInterfaceMock.DeleteNamespacedFunc: method is nil but DaemonSetInterface.DeleteNamespaced was just called")
 	}
 	callInfo := struct {
 		Namespace string
 		Name      string
-		Options   *v1.DeleteOptions
+		Options   *v1b.DeleteOptions
 	}{
 		Namespace: namespace,
 		Name:      name,
@@ -1466,12 +1466,12 @@ func (mock *DaemonSetInterfaceMock) DeleteNamespaced(namespace string, name stri
 func (mock *DaemonSetInterfaceMock) DeleteNamespacedCalls() []struct {
 	Namespace string
 	Name      string
-	Options   *v1.DeleteOptions
+	Options   *v1b.DeleteOptions
 } {
 	var calls []struct {
 		Namespace string
 		Name      string
-		Options   *v1.DeleteOptions
+		Options   *v1b.DeleteOptions
 	}
 	lockDaemonSetInterfaceMockDeleteNamespaced.RLock()
 	calls = mock.calls.DeleteNamespaced
@@ -1480,13 +1480,13 @@ func (mock *DaemonSetInterfaceMock) DeleteNamespacedCalls() []struct {
 }
 
 // Get calls GetFunc.
-func (mock *DaemonSetInterfaceMock) Get(name string, opts v1.GetOptions) (*v1beta2.DaemonSet, error) {
+func (mock *DaemonSetInterfaceMock) Get(name string, opts v1b.GetOptions) (*v1.DaemonSet, error) {
 	if mock.GetFunc == nil {
 		panic("DaemonSetInterfaceMock.GetFunc: method is nil but DaemonSetInterface.Get was just called")
 	}
 	callInfo := struct {
 		Name string
-		Opts v1.GetOptions
+		Opts v1b.GetOptions
 	}{
 		Name: name,
 		Opts: opts,
@@ -1502,11 +1502,11 @@ func (mock *DaemonSetInterfaceMock) Get(name string, opts v1.GetOptions) (*v1bet
 //     len(mockedDaemonSetInterface.GetCalls())
 func (mock *DaemonSetInterfaceMock) GetCalls() []struct {
 	Name string
-	Opts v1.GetOptions
+	Opts v1b.GetOptions
 } {
 	var calls []struct {
 		Name string
-		Opts v1.GetOptions
+		Opts v1b.GetOptions
 	}
 	lockDaemonSetInterfaceMockGet.RLock()
 	calls = mock.calls.Get
@@ -1515,14 +1515,14 @@ func (mock *DaemonSetInterfaceMock) GetCalls() []struct {
 }
 
 // GetNamespaced calls GetNamespacedFunc.
-func (mock *DaemonSetInterfaceMock) GetNamespaced(namespace string, name string, opts v1.GetOptions) (*v1beta2.DaemonSet, error) {
+func (mock *DaemonSetInterfaceMock) GetNamespaced(namespace string, name string, opts v1b.GetOptions) (*v1.DaemonSet, error) {
 	if mock.GetNamespacedFunc == nil {
 		panic("DaemonSetInterfaceMock.GetNamespacedFunc: method is nil but DaemonSetInterface.GetNamespaced was just called")
 	}
 	callInfo := struct {
 		Namespace string
 		Name      string
-		Opts      v1.GetOptions
+		Opts      v1b.GetOptions
 	}{
 		Namespace: namespace,
 		Name:      name,
@@ -1540,12 +1540,12 @@ func (mock *DaemonSetInterfaceMock) GetNamespaced(namespace string, name string,
 func (mock *DaemonSetInterfaceMock) GetNamespacedCalls() []struct {
 	Namespace string
 	Name      string
-	Opts      v1.GetOptions
+	Opts      v1b.GetOptions
 } {
 	var calls []struct {
 		Namespace string
 		Name      string
-		Opts      v1.GetOptions
+		Opts      v1b.GetOptions
 	}
 	lockDaemonSetInterfaceMockGetNamespaced.RLock()
 	calls = mock.calls.GetNamespaced
@@ -1554,12 +1554,12 @@ func (mock *DaemonSetInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *DaemonSetInterfaceMock) List(opts v1.ListOptions) (*v1beta2a.DaemonSetList, error) {
+func (mock *DaemonSetInterfaceMock) List(opts v1b.ListOptions) (*v1a.DaemonSetList, error) {
 	if mock.ListFunc == nil {
 		panic("DaemonSetInterfaceMock.ListFunc: method is nil but DaemonSetInterface.List was just called")
 	}
 	callInfo := struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}{
 		Opts: opts,
 	}
@@ -1573,10 +1573,10 @@ func (mock *DaemonSetInterfaceMock) List(opts v1.ListOptions) (*v1beta2a.DaemonS
 // Check the length with:
 //     len(mockedDaemonSetInterface.ListCalls())
 func (mock *DaemonSetInterfaceMock) ListCalls() []struct {
-	Opts v1.ListOptions
+	Opts v1b.ListOptions
 } {
 	var calls []struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}
 	lockDaemonSetInterfaceMockList.RLock()
 	calls = mock.calls.List
@@ -1611,12 +1611,12 @@ func (mock *DaemonSetInterfaceMock) ObjectClientCalls() []struct {
 }
 
 // Update calls UpdateFunc.
-func (mock *DaemonSetInterfaceMock) Update(in1 *v1beta2.DaemonSet) (*v1beta2.DaemonSet, error) {
+func (mock *DaemonSetInterfaceMock) Update(in1 *v1.DaemonSet) (*v1.DaemonSet, error) {
 	if mock.UpdateFunc == nil {
 		panic("DaemonSetInterfaceMock.UpdateFunc: method is nil but DaemonSetInterface.Update was just called")
 	}
 	callInfo := struct {
-		In1 *v1beta2.DaemonSet
+		In1 *v1.DaemonSet
 	}{
 		In1: in1,
 	}
@@ -1630,10 +1630,10 @@ func (mock *DaemonSetInterfaceMock) Update(in1 *v1beta2.DaemonSet) (*v1beta2.Dae
 // Check the length with:
 //     len(mockedDaemonSetInterface.UpdateCalls())
 func (mock *DaemonSetInterfaceMock) UpdateCalls() []struct {
-	In1 *v1beta2.DaemonSet
+	In1 *v1.DaemonSet
 } {
 	var calls []struct {
-		In1 *v1beta2.DaemonSet
+		In1 *v1.DaemonSet
 	}
 	lockDaemonSetInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
@@ -1642,12 +1642,12 @@ func (mock *DaemonSetInterfaceMock) UpdateCalls() []struct {
 }
 
 // Watch calls WatchFunc.
-func (mock *DaemonSetInterfaceMock) Watch(opts v1.ListOptions) (watch.Interface, error) {
+func (mock *DaemonSetInterfaceMock) Watch(opts v1b.ListOptions) (watch.Interface, error) {
 	if mock.WatchFunc == nil {
 		panic("DaemonSetInterfaceMock.WatchFunc: method is nil but DaemonSetInterface.Watch was just called")
 	}
 	callInfo := struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}{
 		Opts: opts,
 	}
@@ -1661,10 +1661,10 @@ func (mock *DaemonSetInterfaceMock) Watch(opts v1.ListOptions) (watch.Interface,
 // Check the length with:
 //     len(mockedDaemonSetInterface.WatchCalls())
 func (mock *DaemonSetInterfaceMock) WatchCalls() []struct {
-	Opts v1.ListOptions
+	Opts v1b.ListOptions
 } {
 	var calls []struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}
 	lockDaemonSetInterfaceMockWatch.RLock()
 	calls = mock.calls.Watch
@@ -1678,7 +1678,7 @@ var (
 
 // Ensure, that DaemonSetsGetterMock does implement DaemonSetsGetter.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.DaemonSetsGetter = &DaemonSetsGetterMock{}
+var _ v1a.DaemonSetsGetter = &DaemonSetsGetterMock{}
 
 // DaemonSetsGetterMock is a mock implementation of DaemonSetsGetter.
 //
@@ -1686,7 +1686,7 @@ var _ v1beta2a.DaemonSetsGetter = &DaemonSetsGetterMock{}
 //
 //         // make and configure a mocked DaemonSetsGetter
 //         mockedDaemonSetsGetter := &DaemonSetsGetterMock{
-//             DaemonSetsFunc: func(namespace string) v1beta2a.DaemonSetInterface {
+//             DaemonSetsFunc: func(namespace string) v1a.DaemonSetInterface {
 // 	               panic("mock out the DaemonSets method")
 //             },
 //         }
@@ -1697,7 +1697,7 @@ var _ v1beta2a.DaemonSetsGetter = &DaemonSetsGetterMock{}
 //     }
 type DaemonSetsGetterMock struct {
 	// DaemonSetsFunc mocks the DaemonSets method.
-	DaemonSetsFunc func(namespace string) v1beta2a.DaemonSetInterface
+	DaemonSetsFunc func(namespace string) v1a.DaemonSetInterface
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -1710,7 +1710,7 @@ type DaemonSetsGetterMock struct {
 }
 
 // DaemonSets calls DaemonSetsFunc.
-func (mock *DaemonSetsGetterMock) DaemonSets(namespace string) v1beta2a.DaemonSetInterface {
+func (mock *DaemonSetsGetterMock) DaemonSets(namespace string) v1a.DaemonSetInterface {
 	if mock.DaemonSetsFunc == nil {
 		panic("DaemonSetsGetterMock.DaemonSetsFunc: method is nil but DaemonSetsGetter.DaemonSets was just called")
 	}
