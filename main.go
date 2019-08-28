@@ -11,14 +11,15 @@ import (
 	publicSchema "github.com/rancher/types/apis/management.cattle.io/v3public/schema"
 	projectSchema "github.com/rancher/types/apis/project.cattle.io/v3/schema"
 	"github.com/rancher/types/generator"
-	"k8s.io/api/apps/v1beta2"
+
+	appsv1 "k8s.io/api/apps/v1"
+	scalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 	batchv1 "k8s.io/api/batch/v1"
 	batchv1beta1 "k8s.io/api/batch/v1beta1"
-
-	scalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 	v1 "k8s.io/api/core/v1"
 	extv1beta1 "k8s.io/api/extensions/v1beta1"
 	knetworkingv1 "k8s.io/api/networking/v1"
+	policyv1beta1 "k8s.io/api/policy/v1beta1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	k8sschema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -53,11 +54,11 @@ func main() {
 		v1.Namespace{},
 		v1.Event{},
 	})
-	generator.GenerateNativeTypes(v1beta2.SchemeGroupVersion, []interface{}{
-		v1beta2.Deployment{},
-		v1beta2.DaemonSet{},
-		v1beta2.StatefulSet{},
-		v1beta2.ReplicaSet{},
+	generator.GenerateNativeTypes(appsv1.SchemeGroupVersion, []interface{}{
+		appsv1.Deployment{},
+		appsv1.DaemonSet{},
+		appsv1.StatefulSet{},
+		appsv1.ReplicaSet{},
 	}, nil)
 	generator.GenerateNativeTypes(rbacv1.SchemeGroupVersion, []interface{}{
 		rbacv1.RoleBinding{},
@@ -79,13 +80,20 @@ func main() {
 		[]interface{}{
 			extv1beta1.Ingress{},
 		},
+		nil,
+	)
+	generator.GenerateNativeTypes(policyv1beta1.SchemeGroupVersion,
+		nil,
 		[]interface{}{
-			extv1beta1.PodSecurityPolicy{},
+			policyv1beta1.PodSecurityPolicy{},
 		},
 	)
-	generator.GenerateNativeTypes(storagev1.SchemeGroupVersion, nil, []interface{}{
-		storagev1.StorageClass{},
-	})
+	generator.GenerateNativeTypes(storagev1.SchemeGroupVersion,
+		nil,
+		[]interface{}{
+			storagev1.StorageClass{},
+		},
+	)
 	generator.GenerateNativeTypes(
 		k8sschema.GroupVersion{Group: monitoringv1.Group, Version: monitoringv1.Version},
 		[]interface{}{
@@ -94,23 +102,24 @@ func main() {
 			monitoringv1.PrometheusRule{},
 			monitoringv1.ServiceMonitor{},
 		},
-		[]interface{}{},
+		nil,
 	)
 	generator.GenerateNativeTypes(scalingv2beta2.SchemeGroupVersion,
 		[]interface{}{
 			scalingv2beta2.HorizontalPodAutoscaler{},
 		},
-		[]interface{}{},
+		nil,
 	)
 	generator.GenerateNativeTypes(istiov1alpha3.SchemeGroupVersion,
 		[]interface{}{
 			istiov1alpha3.VirtualService{},
 			istiov1alpha3.DestinationRule{},
 		},
-		[]interface{}{},
+		nil,
 	)
 	generator.GenerateNativeTypes(apiregistrationv1.SchemeGroupVersion,
-		[]interface{}{}, []interface{}{
+		nil,
+		[]interface{}{
 			apiregistrationv1.APIService{},
 		},
 	)
