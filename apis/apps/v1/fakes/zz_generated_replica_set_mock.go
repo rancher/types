@@ -9,9 +9,9 @@ import (
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
-	v1beta2a "github.com/rancher/types/apis/apps/v1beta2"
-	v1beta2 "k8s.io/api/apps/v1beta2"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1a "github.com/rancher/types/apis/apps/v1"
+	v1 "k8s.io/api/apps/v1"
+	v1b "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
@@ -24,7 +24,7 @@ var (
 
 // Ensure, that ReplicaSetListerMock does implement ReplicaSetLister.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.ReplicaSetLister = &ReplicaSetListerMock{}
+var _ v1a.ReplicaSetLister = &ReplicaSetListerMock{}
 
 // ReplicaSetListerMock is a mock implementation of ReplicaSetLister.
 //
@@ -32,10 +32,10 @@ var _ v1beta2a.ReplicaSetLister = &ReplicaSetListerMock{}
 //
 //         // make and configure a mocked ReplicaSetLister
 //         mockedReplicaSetLister := &ReplicaSetListerMock{
-//             GetFunc: func(namespace string, name string) (*v1beta2.ReplicaSet, error) {
+//             GetFunc: func(namespace string, name string) (*v1.ReplicaSet, error) {
 // 	               panic("mock out the Get method")
 //             },
-//             ListFunc: func(namespace string, selector labels.Selector) ([]*v1beta2.ReplicaSet, error) {
+//             ListFunc: func(namespace string, selector labels.Selector) ([]*v1.ReplicaSet, error) {
 // 	               panic("mock out the List method")
 //             },
 //         }
@@ -46,10 +46,10 @@ var _ v1beta2a.ReplicaSetLister = &ReplicaSetListerMock{}
 //     }
 type ReplicaSetListerMock struct {
 	// GetFunc mocks the Get method.
-	GetFunc func(namespace string, name string) (*v1beta2.ReplicaSet, error)
+	GetFunc func(namespace string, name string) (*v1.ReplicaSet, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(namespace string, selector labels.Selector) ([]*v1beta2.ReplicaSet, error)
+	ListFunc func(namespace string, selector labels.Selector) ([]*v1.ReplicaSet, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -71,7 +71,7 @@ type ReplicaSetListerMock struct {
 }
 
 // Get calls GetFunc.
-func (mock *ReplicaSetListerMock) Get(namespace string, name string) (*v1beta2.ReplicaSet, error) {
+func (mock *ReplicaSetListerMock) Get(namespace string, name string) (*v1.ReplicaSet, error) {
 	if mock.GetFunc == nil {
 		panic("ReplicaSetListerMock.GetFunc: method is nil but ReplicaSetLister.Get was just called")
 	}
@@ -106,7 +106,7 @@ func (mock *ReplicaSetListerMock) GetCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *ReplicaSetListerMock) List(namespace string, selector labels.Selector) ([]*v1beta2.ReplicaSet, error) {
+func (mock *ReplicaSetListerMock) List(namespace string, selector labels.Selector) ([]*v1.ReplicaSet, error) {
 	if mock.ListFunc == nil {
 		panic("ReplicaSetListerMock.ListFunc: method is nil but ReplicaSetLister.List was just called")
 	}
@@ -155,7 +155,7 @@ var (
 
 // Ensure, that ReplicaSetControllerMock does implement ReplicaSetController.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.ReplicaSetController = &ReplicaSetControllerMock{}
+var _ v1a.ReplicaSetController = &ReplicaSetControllerMock{}
 
 // ReplicaSetControllerMock is a mock implementation of ReplicaSetController.
 //
@@ -163,16 +163,16 @@ var _ v1beta2a.ReplicaSetController = &ReplicaSetControllerMock{}
 //
 //         // make and configure a mocked ReplicaSetController
 //         mockedReplicaSetController := &ReplicaSetControllerMock{
-//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.ReplicaSetHandlerFunc)  {
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.ReplicaSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedFeatureHandler method")
 //             },
-//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1beta2a.ReplicaSetHandlerFunc)  {
+//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1a.ReplicaSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
-//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.ReplicaSetHandlerFunc)  {
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1a.ReplicaSetHandlerFunc)  {
 // 	               panic("mock out the AddFeatureHandler method")
 //             },
-//             AddHandlerFunc: func(ctx context.Context, name string, handler v1beta2a.ReplicaSetHandlerFunc)  {
+//             AddHandlerFunc: func(ctx context.Context, name string, handler v1a.ReplicaSetHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
@@ -184,7 +184,7 @@ var _ v1beta2a.ReplicaSetController = &ReplicaSetControllerMock{}
 //             InformerFunc: func() cache.SharedIndexInformer {
 // 	               panic("mock out the Informer method")
 //             },
-//             ListerFunc: func() v1beta2a.ReplicaSetLister {
+//             ListerFunc: func() v1a.ReplicaSetLister {
 // 	               panic("mock out the Lister method")
 //             },
 //             StartFunc: func(ctx context.Context, threadiness int) error {
@@ -201,16 +201,16 @@ var _ v1beta2a.ReplicaSetController = &ReplicaSetControllerMock{}
 //     }
 type ReplicaSetControllerMock struct {
 	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
-	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.ReplicaSetHandlerFunc)
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.ReplicaSetHandlerFunc)
 
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
-	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1beta2a.ReplicaSetHandlerFunc)
+	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1a.ReplicaSetHandlerFunc)
 
 	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
-	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.ReplicaSetHandlerFunc)
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1a.ReplicaSetHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
-	AddHandlerFunc func(ctx context.Context, name string, handler v1beta2a.ReplicaSetHandlerFunc)
+	AddHandlerFunc func(ctx context.Context, name string, handler v1a.ReplicaSetHandlerFunc)
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
@@ -222,7 +222,7 @@ type ReplicaSetControllerMock struct {
 	InformerFunc func() cache.SharedIndexInformer
 
 	// ListerFunc mocks the Lister method.
-	ListerFunc func() v1beta2a.ReplicaSetLister
+	ListerFunc func() v1a.ReplicaSetLister
 
 	// StartFunc mocks the Start method.
 	StartFunc func(ctx context.Context, threadiness int) error
@@ -243,7 +243,7 @@ type ReplicaSetControllerMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Handler is the handler argument value.
-			Handler v1beta2a.ReplicaSetHandlerFunc
+			Handler v1a.ReplicaSetHandlerFunc
 		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
@@ -254,7 +254,7 @@ type ReplicaSetControllerMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Handler is the handler argument value.
-			Handler v1beta2a.ReplicaSetHandlerFunc
+			Handler v1a.ReplicaSetHandlerFunc
 		}
 		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
 		AddFeatureHandler []struct {
@@ -265,7 +265,7 @@ type ReplicaSetControllerMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.ReplicaSetHandlerFunc
+			Sync v1a.ReplicaSetHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -274,7 +274,7 @@ type ReplicaSetControllerMock struct {
 			// Name is the name argument value.
 			Name string
 			// Handler is the handler argument value.
-			Handler v1beta2a.ReplicaSetHandlerFunc
+			Handler v1a.ReplicaSetHandlerFunc
 		}
 		// Enqueue holds details about calls to the Enqueue method.
 		Enqueue []struct {
@@ -308,7 +308,7 @@ type ReplicaSetControllerMock struct {
 }
 
 // AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
-func (mock *ReplicaSetControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.ReplicaSetHandlerFunc) {
+func (mock *ReplicaSetControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.ReplicaSetHandlerFunc) {
 	if mock.AddClusterScopedFeatureHandlerFunc == nil {
 		panic("ReplicaSetControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but ReplicaSetController.AddClusterScopedFeatureHandler was just called")
 	}
@@ -317,7 +317,7 @@ func (mock *ReplicaSetControllerMock) AddClusterScopedFeatureHandler(ctx context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.ReplicaSetHandlerFunc
+		Handler     v1a.ReplicaSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -339,14 +339,14 @@ func (mock *ReplicaSetControllerMock) AddClusterScopedFeatureHandlerCalls() []st
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Handler     v1beta2a.ReplicaSetHandlerFunc
+	Handler     v1a.ReplicaSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.ReplicaSetHandlerFunc
+		Handler     v1a.ReplicaSetHandlerFunc
 	}
 	lockReplicaSetControllerMockAddClusterScopedFeatureHandler.RLock()
 	calls = mock.calls.AddClusterScopedFeatureHandler
@@ -355,7 +355,7 @@ func (mock *ReplicaSetControllerMock) AddClusterScopedFeatureHandlerCalls() []st
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
-func (mock *ReplicaSetControllerMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, handler v1beta2a.ReplicaSetHandlerFunc) {
+func (mock *ReplicaSetControllerMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, handler v1a.ReplicaSetHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
 		panic("ReplicaSetControllerMock.AddClusterScopedHandlerFunc: method is nil but ReplicaSetController.AddClusterScopedHandler was just called")
 	}
@@ -363,7 +363,7 @@ func (mock *ReplicaSetControllerMock) AddClusterScopedHandler(ctx context.Contex
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.ReplicaSetHandlerFunc
+		Handler     v1a.ReplicaSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -383,13 +383,13 @@ func (mock *ReplicaSetControllerMock) AddClusterScopedHandlerCalls() []struct {
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Handler     v1beta2a.ReplicaSetHandlerFunc
+	Handler     v1a.ReplicaSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.ReplicaSetHandlerFunc
+		Handler     v1a.ReplicaSetHandlerFunc
 	}
 	lockReplicaSetControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
@@ -398,7 +398,7 @@ func (mock *ReplicaSetControllerMock) AddClusterScopedHandlerCalls() []struct {
 }
 
 // AddFeatureHandler calls AddFeatureHandlerFunc.
-func (mock *ReplicaSetControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta2a.ReplicaSetHandlerFunc) {
+func (mock *ReplicaSetControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1a.ReplicaSetHandlerFunc) {
 	if mock.AddFeatureHandlerFunc == nil {
 		panic("ReplicaSetControllerMock.AddFeatureHandlerFunc: method is nil but ReplicaSetController.AddFeatureHandler was just called")
 	}
@@ -406,7 +406,7 @@ func (mock *ReplicaSetControllerMock) AddFeatureHandler(ctx context.Context, ena
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.ReplicaSetHandlerFunc
+		Sync    v1a.ReplicaSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Enabled: enabled,
@@ -426,13 +426,13 @@ func (mock *ReplicaSetControllerMock) AddFeatureHandlerCalls() []struct {
 	Ctx     context.Context
 	Enabled func() bool
 	Name    string
-	Sync    v1beta2a.ReplicaSetHandlerFunc
+	Sync    v1a.ReplicaSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.ReplicaSetHandlerFunc
+		Sync    v1a.ReplicaSetHandlerFunc
 	}
 	lockReplicaSetControllerMockAddFeatureHandler.RLock()
 	calls = mock.calls.AddFeatureHandler
@@ -441,14 +441,14 @@ func (mock *ReplicaSetControllerMock) AddFeatureHandlerCalls() []struct {
 }
 
 // AddHandler calls AddHandlerFunc.
-func (mock *ReplicaSetControllerMock) AddHandler(ctx context.Context, name string, handler v1beta2a.ReplicaSetHandlerFunc) {
+func (mock *ReplicaSetControllerMock) AddHandler(ctx context.Context, name string, handler v1a.ReplicaSetHandlerFunc) {
 	if mock.AddHandlerFunc == nil {
 		panic("ReplicaSetControllerMock.AddHandlerFunc: method is nil but ReplicaSetController.AddHandler was just called")
 	}
 	callInfo := struct {
 		Ctx     context.Context
 		Name    string
-		Handler v1beta2a.ReplicaSetHandlerFunc
+		Handler v1a.ReplicaSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Name:    name,
@@ -466,12 +466,12 @@ func (mock *ReplicaSetControllerMock) AddHandler(ctx context.Context, name strin
 func (mock *ReplicaSetControllerMock) AddHandlerCalls() []struct {
 	Ctx     context.Context
 	Name    string
-	Handler v1beta2a.ReplicaSetHandlerFunc
+	Handler v1a.ReplicaSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Name    string
-		Handler v1beta2a.ReplicaSetHandlerFunc
+		Handler v1a.ReplicaSetHandlerFunc
 	}
 	lockReplicaSetControllerMockAddHandler.RLock()
 	calls = mock.calls.AddHandler
@@ -567,7 +567,7 @@ func (mock *ReplicaSetControllerMock) InformerCalls() []struct {
 }
 
 // Lister calls ListerFunc.
-func (mock *ReplicaSetControllerMock) Lister() v1beta2a.ReplicaSetLister {
+func (mock *ReplicaSetControllerMock) Lister() v1a.ReplicaSetLister {
 	if mock.ListerFunc == nil {
 		panic("ReplicaSetControllerMock.ListerFunc: method is nil but ReplicaSetController.Lister was just called")
 	}
@@ -682,7 +682,7 @@ var (
 
 // Ensure, that ReplicaSetInterfaceMock does implement ReplicaSetInterface.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.ReplicaSetInterface = &ReplicaSetInterfaceMock{}
+var _ v1a.ReplicaSetInterface = &ReplicaSetInterfaceMock{}
 
 // ReplicaSetInterfaceMock is a mock implementation of ReplicaSetInterface.
 //
@@ -690,61 +690,61 @@ var _ v1beta2a.ReplicaSetInterface = &ReplicaSetInterfaceMock{}
 //
 //         // make and configure a mocked ReplicaSetInterface
 //         mockedReplicaSetInterface := &ReplicaSetInterfaceMock{
-//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.ReplicaSetHandlerFunc)  {
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.ReplicaSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedFeatureHandler method")
 //             },
-//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.ReplicaSetLifecycle)  {
+//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.ReplicaSetLifecycle)  {
 // 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
 //             },
-//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1beta2a.ReplicaSetHandlerFunc)  {
+//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1a.ReplicaSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
-//             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.ReplicaSetLifecycle)  {
+//             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1a.ReplicaSetLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
 //             },
-//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.ReplicaSetHandlerFunc)  {
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1a.ReplicaSetHandlerFunc)  {
 // 	               panic("mock out the AddFeatureHandler method")
 //             },
-//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.ReplicaSetLifecycle)  {
+//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1a.ReplicaSetLifecycle)  {
 // 	               panic("mock out the AddFeatureLifecycle method")
 //             },
-//             AddHandlerFunc: func(ctx context.Context, name string, sync v1beta2a.ReplicaSetHandlerFunc)  {
+//             AddHandlerFunc: func(ctx context.Context, name string, sync v1a.ReplicaSetHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
 //             },
-//             AddLifecycleFunc: func(ctx context.Context, name string, lifecycle v1beta2a.ReplicaSetLifecycle)  {
+//             AddLifecycleFunc: func(ctx context.Context, name string, lifecycle v1a.ReplicaSetLifecycle)  {
 // 	               panic("mock out the AddLifecycle method")
 //             },
-//             ControllerFunc: func() v1beta2a.ReplicaSetController {
+//             ControllerFunc: func() v1a.ReplicaSetController {
 // 	               panic("mock out the Controller method")
 //             },
-//             CreateFunc: func(in1 *v1beta2.ReplicaSet) (*v1beta2.ReplicaSet, error) {
+//             CreateFunc: func(in1 *v1.ReplicaSet) (*v1.ReplicaSet, error) {
 // 	               panic("mock out the Create method")
 //             },
-//             DeleteFunc: func(name string, options *v1.DeleteOptions) error {
+//             DeleteFunc: func(name string, options *v1b.DeleteOptions) error {
 // 	               panic("mock out the Delete method")
 //             },
-//             DeleteCollectionFunc: func(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error {
+//             DeleteCollectionFunc: func(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error {
 // 	               panic("mock out the DeleteCollection method")
 //             },
-//             DeleteNamespacedFunc: func(namespace string, name string, options *v1.DeleteOptions) error {
+//             DeleteNamespacedFunc: func(namespace string, name string, options *v1b.DeleteOptions) error {
 // 	               panic("mock out the DeleteNamespaced method")
 //             },
-//             GetFunc: func(name string, opts v1.GetOptions) (*v1beta2.ReplicaSet, error) {
+//             GetFunc: func(name string, opts v1b.GetOptions) (*v1.ReplicaSet, error) {
 // 	               panic("mock out the Get method")
 //             },
-//             GetNamespacedFunc: func(namespace string, name string, opts v1.GetOptions) (*v1beta2.ReplicaSet, error) {
+//             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.ReplicaSet, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1.ListOptions) (*v1beta2a.ReplicaSetList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1a.ReplicaSetList, error) {
 // 	               panic("mock out the List method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
 //             },
-//             UpdateFunc: func(in1 *v1beta2.ReplicaSet) (*v1beta2.ReplicaSet, error) {
+//             UpdateFunc: func(in1 *v1.ReplicaSet) (*v1.ReplicaSet, error) {
 // 	               panic("mock out the Update method")
 //             },
-//             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
+//             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
 //         }
@@ -755,61 +755,61 @@ var _ v1beta2a.ReplicaSetInterface = &ReplicaSetInterfaceMock{}
 //     }
 type ReplicaSetInterfaceMock struct {
 	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
-	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.ReplicaSetHandlerFunc)
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.ReplicaSetHandlerFunc)
 
 	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
-	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.ReplicaSetLifecycle)
+	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.ReplicaSetLifecycle)
 
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
-	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1beta2a.ReplicaSetHandlerFunc)
+	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1a.ReplicaSetHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
-	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.ReplicaSetLifecycle)
+	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1a.ReplicaSetLifecycle)
 
 	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
-	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.ReplicaSetHandlerFunc)
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1a.ReplicaSetHandlerFunc)
 
 	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
-	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.ReplicaSetLifecycle)
+	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1a.ReplicaSetLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
-	AddHandlerFunc func(ctx context.Context, name string, sync v1beta2a.ReplicaSetHandlerFunc)
+	AddHandlerFunc func(ctx context.Context, name string, sync v1a.ReplicaSetHandlerFunc)
 
 	// AddLifecycleFunc mocks the AddLifecycle method.
-	AddLifecycleFunc func(ctx context.Context, name string, lifecycle v1beta2a.ReplicaSetLifecycle)
+	AddLifecycleFunc func(ctx context.Context, name string, lifecycle v1a.ReplicaSetLifecycle)
 
 	// ControllerFunc mocks the Controller method.
-	ControllerFunc func() v1beta2a.ReplicaSetController
+	ControllerFunc func() v1a.ReplicaSetController
 
 	// CreateFunc mocks the Create method.
-	CreateFunc func(in1 *v1beta2.ReplicaSet) (*v1beta2.ReplicaSet, error)
+	CreateFunc func(in1 *v1.ReplicaSet) (*v1.ReplicaSet, error)
 
 	// DeleteFunc mocks the Delete method.
-	DeleteFunc func(name string, options *v1.DeleteOptions) error
+	DeleteFunc func(name string, options *v1b.DeleteOptions) error
 
 	// DeleteCollectionFunc mocks the DeleteCollection method.
-	DeleteCollectionFunc func(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error
+	DeleteCollectionFunc func(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error
 
 	// DeleteNamespacedFunc mocks the DeleteNamespaced method.
-	DeleteNamespacedFunc func(namespace string, name string, options *v1.DeleteOptions) error
+	DeleteNamespacedFunc func(namespace string, name string, options *v1b.DeleteOptions) error
 
 	// GetFunc mocks the Get method.
-	GetFunc func(name string, opts v1.GetOptions) (*v1beta2.ReplicaSet, error)
+	GetFunc func(name string, opts v1b.GetOptions) (*v1.ReplicaSet, error)
 
 	// GetNamespacedFunc mocks the GetNamespaced method.
-	GetNamespacedFunc func(namespace string, name string, opts v1.GetOptions) (*v1beta2.ReplicaSet, error)
+	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.ReplicaSet, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1.ListOptions) (*v1beta2a.ReplicaSetList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1a.ReplicaSetList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
 
 	// UpdateFunc mocks the Update method.
-	UpdateFunc func(in1 *v1beta2.ReplicaSet) (*v1beta2.ReplicaSet, error)
+	UpdateFunc func(in1 *v1.ReplicaSet) (*v1.ReplicaSet, error)
 
 	// WatchFunc mocks the Watch method.
-	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
+	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -824,7 +824,7 @@ type ReplicaSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Sync is the sync argument value.
-			Sync v1beta2a.ReplicaSetHandlerFunc
+			Sync v1a.ReplicaSetHandlerFunc
 		}
 		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
 		AddClusterScopedFeatureLifecycle []struct {
@@ -837,7 +837,7 @@ type ReplicaSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.ReplicaSetLifecycle
+			Lifecycle v1a.ReplicaSetLifecycle
 		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
@@ -848,7 +848,7 @@ type ReplicaSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Sync is the sync argument value.
-			Sync v1beta2a.ReplicaSetHandlerFunc
+			Sync v1a.ReplicaSetHandlerFunc
 		}
 		// AddClusterScopedLifecycle holds details about calls to the AddClusterScopedLifecycle method.
 		AddClusterScopedLifecycle []struct {
@@ -859,7 +859,7 @@ type ReplicaSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.ReplicaSetLifecycle
+			Lifecycle v1a.ReplicaSetLifecycle
 		}
 		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
 		AddFeatureHandler []struct {
@@ -870,7 +870,7 @@ type ReplicaSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.ReplicaSetHandlerFunc
+			Sync v1a.ReplicaSetHandlerFunc
 		}
 		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
 		AddFeatureLifecycle []struct {
@@ -881,7 +881,7 @@ type ReplicaSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.ReplicaSetLifecycle
+			Lifecycle v1a.ReplicaSetLifecycle
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -890,7 +890,7 @@ type ReplicaSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.ReplicaSetHandlerFunc
+			Sync v1a.ReplicaSetHandlerFunc
 		}
 		// AddLifecycle holds details about calls to the AddLifecycle method.
 		AddLifecycle []struct {
@@ -899,7 +899,7 @@ type ReplicaSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.ReplicaSetLifecycle
+			Lifecycle v1a.ReplicaSetLifecycle
 		}
 		// Controller holds details about calls to the Controller method.
 		Controller []struct {
@@ -907,21 +907,21 @@ type ReplicaSetInterfaceMock struct {
 		// Create holds details about calls to the Create method.
 		Create []struct {
 			// In1 is the in1 argument value.
-			In1 *v1beta2.ReplicaSet
+			In1 *v1.ReplicaSet
 		}
 		// Delete holds details about calls to the Delete method.
 		Delete []struct {
 			// Name is the name argument value.
 			Name string
 			// Options is the options argument value.
-			Options *v1.DeleteOptions
+			Options *v1b.DeleteOptions
 		}
 		// DeleteCollection holds details about calls to the DeleteCollection method.
 		DeleteCollection []struct {
 			// DeleteOpts is the deleteOpts argument value.
-			DeleteOpts *v1.DeleteOptions
+			DeleteOpts *v1b.DeleteOptions
 			// ListOpts is the listOpts argument value.
-			ListOpts v1.ListOptions
+			ListOpts v1b.ListOptions
 		}
 		// DeleteNamespaced holds details about calls to the DeleteNamespaced method.
 		DeleteNamespaced []struct {
@@ -930,14 +930,14 @@ type ReplicaSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Options is the options argument value.
-			Options *v1.DeleteOptions
+			Options *v1b.DeleteOptions
 		}
 		// Get holds details about calls to the Get method.
 		Get []struct {
 			// Name is the name argument value.
 			Name string
 			// Opts is the opts argument value.
-			Opts v1.GetOptions
+			Opts v1b.GetOptions
 		}
 		// GetNamespaced holds details about calls to the GetNamespaced method.
 		GetNamespaced []struct {
@@ -946,12 +946,12 @@ type ReplicaSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Opts is the opts argument value.
-			Opts v1.GetOptions
+			Opts v1b.GetOptions
 		}
 		// List holds details about calls to the List method.
 		List []struct {
 			// Opts is the opts argument value.
-			Opts v1.ListOptions
+			Opts v1b.ListOptions
 		}
 		// ObjectClient holds details about calls to the ObjectClient method.
 		ObjectClient []struct {
@@ -959,18 +959,18 @@ type ReplicaSetInterfaceMock struct {
 		// Update holds details about calls to the Update method.
 		Update []struct {
 			// In1 is the in1 argument value.
-			In1 *v1beta2.ReplicaSet
+			In1 *v1.ReplicaSet
 		}
 		// Watch holds details about calls to the Watch method.
 		Watch []struct {
 			// Opts is the opts argument value.
-			Opts v1.ListOptions
+			Opts v1b.ListOptions
 		}
 	}
 }
 
 // AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
-func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.ReplicaSetHandlerFunc) {
+func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.ReplicaSetHandlerFunc) {
 	if mock.AddClusterScopedFeatureHandlerFunc == nil {
 		panic("ReplicaSetInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but ReplicaSetInterface.AddClusterScopedFeatureHandler was just called")
 	}
@@ -979,7 +979,7 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.ReplicaSetHandlerFunc
+		Sync        v1a.ReplicaSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -1001,14 +1001,14 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureHandlerCalls() []str
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Sync        v1beta2a.ReplicaSetHandlerFunc
+	Sync        v1a.ReplicaSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.ReplicaSetHandlerFunc
+		Sync        v1a.ReplicaSetHandlerFunc
 	}
 	lockReplicaSetInterfaceMockAddClusterScopedFeatureHandler.RLock()
 	calls = mock.calls.AddClusterScopedFeatureHandler
@@ -1017,7 +1017,7 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureHandlerCalls() []str
 }
 
 // AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
-func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.ReplicaSetLifecycle) {
+func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.ReplicaSetLifecycle) {
 	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
 		panic("ReplicaSetInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but ReplicaSetInterface.AddClusterScopedFeatureLifecycle was just called")
 	}
@@ -1026,7 +1026,7 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx contex
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.ReplicaSetLifecycle
+		Lifecycle   v1a.ReplicaSetLifecycle
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -1048,14 +1048,14 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []s
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Lifecycle   v1beta2a.ReplicaSetLifecycle
+	Lifecycle   v1a.ReplicaSetLifecycle
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.ReplicaSetLifecycle
+		Lifecycle   v1a.ReplicaSetLifecycle
 	}
 	lockReplicaSetInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedFeatureLifecycle
@@ -1064,7 +1064,7 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []s
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
-func (mock *ReplicaSetInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1beta2a.ReplicaSetHandlerFunc) {
+func (mock *ReplicaSetInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1a.ReplicaSetHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
 		panic("ReplicaSetInterfaceMock.AddClusterScopedHandlerFunc: method is nil but ReplicaSetInterface.AddClusterScopedHandler was just called")
 	}
@@ -1072,7 +1072,7 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedHandler(ctx context.Context
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.ReplicaSetHandlerFunc
+		Sync        v1a.ReplicaSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -1092,13 +1092,13 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedHandlerCalls() []struct {
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Sync        v1beta2a.ReplicaSetHandlerFunc
+	Sync        v1a.ReplicaSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.ReplicaSetHandlerFunc
+		Sync        v1a.ReplicaSetHandlerFunc
 	}
 	lockReplicaSetInterfaceMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
@@ -1107,7 +1107,7 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedHandlerCalls() []struct {
 }
 
 // AddClusterScopedLifecycle calls AddClusterScopedLifecycleFunc.
-func (mock *ReplicaSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.ReplicaSetLifecycle) {
+func (mock *ReplicaSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Context, name string, clusterName string, lifecycle v1a.ReplicaSetLifecycle) {
 	if mock.AddClusterScopedLifecycleFunc == nil {
 		panic("ReplicaSetInterfaceMock.AddClusterScopedLifecycleFunc: method is nil but ReplicaSetInterface.AddClusterScopedLifecycle was just called")
 	}
@@ -1115,7 +1115,7 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Conte
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.ReplicaSetLifecycle
+		Lifecycle   v1a.ReplicaSetLifecycle
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -1135,13 +1135,13 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedLifecycleCalls() []struct {
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Lifecycle   v1beta2a.ReplicaSetLifecycle
+	Lifecycle   v1a.ReplicaSetLifecycle
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.ReplicaSetLifecycle
+		Lifecycle   v1a.ReplicaSetLifecycle
 	}
 	lockReplicaSetInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
@@ -1150,7 +1150,7 @@ func (mock *ReplicaSetInterfaceMock) AddClusterScopedLifecycleCalls() []struct {
 }
 
 // AddFeatureHandler calls AddFeatureHandlerFunc.
-func (mock *ReplicaSetInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta2a.ReplicaSetHandlerFunc) {
+func (mock *ReplicaSetInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1a.ReplicaSetHandlerFunc) {
 	if mock.AddFeatureHandlerFunc == nil {
 		panic("ReplicaSetInterfaceMock.AddFeatureHandlerFunc: method is nil but ReplicaSetInterface.AddFeatureHandler was just called")
 	}
@@ -1158,7 +1158,7 @@ func (mock *ReplicaSetInterfaceMock) AddFeatureHandler(ctx context.Context, enab
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.ReplicaSetHandlerFunc
+		Sync    v1a.ReplicaSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Enabled: enabled,
@@ -1178,13 +1178,13 @@ func (mock *ReplicaSetInterfaceMock) AddFeatureHandlerCalls() []struct {
 	Ctx     context.Context
 	Enabled func() bool
 	Name    string
-	Sync    v1beta2a.ReplicaSetHandlerFunc
+	Sync    v1a.ReplicaSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.ReplicaSetHandlerFunc
+		Sync    v1a.ReplicaSetHandlerFunc
 	}
 	lockReplicaSetInterfaceMockAddFeatureHandler.RLock()
 	calls = mock.calls.AddFeatureHandler
@@ -1193,7 +1193,7 @@ func (mock *ReplicaSetInterfaceMock) AddFeatureHandlerCalls() []struct {
 }
 
 // AddFeatureLifecycle calls AddFeatureLifecycleFunc.
-func (mock *ReplicaSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.ReplicaSetLifecycle) {
+func (mock *ReplicaSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1a.ReplicaSetLifecycle) {
 	if mock.AddFeatureLifecycleFunc == nil {
 		panic("ReplicaSetInterfaceMock.AddFeatureLifecycleFunc: method is nil but ReplicaSetInterface.AddFeatureLifecycle was just called")
 	}
@@ -1201,7 +1201,7 @@ func (mock *ReplicaSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, en
 		Ctx       context.Context
 		Enabled   func() bool
 		Name      string
-		Lifecycle v1beta2a.ReplicaSetLifecycle
+		Lifecycle v1a.ReplicaSetLifecycle
 	}{
 		Ctx:       ctx,
 		Enabled:   enabled,
@@ -1221,13 +1221,13 @@ func (mock *ReplicaSetInterfaceMock) AddFeatureLifecycleCalls() []struct {
 	Ctx       context.Context
 	Enabled   func() bool
 	Name      string
-	Lifecycle v1beta2a.ReplicaSetLifecycle
+	Lifecycle v1a.ReplicaSetLifecycle
 } {
 	var calls []struct {
 		Ctx       context.Context
 		Enabled   func() bool
 		Name      string
-		Lifecycle v1beta2a.ReplicaSetLifecycle
+		Lifecycle v1a.ReplicaSetLifecycle
 	}
 	lockReplicaSetInterfaceMockAddFeatureLifecycle.RLock()
 	calls = mock.calls.AddFeatureLifecycle
@@ -1236,14 +1236,14 @@ func (mock *ReplicaSetInterfaceMock) AddFeatureLifecycleCalls() []struct {
 }
 
 // AddHandler calls AddHandlerFunc.
-func (mock *ReplicaSetInterfaceMock) AddHandler(ctx context.Context, name string, sync v1beta2a.ReplicaSetHandlerFunc) {
+func (mock *ReplicaSetInterfaceMock) AddHandler(ctx context.Context, name string, sync v1a.ReplicaSetHandlerFunc) {
 	if mock.AddHandlerFunc == nil {
 		panic("ReplicaSetInterfaceMock.AddHandlerFunc: method is nil but ReplicaSetInterface.AddHandler was just called")
 	}
 	callInfo := struct {
 		Ctx  context.Context
 		Name string
-		Sync v1beta2a.ReplicaSetHandlerFunc
+		Sync v1a.ReplicaSetHandlerFunc
 	}{
 		Ctx:  ctx,
 		Name: name,
@@ -1261,12 +1261,12 @@ func (mock *ReplicaSetInterfaceMock) AddHandler(ctx context.Context, name string
 func (mock *ReplicaSetInterfaceMock) AddHandlerCalls() []struct {
 	Ctx  context.Context
 	Name string
-	Sync v1beta2a.ReplicaSetHandlerFunc
+	Sync v1a.ReplicaSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx  context.Context
 		Name string
-		Sync v1beta2a.ReplicaSetHandlerFunc
+		Sync v1a.ReplicaSetHandlerFunc
 	}
 	lockReplicaSetInterfaceMockAddHandler.RLock()
 	calls = mock.calls.AddHandler
@@ -1275,14 +1275,14 @@ func (mock *ReplicaSetInterfaceMock) AddHandlerCalls() []struct {
 }
 
 // AddLifecycle calls AddLifecycleFunc.
-func (mock *ReplicaSetInterfaceMock) AddLifecycle(ctx context.Context, name string, lifecycle v1beta2a.ReplicaSetLifecycle) {
+func (mock *ReplicaSetInterfaceMock) AddLifecycle(ctx context.Context, name string, lifecycle v1a.ReplicaSetLifecycle) {
 	if mock.AddLifecycleFunc == nil {
 		panic("ReplicaSetInterfaceMock.AddLifecycleFunc: method is nil but ReplicaSetInterface.AddLifecycle was just called")
 	}
 	callInfo := struct {
 		Ctx       context.Context
 		Name      string
-		Lifecycle v1beta2a.ReplicaSetLifecycle
+		Lifecycle v1a.ReplicaSetLifecycle
 	}{
 		Ctx:       ctx,
 		Name:      name,
@@ -1300,12 +1300,12 @@ func (mock *ReplicaSetInterfaceMock) AddLifecycle(ctx context.Context, name stri
 func (mock *ReplicaSetInterfaceMock) AddLifecycleCalls() []struct {
 	Ctx       context.Context
 	Name      string
-	Lifecycle v1beta2a.ReplicaSetLifecycle
+	Lifecycle v1a.ReplicaSetLifecycle
 } {
 	var calls []struct {
 		Ctx       context.Context
 		Name      string
-		Lifecycle v1beta2a.ReplicaSetLifecycle
+		Lifecycle v1a.ReplicaSetLifecycle
 	}
 	lockReplicaSetInterfaceMockAddLifecycle.RLock()
 	calls = mock.calls.AddLifecycle
@@ -1314,7 +1314,7 @@ func (mock *ReplicaSetInterfaceMock) AddLifecycleCalls() []struct {
 }
 
 // Controller calls ControllerFunc.
-func (mock *ReplicaSetInterfaceMock) Controller() v1beta2a.ReplicaSetController {
+func (mock *ReplicaSetInterfaceMock) Controller() v1a.ReplicaSetController {
 	if mock.ControllerFunc == nil {
 		panic("ReplicaSetInterfaceMock.ControllerFunc: method is nil but ReplicaSetInterface.Controller was just called")
 	}
@@ -1340,12 +1340,12 @@ func (mock *ReplicaSetInterfaceMock) ControllerCalls() []struct {
 }
 
 // Create calls CreateFunc.
-func (mock *ReplicaSetInterfaceMock) Create(in1 *v1beta2.ReplicaSet) (*v1beta2.ReplicaSet, error) {
+func (mock *ReplicaSetInterfaceMock) Create(in1 *v1.ReplicaSet) (*v1.ReplicaSet, error) {
 	if mock.CreateFunc == nil {
 		panic("ReplicaSetInterfaceMock.CreateFunc: method is nil but ReplicaSetInterface.Create was just called")
 	}
 	callInfo := struct {
-		In1 *v1beta2.ReplicaSet
+		In1 *v1.ReplicaSet
 	}{
 		In1: in1,
 	}
@@ -1359,10 +1359,10 @@ func (mock *ReplicaSetInterfaceMock) Create(in1 *v1beta2.ReplicaSet) (*v1beta2.R
 // Check the length with:
 //     len(mockedReplicaSetInterface.CreateCalls())
 func (mock *ReplicaSetInterfaceMock) CreateCalls() []struct {
-	In1 *v1beta2.ReplicaSet
+	In1 *v1.ReplicaSet
 } {
 	var calls []struct {
-		In1 *v1beta2.ReplicaSet
+		In1 *v1.ReplicaSet
 	}
 	lockReplicaSetInterfaceMockCreate.RLock()
 	calls = mock.calls.Create
@@ -1371,13 +1371,13 @@ func (mock *ReplicaSetInterfaceMock) CreateCalls() []struct {
 }
 
 // Delete calls DeleteFunc.
-func (mock *ReplicaSetInterfaceMock) Delete(name string, options *v1.DeleteOptions) error {
+func (mock *ReplicaSetInterfaceMock) Delete(name string, options *v1b.DeleteOptions) error {
 	if mock.DeleteFunc == nil {
 		panic("ReplicaSetInterfaceMock.DeleteFunc: method is nil but ReplicaSetInterface.Delete was just called")
 	}
 	callInfo := struct {
 		Name    string
-		Options *v1.DeleteOptions
+		Options *v1b.DeleteOptions
 	}{
 		Name:    name,
 		Options: options,
@@ -1393,11 +1393,11 @@ func (mock *ReplicaSetInterfaceMock) Delete(name string, options *v1.DeleteOptio
 //     len(mockedReplicaSetInterface.DeleteCalls())
 func (mock *ReplicaSetInterfaceMock) DeleteCalls() []struct {
 	Name    string
-	Options *v1.DeleteOptions
+	Options *v1b.DeleteOptions
 } {
 	var calls []struct {
 		Name    string
-		Options *v1.DeleteOptions
+		Options *v1b.DeleteOptions
 	}
 	lockReplicaSetInterfaceMockDelete.RLock()
 	calls = mock.calls.Delete
@@ -1406,13 +1406,13 @@ func (mock *ReplicaSetInterfaceMock) DeleteCalls() []struct {
 }
 
 // DeleteCollection calls DeleteCollectionFunc.
-func (mock *ReplicaSetInterfaceMock) DeleteCollection(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (mock *ReplicaSetInterfaceMock) DeleteCollection(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error {
 	if mock.DeleteCollectionFunc == nil {
 		panic("ReplicaSetInterfaceMock.DeleteCollectionFunc: method is nil but ReplicaSetInterface.DeleteCollection was just called")
 	}
 	callInfo := struct {
-		DeleteOpts *v1.DeleteOptions
-		ListOpts   v1.ListOptions
+		DeleteOpts *v1b.DeleteOptions
+		ListOpts   v1b.ListOptions
 	}{
 		DeleteOpts: deleteOpts,
 		ListOpts:   listOpts,
@@ -1427,12 +1427,12 @@ func (mock *ReplicaSetInterfaceMock) DeleteCollection(deleteOpts *v1.DeleteOptio
 // Check the length with:
 //     len(mockedReplicaSetInterface.DeleteCollectionCalls())
 func (mock *ReplicaSetInterfaceMock) DeleteCollectionCalls() []struct {
-	DeleteOpts *v1.DeleteOptions
-	ListOpts   v1.ListOptions
+	DeleteOpts *v1b.DeleteOptions
+	ListOpts   v1b.ListOptions
 } {
 	var calls []struct {
-		DeleteOpts *v1.DeleteOptions
-		ListOpts   v1.ListOptions
+		DeleteOpts *v1b.DeleteOptions
+		ListOpts   v1b.ListOptions
 	}
 	lockReplicaSetInterfaceMockDeleteCollection.RLock()
 	calls = mock.calls.DeleteCollection
@@ -1441,14 +1441,14 @@ func (mock *ReplicaSetInterfaceMock) DeleteCollectionCalls() []struct {
 }
 
 // DeleteNamespaced calls DeleteNamespacedFunc.
-func (mock *ReplicaSetInterfaceMock) DeleteNamespaced(namespace string, name string, options *v1.DeleteOptions) error {
+func (mock *ReplicaSetInterfaceMock) DeleteNamespaced(namespace string, name string, options *v1b.DeleteOptions) error {
 	if mock.DeleteNamespacedFunc == nil {
 		panic("ReplicaSetInterfaceMock.DeleteNamespacedFunc: method is nil but ReplicaSetInterface.DeleteNamespaced was just called")
 	}
 	callInfo := struct {
 		Namespace string
 		Name      string
-		Options   *v1.DeleteOptions
+		Options   *v1b.DeleteOptions
 	}{
 		Namespace: namespace,
 		Name:      name,
@@ -1466,12 +1466,12 @@ func (mock *ReplicaSetInterfaceMock) DeleteNamespaced(namespace string, name str
 func (mock *ReplicaSetInterfaceMock) DeleteNamespacedCalls() []struct {
 	Namespace string
 	Name      string
-	Options   *v1.DeleteOptions
+	Options   *v1b.DeleteOptions
 } {
 	var calls []struct {
 		Namespace string
 		Name      string
-		Options   *v1.DeleteOptions
+		Options   *v1b.DeleteOptions
 	}
 	lockReplicaSetInterfaceMockDeleteNamespaced.RLock()
 	calls = mock.calls.DeleteNamespaced
@@ -1480,13 +1480,13 @@ func (mock *ReplicaSetInterfaceMock) DeleteNamespacedCalls() []struct {
 }
 
 // Get calls GetFunc.
-func (mock *ReplicaSetInterfaceMock) Get(name string, opts v1.GetOptions) (*v1beta2.ReplicaSet, error) {
+func (mock *ReplicaSetInterfaceMock) Get(name string, opts v1b.GetOptions) (*v1.ReplicaSet, error) {
 	if mock.GetFunc == nil {
 		panic("ReplicaSetInterfaceMock.GetFunc: method is nil but ReplicaSetInterface.Get was just called")
 	}
 	callInfo := struct {
 		Name string
-		Opts v1.GetOptions
+		Opts v1b.GetOptions
 	}{
 		Name: name,
 		Opts: opts,
@@ -1502,11 +1502,11 @@ func (mock *ReplicaSetInterfaceMock) Get(name string, opts v1.GetOptions) (*v1be
 //     len(mockedReplicaSetInterface.GetCalls())
 func (mock *ReplicaSetInterfaceMock) GetCalls() []struct {
 	Name string
-	Opts v1.GetOptions
+	Opts v1b.GetOptions
 } {
 	var calls []struct {
 		Name string
-		Opts v1.GetOptions
+		Opts v1b.GetOptions
 	}
 	lockReplicaSetInterfaceMockGet.RLock()
 	calls = mock.calls.Get
@@ -1515,14 +1515,14 @@ func (mock *ReplicaSetInterfaceMock) GetCalls() []struct {
 }
 
 // GetNamespaced calls GetNamespacedFunc.
-func (mock *ReplicaSetInterfaceMock) GetNamespaced(namespace string, name string, opts v1.GetOptions) (*v1beta2.ReplicaSet, error) {
+func (mock *ReplicaSetInterfaceMock) GetNamespaced(namespace string, name string, opts v1b.GetOptions) (*v1.ReplicaSet, error) {
 	if mock.GetNamespacedFunc == nil {
 		panic("ReplicaSetInterfaceMock.GetNamespacedFunc: method is nil but ReplicaSetInterface.GetNamespaced was just called")
 	}
 	callInfo := struct {
 		Namespace string
 		Name      string
-		Opts      v1.GetOptions
+		Opts      v1b.GetOptions
 	}{
 		Namespace: namespace,
 		Name:      name,
@@ -1540,12 +1540,12 @@ func (mock *ReplicaSetInterfaceMock) GetNamespaced(namespace string, name string
 func (mock *ReplicaSetInterfaceMock) GetNamespacedCalls() []struct {
 	Namespace string
 	Name      string
-	Opts      v1.GetOptions
+	Opts      v1b.GetOptions
 } {
 	var calls []struct {
 		Namespace string
 		Name      string
-		Opts      v1.GetOptions
+		Opts      v1b.GetOptions
 	}
 	lockReplicaSetInterfaceMockGetNamespaced.RLock()
 	calls = mock.calls.GetNamespaced
@@ -1554,12 +1554,12 @@ func (mock *ReplicaSetInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *ReplicaSetInterfaceMock) List(opts v1.ListOptions) (*v1beta2a.ReplicaSetList, error) {
+func (mock *ReplicaSetInterfaceMock) List(opts v1b.ListOptions) (*v1a.ReplicaSetList, error) {
 	if mock.ListFunc == nil {
 		panic("ReplicaSetInterfaceMock.ListFunc: method is nil but ReplicaSetInterface.List was just called")
 	}
 	callInfo := struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}{
 		Opts: opts,
 	}
@@ -1573,10 +1573,10 @@ func (mock *ReplicaSetInterfaceMock) List(opts v1.ListOptions) (*v1beta2a.Replic
 // Check the length with:
 //     len(mockedReplicaSetInterface.ListCalls())
 func (mock *ReplicaSetInterfaceMock) ListCalls() []struct {
-	Opts v1.ListOptions
+	Opts v1b.ListOptions
 } {
 	var calls []struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}
 	lockReplicaSetInterfaceMockList.RLock()
 	calls = mock.calls.List
@@ -1611,12 +1611,12 @@ func (mock *ReplicaSetInterfaceMock) ObjectClientCalls() []struct {
 }
 
 // Update calls UpdateFunc.
-func (mock *ReplicaSetInterfaceMock) Update(in1 *v1beta2.ReplicaSet) (*v1beta2.ReplicaSet, error) {
+func (mock *ReplicaSetInterfaceMock) Update(in1 *v1.ReplicaSet) (*v1.ReplicaSet, error) {
 	if mock.UpdateFunc == nil {
 		panic("ReplicaSetInterfaceMock.UpdateFunc: method is nil but ReplicaSetInterface.Update was just called")
 	}
 	callInfo := struct {
-		In1 *v1beta2.ReplicaSet
+		In1 *v1.ReplicaSet
 	}{
 		In1: in1,
 	}
@@ -1630,10 +1630,10 @@ func (mock *ReplicaSetInterfaceMock) Update(in1 *v1beta2.ReplicaSet) (*v1beta2.R
 // Check the length with:
 //     len(mockedReplicaSetInterface.UpdateCalls())
 func (mock *ReplicaSetInterfaceMock) UpdateCalls() []struct {
-	In1 *v1beta2.ReplicaSet
+	In1 *v1.ReplicaSet
 } {
 	var calls []struct {
-		In1 *v1beta2.ReplicaSet
+		In1 *v1.ReplicaSet
 	}
 	lockReplicaSetInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
@@ -1642,12 +1642,12 @@ func (mock *ReplicaSetInterfaceMock) UpdateCalls() []struct {
 }
 
 // Watch calls WatchFunc.
-func (mock *ReplicaSetInterfaceMock) Watch(opts v1.ListOptions) (watch.Interface, error) {
+func (mock *ReplicaSetInterfaceMock) Watch(opts v1b.ListOptions) (watch.Interface, error) {
 	if mock.WatchFunc == nil {
 		panic("ReplicaSetInterfaceMock.WatchFunc: method is nil but ReplicaSetInterface.Watch was just called")
 	}
 	callInfo := struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}{
 		Opts: opts,
 	}
@@ -1661,10 +1661,10 @@ func (mock *ReplicaSetInterfaceMock) Watch(opts v1.ListOptions) (watch.Interface
 // Check the length with:
 //     len(mockedReplicaSetInterface.WatchCalls())
 func (mock *ReplicaSetInterfaceMock) WatchCalls() []struct {
-	Opts v1.ListOptions
+	Opts v1b.ListOptions
 } {
 	var calls []struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}
 	lockReplicaSetInterfaceMockWatch.RLock()
 	calls = mock.calls.Watch
@@ -1678,7 +1678,7 @@ var (
 
 // Ensure, that ReplicaSetsGetterMock does implement ReplicaSetsGetter.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.ReplicaSetsGetter = &ReplicaSetsGetterMock{}
+var _ v1a.ReplicaSetsGetter = &ReplicaSetsGetterMock{}
 
 // ReplicaSetsGetterMock is a mock implementation of ReplicaSetsGetter.
 //
@@ -1686,7 +1686,7 @@ var _ v1beta2a.ReplicaSetsGetter = &ReplicaSetsGetterMock{}
 //
 //         // make and configure a mocked ReplicaSetsGetter
 //         mockedReplicaSetsGetter := &ReplicaSetsGetterMock{
-//             ReplicaSetsFunc: func(namespace string) v1beta2a.ReplicaSetInterface {
+//             ReplicaSetsFunc: func(namespace string) v1a.ReplicaSetInterface {
 // 	               panic("mock out the ReplicaSets method")
 //             },
 //         }
@@ -1697,7 +1697,7 @@ var _ v1beta2a.ReplicaSetsGetter = &ReplicaSetsGetterMock{}
 //     }
 type ReplicaSetsGetterMock struct {
 	// ReplicaSetsFunc mocks the ReplicaSets method.
-	ReplicaSetsFunc func(namespace string) v1beta2a.ReplicaSetInterface
+	ReplicaSetsFunc func(namespace string) v1a.ReplicaSetInterface
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -1710,7 +1710,7 @@ type ReplicaSetsGetterMock struct {
 }
 
 // ReplicaSets calls ReplicaSetsFunc.
-func (mock *ReplicaSetsGetterMock) ReplicaSets(namespace string) v1beta2a.ReplicaSetInterface {
+func (mock *ReplicaSetsGetterMock) ReplicaSets(namespace string) v1a.ReplicaSetInterface {
 	if mock.ReplicaSetsFunc == nil {
 		panic("ReplicaSetsGetterMock.ReplicaSetsFunc: method is nil but ReplicaSetsGetter.ReplicaSets was just called")
 	}

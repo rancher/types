@@ -9,9 +9,9 @@ import (
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
-	v1beta2a "github.com/rancher/types/apis/apps/v1beta2"
-	v1beta2 "k8s.io/api/apps/v1beta2"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1a "github.com/rancher/types/apis/apps/v1"
+	v1 "k8s.io/api/apps/v1"
+	v1b "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
@@ -24,7 +24,7 @@ var (
 
 // Ensure, that StatefulSetListerMock does implement StatefulSetLister.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.StatefulSetLister = &StatefulSetListerMock{}
+var _ v1a.StatefulSetLister = &StatefulSetListerMock{}
 
 // StatefulSetListerMock is a mock implementation of StatefulSetLister.
 //
@@ -32,10 +32,10 @@ var _ v1beta2a.StatefulSetLister = &StatefulSetListerMock{}
 //
 //         // make and configure a mocked StatefulSetLister
 //         mockedStatefulSetLister := &StatefulSetListerMock{
-//             GetFunc: func(namespace string, name string) (*v1beta2.StatefulSet, error) {
+//             GetFunc: func(namespace string, name string) (*v1.StatefulSet, error) {
 // 	               panic("mock out the Get method")
 //             },
-//             ListFunc: func(namespace string, selector labels.Selector) ([]*v1beta2.StatefulSet, error) {
+//             ListFunc: func(namespace string, selector labels.Selector) ([]*v1.StatefulSet, error) {
 // 	               panic("mock out the List method")
 //             },
 //         }
@@ -46,10 +46,10 @@ var _ v1beta2a.StatefulSetLister = &StatefulSetListerMock{}
 //     }
 type StatefulSetListerMock struct {
 	// GetFunc mocks the Get method.
-	GetFunc func(namespace string, name string) (*v1beta2.StatefulSet, error)
+	GetFunc func(namespace string, name string) (*v1.StatefulSet, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(namespace string, selector labels.Selector) ([]*v1beta2.StatefulSet, error)
+	ListFunc func(namespace string, selector labels.Selector) ([]*v1.StatefulSet, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -71,7 +71,7 @@ type StatefulSetListerMock struct {
 }
 
 // Get calls GetFunc.
-func (mock *StatefulSetListerMock) Get(namespace string, name string) (*v1beta2.StatefulSet, error) {
+func (mock *StatefulSetListerMock) Get(namespace string, name string) (*v1.StatefulSet, error) {
 	if mock.GetFunc == nil {
 		panic("StatefulSetListerMock.GetFunc: method is nil but StatefulSetLister.Get was just called")
 	}
@@ -106,7 +106,7 @@ func (mock *StatefulSetListerMock) GetCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *StatefulSetListerMock) List(namespace string, selector labels.Selector) ([]*v1beta2.StatefulSet, error) {
+func (mock *StatefulSetListerMock) List(namespace string, selector labels.Selector) ([]*v1.StatefulSet, error) {
 	if mock.ListFunc == nil {
 		panic("StatefulSetListerMock.ListFunc: method is nil but StatefulSetLister.List was just called")
 	}
@@ -155,7 +155,7 @@ var (
 
 // Ensure, that StatefulSetControllerMock does implement StatefulSetController.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.StatefulSetController = &StatefulSetControllerMock{}
+var _ v1a.StatefulSetController = &StatefulSetControllerMock{}
 
 // StatefulSetControllerMock is a mock implementation of StatefulSetController.
 //
@@ -163,16 +163,16 @@ var _ v1beta2a.StatefulSetController = &StatefulSetControllerMock{}
 //
 //         // make and configure a mocked StatefulSetController
 //         mockedStatefulSetController := &StatefulSetControllerMock{
-//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc)  {
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedFeatureHandler method")
 //             },
-//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc)  {
+//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, handler v1a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
-//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.StatefulSetHandlerFunc)  {
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddFeatureHandler method")
 //             },
-//             AddHandlerFunc: func(ctx context.Context, name string, handler v1beta2a.StatefulSetHandlerFunc)  {
+//             AddHandlerFunc: func(ctx context.Context, name string, handler v1a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
@@ -184,7 +184,7 @@ var _ v1beta2a.StatefulSetController = &StatefulSetControllerMock{}
 //             InformerFunc: func() cache.SharedIndexInformer {
 // 	               panic("mock out the Informer method")
 //             },
-//             ListerFunc: func() v1beta2a.StatefulSetLister {
+//             ListerFunc: func() v1a.StatefulSetLister {
 // 	               panic("mock out the Lister method")
 //             },
 //             StartFunc: func(ctx context.Context, threadiness int) error {
@@ -201,16 +201,16 @@ var _ v1beta2a.StatefulSetController = &StatefulSetControllerMock{}
 //     }
 type StatefulSetControllerMock struct {
 	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
-	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc)
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.StatefulSetHandlerFunc)
 
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
-	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc)
+	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, handler v1a.StatefulSetHandlerFunc)
 
 	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
-	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.StatefulSetHandlerFunc)
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1a.StatefulSetHandlerFunc)
 
 	// AddHandlerFunc mocks the AddHandler method.
-	AddHandlerFunc func(ctx context.Context, name string, handler v1beta2a.StatefulSetHandlerFunc)
+	AddHandlerFunc func(ctx context.Context, name string, handler v1a.StatefulSetHandlerFunc)
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
@@ -222,7 +222,7 @@ type StatefulSetControllerMock struct {
 	InformerFunc func() cache.SharedIndexInformer
 
 	// ListerFunc mocks the Lister method.
-	ListerFunc func() v1beta2a.StatefulSetLister
+	ListerFunc func() v1a.StatefulSetLister
 
 	// StartFunc mocks the Start method.
 	StartFunc func(ctx context.Context, threadiness int) error
@@ -243,7 +243,7 @@ type StatefulSetControllerMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Handler is the handler argument value.
-			Handler v1beta2a.StatefulSetHandlerFunc
+			Handler v1a.StatefulSetHandlerFunc
 		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
@@ -254,7 +254,7 @@ type StatefulSetControllerMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Handler is the handler argument value.
-			Handler v1beta2a.StatefulSetHandlerFunc
+			Handler v1a.StatefulSetHandlerFunc
 		}
 		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
 		AddFeatureHandler []struct {
@@ -265,7 +265,7 @@ type StatefulSetControllerMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.StatefulSetHandlerFunc
+			Sync v1a.StatefulSetHandlerFunc
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -274,7 +274,7 @@ type StatefulSetControllerMock struct {
 			// Name is the name argument value.
 			Name string
 			// Handler is the handler argument value.
-			Handler v1beta2a.StatefulSetHandlerFunc
+			Handler v1a.StatefulSetHandlerFunc
 		}
 		// Enqueue holds details about calls to the Enqueue method.
 		Enqueue []struct {
@@ -308,7 +308,7 @@ type StatefulSetControllerMock struct {
 }
 
 // AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
-func (mock *StatefulSetControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc) {
+func (mock *StatefulSetControllerMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, handler v1a.StatefulSetHandlerFunc) {
 	if mock.AddClusterScopedFeatureHandlerFunc == nil {
 		panic("StatefulSetControllerMock.AddClusterScopedFeatureHandlerFunc: method is nil but StatefulSetController.AddClusterScopedFeatureHandler was just called")
 	}
@@ -317,7 +317,7 @@ func (mock *StatefulSetControllerMock) AddClusterScopedFeatureHandler(ctx contex
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.StatefulSetHandlerFunc
+		Handler     v1a.StatefulSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -339,14 +339,14 @@ func (mock *StatefulSetControllerMock) AddClusterScopedFeatureHandlerCalls() []s
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Handler     v1beta2a.StatefulSetHandlerFunc
+	Handler     v1a.StatefulSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.StatefulSetHandlerFunc
+		Handler     v1a.StatefulSetHandlerFunc
 	}
 	lockStatefulSetControllerMockAddClusterScopedFeatureHandler.RLock()
 	calls = mock.calls.AddClusterScopedFeatureHandler
@@ -355,7 +355,7 @@ func (mock *StatefulSetControllerMock) AddClusterScopedFeatureHandlerCalls() []s
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
-func (mock *StatefulSetControllerMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, handler v1beta2a.StatefulSetHandlerFunc) {
+func (mock *StatefulSetControllerMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, handler v1a.StatefulSetHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
 		panic("StatefulSetControllerMock.AddClusterScopedHandlerFunc: method is nil but StatefulSetController.AddClusterScopedHandler was just called")
 	}
@@ -363,7 +363,7 @@ func (mock *StatefulSetControllerMock) AddClusterScopedHandler(ctx context.Conte
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.StatefulSetHandlerFunc
+		Handler     v1a.StatefulSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -383,13 +383,13 @@ func (mock *StatefulSetControllerMock) AddClusterScopedHandlerCalls() []struct {
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Handler     v1beta2a.StatefulSetHandlerFunc
+	Handler     v1a.StatefulSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Handler     v1beta2a.StatefulSetHandlerFunc
+		Handler     v1a.StatefulSetHandlerFunc
 	}
 	lockStatefulSetControllerMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
@@ -398,7 +398,7 @@ func (mock *StatefulSetControllerMock) AddClusterScopedHandlerCalls() []struct {
 }
 
 // AddFeatureHandler calls AddFeatureHandlerFunc.
-func (mock *StatefulSetControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta2a.StatefulSetHandlerFunc) {
+func (mock *StatefulSetControllerMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1a.StatefulSetHandlerFunc) {
 	if mock.AddFeatureHandlerFunc == nil {
 		panic("StatefulSetControllerMock.AddFeatureHandlerFunc: method is nil but StatefulSetController.AddFeatureHandler was just called")
 	}
@@ -406,7 +406,7 @@ func (mock *StatefulSetControllerMock) AddFeatureHandler(ctx context.Context, en
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.StatefulSetHandlerFunc
+		Sync    v1a.StatefulSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Enabled: enabled,
@@ -426,13 +426,13 @@ func (mock *StatefulSetControllerMock) AddFeatureHandlerCalls() []struct {
 	Ctx     context.Context
 	Enabled func() bool
 	Name    string
-	Sync    v1beta2a.StatefulSetHandlerFunc
+	Sync    v1a.StatefulSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.StatefulSetHandlerFunc
+		Sync    v1a.StatefulSetHandlerFunc
 	}
 	lockStatefulSetControllerMockAddFeatureHandler.RLock()
 	calls = mock.calls.AddFeatureHandler
@@ -441,14 +441,14 @@ func (mock *StatefulSetControllerMock) AddFeatureHandlerCalls() []struct {
 }
 
 // AddHandler calls AddHandlerFunc.
-func (mock *StatefulSetControllerMock) AddHandler(ctx context.Context, name string, handler v1beta2a.StatefulSetHandlerFunc) {
+func (mock *StatefulSetControllerMock) AddHandler(ctx context.Context, name string, handler v1a.StatefulSetHandlerFunc) {
 	if mock.AddHandlerFunc == nil {
 		panic("StatefulSetControllerMock.AddHandlerFunc: method is nil but StatefulSetController.AddHandler was just called")
 	}
 	callInfo := struct {
 		Ctx     context.Context
 		Name    string
-		Handler v1beta2a.StatefulSetHandlerFunc
+		Handler v1a.StatefulSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Name:    name,
@@ -466,12 +466,12 @@ func (mock *StatefulSetControllerMock) AddHandler(ctx context.Context, name stri
 func (mock *StatefulSetControllerMock) AddHandlerCalls() []struct {
 	Ctx     context.Context
 	Name    string
-	Handler v1beta2a.StatefulSetHandlerFunc
+	Handler v1a.StatefulSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Name    string
-		Handler v1beta2a.StatefulSetHandlerFunc
+		Handler v1a.StatefulSetHandlerFunc
 	}
 	lockStatefulSetControllerMockAddHandler.RLock()
 	calls = mock.calls.AddHandler
@@ -567,7 +567,7 @@ func (mock *StatefulSetControllerMock) InformerCalls() []struct {
 }
 
 // Lister calls ListerFunc.
-func (mock *StatefulSetControllerMock) Lister() v1beta2a.StatefulSetLister {
+func (mock *StatefulSetControllerMock) Lister() v1a.StatefulSetLister {
 	if mock.ListerFunc == nil {
 		panic("StatefulSetControllerMock.ListerFunc: method is nil but StatefulSetController.Lister was just called")
 	}
@@ -682,7 +682,7 @@ var (
 
 // Ensure, that StatefulSetInterfaceMock does implement StatefulSetInterface.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.StatefulSetInterface = &StatefulSetInterfaceMock{}
+var _ v1a.StatefulSetInterface = &StatefulSetInterfaceMock{}
 
 // StatefulSetInterfaceMock is a mock implementation of StatefulSetInterface.
 //
@@ -690,61 +690,61 @@ var _ v1beta2a.StatefulSetInterface = &StatefulSetInterfaceMock{}
 //
 //         // make and configure a mocked StatefulSetInterface
 //         mockedStatefulSetInterface := &StatefulSetInterfaceMock{
-//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc)  {
+//             AddClusterScopedFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedFeatureHandler method")
 //             },
-//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle)  {
+//             AddClusterScopedFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.StatefulSetLifecycle)  {
 // 	               panic("mock out the AddClusterScopedFeatureLifecycle method")
 //             },
-//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc)  {
+//             AddClusterScopedHandlerFunc: func(ctx context.Context, name string, clusterName string, sync v1a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddClusterScopedHandler method")
 //             },
-//             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle)  {
+//             AddClusterScopedLifecycleFunc: func(ctx context.Context, name string, clusterName string, lifecycle v1a.StatefulSetLifecycle)  {
 // 	               panic("mock out the AddClusterScopedLifecycle method")
 //             },
-//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.StatefulSetHandlerFunc)  {
+//             AddFeatureHandlerFunc: func(ctx context.Context, enabled func() bool, name string, sync v1a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddFeatureHandler method")
 //             },
-//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.StatefulSetLifecycle)  {
+//             AddFeatureLifecycleFunc: func(ctx context.Context, enabled func() bool, name string, lifecycle v1a.StatefulSetLifecycle)  {
 // 	               panic("mock out the AddFeatureLifecycle method")
 //             },
-//             AddHandlerFunc: func(ctx context.Context, name string, sync v1beta2a.StatefulSetHandlerFunc)  {
+//             AddHandlerFunc: func(ctx context.Context, name string, sync v1a.StatefulSetHandlerFunc)  {
 // 	               panic("mock out the AddHandler method")
 //             },
-//             AddLifecycleFunc: func(ctx context.Context, name string, lifecycle v1beta2a.StatefulSetLifecycle)  {
+//             AddLifecycleFunc: func(ctx context.Context, name string, lifecycle v1a.StatefulSetLifecycle)  {
 // 	               panic("mock out the AddLifecycle method")
 //             },
-//             ControllerFunc: func() v1beta2a.StatefulSetController {
+//             ControllerFunc: func() v1a.StatefulSetController {
 // 	               panic("mock out the Controller method")
 //             },
-//             CreateFunc: func(in1 *v1beta2.StatefulSet) (*v1beta2.StatefulSet, error) {
+//             CreateFunc: func(in1 *v1.StatefulSet) (*v1.StatefulSet, error) {
 // 	               panic("mock out the Create method")
 //             },
-//             DeleteFunc: func(name string, options *v1.DeleteOptions) error {
+//             DeleteFunc: func(name string, options *v1b.DeleteOptions) error {
 // 	               panic("mock out the Delete method")
 //             },
-//             DeleteCollectionFunc: func(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error {
+//             DeleteCollectionFunc: func(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error {
 // 	               panic("mock out the DeleteCollection method")
 //             },
-//             DeleteNamespacedFunc: func(namespace string, name string, options *v1.DeleteOptions) error {
+//             DeleteNamespacedFunc: func(namespace string, name string, options *v1b.DeleteOptions) error {
 // 	               panic("mock out the DeleteNamespaced method")
 //             },
-//             GetFunc: func(name string, opts v1.GetOptions) (*v1beta2.StatefulSet, error) {
+//             GetFunc: func(name string, opts v1b.GetOptions) (*v1.StatefulSet, error) {
 // 	               panic("mock out the Get method")
 //             },
-//             GetNamespacedFunc: func(namespace string, name string, opts v1.GetOptions) (*v1beta2.StatefulSet, error) {
+//             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.StatefulSet, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1.ListOptions) (*v1beta2a.StatefulSetList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1a.StatefulSetList, error) {
 // 	               panic("mock out the List method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
 //             },
-//             UpdateFunc: func(in1 *v1beta2.StatefulSet) (*v1beta2.StatefulSet, error) {
+//             UpdateFunc: func(in1 *v1.StatefulSet) (*v1.StatefulSet, error) {
 // 	               panic("mock out the Update method")
 //             },
-//             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
+//             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
 //         }
@@ -755,61 +755,61 @@ var _ v1beta2a.StatefulSetInterface = &StatefulSetInterfaceMock{}
 //     }
 type StatefulSetInterfaceMock struct {
 	// AddClusterScopedFeatureHandlerFunc mocks the AddClusterScopedFeatureHandler method.
-	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc)
+	AddClusterScopedFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.StatefulSetHandlerFunc)
 
 	// AddClusterScopedFeatureLifecycleFunc mocks the AddClusterScopedFeatureLifecycle method.
-	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle)
+	AddClusterScopedFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.StatefulSetLifecycle)
 
 	// AddClusterScopedHandlerFunc mocks the AddClusterScopedHandler method.
-	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc)
+	AddClusterScopedHandlerFunc func(ctx context.Context, name string, clusterName string, sync v1a.StatefulSetHandlerFunc)
 
 	// AddClusterScopedLifecycleFunc mocks the AddClusterScopedLifecycle method.
-	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle)
+	AddClusterScopedLifecycleFunc func(ctx context.Context, name string, clusterName string, lifecycle v1a.StatefulSetLifecycle)
 
 	// AddFeatureHandlerFunc mocks the AddFeatureHandler method.
-	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1beta2a.StatefulSetHandlerFunc)
+	AddFeatureHandlerFunc func(ctx context.Context, enabled func() bool, name string, sync v1a.StatefulSetHandlerFunc)
 
 	// AddFeatureLifecycleFunc mocks the AddFeatureLifecycle method.
-	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.StatefulSetLifecycle)
+	AddFeatureLifecycleFunc func(ctx context.Context, enabled func() bool, name string, lifecycle v1a.StatefulSetLifecycle)
 
 	// AddHandlerFunc mocks the AddHandler method.
-	AddHandlerFunc func(ctx context.Context, name string, sync v1beta2a.StatefulSetHandlerFunc)
+	AddHandlerFunc func(ctx context.Context, name string, sync v1a.StatefulSetHandlerFunc)
 
 	// AddLifecycleFunc mocks the AddLifecycle method.
-	AddLifecycleFunc func(ctx context.Context, name string, lifecycle v1beta2a.StatefulSetLifecycle)
+	AddLifecycleFunc func(ctx context.Context, name string, lifecycle v1a.StatefulSetLifecycle)
 
 	// ControllerFunc mocks the Controller method.
-	ControllerFunc func() v1beta2a.StatefulSetController
+	ControllerFunc func() v1a.StatefulSetController
 
 	// CreateFunc mocks the Create method.
-	CreateFunc func(in1 *v1beta2.StatefulSet) (*v1beta2.StatefulSet, error)
+	CreateFunc func(in1 *v1.StatefulSet) (*v1.StatefulSet, error)
 
 	// DeleteFunc mocks the Delete method.
-	DeleteFunc func(name string, options *v1.DeleteOptions) error
+	DeleteFunc func(name string, options *v1b.DeleteOptions) error
 
 	// DeleteCollectionFunc mocks the DeleteCollection method.
-	DeleteCollectionFunc func(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error
+	DeleteCollectionFunc func(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error
 
 	// DeleteNamespacedFunc mocks the DeleteNamespaced method.
-	DeleteNamespacedFunc func(namespace string, name string, options *v1.DeleteOptions) error
+	DeleteNamespacedFunc func(namespace string, name string, options *v1b.DeleteOptions) error
 
 	// GetFunc mocks the Get method.
-	GetFunc func(name string, opts v1.GetOptions) (*v1beta2.StatefulSet, error)
+	GetFunc func(name string, opts v1b.GetOptions) (*v1.StatefulSet, error)
 
 	// GetNamespacedFunc mocks the GetNamespaced method.
-	GetNamespacedFunc func(namespace string, name string, opts v1.GetOptions) (*v1beta2.StatefulSet, error)
+	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.StatefulSet, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1.ListOptions) (*v1beta2a.StatefulSetList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1a.StatefulSetList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
 
 	// UpdateFunc mocks the Update method.
-	UpdateFunc func(in1 *v1beta2.StatefulSet) (*v1beta2.StatefulSet, error)
+	UpdateFunc func(in1 *v1.StatefulSet) (*v1.StatefulSet, error)
 
 	// WatchFunc mocks the Watch method.
-	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
+	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -824,7 +824,7 @@ type StatefulSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Sync is the sync argument value.
-			Sync v1beta2a.StatefulSetHandlerFunc
+			Sync v1a.StatefulSetHandlerFunc
 		}
 		// AddClusterScopedFeatureLifecycle holds details about calls to the AddClusterScopedFeatureLifecycle method.
 		AddClusterScopedFeatureLifecycle []struct {
@@ -837,7 +837,7 @@ type StatefulSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.StatefulSetLifecycle
+			Lifecycle v1a.StatefulSetLifecycle
 		}
 		// AddClusterScopedHandler holds details about calls to the AddClusterScopedHandler method.
 		AddClusterScopedHandler []struct {
@@ -848,7 +848,7 @@ type StatefulSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Sync is the sync argument value.
-			Sync v1beta2a.StatefulSetHandlerFunc
+			Sync v1a.StatefulSetHandlerFunc
 		}
 		// AddClusterScopedLifecycle holds details about calls to the AddClusterScopedLifecycle method.
 		AddClusterScopedLifecycle []struct {
@@ -859,7 +859,7 @@ type StatefulSetInterfaceMock struct {
 			// ClusterName is the clusterName argument value.
 			ClusterName string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.StatefulSetLifecycle
+			Lifecycle v1a.StatefulSetLifecycle
 		}
 		// AddFeatureHandler holds details about calls to the AddFeatureHandler method.
 		AddFeatureHandler []struct {
@@ -870,7 +870,7 @@ type StatefulSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.StatefulSetHandlerFunc
+			Sync v1a.StatefulSetHandlerFunc
 		}
 		// AddFeatureLifecycle holds details about calls to the AddFeatureLifecycle method.
 		AddFeatureLifecycle []struct {
@@ -881,7 +881,7 @@ type StatefulSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.StatefulSetLifecycle
+			Lifecycle v1a.StatefulSetLifecycle
 		}
 		// AddHandler holds details about calls to the AddHandler method.
 		AddHandler []struct {
@@ -890,7 +890,7 @@ type StatefulSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Sync is the sync argument value.
-			Sync v1beta2a.StatefulSetHandlerFunc
+			Sync v1a.StatefulSetHandlerFunc
 		}
 		// AddLifecycle holds details about calls to the AddLifecycle method.
 		AddLifecycle []struct {
@@ -899,7 +899,7 @@ type StatefulSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Lifecycle is the lifecycle argument value.
-			Lifecycle v1beta2a.StatefulSetLifecycle
+			Lifecycle v1a.StatefulSetLifecycle
 		}
 		// Controller holds details about calls to the Controller method.
 		Controller []struct {
@@ -907,21 +907,21 @@ type StatefulSetInterfaceMock struct {
 		// Create holds details about calls to the Create method.
 		Create []struct {
 			// In1 is the in1 argument value.
-			In1 *v1beta2.StatefulSet
+			In1 *v1.StatefulSet
 		}
 		// Delete holds details about calls to the Delete method.
 		Delete []struct {
 			// Name is the name argument value.
 			Name string
 			// Options is the options argument value.
-			Options *v1.DeleteOptions
+			Options *v1b.DeleteOptions
 		}
 		// DeleteCollection holds details about calls to the DeleteCollection method.
 		DeleteCollection []struct {
 			// DeleteOpts is the deleteOpts argument value.
-			DeleteOpts *v1.DeleteOptions
+			DeleteOpts *v1b.DeleteOptions
 			// ListOpts is the listOpts argument value.
-			ListOpts v1.ListOptions
+			ListOpts v1b.ListOptions
 		}
 		// DeleteNamespaced holds details about calls to the DeleteNamespaced method.
 		DeleteNamespaced []struct {
@@ -930,14 +930,14 @@ type StatefulSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Options is the options argument value.
-			Options *v1.DeleteOptions
+			Options *v1b.DeleteOptions
 		}
 		// Get holds details about calls to the Get method.
 		Get []struct {
 			// Name is the name argument value.
 			Name string
 			// Opts is the opts argument value.
-			Opts v1.GetOptions
+			Opts v1b.GetOptions
 		}
 		// GetNamespaced holds details about calls to the GetNamespaced method.
 		GetNamespaced []struct {
@@ -946,12 +946,12 @@ type StatefulSetInterfaceMock struct {
 			// Name is the name argument value.
 			Name string
 			// Opts is the opts argument value.
-			Opts v1.GetOptions
+			Opts v1b.GetOptions
 		}
 		// List holds details about calls to the List method.
 		List []struct {
 			// Opts is the opts argument value.
-			Opts v1.ListOptions
+			Opts v1b.ListOptions
 		}
 		// ObjectClient holds details about calls to the ObjectClient method.
 		ObjectClient []struct {
@@ -959,18 +959,18 @@ type StatefulSetInterfaceMock struct {
 		// Update holds details about calls to the Update method.
 		Update []struct {
 			// In1 is the in1 argument value.
-			In1 *v1beta2.StatefulSet
+			In1 *v1.StatefulSet
 		}
 		// Watch holds details about calls to the Watch method.
 		Watch []struct {
 			// Opts is the opts argument value.
-			Opts v1.ListOptions
+			Opts v1b.ListOptions
 		}
 	}
 }
 
 // AddClusterScopedFeatureHandler calls AddClusterScopedFeatureHandlerFunc.
-func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc) {
+func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context.Context, enabled func() bool, name string, clusterName string, sync v1a.StatefulSetHandlerFunc) {
 	if mock.AddClusterScopedFeatureHandlerFunc == nil {
 		panic("StatefulSetInterfaceMock.AddClusterScopedFeatureHandlerFunc: method is nil but StatefulSetInterface.AddClusterScopedFeatureHandler was just called")
 	}
@@ -979,7 +979,7 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureHandler(ctx context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.StatefulSetHandlerFunc
+		Sync        v1a.StatefulSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -1001,14 +1001,14 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureHandlerCalls() []st
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Sync        v1beta2a.StatefulSetHandlerFunc
+	Sync        v1a.StatefulSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.StatefulSetHandlerFunc
+		Sync        v1a.StatefulSetHandlerFunc
 	}
 	lockStatefulSetInterfaceMockAddClusterScopedFeatureHandler.RLock()
 	calls = mock.calls.AddClusterScopedFeatureHandler
@@ -1017,7 +1017,7 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureHandlerCalls() []st
 }
 
 // AddClusterScopedFeatureLifecycle calls AddClusterScopedFeatureLifecycleFunc.
-func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle) {
+func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx context.Context, enabled func() bool, name string, clusterName string, lifecycle v1a.StatefulSetLifecycle) {
 	if mock.AddClusterScopedFeatureLifecycleFunc == nil {
 		panic("StatefulSetInterfaceMock.AddClusterScopedFeatureLifecycleFunc: method is nil but StatefulSetInterface.AddClusterScopedFeatureLifecycle was just called")
 	}
@@ -1026,7 +1026,7 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureLifecycle(ctx conte
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.StatefulSetLifecycle
+		Lifecycle   v1a.StatefulSetLifecycle
 	}{
 		Ctx:         ctx,
 		Enabled:     enabled,
@@ -1048,14 +1048,14 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []
 	Enabled     func() bool
 	Name        string
 	ClusterName string
-	Lifecycle   v1beta2a.StatefulSetLifecycle
+	Lifecycle   v1a.StatefulSetLifecycle
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Enabled     func() bool
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.StatefulSetLifecycle
+		Lifecycle   v1a.StatefulSetLifecycle
 	}
 	lockStatefulSetInterfaceMockAddClusterScopedFeatureLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedFeatureLifecycle
@@ -1064,7 +1064,7 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedFeatureLifecycleCalls() []
 }
 
 // AddClusterScopedHandler calls AddClusterScopedHandlerFunc.
-func (mock *StatefulSetInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1beta2a.StatefulSetHandlerFunc) {
+func (mock *StatefulSetInterfaceMock) AddClusterScopedHandler(ctx context.Context, name string, clusterName string, sync v1a.StatefulSetHandlerFunc) {
 	if mock.AddClusterScopedHandlerFunc == nil {
 		panic("StatefulSetInterfaceMock.AddClusterScopedHandlerFunc: method is nil but StatefulSetInterface.AddClusterScopedHandler was just called")
 	}
@@ -1072,7 +1072,7 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedHandler(ctx context.Contex
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.StatefulSetHandlerFunc
+		Sync        v1a.StatefulSetHandlerFunc
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -1092,13 +1092,13 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedHandlerCalls() []struct {
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Sync        v1beta2a.StatefulSetHandlerFunc
+	Sync        v1a.StatefulSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Sync        v1beta2a.StatefulSetHandlerFunc
+		Sync        v1a.StatefulSetHandlerFunc
 	}
 	lockStatefulSetInterfaceMockAddClusterScopedHandler.RLock()
 	calls = mock.calls.AddClusterScopedHandler
@@ -1107,7 +1107,7 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedHandlerCalls() []struct {
 }
 
 // AddClusterScopedLifecycle calls AddClusterScopedLifecycleFunc.
-func (mock *StatefulSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Context, name string, clusterName string, lifecycle v1beta2a.StatefulSetLifecycle) {
+func (mock *StatefulSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Context, name string, clusterName string, lifecycle v1a.StatefulSetLifecycle) {
 	if mock.AddClusterScopedLifecycleFunc == nil {
 		panic("StatefulSetInterfaceMock.AddClusterScopedLifecycleFunc: method is nil but StatefulSetInterface.AddClusterScopedLifecycle was just called")
 	}
@@ -1115,7 +1115,7 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedLifecycle(ctx context.Cont
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.StatefulSetLifecycle
+		Lifecycle   v1a.StatefulSetLifecycle
 	}{
 		Ctx:         ctx,
 		Name:        name,
@@ -1135,13 +1135,13 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedLifecycleCalls() []struct 
 	Ctx         context.Context
 	Name        string
 	ClusterName string
-	Lifecycle   v1beta2a.StatefulSetLifecycle
+	Lifecycle   v1a.StatefulSetLifecycle
 } {
 	var calls []struct {
 		Ctx         context.Context
 		Name        string
 		ClusterName string
-		Lifecycle   v1beta2a.StatefulSetLifecycle
+		Lifecycle   v1a.StatefulSetLifecycle
 	}
 	lockStatefulSetInterfaceMockAddClusterScopedLifecycle.RLock()
 	calls = mock.calls.AddClusterScopedLifecycle
@@ -1150,7 +1150,7 @@ func (mock *StatefulSetInterfaceMock) AddClusterScopedLifecycleCalls() []struct 
 }
 
 // AddFeatureHandler calls AddFeatureHandlerFunc.
-func (mock *StatefulSetInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1beta2a.StatefulSetHandlerFunc) {
+func (mock *StatefulSetInterfaceMock) AddFeatureHandler(ctx context.Context, enabled func() bool, name string, sync v1a.StatefulSetHandlerFunc) {
 	if mock.AddFeatureHandlerFunc == nil {
 		panic("StatefulSetInterfaceMock.AddFeatureHandlerFunc: method is nil but StatefulSetInterface.AddFeatureHandler was just called")
 	}
@@ -1158,7 +1158,7 @@ func (mock *StatefulSetInterfaceMock) AddFeatureHandler(ctx context.Context, ena
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.StatefulSetHandlerFunc
+		Sync    v1a.StatefulSetHandlerFunc
 	}{
 		Ctx:     ctx,
 		Enabled: enabled,
@@ -1178,13 +1178,13 @@ func (mock *StatefulSetInterfaceMock) AddFeatureHandlerCalls() []struct {
 	Ctx     context.Context
 	Enabled func() bool
 	Name    string
-	Sync    v1beta2a.StatefulSetHandlerFunc
+	Sync    v1a.StatefulSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx     context.Context
 		Enabled func() bool
 		Name    string
-		Sync    v1beta2a.StatefulSetHandlerFunc
+		Sync    v1a.StatefulSetHandlerFunc
 	}
 	lockStatefulSetInterfaceMockAddFeatureHandler.RLock()
 	calls = mock.calls.AddFeatureHandler
@@ -1193,7 +1193,7 @@ func (mock *StatefulSetInterfaceMock) AddFeatureHandlerCalls() []struct {
 }
 
 // AddFeatureLifecycle calls AddFeatureLifecycleFunc.
-func (mock *StatefulSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1beta2a.StatefulSetLifecycle) {
+func (mock *StatefulSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, enabled func() bool, name string, lifecycle v1a.StatefulSetLifecycle) {
 	if mock.AddFeatureLifecycleFunc == nil {
 		panic("StatefulSetInterfaceMock.AddFeatureLifecycleFunc: method is nil but StatefulSetInterface.AddFeatureLifecycle was just called")
 	}
@@ -1201,7 +1201,7 @@ func (mock *StatefulSetInterfaceMock) AddFeatureLifecycle(ctx context.Context, e
 		Ctx       context.Context
 		Enabled   func() bool
 		Name      string
-		Lifecycle v1beta2a.StatefulSetLifecycle
+		Lifecycle v1a.StatefulSetLifecycle
 	}{
 		Ctx:       ctx,
 		Enabled:   enabled,
@@ -1221,13 +1221,13 @@ func (mock *StatefulSetInterfaceMock) AddFeatureLifecycleCalls() []struct {
 	Ctx       context.Context
 	Enabled   func() bool
 	Name      string
-	Lifecycle v1beta2a.StatefulSetLifecycle
+	Lifecycle v1a.StatefulSetLifecycle
 } {
 	var calls []struct {
 		Ctx       context.Context
 		Enabled   func() bool
 		Name      string
-		Lifecycle v1beta2a.StatefulSetLifecycle
+		Lifecycle v1a.StatefulSetLifecycle
 	}
 	lockStatefulSetInterfaceMockAddFeatureLifecycle.RLock()
 	calls = mock.calls.AddFeatureLifecycle
@@ -1236,14 +1236,14 @@ func (mock *StatefulSetInterfaceMock) AddFeatureLifecycleCalls() []struct {
 }
 
 // AddHandler calls AddHandlerFunc.
-func (mock *StatefulSetInterfaceMock) AddHandler(ctx context.Context, name string, sync v1beta2a.StatefulSetHandlerFunc) {
+func (mock *StatefulSetInterfaceMock) AddHandler(ctx context.Context, name string, sync v1a.StatefulSetHandlerFunc) {
 	if mock.AddHandlerFunc == nil {
 		panic("StatefulSetInterfaceMock.AddHandlerFunc: method is nil but StatefulSetInterface.AddHandler was just called")
 	}
 	callInfo := struct {
 		Ctx  context.Context
 		Name string
-		Sync v1beta2a.StatefulSetHandlerFunc
+		Sync v1a.StatefulSetHandlerFunc
 	}{
 		Ctx:  ctx,
 		Name: name,
@@ -1261,12 +1261,12 @@ func (mock *StatefulSetInterfaceMock) AddHandler(ctx context.Context, name strin
 func (mock *StatefulSetInterfaceMock) AddHandlerCalls() []struct {
 	Ctx  context.Context
 	Name string
-	Sync v1beta2a.StatefulSetHandlerFunc
+	Sync v1a.StatefulSetHandlerFunc
 } {
 	var calls []struct {
 		Ctx  context.Context
 		Name string
-		Sync v1beta2a.StatefulSetHandlerFunc
+		Sync v1a.StatefulSetHandlerFunc
 	}
 	lockStatefulSetInterfaceMockAddHandler.RLock()
 	calls = mock.calls.AddHandler
@@ -1275,14 +1275,14 @@ func (mock *StatefulSetInterfaceMock) AddHandlerCalls() []struct {
 }
 
 // AddLifecycle calls AddLifecycleFunc.
-func (mock *StatefulSetInterfaceMock) AddLifecycle(ctx context.Context, name string, lifecycle v1beta2a.StatefulSetLifecycle) {
+func (mock *StatefulSetInterfaceMock) AddLifecycle(ctx context.Context, name string, lifecycle v1a.StatefulSetLifecycle) {
 	if mock.AddLifecycleFunc == nil {
 		panic("StatefulSetInterfaceMock.AddLifecycleFunc: method is nil but StatefulSetInterface.AddLifecycle was just called")
 	}
 	callInfo := struct {
 		Ctx       context.Context
 		Name      string
-		Lifecycle v1beta2a.StatefulSetLifecycle
+		Lifecycle v1a.StatefulSetLifecycle
 	}{
 		Ctx:       ctx,
 		Name:      name,
@@ -1300,12 +1300,12 @@ func (mock *StatefulSetInterfaceMock) AddLifecycle(ctx context.Context, name str
 func (mock *StatefulSetInterfaceMock) AddLifecycleCalls() []struct {
 	Ctx       context.Context
 	Name      string
-	Lifecycle v1beta2a.StatefulSetLifecycle
+	Lifecycle v1a.StatefulSetLifecycle
 } {
 	var calls []struct {
 		Ctx       context.Context
 		Name      string
-		Lifecycle v1beta2a.StatefulSetLifecycle
+		Lifecycle v1a.StatefulSetLifecycle
 	}
 	lockStatefulSetInterfaceMockAddLifecycle.RLock()
 	calls = mock.calls.AddLifecycle
@@ -1314,7 +1314,7 @@ func (mock *StatefulSetInterfaceMock) AddLifecycleCalls() []struct {
 }
 
 // Controller calls ControllerFunc.
-func (mock *StatefulSetInterfaceMock) Controller() v1beta2a.StatefulSetController {
+func (mock *StatefulSetInterfaceMock) Controller() v1a.StatefulSetController {
 	if mock.ControllerFunc == nil {
 		panic("StatefulSetInterfaceMock.ControllerFunc: method is nil but StatefulSetInterface.Controller was just called")
 	}
@@ -1340,12 +1340,12 @@ func (mock *StatefulSetInterfaceMock) ControllerCalls() []struct {
 }
 
 // Create calls CreateFunc.
-func (mock *StatefulSetInterfaceMock) Create(in1 *v1beta2.StatefulSet) (*v1beta2.StatefulSet, error) {
+func (mock *StatefulSetInterfaceMock) Create(in1 *v1.StatefulSet) (*v1.StatefulSet, error) {
 	if mock.CreateFunc == nil {
 		panic("StatefulSetInterfaceMock.CreateFunc: method is nil but StatefulSetInterface.Create was just called")
 	}
 	callInfo := struct {
-		In1 *v1beta2.StatefulSet
+		In1 *v1.StatefulSet
 	}{
 		In1: in1,
 	}
@@ -1359,10 +1359,10 @@ func (mock *StatefulSetInterfaceMock) Create(in1 *v1beta2.StatefulSet) (*v1beta2
 // Check the length with:
 //     len(mockedStatefulSetInterface.CreateCalls())
 func (mock *StatefulSetInterfaceMock) CreateCalls() []struct {
-	In1 *v1beta2.StatefulSet
+	In1 *v1.StatefulSet
 } {
 	var calls []struct {
-		In1 *v1beta2.StatefulSet
+		In1 *v1.StatefulSet
 	}
 	lockStatefulSetInterfaceMockCreate.RLock()
 	calls = mock.calls.Create
@@ -1371,13 +1371,13 @@ func (mock *StatefulSetInterfaceMock) CreateCalls() []struct {
 }
 
 // Delete calls DeleteFunc.
-func (mock *StatefulSetInterfaceMock) Delete(name string, options *v1.DeleteOptions) error {
+func (mock *StatefulSetInterfaceMock) Delete(name string, options *v1b.DeleteOptions) error {
 	if mock.DeleteFunc == nil {
 		panic("StatefulSetInterfaceMock.DeleteFunc: method is nil but StatefulSetInterface.Delete was just called")
 	}
 	callInfo := struct {
 		Name    string
-		Options *v1.DeleteOptions
+		Options *v1b.DeleteOptions
 	}{
 		Name:    name,
 		Options: options,
@@ -1393,11 +1393,11 @@ func (mock *StatefulSetInterfaceMock) Delete(name string, options *v1.DeleteOpti
 //     len(mockedStatefulSetInterface.DeleteCalls())
 func (mock *StatefulSetInterfaceMock) DeleteCalls() []struct {
 	Name    string
-	Options *v1.DeleteOptions
+	Options *v1b.DeleteOptions
 } {
 	var calls []struct {
 		Name    string
-		Options *v1.DeleteOptions
+		Options *v1b.DeleteOptions
 	}
 	lockStatefulSetInterfaceMockDelete.RLock()
 	calls = mock.calls.Delete
@@ -1406,13 +1406,13 @@ func (mock *StatefulSetInterfaceMock) DeleteCalls() []struct {
 }
 
 // DeleteCollection calls DeleteCollectionFunc.
-func (mock *StatefulSetInterfaceMock) DeleteCollection(deleteOpts *v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (mock *StatefulSetInterfaceMock) DeleteCollection(deleteOpts *v1b.DeleteOptions, listOpts v1b.ListOptions) error {
 	if mock.DeleteCollectionFunc == nil {
 		panic("StatefulSetInterfaceMock.DeleteCollectionFunc: method is nil but StatefulSetInterface.DeleteCollection was just called")
 	}
 	callInfo := struct {
-		DeleteOpts *v1.DeleteOptions
-		ListOpts   v1.ListOptions
+		DeleteOpts *v1b.DeleteOptions
+		ListOpts   v1b.ListOptions
 	}{
 		DeleteOpts: deleteOpts,
 		ListOpts:   listOpts,
@@ -1427,12 +1427,12 @@ func (mock *StatefulSetInterfaceMock) DeleteCollection(deleteOpts *v1.DeleteOpti
 // Check the length with:
 //     len(mockedStatefulSetInterface.DeleteCollectionCalls())
 func (mock *StatefulSetInterfaceMock) DeleteCollectionCalls() []struct {
-	DeleteOpts *v1.DeleteOptions
-	ListOpts   v1.ListOptions
+	DeleteOpts *v1b.DeleteOptions
+	ListOpts   v1b.ListOptions
 } {
 	var calls []struct {
-		DeleteOpts *v1.DeleteOptions
-		ListOpts   v1.ListOptions
+		DeleteOpts *v1b.DeleteOptions
+		ListOpts   v1b.ListOptions
 	}
 	lockStatefulSetInterfaceMockDeleteCollection.RLock()
 	calls = mock.calls.DeleteCollection
@@ -1441,14 +1441,14 @@ func (mock *StatefulSetInterfaceMock) DeleteCollectionCalls() []struct {
 }
 
 // DeleteNamespaced calls DeleteNamespacedFunc.
-func (mock *StatefulSetInterfaceMock) DeleteNamespaced(namespace string, name string, options *v1.DeleteOptions) error {
+func (mock *StatefulSetInterfaceMock) DeleteNamespaced(namespace string, name string, options *v1b.DeleteOptions) error {
 	if mock.DeleteNamespacedFunc == nil {
 		panic("StatefulSetInterfaceMock.DeleteNamespacedFunc: method is nil but StatefulSetInterface.DeleteNamespaced was just called")
 	}
 	callInfo := struct {
 		Namespace string
 		Name      string
-		Options   *v1.DeleteOptions
+		Options   *v1b.DeleteOptions
 	}{
 		Namespace: namespace,
 		Name:      name,
@@ -1466,12 +1466,12 @@ func (mock *StatefulSetInterfaceMock) DeleteNamespaced(namespace string, name st
 func (mock *StatefulSetInterfaceMock) DeleteNamespacedCalls() []struct {
 	Namespace string
 	Name      string
-	Options   *v1.DeleteOptions
+	Options   *v1b.DeleteOptions
 } {
 	var calls []struct {
 		Namespace string
 		Name      string
-		Options   *v1.DeleteOptions
+		Options   *v1b.DeleteOptions
 	}
 	lockStatefulSetInterfaceMockDeleteNamespaced.RLock()
 	calls = mock.calls.DeleteNamespaced
@@ -1480,13 +1480,13 @@ func (mock *StatefulSetInterfaceMock) DeleteNamespacedCalls() []struct {
 }
 
 // Get calls GetFunc.
-func (mock *StatefulSetInterfaceMock) Get(name string, opts v1.GetOptions) (*v1beta2.StatefulSet, error) {
+func (mock *StatefulSetInterfaceMock) Get(name string, opts v1b.GetOptions) (*v1.StatefulSet, error) {
 	if mock.GetFunc == nil {
 		panic("StatefulSetInterfaceMock.GetFunc: method is nil but StatefulSetInterface.Get was just called")
 	}
 	callInfo := struct {
 		Name string
-		Opts v1.GetOptions
+		Opts v1b.GetOptions
 	}{
 		Name: name,
 		Opts: opts,
@@ -1502,11 +1502,11 @@ func (mock *StatefulSetInterfaceMock) Get(name string, opts v1.GetOptions) (*v1b
 //     len(mockedStatefulSetInterface.GetCalls())
 func (mock *StatefulSetInterfaceMock) GetCalls() []struct {
 	Name string
-	Opts v1.GetOptions
+	Opts v1b.GetOptions
 } {
 	var calls []struct {
 		Name string
-		Opts v1.GetOptions
+		Opts v1b.GetOptions
 	}
 	lockStatefulSetInterfaceMockGet.RLock()
 	calls = mock.calls.Get
@@ -1515,14 +1515,14 @@ func (mock *StatefulSetInterfaceMock) GetCalls() []struct {
 }
 
 // GetNamespaced calls GetNamespacedFunc.
-func (mock *StatefulSetInterfaceMock) GetNamespaced(namespace string, name string, opts v1.GetOptions) (*v1beta2.StatefulSet, error) {
+func (mock *StatefulSetInterfaceMock) GetNamespaced(namespace string, name string, opts v1b.GetOptions) (*v1.StatefulSet, error) {
 	if mock.GetNamespacedFunc == nil {
 		panic("StatefulSetInterfaceMock.GetNamespacedFunc: method is nil but StatefulSetInterface.GetNamespaced was just called")
 	}
 	callInfo := struct {
 		Namespace string
 		Name      string
-		Opts      v1.GetOptions
+		Opts      v1b.GetOptions
 	}{
 		Namespace: namespace,
 		Name:      name,
@@ -1540,12 +1540,12 @@ func (mock *StatefulSetInterfaceMock) GetNamespaced(namespace string, name strin
 func (mock *StatefulSetInterfaceMock) GetNamespacedCalls() []struct {
 	Namespace string
 	Name      string
-	Opts      v1.GetOptions
+	Opts      v1b.GetOptions
 } {
 	var calls []struct {
 		Namespace string
 		Name      string
-		Opts      v1.GetOptions
+		Opts      v1b.GetOptions
 	}
 	lockStatefulSetInterfaceMockGetNamespaced.RLock()
 	calls = mock.calls.GetNamespaced
@@ -1554,12 +1554,12 @@ func (mock *StatefulSetInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *StatefulSetInterfaceMock) List(opts v1.ListOptions) (*v1beta2a.StatefulSetList, error) {
+func (mock *StatefulSetInterfaceMock) List(opts v1b.ListOptions) (*v1a.StatefulSetList, error) {
 	if mock.ListFunc == nil {
 		panic("StatefulSetInterfaceMock.ListFunc: method is nil but StatefulSetInterface.List was just called")
 	}
 	callInfo := struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}{
 		Opts: opts,
 	}
@@ -1573,10 +1573,10 @@ func (mock *StatefulSetInterfaceMock) List(opts v1.ListOptions) (*v1beta2a.State
 // Check the length with:
 //     len(mockedStatefulSetInterface.ListCalls())
 func (mock *StatefulSetInterfaceMock) ListCalls() []struct {
-	Opts v1.ListOptions
+	Opts v1b.ListOptions
 } {
 	var calls []struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}
 	lockStatefulSetInterfaceMockList.RLock()
 	calls = mock.calls.List
@@ -1611,12 +1611,12 @@ func (mock *StatefulSetInterfaceMock) ObjectClientCalls() []struct {
 }
 
 // Update calls UpdateFunc.
-func (mock *StatefulSetInterfaceMock) Update(in1 *v1beta2.StatefulSet) (*v1beta2.StatefulSet, error) {
+func (mock *StatefulSetInterfaceMock) Update(in1 *v1.StatefulSet) (*v1.StatefulSet, error) {
 	if mock.UpdateFunc == nil {
 		panic("StatefulSetInterfaceMock.UpdateFunc: method is nil but StatefulSetInterface.Update was just called")
 	}
 	callInfo := struct {
-		In1 *v1beta2.StatefulSet
+		In1 *v1.StatefulSet
 	}{
 		In1: in1,
 	}
@@ -1630,10 +1630,10 @@ func (mock *StatefulSetInterfaceMock) Update(in1 *v1beta2.StatefulSet) (*v1beta2
 // Check the length with:
 //     len(mockedStatefulSetInterface.UpdateCalls())
 func (mock *StatefulSetInterfaceMock) UpdateCalls() []struct {
-	In1 *v1beta2.StatefulSet
+	In1 *v1.StatefulSet
 } {
 	var calls []struct {
-		In1 *v1beta2.StatefulSet
+		In1 *v1.StatefulSet
 	}
 	lockStatefulSetInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
@@ -1642,12 +1642,12 @@ func (mock *StatefulSetInterfaceMock) UpdateCalls() []struct {
 }
 
 // Watch calls WatchFunc.
-func (mock *StatefulSetInterfaceMock) Watch(opts v1.ListOptions) (watch.Interface, error) {
+func (mock *StatefulSetInterfaceMock) Watch(opts v1b.ListOptions) (watch.Interface, error) {
 	if mock.WatchFunc == nil {
 		panic("StatefulSetInterfaceMock.WatchFunc: method is nil but StatefulSetInterface.Watch was just called")
 	}
 	callInfo := struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}{
 		Opts: opts,
 	}
@@ -1661,10 +1661,10 @@ func (mock *StatefulSetInterfaceMock) Watch(opts v1.ListOptions) (watch.Interfac
 // Check the length with:
 //     len(mockedStatefulSetInterface.WatchCalls())
 func (mock *StatefulSetInterfaceMock) WatchCalls() []struct {
-	Opts v1.ListOptions
+	Opts v1b.ListOptions
 } {
 	var calls []struct {
-		Opts v1.ListOptions
+		Opts v1b.ListOptions
 	}
 	lockStatefulSetInterfaceMockWatch.RLock()
 	calls = mock.calls.Watch
@@ -1678,7 +1678,7 @@ var (
 
 // Ensure, that StatefulSetsGetterMock does implement StatefulSetsGetter.
 // If this is not the case, regenerate this file with moq.
-var _ v1beta2a.StatefulSetsGetter = &StatefulSetsGetterMock{}
+var _ v1a.StatefulSetsGetter = &StatefulSetsGetterMock{}
 
 // StatefulSetsGetterMock is a mock implementation of StatefulSetsGetter.
 //
@@ -1686,7 +1686,7 @@ var _ v1beta2a.StatefulSetsGetter = &StatefulSetsGetterMock{}
 //
 //         // make and configure a mocked StatefulSetsGetter
 //         mockedStatefulSetsGetter := &StatefulSetsGetterMock{
-//             StatefulSetsFunc: func(namespace string) v1beta2a.StatefulSetInterface {
+//             StatefulSetsFunc: func(namespace string) v1a.StatefulSetInterface {
 // 	               panic("mock out the StatefulSets method")
 //             },
 //         }
@@ -1697,7 +1697,7 @@ var _ v1beta2a.StatefulSetsGetter = &StatefulSetsGetterMock{}
 //     }
 type StatefulSetsGetterMock struct {
 	// StatefulSetsFunc mocks the StatefulSets method.
-	StatefulSetsFunc func(namespace string) v1beta2a.StatefulSetInterface
+	StatefulSetsFunc func(namespace string) v1a.StatefulSetInterface
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -1710,7 +1710,7 @@ type StatefulSetsGetterMock struct {
 }
 
 // StatefulSets calls StatefulSetsFunc.
-func (mock *StatefulSetsGetterMock) StatefulSets(namespace string) v1beta2a.StatefulSetInterface {
+func (mock *StatefulSetsGetterMock) StatefulSets(namespace string) v1a.StatefulSetInterface {
 	if mock.StatefulSetsFunc == nil {
 		panic("StatefulSetsGetterMock.StatefulSetsFunc: method is nil but StatefulSetsGetter.StatefulSets was just called")
 	}
