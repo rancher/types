@@ -558,17 +558,25 @@ type GlobalOpenstackOpts struct {
 }
 
 type LoadBalancerOpenstackOpts struct {
-	LBVersion            string `json:"lb-version" yaml:"lb-version" ini:"lb-version,omitempty"`                            // overrides autodetection. Only support v2.
-	UseOctavia           bool   `json:"use-octavia" yaml:"use-octavia" ini:"use-octavia,omitempty"`                         // uses Octavia V2 service catalog endpoint
-	SubnetID             string `json:"subnet-id" yaml:"subnet-id" ini:"subnet-id,omitempty"`                               // overrides autodetection.
-	FloatingNetworkID    string `json:"floating-network-id" yaml:"floating-network-id" ini:"floating-network-id,omitempty"` // If specified, will create floating ip for loadbalancer, or do not create floating ip.
-	LBMethod             string `json:"lb-method" yaml:"lb-method" ini:"lb-method,omitempty"`                               // default to ROUND_ROBIN.
-	LBProvider           string `json:"lb-provider" yaml:"lb-provider" ini:"lb-provider,omitempty"`
-	CreateMonitor        bool   `json:"create-monitor" yaml:"create-monitor" ini:"create-monitor,omitempty"`
-	MonitorDelay         string `json:"monitor-delay" yaml:"monitor-delay" ini:"monitor-delay,omitempty"`
-	MonitorTimeout       string `json:"monitor-timeout" yaml:"monitor-timeout" ini:"monitor-timeout,omitempty"`
-	MonitorMaxRetries    int    `json:"monitor-max-retries" yaml:"monitor-max-retries" ini:"monitor-max-retries,omitempty"`
-	ManageSecurityGroups bool   `json:"manage-security-groups" yaml:"manage-security-groups" ini:"manage-security-groups,omitempty"`
+	LBVersion            string                                    `json:"lb-version" yaml:"lb-version" ini:"lb-version,omitempty"`                            // overrides autodetection. Only support v2.
+	UseOctavia           bool                                      `json:"use-octavia" yaml:"use-octavia" ini:"use-octavia,omitempty"`                         // uses Octavia V2 service catalog endpoint
+	SubnetID             string                                    `json:"subnet-id" yaml:"subnet-id" ini:"subnet-id,omitempty"`                               // overrides autodetection.
+	FloatingNetworkID    string                                    `json:"floating-network-id" yaml:"floating-network-id" ini:"floating-network-id,omitempty"` // If specified, will create floating ip for loadbalancer, or do not create floating ip.
+	FloatingSubnetID     string                                    `json:"floating-subnet-id" yaml:"floating-subnet-id" ini:"floating-subnet-id,omitempty"`    // If specified, will create floating ip for loadbalancer in this particular floating pool subnetwork.
+	LBMethod             string                                    `json:"lb-method" yaml:"lb-method" ini:"lb-method,omitempty"`                               // default to ROUND_ROBIN.
+	LBProvider           string                                    `json:"lb-provider" yaml:"lb-provider" ini:"lb-provider,omitempty"`
+	LBClasses            map[string]LoadBalancerClassOpenstackOpts // Predefined named Floating networks and subnets
+	CreateMonitor        bool                                      `json:"create-monitor" yaml:"create-monitor" ini:"create-monitor,omitempty"`
+	MonitorDelay         string                                    `json:"monitor-delay" yaml:"monitor-delay" ini:"monitor-delay,omitempty"`
+	MonitorTimeout       string                                    `json:"monitor-timeout" yaml:"monitor-timeout" ini:"monitor-timeout,omitempty"`
+	MonitorMaxRetries    int                                       `json:"monitor-max-retries" yaml:"monitor-max-retries" ini:"monitor-max-retries,omitempty"`
+	ManageSecurityGroups bool                                      `json:"manage-security-groups" yaml:"manage-security-groups" ini:"manage-security-groups,omitempty"`
+}
+
+type LoadBalancerClassOpenstackOpts struct {
+	FloatingNetworkID string `json:"floating-network-id" yaml:"floating-network-id" ini:"floating-network-id,omitempty"`
+	FloatingSubnetID  string `json:"floating-subnet-id" yaml:"floating-subnet-id" ini:"floating-subnet-id,omitempty"`
+	SubnetID          string `json:"subnet-id" yaml:"subnet-id" ini:"subnet-id,omitempty"`
 }
 
 type BlockStorageOpenstackOpts struct {

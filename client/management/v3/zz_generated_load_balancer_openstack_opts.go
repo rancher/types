@@ -4,6 +4,8 @@ const (
 	LoadBalancerOpenstackOptsType                      = "loadBalancerOpenstackOpts"
 	LoadBalancerOpenstackOptsFieldCreateMonitor        = "create-monitor"
 	LoadBalancerOpenstackOptsFieldFloatingNetworkID    = "floating-network-id"
+	LoadBalancerOpenstackOptsFieldFloatingSubnetID     = "floating-subnet-id"
+	LoadBalancerOpenstackOptsFieldLBClasses            = "lbClasses"
 	LoadBalancerOpenstackOptsFieldLBMethod             = "lb-method"
 	LoadBalancerOpenstackOptsFieldLBProvider           = "lb-provider"
 	LoadBalancerOpenstackOptsFieldLBVersion            = "lb-version"
@@ -16,15 +18,17 @@ const (
 )
 
 type LoadBalancerOpenstackOpts struct {
-	CreateMonitor        bool   `json:"create-monitor,omitempty" yaml:"create-monitor,omitempty"`
-	FloatingNetworkID    string `json:"floating-network-id,omitempty" yaml:"floating-network-id,omitempty"`
-	LBMethod             string `json:"lb-method,omitempty" yaml:"lb-method,omitempty"`
-	LBProvider           string `json:"lb-provider,omitempty" yaml:"lb-provider,omitempty"`
-	LBVersion            string `json:"lb-version,omitempty" yaml:"lb-version,omitempty"`
-	ManageSecurityGroups bool   `json:"manage-security-groups,omitempty" yaml:"manage-security-groups,omitempty"`
-	MonitorDelay         string `json:"monitor-delay,omitempty" yaml:"monitor-delay,omitempty"`
-	MonitorMaxRetries    int64  `json:"monitor-max-retries,omitempty" yaml:"monitor-max-retries,omitempty"`
-	MonitorTimeout       string `json:"monitor-timeout,omitempty" yaml:"monitor-timeout,omitempty"`
-	SubnetID             string `json:"subnet-id,omitempty" yaml:"subnet-id,omitempty"`
-	UseOctavia           bool   `json:"use-octavia,omitempty" yaml:"use-octavia,omitempty"`
+	CreateMonitor        bool                                      `json:"create-monitor,omitempty" yaml:"create-monitor,omitempty"`
+	FloatingNetworkID    string                                    `json:"floating-network-id,omitempty" yaml:"floating-network-id,omitempty"`
+	FloatingSubnetID     string                                    `json:"floating-subnet-id,omitempty" yaml:"floating-subnet-id,omitempty"`
+	LBClasses            map[string]LoadBalancerClassOpenstackOpts `json:"lbClasses,omitempty" yaml:"lbClasses,omitempty"`
+	LBMethod             string                                    `json:"lb-method,omitempty" yaml:"lb-method,omitempty"`
+	LBProvider           string                                    `json:"lb-provider,omitempty" yaml:"lb-provider,omitempty"`
+	LBVersion            string                                    `json:"lb-version,omitempty" yaml:"lb-version,omitempty"`
+	ManageSecurityGroups bool                                      `json:"manage-security-groups,omitempty" yaml:"manage-security-groups,omitempty"`
+	MonitorDelay         string                                    `json:"monitor-delay,omitempty" yaml:"monitor-delay,omitempty"`
+	MonitorMaxRetries    int64                                     `json:"monitor-max-retries,omitempty" yaml:"monitor-max-retries,omitempty"`
+	MonitorTimeout       string                                    `json:"monitor-timeout,omitempty" yaml:"monitor-timeout,omitempty"`
+	SubnetID             string                                    `json:"subnet-id,omitempty" yaml:"subnet-id,omitempty"`
+	UseOctavia           bool                                      `json:"use-octavia,omitempty" yaml:"use-octavia,omitempty"`
 }
