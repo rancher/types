@@ -47,6 +47,8 @@ type RancherKubernetesEngineConfig struct {
 	AddonJobTimeout int `yaml:"addon_job_timeout" json:"addonJobTimeout,omitempty" norman:"default=30"`
 	// Bastion/Jump Host configuration
 	BastionHost BastionHost `yaml:"bastion_host" json:"bastionHost,omitempty"`
+	// Load Balancer address (externally-managed) through which nodes are to contact the control plane API port
+	ControlPlaneLoadBalancer string `yaml:"control_plane_load_balancer" json:"controlPlaneLoadBalancer,omitempty"`
 	// Monitoring Config
 	Monitoring MonitoringConfig `yaml:"monitoring" json:"monitoring,omitempty"`
 	// RestoreCluster flag
