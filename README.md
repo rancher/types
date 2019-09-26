@@ -19,7 +19,7 @@ To generate types you need to update vendor.
 1. Update go.mod for what you need 
 2. Run `GO111MODULE=on go mod vendor`
 3. Export your gopath (export GOPATH=types_go_path_dir)
-4. Run `go generate`
+4. Run `GO111MODULE=off go generate`
 5. Unset your `GOPATH`
 
 ## License
