@@ -7,7 +7,7 @@ import (
 	context "context"
 	sync "sync"
 
-	v1 "github.com/coreos/prometheus-operator/pkg/client/monitoring/v1"
+	v1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
 	v1a "github.com/rancher/types/apis/monitoring.coreos.com/v1"
