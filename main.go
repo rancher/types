@@ -4,7 +4,8 @@
 package main
 
 import (
-	monitoringv1 "github.com/coreos/prometheus-operator/pkg/client/monitoring/v1"
+	monitoring "github.com/coreos/prometheus-operator/pkg/apis/monitoring"
+	monitoringv1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	istiov1alpha3 "github.com/knative/pkg/apis/istio/v1alpha3"
 	clusterSchema "github.com/rancher/types/apis/cluster.cattle.io/v3/schema"
 	managementSchema "github.com/rancher/types/apis/management.cattle.io/v3/schema"
@@ -95,7 +96,7 @@ func main() {
 		},
 	)
 	generator.GenerateNativeTypes(
-		k8sschema.GroupVersion{Group: monitoringv1.Group, Version: monitoringv1.Version},
+		k8sschema.GroupVersion{Group: monitoring.GroupName, Version: monitoringv1.Version},
 		[]interface{}{
 			monitoringv1.Prometheus{},
 			monitoringv1.Alertmanager{},
