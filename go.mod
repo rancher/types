@@ -12,7 +12,7 @@ require (
 	github.com/coreos/prometheus-operator v0.33.0
 	github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8
 	github.com/pkg/errors v0.8.1
-	github.com/rancher/norman v0.0.0-20191002173122-b1eb20740eab
+	github.com/rancher/norman v0.0.0-20191003174345-0ac7dd6ccb36
 	github.com/sirupsen/logrus v1.4.2
 	golang.org/x/tools v0.0.0-20190926165942-a8d5d34286bd // indirect
 	k8s.io/api v0.0.0-20190918155943-95b840bb6a1f
