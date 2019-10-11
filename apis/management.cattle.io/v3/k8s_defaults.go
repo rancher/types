@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultK8s = "v1.15.4-rancher1-1"
+	DefaultK8s = "v1.15.5-rancher1-1"
 )
 
 var (
@@ -27,9 +27,9 @@ var (
 		// When add a new k8s version to 2.2, make sure to add support for it to the 2.1.x branch.
 		// Account for the fact that rke-tools image is different cross branches, and it requires using
 		// different k8s version tag
-		"v1.13.11-rancher1-1",
-		"v1.14.7-rancher1-1",
-		"v1.15.4-rancher1-1",
+		"v1.13.12-rancher1-1",
+		"v1.14.8-rancher1-1",
+		"v1.15.5-rancher1-1",
 	}
 
 	// K8sVersionToRKESystemImages is dynamically populated on init() with the latest versions
@@ -1309,9 +1309,9 @@ var (
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.0.0"),
 		},
 		// Enabled in Rancher v2.2.9
-		"v1.13.11-rancher1-1": {
+		"v1.13.12-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.2.24-rancher1"),
-			Kubernetes:                m("rancher/hyperkube:v1.13.11-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.13.12-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.50"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.50"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.50"),
@@ -1512,9 +1512,9 @@ var (
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.3.0"),
 		},
 		// Enabled in Rancher v2.2.9
-		"v1.14.7-rancher1-1": {
+		"v1.14.8-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.3.10-rancher1"),
-			Kubernetes:                m("rancher/hyperkube:v1.14.7-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.14.8-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.50"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.50"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.50"),
@@ -1661,9 +1661,9 @@ var (
 			CoreDNSAutoscaler:         m("gcr.io/google_containers/cluster-proportional-autoscaler:1.3.0"),
 		},
 		// Enabled in Rancher v2.2.9
-		"v1.15.4-rancher1-1": {
+		"v1.15.5-rancher1-1": {
 			Etcd:                      m("quay.io/coreos/etcd:v3.3.10-rancher1"),
-			Kubernetes:                m("rancher/hyperkube:v1.15.4-rancher1"),
+			Kubernetes:                m("rancher/hyperkube:v1.15.5-rancher1"),
 			Alpine:                    m("rancher/rke-tools:v0.1.50"),
 			NginxProxy:                m("rancher/rke-tools:v0.1.50"),
 			CertDownloader:            m("rancher/rke-tools:v0.1.50"),
