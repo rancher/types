@@ -87,14 +87,14 @@ var (
 	}{
 		AlertSystemImages: AlertSystemImages{
 			AlertManager:       m("prom/alertmanager:v0.15.2"),
-			AlertManagerHelper: m("rancher/alertmanager-helper:v0.0.2"),
+			AlertManagerHelper: m("rancher/alertmanager-helper:v0.0.3"),
 		},
 		PipelineSystemImages: projectv3.PipelineSystemImages{
 			Jenkins:       m("rancher/pipeline-jenkins-server:v0.1.0"),
-			JenkinsJnlp:   m("jenkins/jnlp-slave:3.10-1-alpine"),
+			JenkinsJnlp:   m("jenkins/jnlp-slave:3.35-4"),
 			AlpineGit:     m("rancher/pipeline-tools:v0.1.0"),
-			PluginsDocker: m("plugins/docker:17.12"),
-			Minio:         m("minio/minio:RELEASE.2018-05-25T19-49-13Z"),
+			PluginsDocker: m("plugins/docker:18.09"),
+			Minio:         m("minio/minio:RELEASE.2019-09-25T18-25-51Z"),
 			Registry:      m("registry:2"),
 			RegistryProxy: m("rancher/pipeline-tools:v0.1.0"),
 			KubeApply:     m("rancher/pipeline-tools:v0.1.0"),
