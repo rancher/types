@@ -4014,6 +4014,11 @@ func (in *IngressConfig) DeepCopyInto(out *IngressConfig) {
 			(*out)[key] = val
 		}
 	}
+	if in.ExtraEnv != nil {
+		in, out := &in.ExtraEnv, &out.ExtraEnv
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 
