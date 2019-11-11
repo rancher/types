@@ -675,6 +675,7 @@ var (
 	lockPrometheusInterfaceMockGet                              sync.RWMutex
 	lockPrometheusInterfaceMockGetNamespaced                    sync.RWMutex
 	lockPrometheusInterfaceMockList                             sync.RWMutex
+	lockPrometheusInterfaceMockListNamespaced                   sync.RWMutex
 	lockPrometheusInterfaceMockObjectClient                     sync.RWMutex
 	lockPrometheusInterfaceMockUpdate                           sync.RWMutex
 	lockPrometheusInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +738,9 @@ var _ v1a.PrometheusInterface = &PrometheusInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1b.ListOptions) (*v1a.PrometheusList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.PrometheusList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +805,9 @@ type PrometheusInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1b.ListOptions) (*v1a.PrometheusList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.PrometheusList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +957,13 @@ type PrometheusInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1b.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1b.ListOptions
 		}
@@ -1581,6 +1595,41 @@ func (mock *PrometheusInterfaceMock) ListCalls() []struct {
 	lockPrometheusInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockPrometheusInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *PrometheusInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.PrometheusList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("PrometheusInterfaceMock.ListNamespacedFunc: method is nil but PrometheusInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockPrometheusInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockPrometheusInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedPrometheusInterface.ListNamespacedCalls())
+func (mock *PrometheusInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1b.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}
+	lockPrometheusInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockPrometheusInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

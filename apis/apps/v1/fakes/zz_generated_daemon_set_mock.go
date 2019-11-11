@@ -675,6 +675,7 @@ var (
 	lockDaemonSetInterfaceMockGet                              sync.RWMutex
 	lockDaemonSetInterfaceMockGetNamespaced                    sync.RWMutex
 	lockDaemonSetInterfaceMockList                             sync.RWMutex
+	lockDaemonSetInterfaceMockListNamespaced                   sync.RWMutex
 	lockDaemonSetInterfaceMockObjectClient                     sync.RWMutex
 	lockDaemonSetInterfaceMockUpdate                           sync.RWMutex
 	lockDaemonSetInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +738,9 @@ var _ v1a.DaemonSetInterface = &DaemonSetInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1b.ListOptions) (*v1a.DaemonSetList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.DaemonSetList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +805,9 @@ type DaemonSetInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1b.ListOptions) (*v1a.DaemonSetList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.DaemonSetList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +957,13 @@ type DaemonSetInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1b.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1b.ListOptions
 		}
@@ -1581,6 +1595,41 @@ func (mock *DaemonSetInterfaceMock) ListCalls() []struct {
 	lockDaemonSetInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockDaemonSetInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *DaemonSetInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.DaemonSetList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("DaemonSetInterfaceMock.ListNamespacedFunc: method is nil but DaemonSetInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockDaemonSetInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockDaemonSetInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedDaemonSetInterface.ListNamespacedCalls())
+func (mock *DaemonSetInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1b.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}
+	lockDaemonSetInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockDaemonSetInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

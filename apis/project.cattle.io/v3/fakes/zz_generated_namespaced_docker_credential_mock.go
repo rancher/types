@@ -674,6 +674,7 @@ var (
 	lockNamespacedDockerCredentialInterfaceMockGet                              sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockGetNamespaced                    sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockList                             sync.RWMutex
+	lockNamespacedDockerCredentialInterfaceMockListNamespaced                   sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockObjectClient                     sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockUpdate                           sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +737,9 @@ var _ v3.NamespacedDockerCredentialInterface = &NamespacedDockerCredentialInterf
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.NamespacedDockerCredentialList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.NamespacedDockerCredentialList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +804,9 @@ type NamespacedDockerCredentialInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.NamespacedDockerCredentialList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.NamespacedDockerCredentialList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +956,13 @@ type NamespacedDockerCredentialInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1594,41 @@ func (mock *NamespacedDockerCredentialInterfaceMock) ListCalls() []struct {
 	lockNamespacedDockerCredentialInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockNamespacedDockerCredentialInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *NamespacedDockerCredentialInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.NamespacedDockerCredentialList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("NamespacedDockerCredentialInterfaceMock.ListNamespacedFunc: method is nil but NamespacedDockerCredentialInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockNamespacedDockerCredentialInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockNamespacedDockerCredentialInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedNamespacedDockerCredentialInterface.ListNamespacedCalls())
+func (mock *NamespacedDockerCredentialInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockNamespacedDockerCredentialInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockNamespacedDockerCredentialInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

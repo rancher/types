@@ -674,6 +674,7 @@ var (
 	lockPipelineExecutionInterfaceMockGet                              sync.RWMutex
 	lockPipelineExecutionInterfaceMockGetNamespaced                    sync.RWMutex
 	lockPipelineExecutionInterfaceMockList                             sync.RWMutex
+	lockPipelineExecutionInterfaceMockListNamespaced                   sync.RWMutex
 	lockPipelineExecutionInterfaceMockObjectClient                     sync.RWMutex
 	lockPipelineExecutionInterfaceMockUpdate                           sync.RWMutex
 	lockPipelineExecutionInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +737,9 @@ var _ v3.PipelineExecutionInterface = &PipelineExecutionInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.PipelineExecutionList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.PipelineExecutionList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +804,9 @@ type PipelineExecutionInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.PipelineExecutionList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.PipelineExecutionList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +956,13 @@ type PipelineExecutionInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1594,41 @@ func (mock *PipelineExecutionInterfaceMock) ListCalls() []struct {
 	lockPipelineExecutionInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockPipelineExecutionInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *PipelineExecutionInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.PipelineExecutionList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("PipelineExecutionInterfaceMock.ListNamespacedFunc: method is nil but PipelineExecutionInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockPipelineExecutionInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockPipelineExecutionInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedPipelineExecutionInterface.ListNamespacedCalls())
+func (mock *PipelineExecutionInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockPipelineExecutionInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockPipelineExecutionInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

@@ -674,6 +674,7 @@ var (
 	lockClusterUserAttributeInterfaceMockGet                              sync.RWMutex
 	lockClusterUserAttributeInterfaceMockGetNamespaced                    sync.RWMutex
 	lockClusterUserAttributeInterfaceMockList                             sync.RWMutex
+	lockClusterUserAttributeInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterUserAttributeInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterUserAttributeInterfaceMockUpdate                           sync.RWMutex
 	lockClusterUserAttributeInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +737,9 @@ var _ v3.ClusterUserAttributeInterface = &ClusterUserAttributeInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.ClusterUserAttributeList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.ClusterUserAttributeList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +804,9 @@ type ClusterUserAttributeInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.ClusterUserAttributeList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.ClusterUserAttributeList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +956,13 @@ type ClusterUserAttributeInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1594,41 @@ func (mock *ClusterUserAttributeInterfaceMock) ListCalls() []struct {
 	lockClusterUserAttributeInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockClusterUserAttributeInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *ClusterUserAttributeInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.ClusterUserAttributeList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("ClusterUserAttributeInterfaceMock.ListNamespacedFunc: method is nil but ClusterUserAttributeInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockClusterUserAttributeInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockClusterUserAttributeInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedClusterUserAttributeInterface.ListNamespacedCalls())
+func (mock *ClusterUserAttributeInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockClusterUserAttributeInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockClusterUserAttributeInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 
