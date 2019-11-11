@@ -675,6 +675,7 @@ var (
 	lockAlertmanagerInterfaceMockGet                              sync.RWMutex
 	lockAlertmanagerInterfaceMockGetNamespaced                    sync.RWMutex
 	lockAlertmanagerInterfaceMockList                             sync.RWMutex
+	lockAlertmanagerInterfaceMockListNamespaced                   sync.RWMutex
 	lockAlertmanagerInterfaceMockObjectClient                     sync.RWMutex
 	lockAlertmanagerInterfaceMockUpdate                           sync.RWMutex
 	lockAlertmanagerInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +738,9 @@ var _ v1a.AlertmanagerInterface = &AlertmanagerInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +805,9 @@ type AlertmanagerInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1b.ListOptions) (*v1a.AlertmanagerList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +957,13 @@ type AlertmanagerInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1b.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1b.ListOptions
 		}
@@ -1581,6 +1595,41 @@ func (mock *AlertmanagerInterfaceMock) ListCalls() []struct {
 	lockAlertmanagerInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockAlertmanagerInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *AlertmanagerInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("AlertmanagerInterfaceMock.ListNamespacedFunc: method is nil but AlertmanagerInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockAlertmanagerInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockAlertmanagerInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedAlertmanagerInterface.ListNamespacedCalls())
+func (mock *AlertmanagerInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1b.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}
+	lockAlertmanagerInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockAlertmanagerInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

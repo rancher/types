@@ -674,6 +674,7 @@ var (
 	lockBasicAuthInterfaceMockGet                              sync.RWMutex
 	lockBasicAuthInterfaceMockGetNamespaced                    sync.RWMutex
 	lockBasicAuthInterfaceMockList                             sync.RWMutex
+	lockBasicAuthInterfaceMockListNamespaced                   sync.RWMutex
 	lockBasicAuthInterfaceMockObjectClient                     sync.RWMutex
 	lockBasicAuthInterfaceMockUpdate                           sync.RWMutex
 	lockBasicAuthInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +737,9 @@ var _ v3.BasicAuthInterface = &BasicAuthInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.BasicAuthList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.BasicAuthList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +804,9 @@ type BasicAuthInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.BasicAuthList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.BasicAuthList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +956,13 @@ type BasicAuthInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1594,41 @@ func (mock *BasicAuthInterfaceMock) ListCalls() []struct {
 	lockBasicAuthInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockBasicAuthInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *BasicAuthInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.BasicAuthList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("BasicAuthInterfaceMock.ListNamespacedFunc: method is nil but BasicAuthInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockBasicAuthInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockBasicAuthInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedBasicAuthInterface.ListNamespacedCalls())
+func (mock *BasicAuthInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockBasicAuthInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockBasicAuthInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

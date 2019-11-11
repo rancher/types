@@ -674,6 +674,7 @@ var (
 	lockNamespacedServiceAccountTokenInterfaceMockGet                              sync.RWMutex
 	lockNamespacedServiceAccountTokenInterfaceMockGetNamespaced                    sync.RWMutex
 	lockNamespacedServiceAccountTokenInterfaceMockList                             sync.RWMutex
+	lockNamespacedServiceAccountTokenInterfaceMockListNamespaced                   sync.RWMutex
 	lockNamespacedServiceAccountTokenInterfaceMockObjectClient                     sync.RWMutex
 	lockNamespacedServiceAccountTokenInterfaceMockUpdate                           sync.RWMutex
 	lockNamespacedServiceAccountTokenInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +737,9 @@ var _ v3.NamespacedServiceAccountTokenInterface = &NamespacedServiceAccountToken
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.NamespacedServiceAccountTokenList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.NamespacedServiceAccountTokenList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +804,9 @@ type NamespacedServiceAccountTokenInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.NamespacedServiceAccountTokenList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.NamespacedServiceAccountTokenList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +956,13 @@ type NamespacedServiceAccountTokenInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1594,41 @@ func (mock *NamespacedServiceAccountTokenInterfaceMock) ListCalls() []struct {
 	lockNamespacedServiceAccountTokenInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockNamespacedServiceAccountTokenInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *NamespacedServiceAccountTokenInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.NamespacedServiceAccountTokenList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("NamespacedServiceAccountTokenInterfaceMock.ListNamespacedFunc: method is nil but NamespacedServiceAccountTokenInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockNamespacedServiceAccountTokenInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockNamespacedServiceAccountTokenInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedNamespacedServiceAccountTokenInterface.ListNamespacedCalls())
+func (mock *NamespacedServiceAccountTokenInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockNamespacedServiceAccountTokenInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockNamespacedServiceAccountTokenInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

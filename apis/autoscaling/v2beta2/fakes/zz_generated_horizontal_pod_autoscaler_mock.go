@@ -675,6 +675,7 @@ var (
 	lockHorizontalPodAutoscalerInterfaceMockGet                              sync.RWMutex
 	lockHorizontalPodAutoscalerInterfaceMockGetNamespaced                    sync.RWMutex
 	lockHorizontalPodAutoscalerInterfaceMockList                             sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockListNamespaced                   sync.RWMutex
 	lockHorizontalPodAutoscalerInterfaceMockObjectClient                     sync.RWMutex
 	lockHorizontalPodAutoscalerInterfaceMockUpdate                           sync.RWMutex
 	lockHorizontalPodAutoscalerInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +738,9 @@ var _ v2beta2a.HorizontalPodAutoscalerInterface = &HorizontalPodAutoscalerInterf
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v2beta2a.HorizontalPodAutoscalerList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v2beta2a.HorizontalPodAutoscalerList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +805,9 @@ type HorizontalPodAutoscalerInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v2beta2a.HorizontalPodAutoscalerList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v2beta2a.HorizontalPodAutoscalerList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +957,13 @@ type HorizontalPodAutoscalerInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1581,6 +1595,41 @@ func (mock *HorizontalPodAutoscalerInterfaceMock) ListCalls() []struct {
 	lockHorizontalPodAutoscalerInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockHorizontalPodAutoscalerInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *HorizontalPodAutoscalerInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v2beta2a.HorizontalPodAutoscalerList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("HorizontalPodAutoscalerInterfaceMock.ListNamespacedFunc: method is nil but HorizontalPodAutoscalerInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockHorizontalPodAutoscalerInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockHorizontalPodAutoscalerInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedHorizontalPodAutoscalerInterface.ListNamespacedCalls())
+func (mock *HorizontalPodAutoscalerInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockHorizontalPodAutoscalerInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockHorizontalPodAutoscalerInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

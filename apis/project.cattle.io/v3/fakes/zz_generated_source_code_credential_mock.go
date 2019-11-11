@@ -674,6 +674,7 @@ var (
 	lockSourceCodeCredentialInterfaceMockGet                              sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockGetNamespaced                    sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockList                             sync.RWMutex
+	lockSourceCodeCredentialInterfaceMockListNamespaced                   sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockObjectClient                     sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockUpdate                           sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +737,9 @@ var _ v3.SourceCodeCredentialInterface = &SourceCodeCredentialInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.SourceCodeCredentialList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.SourceCodeCredentialList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +804,9 @@ type SourceCodeCredentialInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.SourceCodeCredentialList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.SourceCodeCredentialList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +956,13 @@ type SourceCodeCredentialInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1594,41 @@ func (mock *SourceCodeCredentialInterfaceMock) ListCalls() []struct {
 	lockSourceCodeCredentialInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockSourceCodeCredentialInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *SourceCodeCredentialInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.SourceCodeCredentialList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("SourceCodeCredentialInterfaceMock.ListNamespacedFunc: method is nil but SourceCodeCredentialInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockSourceCodeCredentialInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockSourceCodeCredentialInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedSourceCodeCredentialInterface.ListNamespacedCalls())
+func (mock *SourceCodeCredentialInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockSourceCodeCredentialInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockSourceCodeCredentialInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 
