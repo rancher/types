@@ -146,6 +146,13 @@ type ClusterStatus struct {
 	MonitoringStatus                     *MonitoringStatus         `json:"monitoringStatus,omitempty" norman:"nocreate,noupdate"`
 	IstioEnabled                         bool                      `json:"istioEnabled,omitempty" norman:"nocreate,noupdate,default=false"`
 	CertificatesExpiration               map[string]CertExpiration `json:"certificatesExpiration,omitempty"`
+	NodeUpgradeStatus                    *NodeUpgradeStatus        `json:"nodeUpgradeStatus,omitempty" norman:"nocreate,noupdate"`
+}
+
+type NodeUpgradeStatus struct {
+	Token string          `json:"token"`
+	State string          `json:"state"`
+	Nodes map[string]bool `json:"nodes"`
 }
 
 type ClusterComponentStatus struct {

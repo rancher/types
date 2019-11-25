@@ -4,6 +4,7 @@ import (
 	"github.com/rancher/norman/types"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	intstr "k8s.io/apimachinery/pkg/util/intstr"
 	apiserverv1alpha1 "k8s.io/apiserver/pkg/apis/apiserver/v1alpha1"
 	auditv1 "k8s.io/apiserver/pkg/apis/audit/v1"
 	apiserverconfig "k8s.io/apiserver/pkg/apis/config"
@@ -59,6 +60,16 @@ type RancherKubernetesEngineConfig struct {
 	RotateCertificates *RotateCertificates `yaml:"rotate_certificates,omitempty" json:"rotateCertificates,omitempty"`
 	// DNS Config
 	DNS *DNSConfig `yaml:"dns" json:"dns,omitempty"`
+	// Upgrade Strategy
+	NodeUpgradeStrategy *NodeUpgradeStrategy `yaml:"node_upgrade_strategy,omitempty" json:"nodeUpgradeStrategy,omitempty"`
+}
+
+type NodeUpgradeStrategy struct {
+	RollingUpdate *RollingUpdateStrategy `yaml:"rolling_update_strategy,omitempty" json:"rollingUpdateStrategy,omitempty"`
+}
+
+type RollingUpdateStrategy struct {
+	MaxUnavailable intstr.IntOrString `yaml:"max_unavailable,omitempty" json:"maxUnavailable,omitempty"`
 }
 
 type BastionHost struct {
@@ -440,6 +451,46 @@ type RKEConfigNodePlan struct {
 	Labels map[string]string `json:"labels,omitempty"`
 	// Node Taints
 	Taints []RKETaint `json:"taints,omitempty"`
+}
+
+type RKEClusterPlan struct {
+	// Map of cluster plan for RKE worker nodes
+	Processes map[string]RKEProcess
+}
+
+type RKEProcess struct {
+	// Process name, this should be the container name
+	Name string `json:"name,omitempty"`
+	// Process Entrypoint command
+	Command map[string]string `json:"command,omitempty"`
+	// Process args
+	Args map[string]string `json:"args,omitempty"`
+	// Environment variables list
+	Env map[string]string `json:"env,omitempty"`
+	// Process docker image
+	Image string `json:"image,omitempty"`
+	//AuthConfig for image private registry
+	ImageRegistryAuthConfig string `json:"imageRegistryAuthConfig,omitempty"`
+	// Process docker image VolumesFrom
+	VolumesFrom []string `json:"volumesFrom,omitempty"`
+	// Process docker container bind mounts
+	Binds []string `json:"binds,omitempty"`
+	// Process docker container netwotk mode
+	NetworkMode string `json:"networkMode,omitempty"`
+	// Process container restart policy
+	RestartPolicy string `json:"restartPolicy,omitempty"`
+	// Process container pid mode
+	PidMode string `json:"pidMode,omitempty"`
+	// Run process in privileged container
+	Privileged bool `json:"privileged,omitempty"`
+	// Process healthcheck
+	HealthCheck HealthCheck `json:"healthCheck,omitempty"`
+	// Process docker container Labels
+	Labels map[string]string `json:"labels,omitempty"`
+	// Process docker publish container's port to host
+	Publish []string `json:"publish,omitempty"`
+	// docker will run the container with this user
+	User string `json:"user,omitempty"`
 }
 
 type Process struct {
