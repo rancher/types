@@ -29,6 +29,9 @@ type Token struct {
 	Enabled         *bool             `json:"enabled,omitempty" norman:"default=true"`
 }
 
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
 type User struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
