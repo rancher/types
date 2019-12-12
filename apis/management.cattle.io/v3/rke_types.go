@@ -142,6 +142,8 @@ type RKESystemImages struct {
 	WeaveNode string `yaml:"weave_node" json:"weaveNode,omitempty"`
 	// Weave CNI image
 	WeaveCNI string `yaml:"weave_cni" json:"weaveCni,omitempty"`
+	// Kube Router CNI image
+	KubeRouterCNI string `yaml:"kube_router_cni" json:"kubeRouterCni,omitempty"`
 	// Pod infra container image
 	PodInfraContainer string `yaml:"pod_infra_container" json:"podInfraContainer,omitempty"`
 	// Ingress Controller image
@@ -331,6 +333,9 @@ type KubeletService struct {
 type KubeproxyService struct {
 	// Base service properties
 	BaseService `yaml:",inline" json:",inline"`
+
+	// Enabled
+	Enabled *bool `yaml:"enabled" json:"enabled,omitempty" norman:"default=false"`
 }
 
 type SchedulerService struct {
