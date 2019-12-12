@@ -532,7 +532,7 @@ type WeaveNetworkProvider struct {
 }
 
 type KubeRouterNetworkProvider struct {
-	RunServiceProxy string `yaml:"run_service_proxy" json:"runServiceProxy,omitempty"`
+	RunServiceProxy bool `yaml:"run_service_proxy" json:"runServiceProxy,omitempty"`
 }
 
 type KubernetesServicesOptions struct {
