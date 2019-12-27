@@ -366,6 +366,8 @@ type NetworkConfig struct {
 	FlannelNetworkProvider *FlannelNetworkProvider `yaml:"flannel_network_provider,omitempty" json:"flannelNetworkProvider,omitempty"`
 	// WeaveNetworkProvider
 	WeaveNetworkProvider *WeaveNetworkProvider `yaml:"weave_network_provider,omitempty" json:"weaveNetworkProvider,omitempty"`
+	// AciNetworkProvider
+	AciNetworkProvider *AciNetworkProvider `yaml:"aci_network_provider,omitempty" json:"aci_network_provider,omitempty"`
 	// NodeSelector key pair
 	NodeSelector map[string]string `yaml:"node_selector" json:"nodeSelector,omitempty"`
 }
@@ -526,6 +528,10 @@ type CanalNetworkProvider struct {
 
 type WeaveNetworkProvider struct {
 	Password string `yaml:"password,omitempty" json:"password,omitempty" norman:"type=password"`
+}
+
+type AciNetworkProvider struct {
+	AciCNIConfig string `yaml:"aci_cni_config,omitempty" json:"aci_cni_config,omitempty"`
 }
 
 type KubernetesServicesOptions struct {
