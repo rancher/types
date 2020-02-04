@@ -7,7 +7,6 @@ import (
 	apiserverv1alpha1 "k8s.io/apiserver/pkg/apis/apiserver/v1alpha1"
 	auditv1 "k8s.io/apiserver/pkg/apis/audit/v1"
 	apiserverconfig "k8s.io/apiserver/pkg/apis/config"
-	eventratelimitv1alpha1 "k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/apis/eventratelimit/v1alpha1"
 )
 
 type RancherKubernetesEngineConfig struct {
@@ -59,6 +58,15 @@ type RancherKubernetesEngineConfig struct {
 	RotateCertificates *RotateCertificates `yaml:"rotate_certificates,omitempty" json:"rotateCertificates,omitempty"`
 	// DNS Config
 	DNS *DNSConfig `yaml:"dns" json:"dns,omitempty"`
+	// Upgrade Strategy for the cluster
+	UpgradeStrategy *NodeUpgradeStrategy `yaml:"upgrade_strategy,omitempty" json:"upgradeStrategy,omitempty"`
+}
+
+type NodeUpgradeStrategy struct {
+	// MaxUnavailable input can be a number of nodes or a percentage of nodes (example, max_unavailable: 2 OR max_unavailable: 20%)
+	MaxUnavailable string          `yaml:"max_unavailable" json:"maxUnavailable,omitempty" norman:"min=1,default=10%"`
+	Drain          bool            `yaml:"drain" json:"drain,omitempty"`
+	DrainInput     *NodeDrainInput `yaml:"node_drain_input" json:"nodeDrainInput,omitempty"`
 }
 
 type BastionHost struct {
@@ -290,8 +298,8 @@ type KubeAPIService struct {
 }
 
 type EventRateLimit struct {
-	Enabled       bool                                  `yaml:"enabled" json:"enabled,omitempty"`
-	Configuration *eventratelimitv1alpha1.Configuration `yaml:"configuration" json:"configuration,omitempty" norman:"type=map[json]"`
+	Enabled       bool           `yaml:"enabled" json:"enabled,omitempty"`
+	Configuration *Configuration `yaml:"configuration" json:"configuration,omitempty" norman:"type=map[json]"`
 }
 
 type AuditLog struct {
@@ -362,7 +370,7 @@ type NetworkConfig struct {
 	// Plugin options to configure network properties
 	Options map[string]string `yaml:"options" json:"options,omitempty"`
 	// Set MTU for CNI provider
-	MTU string `yaml:"mtu" json:"mtu,omitempty"`
+	MTU int `yaml:"mtu" json:"mtu,omitempty"`
 	// CalicoNetworkProvider
 	CalicoNetworkProvider *CalicoNetworkProvider `yaml:"calico_network_provider,omitempty" json:"calicoNetworkProvider,omitempty"`
 	// CanalNetworkProvider

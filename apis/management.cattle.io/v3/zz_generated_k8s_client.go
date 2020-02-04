@@ -53,7 +53,6 @@ type Interface interface {
 	ProjectNetworkPoliciesGetter
 	ClusterLoggingsGetter
 	ProjectLoggingsGetter
-	ListenConfigsGetter
 	SettingsGetter
 	FeaturesGetter
 	ClusterAlertsGetter
@@ -82,6 +81,8 @@ type Interface interface {
 	RKEK8sSystemImagesGetter
 	RKEK8sServiceOptionsGetter
 	RKEAddonsGetter
+	CisConfigsGetter
+	CisBenchmarkVersionsGetter
 }
 
 type Clients struct {
@@ -120,7 +121,6 @@ type Clients struct {
 	ProjectNetworkPolicy                    ProjectNetworkPolicyClient
 	ClusterLogging                          ClusterLoggingClient
 	ProjectLogging                          ProjectLoggingClient
-	ListenConfig                            ListenConfigClient
 	Setting                                 SettingClient
 	Feature                                 FeatureClient
 	ClusterAlert                            ClusterAlertClient
@@ -149,6 +149,8 @@ type Clients struct {
 	RKEK8sSystemImage                       RKEK8sSystemImageClient
 	RKEK8sServiceOption                     RKEK8sServiceOptionClient
 	RKEAddon                                RKEAddonClient
+	CisConfig                               CisConfigClient
+	CisBenchmarkVersion                     CisBenchmarkVersionClient
 }
 
 type Client struct {
@@ -189,7 +191,6 @@ type Client struct {
 	projectNetworkPolicyControllers                    map[string]ProjectNetworkPolicyController
 	clusterLoggingControllers                          map[string]ClusterLoggingController
 	projectLoggingControllers                          map[string]ProjectLoggingController
-	listenConfigControllers                            map[string]ListenConfigController
 	settingControllers                                 map[string]SettingController
 	featureControllers                                 map[string]FeatureController
 	clusterAlertControllers                            map[string]ClusterAlertController
@@ -218,6 +219,8 @@ type Client struct {
 	rkeK8sSystemImageControllers                       map[string]RKEK8sSystemImageController
 	rkeK8sServiceOptionControllers                     map[string]RKEK8sServiceOptionController
 	rkeAddonControllers                                map[string]RKEAddonController
+	cisConfigControllers                               map[string]CisConfigController
+	cisBenchmarkVersionControllers                     map[string]CisBenchmarkVersionController
 }
 
 func Factory(ctx context.Context, config rest.Config) (context.Context, controller.Starter, error) {
@@ -352,9 +355,6 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		ProjectLogging: &projectLoggingClient2{
 			iface: iface.ProjectLoggings(""),
 		},
-		ListenConfig: &listenConfigClient2{
-			iface: iface.ListenConfigs(""),
-		},
 		Setting: &settingClient2{
 			iface: iface.Settings(""),
 		},
@@ -439,6 +439,12 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		RKEAddon: &rkeAddonClient2{
 			iface: iface.RKEAddons(""),
 		},
+		CisConfig: &cisConfigClient2{
+			iface: iface.CisConfigs(""),
+		},
+		CisBenchmarkVersion: &cisBenchmarkVersionClient2{
+			iface: iface.CisBenchmarkVersions(""),
+		},
 	}
 }
 
@@ -488,7 +494,6 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		projectNetworkPolicyControllers:                    map[string]ProjectNetworkPolicyController{},
 		clusterLoggingControllers:                          map[string]ClusterLoggingController{},
 		projectLoggingControllers:                          map[string]ProjectLoggingController{},
-		listenConfigControllers:                            map[string]ListenConfigController{},
 		settingControllers:                                 map[string]SettingController{},
 		featureControllers:                                 map[string]FeatureController{},
 		clusterAlertControllers:                            map[string]ClusterAlertController{},
@@ -517,6 +522,8 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		rkeK8sSystemImageControllers:                       map[string]RKEK8sSystemImageController{},
 		rkeK8sServiceOptionControllers:                     map[string]RKEK8sServiceOptionController{},
 		rkeAddonControllers:                                map[string]RKEAddonController{},
+		cisConfigControllers:                               map[string]CisConfigController{},
+		cisBenchmarkVersionControllers:                     map[string]CisBenchmarkVersionController{},
 	}, nil
 }
 
@@ -961,19 +968,6 @@ func (c *Client) ProjectLoggings(namespace string) ProjectLoggingInterface {
 	}
 }
 
-type ListenConfigsGetter interface {
-	ListenConfigs(namespace string) ListenConfigInterface
-}
-
-func (c *Client) ListenConfigs(namespace string) ListenConfigInterface {
-	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ListenConfigResource, ListenConfigGroupVersionKind, listenConfigFactory{})
-	return &listenConfigClient{
-		ns:           namespace,
-		client:       c,
-		objectClient: objectClient,
-	}
-}
-
 type SettingsGetter interface {
 	Settings(namespace string) SettingInterface
 }
@@ -1332,6 +1326,32 @@ type RKEAddonsGetter interface {
 func (c *Client) RKEAddons(namespace string) RKEAddonInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &RKEAddonResource, RKEAddonGroupVersionKind, rkeAddonFactory{})
 	return &rkeAddonClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type CisConfigsGetter interface {
+	CisConfigs(namespace string) CisConfigInterface
+}
+
+func (c *Client) CisConfigs(namespace string) CisConfigInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &CisConfigResource, CisConfigGroupVersionKind, cisConfigFactory{})
+	return &cisConfigClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type CisBenchmarkVersionsGetter interface {
+	CisBenchmarkVersions(namespace string) CisBenchmarkVersionInterface
+}
+
+func (c *Client) CisBenchmarkVersions(namespace string) CisBenchmarkVersionInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &CisBenchmarkVersionResource, CisBenchmarkVersionGroupVersionKind, cisBenchmarkVersionFactory{})
+	return &cisBenchmarkVersionClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
