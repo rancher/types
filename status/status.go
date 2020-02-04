@@ -55,6 +55,7 @@ var transitioningMap = map[string]string{
 	"Registered":                  "registering",
 	"Removed":                     "removing",
 	"Saved":                       "saving",
+	"Upgraded":                    "upgrading",
 	"Updated":                     "updating",
 	"Updating":                    "updating",
 	"Waiting":                     "waiting",
