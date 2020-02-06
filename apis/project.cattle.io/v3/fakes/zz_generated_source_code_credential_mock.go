@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
@@ -145,6 +146,7 @@ var (
 	lockSourceCodeCredentialControllerMockAddFeatureHandler              sync.RWMutex
 	lockSourceCodeCredentialControllerMockAddHandler                     sync.RWMutex
 	lockSourceCodeCredentialControllerMockEnqueue                        sync.RWMutex
+	lockSourceCodeCredentialControllerMockEnqueueAfter                   sync.RWMutex
 	lockSourceCodeCredentialControllerMockGeneric                        sync.RWMutex
 	lockSourceCodeCredentialControllerMockInformer                       sync.RWMutex
 	lockSourceCodeCredentialControllerMockLister                         sync.RWMutex
@@ -176,6 +178,9 @@ var _ v3.SourceCodeCredentialController = &SourceCodeCredentialControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -213,6 +218,9 @@ type SourceCodeCredentialControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -281,6 +289,15 @@ type SourceCodeCredentialControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -510,6 +527,45 @@ func (mock *SourceCodeCredentialControllerMock) EnqueueCalls() []struct {
 	lockSourceCodeCredentialControllerMockEnqueue.RLock()
 	calls = mock.calls.Enqueue
 	lockSourceCodeCredentialControllerMockEnqueue.RUnlock()
+	return calls
+}
+
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *SourceCodeCredentialControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("SourceCodeCredentialControllerMock.EnqueueAfterFunc: method is nil but SourceCodeCredentialController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockSourceCodeCredentialControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockSourceCodeCredentialControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedSourceCodeCredentialController.EnqueueAfterCalls())
+func (mock *SourceCodeCredentialControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockSourceCodeCredentialControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockSourceCodeCredentialControllerMockEnqueueAfter.RUnlock()
 	return calls
 }
 
