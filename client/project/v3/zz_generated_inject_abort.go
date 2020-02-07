@@ -1,12 +1,13 @@
 package client
 
 const (
-	InjectAbortType            = "injectAbort"
+    InjectAbortType = "injectAbort"
 	InjectAbortFieldHTTPStatus = "httpStatus"
-	InjectAbortFieldPercent    = "percent"
+	InjectAbortFieldPercent = "percent"
 )
 
 type InjectAbort struct {
-	HTTPStatus int64 `json:"httpStatus,omitempty" yaml:"httpStatus,omitempty"`
-	Percent    int64 `json:"percent,omitempty" yaml:"percent,omitempty"`
+        HTTPStatus int64 `json:"httpStatus,omitempty" yaml:"httpStatus,omitempty"`
+        Percent int64 `json:"percent,omitempty" yaml:"percent,omitempty"`
 }
+

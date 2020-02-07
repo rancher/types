@@ -1,12 +1,13 @@
 package client
 
 const (
-	VolumeDeviceType            = "volumeDevice"
+    VolumeDeviceType = "volumeDevice"
 	VolumeDeviceFieldDevicePath = "devicePath"
-	VolumeDeviceFieldName       = "name"
+	VolumeDeviceFieldName = "name"
 )
 
 type VolumeDevice struct {
-	DevicePath string `json:"devicePath,omitempty" yaml:"devicePath,omitempty"`
-	Name       string `json:"name,omitempty" yaml:"name,omitempty"`
+        DevicePath string `json:"devicePath,omitempty" yaml:"devicePath,omitempty"`
+        Name string `json:"name,omitempty" yaml:"name,omitempty"`
 }
+

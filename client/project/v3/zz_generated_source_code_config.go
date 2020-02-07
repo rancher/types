@@ -1,8 +1,9 @@
 package client
 
 const (
-	SourceCodeConfigType = "sourceCodeConfig"
+    SourceCodeConfigType = "sourceCodeConfig"
 )
 
 type SourceCodeConfig struct {
 }
+

@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "sourcecoderepository",
 		Namespaced:   true,
 
-		Kind: SourceCodeRepositoryGroupVersionKind.Kind,
+		Kind:         SourceCodeRepositoryGroupVersionKind.Kind,
 	}
 
 	SourceCodeRepositoryGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "sourcecoderepositories",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "sourcecoderepositories",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewSourceCodeRepository(namespace, name string, obj SourceCodeRepository) *
 }
 
 type SourceCodeRepositoryList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []SourceCodeRepository `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []SourceCodeRepository `json:"items"`
 }
 
 type SourceCodeRepositoryHandlerFunc func(key string, obj *SourceCodeRepository) (runtime.Object, error)
@@ -79,7 +80,7 @@ type SourceCodeRepositoryController interface {
 }
 
 type SourceCodeRepositoryInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*SourceCodeRepository) (*SourceCodeRepository, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*SourceCodeRepository, error)
 	Get(name string, opts metav1.GetOptions) (*SourceCodeRepository, error)
@@ -125,7 +126,7 @@ func (l *sourceCodeRepositoryLister) Get(namespace, name string) (*SourceCodeRep
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    SourceCodeRepositoryGroupVersionKind.Group,
+			Group: SourceCodeRepositoryGroupVersionKind.Group,
 			Resource: "sourceCodeRepository",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *sourceCodeRepositoryController) Lister() SourceCodeRepositoryLister {
 		controller: c,
 	}
 }
+
 
 func (c *sourceCodeRepositoryController) AddHandler(ctx context.Context, name string, handler SourceCodeRepositoryHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *sourceCodeRepositoryClient) Controller() SourceCodeRepositoryController
 	}
 
 	s.client.sourceCodeRepositoryControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type sourceCodeRepositoryClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   SourceCodeRepositoryController
 }

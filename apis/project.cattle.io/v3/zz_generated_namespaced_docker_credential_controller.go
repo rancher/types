@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "namespaceddockercredential",
 		Namespaced:   true,
 
-		Kind: NamespacedDockerCredentialGroupVersionKind.Kind,
+		Kind:         NamespacedDockerCredentialGroupVersionKind.Kind,
 	}
 
 	NamespacedDockerCredentialGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "namespaceddockercredentials",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "namespaceddockercredentials",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewNamespacedDockerCredential(namespace, name string, obj NamespacedDockerC
 }
 
 type NamespacedDockerCredentialList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []NamespacedDockerCredential `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []NamespacedDockerCredential `json:"items"`
 }
 
 type NamespacedDockerCredentialHandlerFunc func(key string, obj *NamespacedDockerCredential) (runtime.Object, error)
@@ -79,7 +80,7 @@ type NamespacedDockerCredentialController interface {
 }
 
 type NamespacedDockerCredentialInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*NamespacedDockerCredential) (*NamespacedDockerCredential, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NamespacedDockerCredential, error)
 	Get(name string, opts metav1.GetOptions) (*NamespacedDockerCredential, error)
@@ -125,7 +126,7 @@ func (l *namespacedDockerCredentialLister) Get(namespace, name string) (*Namespa
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    NamespacedDockerCredentialGroupVersionKind.Group,
+			Group: NamespacedDockerCredentialGroupVersionKind.Group,
 			Resource: "namespacedDockerCredential",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *namespacedDockerCredentialController) Lister() NamespacedDockerCredenti
 		controller: c,
 	}
 }
+
 
 func (c *namespacedDockerCredentialController) AddHandler(ctx context.Context, name string, handler NamespacedDockerCredentialHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *namespacedDockerCredentialClient) Controller() NamespacedDockerCredenti
 	}
 
 	s.client.namespacedDockerCredentialControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type namespacedDockerCredentialClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   NamespacedDockerCredentialController
 }

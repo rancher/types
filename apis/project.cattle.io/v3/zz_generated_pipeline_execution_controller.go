@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "pipelineexecution",
 		Namespaced:   true,
 
-		Kind: PipelineExecutionGroupVersionKind.Kind,
+		Kind:         PipelineExecutionGroupVersionKind.Kind,
 	}
 
 	PipelineExecutionGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "pipelineexecutions",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "pipelineexecutions",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewPipelineExecution(namespace, name string, obj PipelineExecution) *Pipeli
 }
 
 type PipelineExecutionList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []PipelineExecution `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []PipelineExecution `json:"items"`
 }
 
 type PipelineExecutionHandlerFunc func(key string, obj *PipelineExecution) (runtime.Object, error)
@@ -79,7 +80,7 @@ type PipelineExecutionController interface {
 }
 
 type PipelineExecutionInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*PipelineExecution) (*PipelineExecution, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*PipelineExecution, error)
 	Get(name string, opts metav1.GetOptions) (*PipelineExecution, error)
@@ -125,7 +126,7 @@ func (l *pipelineExecutionLister) Get(namespace, name string) (*PipelineExecutio
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    PipelineExecutionGroupVersionKind.Group,
+			Group: PipelineExecutionGroupVersionKind.Group,
 			Resource: "pipelineExecution",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *pipelineExecutionController) Lister() PipelineExecutionLister {
 		controller: c,
 	}
 }
+
 
 func (c *pipelineExecutionController) AddHandler(ctx context.Context, name string, handler PipelineExecutionHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *pipelineExecutionClient) Controller() PipelineExecutionController {
 	}
 
 	s.client.pipelineExecutionControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type pipelineExecutionClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   PipelineExecutionController
 }

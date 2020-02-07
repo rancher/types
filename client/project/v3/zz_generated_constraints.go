@@ -1,12 +1,13 @@
 package client
 
 const (
-	ConstraintsType        = "constraints"
+    ConstraintsType = "constraints"
 	ConstraintsFieldBranch = "branch"
-	ConstraintsFieldEvent  = "event"
+	ConstraintsFieldEvent = "event"
 )
 
 type Constraints struct {
-	Branch *Constraint `json:"branch,omitempty" yaml:"branch,omitempty"`
-	Event  *Constraint `json:"event,omitempty" yaml:"event,omitempty"`
+        Branch *Constraint `json:"branch,omitempty" yaml:"branch,omitempty"`
+        Event *Constraint `json:"event,omitempty" yaml:"event,omitempty"`
 }
+

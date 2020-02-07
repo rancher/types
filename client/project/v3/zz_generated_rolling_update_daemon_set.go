@@ -1,12 +1,11 @@
 package client
 
-import "k8s.io/apimachinery/pkg/util/intstr"
-
 const (
-	RollingUpdateDaemonSetType                = "rollingUpdateDaemonSet"
+    RollingUpdateDaemonSetType = "rollingUpdateDaemonSet"
 	RollingUpdateDaemonSetFieldMaxUnavailable = "maxUnavailable"
 )
 
 type RollingUpdateDaemonSet struct {
-	MaxUnavailable intstr.IntOrString `json:"maxUnavailable,omitempty" yaml:"maxUnavailable,omitempty"`
+        MaxUnavailable intstr.IntOrString `json:"maxUnavailable,omitempty" yaml:"maxUnavailable,omitempty"`
 }
+

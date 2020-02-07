@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "basicauth",
 		Namespaced:   true,
 
-		Kind: BasicAuthGroupVersionKind.Kind,
+		Kind:         BasicAuthGroupVersionKind.Kind,
 	}
 
 	BasicAuthGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "basicauths",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "basicauths",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewBasicAuth(namespace, name string, obj BasicAuth) *BasicAuth {
 }
 
 type BasicAuthList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []BasicAuth `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []BasicAuth `json:"items"`
 }
 
 type BasicAuthHandlerFunc func(key string, obj *BasicAuth) (runtime.Object, error)
@@ -79,7 +80,7 @@ type BasicAuthController interface {
 }
 
 type BasicAuthInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*BasicAuth) (*BasicAuth, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*BasicAuth, error)
 	Get(name string, opts metav1.GetOptions) (*BasicAuth, error)
@@ -125,7 +126,7 @@ func (l *basicAuthLister) Get(namespace, name string) (*BasicAuth, error) {
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    BasicAuthGroupVersionKind.Group,
+			Group: BasicAuthGroupVersionKind.Group,
 			Resource: "basicAuth",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *basicAuthController) Lister() BasicAuthLister {
 		controller: c,
 	}
 }
+
 
 func (c *basicAuthController) AddHandler(ctx context.Context, name string, handler BasicAuthHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *basicAuthClient) Controller() BasicAuthController {
 	}
 
 	s.client.basicAuthControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type basicAuthClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   BasicAuthController
 }

@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "namespacedbasicauth",
 		Namespaced:   true,
 
-		Kind: NamespacedBasicAuthGroupVersionKind.Kind,
+		Kind:         NamespacedBasicAuthGroupVersionKind.Kind,
 	}
 
 	NamespacedBasicAuthGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "namespacedbasicauths",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "namespacedbasicauths",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewNamespacedBasicAuth(namespace, name string, obj NamespacedBasicAuth) *Na
 }
 
 type NamespacedBasicAuthList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []NamespacedBasicAuth `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []NamespacedBasicAuth `json:"items"`
 }
 
 type NamespacedBasicAuthHandlerFunc func(key string, obj *NamespacedBasicAuth) (runtime.Object, error)
@@ -79,7 +80,7 @@ type NamespacedBasicAuthController interface {
 }
 
 type NamespacedBasicAuthInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*NamespacedBasicAuth) (*NamespacedBasicAuth, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NamespacedBasicAuth, error)
 	Get(name string, opts metav1.GetOptions) (*NamespacedBasicAuth, error)
@@ -125,7 +126,7 @@ func (l *namespacedBasicAuthLister) Get(namespace, name string) (*NamespacedBasi
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    NamespacedBasicAuthGroupVersionKind.Group,
+			Group: NamespacedBasicAuthGroupVersionKind.Group,
 			Resource: "namespacedBasicAuth",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *namespacedBasicAuthController) Lister() NamespacedBasicAuthLister {
 		controller: c,
 	}
 }
+
 
 func (c *namespacedBasicAuthController) AddHandler(ctx context.Context, name string, handler NamespacedBasicAuthHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *namespacedBasicAuthClient) Controller() NamespacedBasicAuthController {
 	}
 
 	s.client.namespacedBasicAuthControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type namespacedBasicAuthClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   NamespacedBasicAuthController
 }

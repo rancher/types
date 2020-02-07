@@ -1,12 +1,13 @@
 package client
 
 const (
-	LoadBalancerIngressType          = "loadBalancerIngress"
+    LoadBalancerIngressType = "loadBalancerIngress"
 	LoadBalancerIngressFieldHostname = "hostname"
-	LoadBalancerIngressFieldIP       = "ip"
+	LoadBalancerIngressFieldIP = "ip"
 )
 
 type LoadBalancerIngress struct {
-	Hostname string `json:"hostname,omitempty" yaml:"hostname,omitempty"`
-	IP       string `json:"ip,omitempty" yaml:"ip,omitempty"`
+        Hostname string `json:"hostname,omitempty" yaml:"hostname,omitempty"`
+        IP string `json:"ip,omitempty" yaml:"ip,omitempty"`
 }
+

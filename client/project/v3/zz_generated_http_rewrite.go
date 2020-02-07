@@ -1,12 +1,13 @@
 package client
 
 const (
-	HTTPRewriteType           = "httpRewrite"
+    HTTPRewriteType = "httpRewrite"
 	HTTPRewriteFieldAuthority = "authority"
-	HTTPRewriteFieldURI       = "uri"
+	HTTPRewriteFieldURI = "uri"
 )
 
 type HTTPRewrite struct {
-	Authority string `json:"authority,omitempty" yaml:"authority,omitempty"`
-	URI       string `json:"uri,omitempty" yaml:"uri,omitempty"`
+        Authority string `json:"authority,omitempty" yaml:"authority,omitempty"`
+        URI string `json:"uri,omitempty" yaml:"uri,omitempty"`
 }
+

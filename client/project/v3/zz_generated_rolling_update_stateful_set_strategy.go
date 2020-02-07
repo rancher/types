@@ -1,10 +1,11 @@
 package client
 
 const (
-	RollingUpdateStatefulSetStrategyType           = "rollingUpdateStatefulSetStrategy"
+    RollingUpdateStatefulSetStrategyType = "rollingUpdateStatefulSetStrategy"
 	RollingUpdateStatefulSetStrategyFieldPartition = "partition"
 )
 
 type RollingUpdateStatefulSetStrategy struct {
-	Partition *int64 `json:"partition,omitempty" yaml:"partition,omitempty"`
+        Partition *int64 `json:"partition,omitempty" yaml:"partition,omitempty"`
 }
+

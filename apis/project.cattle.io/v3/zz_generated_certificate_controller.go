@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "certificate",
 		Namespaced:   true,
 
-		Kind: CertificateGroupVersionKind.Kind,
+		Kind:         CertificateGroupVersionKind.Kind,
 	}
 
 	CertificateGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "certificates",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "certificates",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewCertificate(namespace, name string, obj Certificate) *Certificate {
 }
 
 type CertificateList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Certificate `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []Certificate `json:"items"`
 }
 
 type CertificateHandlerFunc func(key string, obj *Certificate) (runtime.Object, error)
@@ -79,7 +80,7 @@ type CertificateController interface {
 }
 
 type CertificateInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*Certificate) (*Certificate, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Certificate, error)
 	Get(name string, opts metav1.GetOptions) (*Certificate, error)
@@ -125,7 +126,7 @@ func (l *certificateLister) Get(namespace, name string) (*Certificate, error) {
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    CertificateGroupVersionKind.Group,
+			Group: CertificateGroupVersionKind.Group,
 			Resource: "certificate",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *certificateController) Lister() CertificateLister {
 		controller: c,
 	}
 }
+
 
 func (c *certificateController) AddHandler(ctx context.Context, name string, handler CertificateHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *certificateClient) Controller() CertificateController {
 	}
 
 	s.client.certificateControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type certificateClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   CertificateController
 }

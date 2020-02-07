@@ -1,12 +1,13 @@
 package client
 
 const (
-	ResourceMetricStatusType         = "resourceMetricStatus"
+    ResourceMetricStatusType = "resourceMetricStatus"
 	ResourceMetricStatusFieldCurrent = "current"
-	ResourceMetricStatusFieldName    = "name"
+	ResourceMetricStatusFieldName = "name"
 )
 
 type ResourceMetricStatus struct {
-	Current *MetricValueStatus `json:"current,omitempty" yaml:"current,omitempty"`
-	Name    string             `json:"name,omitempty" yaml:"name,omitempty"`
+        Current *MetricValueStatus `json:"current,omitempty" yaml:"current,omitempty"`
+        Name string `json:"name,omitempty" yaml:"name,omitempty"`
 }
+

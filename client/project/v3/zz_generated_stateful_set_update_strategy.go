@@ -1,12 +1,13 @@
 package client
 
 const (
-	StatefulSetUpdateStrategyType           = "statefulSetUpdateStrategy"
+    StatefulSetUpdateStrategyType = "statefulSetUpdateStrategy"
 	StatefulSetUpdateStrategyFieldPartition = "partition"
-	StatefulSetUpdateStrategyFieldStrategy  = "strategy"
+	StatefulSetUpdateStrategyFieldStrategy = "strategy"
 )
 
 type StatefulSetUpdateStrategy struct {
-	Partition *int64 `json:"partition,omitempty" yaml:"partition,omitempty"`
-	Strategy  string `json:"strategy,omitempty" yaml:"strategy,omitempty"`
+        Partition *int64 `json:"partition,omitempty" yaml:"partition,omitempty"`
+        Strategy string `json:"strategy,omitempty" yaml:"strategy,omitempty"`
 }
+

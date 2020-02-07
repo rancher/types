@@ -1,10 +1,11 @@
 package client
 
 const (
-	LoadBalancerStatusType         = "loadBalancerStatus"
+    LoadBalancerStatusType = "loadBalancerStatus"
 	LoadBalancerStatusFieldIngress = "ingress"
 )
 
 type LoadBalancerStatus struct {
-	Ingress []LoadBalancerIngress `json:"ingress,omitempty" yaml:"ingress,omitempty"`
+        Ingress []LoadBalancerIngress `json:"ingress,omitempty" yaml:"ingress,omitempty"`
 }
+

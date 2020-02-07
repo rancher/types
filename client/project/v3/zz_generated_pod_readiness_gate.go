@@ -1,10 +1,11 @@
 package client
 
 const (
-	PodReadinessGateType               = "podReadinessGate"
+    PodReadinessGateType = "podReadinessGate"
 	PodReadinessGateFieldConditionType = "conditionType"
 )
 
 type PodReadinessGate struct {
-	ConditionType string `json:"conditionType,omitempty" yaml:"conditionType,omitempty"`
+        ConditionType string `json:"conditionType,omitempty" yaml:"conditionType,omitempty"`
 }
+

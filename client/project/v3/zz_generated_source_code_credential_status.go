@@ -1,10 +1,11 @@
 package client
 
 const (
-	SourceCodeCredentialStatusType        = "sourceCodeCredentialStatus"
+    SourceCodeCredentialStatusType = "sourceCodeCredentialStatus"
 	SourceCodeCredentialStatusFieldLogout = "logout"
 )
 
 type SourceCodeCredentialStatus struct {
-	Logout bool `json:"logout,omitempty" yaml:"logout,omitempty"`
+        Logout bool `json:"logout,omitempty" yaml:"logout,omitempty"`
 }
+

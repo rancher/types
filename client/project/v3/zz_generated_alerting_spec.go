@@ -1,10 +1,11 @@
 package client
 
 const (
-	AlertingSpecType               = "alertingSpec"
+    AlertingSpecType = "alertingSpec"
 	AlertingSpecFieldAlertmanagers = "alertmanagers"
 )
 
 type AlertingSpec struct {
-	Alertmanagers []AlertmanagerEndpoints `json:"alertmanagers,omitempty" yaml:"alertmanagers,omitempty"`
+        Alertmanagers []AlertmanagerEndpoints `json:"alertmanagers,omitempty" yaml:"alertmanagers,omitempty"`
 }
+

@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "sourcecodecredential",
 		Namespaced:   true,
 
-		Kind: SourceCodeCredentialGroupVersionKind.Kind,
+		Kind:         SourceCodeCredentialGroupVersionKind.Kind,
 	}
 
 	SourceCodeCredentialGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "sourcecodecredentials",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "sourcecodecredentials",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewSourceCodeCredential(namespace, name string, obj SourceCodeCredential) *
 }
 
 type SourceCodeCredentialList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []SourceCodeCredential `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []SourceCodeCredential `json:"items"`
 }
 
 type SourceCodeCredentialHandlerFunc func(key string, obj *SourceCodeCredential) (runtime.Object, error)
@@ -79,7 +80,7 @@ type SourceCodeCredentialController interface {
 }
 
 type SourceCodeCredentialInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*SourceCodeCredential) (*SourceCodeCredential, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*SourceCodeCredential, error)
 	Get(name string, opts metav1.GetOptions) (*SourceCodeCredential, error)
@@ -125,7 +126,7 @@ func (l *sourceCodeCredentialLister) Get(namespace, name string) (*SourceCodeCre
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    SourceCodeCredentialGroupVersionKind.Group,
+			Group: SourceCodeCredentialGroupVersionKind.Group,
 			Resource: "sourceCodeCredential",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *sourceCodeCredentialController) Lister() SourceCodeCredentialLister {
 		controller: c,
 	}
 }
+
 
 func (c *sourceCodeCredentialController) AddHandler(ctx context.Context, name string, handler SourceCodeCredentialHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *sourceCodeCredentialClient) Controller() SourceCodeCredentialController
 	}
 
 	s.client.sourceCodeCredentialControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type sourceCodeCredentialClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   SourceCodeCredentialController
 }

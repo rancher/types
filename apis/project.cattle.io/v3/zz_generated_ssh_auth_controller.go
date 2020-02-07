@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "sshauth",
 		Namespaced:   true,
 
-		Kind: SSHAuthGroupVersionKind.Kind,
+		Kind:         SSHAuthGroupVersionKind.Kind,
 	}
 
 	SSHAuthGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "sshauths",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "sshauths",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewSSHAuth(namespace, name string, obj SSHAuth) *SSHAuth {
 }
 
 type SSHAuthList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []SSHAuth `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []SSHAuth `json:"items"`
 }
 
 type SSHAuthHandlerFunc func(key string, obj *SSHAuth) (runtime.Object, error)
@@ -79,7 +80,7 @@ type SSHAuthController interface {
 }
 
 type SSHAuthInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*SSHAuth) (*SSHAuth, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*SSHAuth, error)
 	Get(name string, opts metav1.GetOptions) (*SSHAuth, error)
@@ -125,7 +126,7 @@ func (l *sshAuthLister) Get(namespace, name string) (*SSHAuth, error) {
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    SSHAuthGroupVersionKind.Group,
+			Group: SSHAuthGroupVersionKind.Group,
 			Resource: "sshAuth",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *sshAuthController) Lister() SSHAuthLister {
 		controller: c,
 	}
 }
+
 
 func (c *sshAuthController) AddHandler(ctx context.Context, name string, handler SSHAuthHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *sshAuthClient) Controller() SSHAuthController {
 	}
 
 	s.client.sshAuthControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type sshAuthClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   SSHAuthController
 }

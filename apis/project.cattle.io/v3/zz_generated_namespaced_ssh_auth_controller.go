@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "namespacedsshauth",
 		Namespaced:   true,
 
-		Kind: NamespacedSSHAuthGroupVersionKind.Kind,
+		Kind:         NamespacedSSHAuthGroupVersionKind.Kind,
 	}
 
 	NamespacedSSHAuthGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "namespacedsshauths",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "namespacedsshauths",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewNamespacedSSHAuth(namespace, name string, obj NamespacedSSHAuth) *Namesp
 }
 
 type NamespacedSSHAuthList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []NamespacedSSHAuth `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []NamespacedSSHAuth `json:"items"`
 }
 
 type NamespacedSSHAuthHandlerFunc func(key string, obj *NamespacedSSHAuth) (runtime.Object, error)
@@ -79,7 +80,7 @@ type NamespacedSSHAuthController interface {
 }
 
 type NamespacedSSHAuthInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*NamespacedSSHAuth) (*NamespacedSSHAuth, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NamespacedSSHAuth, error)
 	Get(name string, opts metav1.GetOptions) (*NamespacedSSHAuth, error)
@@ -125,7 +126,7 @@ func (l *namespacedSshAuthLister) Get(namespace, name string) (*NamespacedSSHAut
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    NamespacedSSHAuthGroupVersionKind.Group,
+			Group: NamespacedSSHAuthGroupVersionKind.Group,
 			Resource: "namespacedSshAuth",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *namespacedSshAuthController) Lister() NamespacedSSHAuthLister {
 		controller: c,
 	}
 }
+
 
 func (c *namespacedSshAuthController) AddHandler(ctx context.Context, name string, handler NamespacedSSHAuthHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *namespacedSshAuthClient) Controller() NamespacedSSHAuthController {
 	}
 
 	s.client.namespacedSshAuthControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type namespacedSshAuthClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   NamespacedSSHAuthController
 }

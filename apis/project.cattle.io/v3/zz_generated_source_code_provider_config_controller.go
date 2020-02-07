@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "sourcecodeproviderconfig",
 		Namespaced:   true,
 
-		Kind: SourceCodeProviderConfigGroupVersionKind.Kind,
+		Kind:         SourceCodeProviderConfigGroupVersionKind.Kind,
 	}
 
 	SourceCodeProviderConfigGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "sourcecodeproviderconfigs",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "sourcecodeproviderconfigs",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewSourceCodeProviderConfig(namespace, name string, obj SourceCodeProviderC
 }
 
 type SourceCodeProviderConfigList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []SourceCodeProviderConfig `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []SourceCodeProviderConfig `json:"items"`
 }
 
 type SourceCodeProviderConfigHandlerFunc func(key string, obj *SourceCodeProviderConfig) (runtime.Object, error)
@@ -79,7 +80,7 @@ type SourceCodeProviderConfigController interface {
 }
 
 type SourceCodeProviderConfigInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*SourceCodeProviderConfig) (*SourceCodeProviderConfig, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*SourceCodeProviderConfig, error)
 	Get(name string, opts metav1.GetOptions) (*SourceCodeProviderConfig, error)
@@ -125,7 +126,7 @@ func (l *sourceCodeProviderConfigLister) Get(namespace, name string) (*SourceCod
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    SourceCodeProviderConfigGroupVersionKind.Group,
+			Group: SourceCodeProviderConfigGroupVersionKind.Group,
 			Resource: "sourceCodeProviderConfig",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *sourceCodeProviderConfigController) Lister() SourceCodeProviderConfigLi
 		controller: c,
 	}
 }
+
 
 func (c *sourceCodeProviderConfigController) AddHandler(ctx context.Context, name string, handler SourceCodeProviderConfigHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *sourceCodeProviderConfigClient) Controller() SourceCodeProviderConfigCo
 	}
 
 	s.client.sourceCodeProviderConfigControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type sourceCodeProviderConfigClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   SourceCodeProviderConfigController
 }

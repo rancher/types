@@ -1,12 +1,13 @@
 package client
 
 const (
-	RollbackRevisionType              = "rollbackRevision"
+    RollbackRevisionType = "rollbackRevision"
 	RollbackRevisionFieldForceUpgrade = "forceUpgrade"
-	RollbackRevisionFieldRevisionID   = "revisionId"
+	RollbackRevisionFieldRevisionID = "revisionId"
 )
 
 type RollbackRevision struct {
-	ForceUpgrade bool   `json:"forceUpgrade,omitempty" yaml:"forceUpgrade,omitempty"`
-	RevisionID   string `json:"revisionId,omitempty" yaml:"revisionId,omitempty"`
+        ForceUpgrade bool `json:"forceUpgrade,omitempty" yaml:"forceUpgrade,omitempty"`
+        RevisionID string `json:"revisionId,omitempty" yaml:"revisionId,omitempty"`
 }
+

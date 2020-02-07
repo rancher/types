@@ -1,12 +1,13 @@
 package client
 
 const (
-	ConnectionPoolSettingsType      = "connectionPoolSettings"
+    ConnectionPoolSettingsType = "connectionPoolSettings"
 	ConnectionPoolSettingsFieldHTTP = "http"
-	ConnectionPoolSettingsFieldTCP  = "tcp"
+	ConnectionPoolSettingsFieldTCP = "tcp"
 )
 
 type ConnectionPoolSettings struct {
-	HTTP *HTTPSettings `json:"http,omitempty" yaml:"http,omitempty"`
-	TCP  *TCPSettings  `json:"tcp,omitempty" yaml:"tcp,omitempty"`
+        HTTP *HTTPSettings `json:"http,omitempty" yaml:"http,omitempty"`
+        TCP *TCPSettings `json:"tcp,omitempty" yaml:"tcp,omitempty"`
 }
+

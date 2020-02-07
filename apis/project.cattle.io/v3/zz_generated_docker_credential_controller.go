@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "dockercredential",
 		Namespaced:   true,
 
-		Kind: DockerCredentialGroupVersionKind.Kind,
+		Kind:         DockerCredentialGroupVersionKind.Kind,
 	}
 
 	DockerCredentialGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "dockercredentials",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "dockercredentials",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewDockerCredential(namespace, name string, obj DockerCredential) *DockerCr
 }
 
 type DockerCredentialList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []DockerCredential `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []DockerCredential `json:"items"`
 }
 
 type DockerCredentialHandlerFunc func(key string, obj *DockerCredential) (runtime.Object, error)
@@ -79,7 +80,7 @@ type DockerCredentialController interface {
 }
 
 type DockerCredentialInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*DockerCredential) (*DockerCredential, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*DockerCredential, error)
 	Get(name string, opts metav1.GetOptions) (*DockerCredential, error)
@@ -125,7 +126,7 @@ func (l *dockerCredentialLister) Get(namespace, name string) (*DockerCredential,
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    DockerCredentialGroupVersionKind.Group,
+			Group: DockerCredentialGroupVersionKind.Group,
 			Resource: "dockerCredential",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *dockerCredentialController) Lister() DockerCredentialLister {
 		controller: c,
 	}
 }
+
 
 func (c *dockerCredentialController) AddHandler(ctx context.Context, name string, handler DockerCredentialHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *dockerCredentialClient) Controller() DockerCredentialController {
 	}
 
 	s.client.dockerCredentialControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type dockerCredentialClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   DockerCredentialController
 }

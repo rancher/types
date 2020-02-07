@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "apprevision",
 		Namespaced:   true,
 
-		Kind: AppRevisionGroupVersionKind.Kind,
+		Kind:         AppRevisionGroupVersionKind.Kind,
 	}
 
 	AppRevisionGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "apprevisions",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "apprevisions",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewAppRevision(namespace, name string, obj AppRevision) *AppRevision {
 }
 
 type AppRevisionList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []AppRevision `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []AppRevision `json:"items"`
 }
 
 type AppRevisionHandlerFunc func(key string, obj *AppRevision) (runtime.Object, error)
@@ -79,7 +80,7 @@ type AppRevisionController interface {
 }
 
 type AppRevisionInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*AppRevision) (*AppRevision, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*AppRevision, error)
 	Get(name string, opts metav1.GetOptions) (*AppRevision, error)
@@ -125,7 +126,7 @@ func (l *appRevisionLister) Get(namespace, name string) (*AppRevision, error) {
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    AppRevisionGroupVersionKind.Group,
+			Group: AppRevisionGroupVersionKind.Group,
 			Resource: "appRevision",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *appRevisionController) Lister() AppRevisionLister {
 		controller: c,
 	}
 }
+
 
 func (c *appRevisionController) AddHandler(ctx context.Context, name string, handler AppRevisionHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *appRevisionClient) Controller() AppRevisionController {
 	}
 
 	s.client.appRevisionControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type appRevisionClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   AppRevisionController
 }

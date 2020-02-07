@@ -1,12 +1,13 @@
 package client
 
 const (
-	LifecycleType           = "lifecycle"
+    LifecycleType = "lifecycle"
 	LifecycleFieldPostStart = "postStart"
-	LifecycleFieldPreStop   = "preStop"
+	LifecycleFieldPreStop = "preStop"
 )
 
 type Lifecycle struct {
-	PostStart *Handler `json:"postStart,omitempty" yaml:"postStart,omitempty"`
-	PreStop   *Handler `json:"preStop,omitempty" yaml:"preStop,omitempty"`
+        PostStart *Handler `json:"postStart,omitempty" yaml:"postStart,omitempty"`
+        PreStop *Handler `json:"preStop,omitempty" yaml:"preStop,omitempty"`
 }
+

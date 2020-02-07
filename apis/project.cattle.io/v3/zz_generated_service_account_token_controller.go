@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "serviceaccounttoken",
 		Namespaced:   true,
 
-		Kind: ServiceAccountTokenGroupVersionKind.Kind,
+		Kind:         ServiceAccountTokenGroupVersionKind.Kind,
 	}
 
 	ServiceAccountTokenGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "serviceaccounttokens",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "serviceaccounttokens",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewServiceAccountToken(namespace, name string, obj ServiceAccountToken) *Se
 }
 
 type ServiceAccountTokenList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []ServiceAccountToken `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []ServiceAccountToken `json:"items"`
 }
 
 type ServiceAccountTokenHandlerFunc func(key string, obj *ServiceAccountToken) (runtime.Object, error)
@@ -79,7 +80,7 @@ type ServiceAccountTokenController interface {
 }
 
 type ServiceAccountTokenInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*ServiceAccountToken) (*ServiceAccountToken, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ServiceAccountToken, error)
 	Get(name string, opts metav1.GetOptions) (*ServiceAccountToken, error)
@@ -125,7 +126,7 @@ func (l *serviceAccountTokenLister) Get(namespace, name string) (*ServiceAccount
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    ServiceAccountTokenGroupVersionKind.Group,
+			Group: ServiceAccountTokenGroupVersionKind.Group,
 			Resource: "serviceAccountToken",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *serviceAccountTokenController) Lister() ServiceAccountTokenLister {
 		controller: c,
 	}
 }
+
 
 func (c *serviceAccountTokenController) AddHandler(ctx context.Context, name string, handler ServiceAccountTokenHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *serviceAccountTokenClient) Controller() ServiceAccountTokenController {
 	}
 
 	s.client.serviceAccountTokenControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type serviceAccountTokenClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   ServiceAccountTokenController
 }

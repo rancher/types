@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "namespacedserviceaccounttoken",
 		Namespaced:   true,
 
-		Kind: NamespacedServiceAccountTokenGroupVersionKind.Kind,
+		Kind:         NamespacedServiceAccountTokenGroupVersionKind.Kind,
 	}
 
 	NamespacedServiceAccountTokenGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "namespacedserviceaccounttokens",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "namespacedserviceaccounttokens",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewNamespacedServiceAccountToken(namespace, name string, obj NamespacedServ
 }
 
 type NamespacedServiceAccountTokenList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []NamespacedServiceAccountToken `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []NamespacedServiceAccountToken `json:"items"`
 }
 
 type NamespacedServiceAccountTokenHandlerFunc func(key string, obj *NamespacedServiceAccountToken) (runtime.Object, error)
@@ -79,7 +80,7 @@ type NamespacedServiceAccountTokenController interface {
 }
 
 type NamespacedServiceAccountTokenInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*NamespacedServiceAccountToken) (*NamespacedServiceAccountToken, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NamespacedServiceAccountToken, error)
 	Get(name string, opts metav1.GetOptions) (*NamespacedServiceAccountToken, error)
@@ -125,7 +126,7 @@ func (l *namespacedServiceAccountTokenLister) Get(namespace, name string) (*Name
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    NamespacedServiceAccountTokenGroupVersionKind.Group,
+			Group: NamespacedServiceAccountTokenGroupVersionKind.Group,
 			Resource: "namespacedServiceAccountToken",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *namespacedServiceAccountTokenController) Lister() NamespacedServiceAcco
 		controller: c,
 	}
 }
+
 
 func (c *namespacedServiceAccountTokenController) AddHandler(ctx context.Context, name string, handler NamespacedServiceAccountTokenHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *namespacedServiceAccountTokenClient) Controller() NamespacedServiceAcco
 	}
 
 	s.client.namespacedServiceAccountTokenControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type namespacedServiceAccountTokenClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   NamespacedServiceAccountTokenController
 }

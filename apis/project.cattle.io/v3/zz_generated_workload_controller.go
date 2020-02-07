@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "workload",
 		Namespaced:   true,
 
-		Kind: WorkloadGroupVersionKind.Kind,
+		Kind:         WorkloadGroupVersionKind.Kind,
 	}
 
 	WorkloadGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "workloads",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "workloads",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewWorkload(namespace, name string, obj Workload) *Workload {
 }
 
 type WorkloadList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Workload `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []Workload `json:"items"`
 }
 
 type WorkloadHandlerFunc func(key string, obj *Workload) (runtime.Object, error)
@@ -79,7 +80,7 @@ type WorkloadController interface {
 }
 
 type WorkloadInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*Workload) (*Workload, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Workload, error)
 	Get(name string, opts metav1.GetOptions) (*Workload, error)
@@ -125,7 +126,7 @@ func (l *workloadLister) Get(namespace, name string) (*Workload, error) {
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    WorkloadGroupVersionKind.Group,
+			Group: WorkloadGroupVersionKind.Group,
 			Resource: "workload",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *workloadController) Lister() WorkloadLister {
 		controller: c,
 	}
 }
+
 
 func (c *workloadController) AddHandler(ctx context.Context, name string, handler WorkloadHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *workloadClient) Controller() WorkloadController {
 	}
 
 	s.client.workloadControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type workloadClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   WorkloadController
 }

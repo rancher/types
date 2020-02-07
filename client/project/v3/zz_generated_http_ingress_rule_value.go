@@ -1,10 +1,11 @@
 package client
 
 const (
-	HTTPIngressRuleValueType       = "httpIngressRuleValue"
+    HTTPIngressRuleValueType = "httpIngressRuleValue"
 	HTTPIngressRuleValueFieldPaths = "paths"
 )
 
 type HTTPIngressRuleValue struct {
-	Paths []HTTPIngressPath `json:"paths,omitempty" yaml:"paths,omitempty"`
+        Paths []HTTPIngressPath `json:"paths,omitempty" yaml:"paths,omitempty"`
 }
+

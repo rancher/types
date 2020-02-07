@@ -1,12 +1,13 @@
 package client
 
 const (
-	HostAliasType           = "hostAlias"
+    HostAliasType = "hostAlias"
 	HostAliasFieldHostnames = "hostnames"
-	HostAliasFieldIP        = "ip"
+	HostAliasFieldIP = "ip"
 )
 
 type HostAlias struct {
-	Hostnames []string `json:"hostnames,omitempty" yaml:"hostnames,omitempty"`
-	IP        string   `json:"ip,omitempty" yaml:"ip,omitempty"`
+        Hostnames []string `json:"hostnames,omitempty" yaml:"hostnames,omitempty"`
+        IP string `json:"ip,omitempty" yaml:"ip,omitempty"`
 }
+

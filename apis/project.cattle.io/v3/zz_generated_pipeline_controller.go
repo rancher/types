@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "pipeline",
 		Namespaced:   true,
 
-		Kind: PipelineGroupVersionKind.Kind,
+		Kind:         PipelineGroupVersionKind.Kind,
 	}
 
 	PipelineGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "pipelines",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "pipelines",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewPipeline(namespace, name string, obj Pipeline) *Pipeline {
 }
 
 type PipelineList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Pipeline `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []Pipeline `json:"items"`
 }
 
 type PipelineHandlerFunc func(key string, obj *Pipeline) (runtime.Object, error)
@@ -79,7 +80,7 @@ type PipelineController interface {
 }
 
 type PipelineInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*Pipeline) (*Pipeline, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Pipeline, error)
 	Get(name string, opts metav1.GetOptions) (*Pipeline, error)
@@ -125,7 +126,7 @@ func (l *pipelineLister) Get(namespace, name string) (*Pipeline, error) {
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    PipelineGroupVersionKind.Group,
+			Group: PipelineGroupVersionKind.Group,
 			Resource: "pipeline",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *pipelineController) Lister() PipelineLister {
 		controller: c,
 	}
 }
+
 
 func (c *pipelineController) AddHandler(ctx context.Context, name string, handler PipelineHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *pipelineClient) Controller() PipelineController {
 	}
 
 	s.client.pipelineControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type pipelineClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   PipelineController
 }

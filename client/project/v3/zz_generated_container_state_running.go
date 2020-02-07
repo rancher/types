@@ -1,10 +1,11 @@
 package client
 
 const (
-	ContainerStateRunningType           = "containerStateRunning"
+    ContainerStateRunningType = "containerStateRunning"
 	ContainerStateRunningFieldStartedAt = "startedAt"
 )
 
 type ContainerStateRunning struct {
-	StartedAt string `json:"startedAt,omitempty" yaml:"startedAt,omitempty"`
+        StartedAt string `json:"startedAt,omitempty" yaml:"startedAt,omitempty"`
 }
+

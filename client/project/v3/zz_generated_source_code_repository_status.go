@@ -1,8 +1,9 @@
 package client
 
 const (
-	SourceCodeRepositoryStatusType = "sourceCodeRepositoryStatus"
+    SourceCodeRepositoryStatusType = "sourceCodeRepositoryStatus"
 )
 
 type SourceCodeRepositoryStatus struct {
 }
+

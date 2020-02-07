@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "pipelinesetting",
 		Namespaced:   true,
 
-		Kind: PipelineSettingGroupVersionKind.Kind,
+		Kind:         PipelineSettingGroupVersionKind.Kind,
 	}
 
 	PipelineSettingGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "pipelinesettings",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "pipelinesettings",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewPipelineSetting(namespace, name string, obj PipelineSetting) *PipelineSe
 }
 
 type PipelineSettingList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []PipelineSetting `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []PipelineSetting `json:"items"`
 }
 
 type PipelineSettingHandlerFunc func(key string, obj *PipelineSetting) (runtime.Object, error)
@@ -79,7 +80,7 @@ type PipelineSettingController interface {
 }
 
 type PipelineSettingInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*PipelineSetting) (*PipelineSetting, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*PipelineSetting, error)
 	Get(name string, opts metav1.GetOptions) (*PipelineSetting, error)
@@ -125,7 +126,7 @@ func (l *pipelineSettingLister) Get(namespace, name string) (*PipelineSetting, e
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    PipelineSettingGroupVersionKind.Group,
+			Group: PipelineSettingGroupVersionKind.Group,
 			Resource: "pipelineSetting",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *pipelineSettingController) Lister() PipelineSettingLister {
 		controller: c,
 	}
 }
+
 
 func (c *pipelineSettingController) AddHandler(ctx context.Context, name string, handler PipelineSettingHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *pipelineSettingClient) Controller() PipelineSettingController {
 	}
 
 	s.client.pipelineSettingControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type pipelineSettingClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   PipelineSettingController
 }

@@ -1,12 +1,13 @@
 package client
 
 const (
-	ContainerStateWaitingType         = "containerStateWaiting"
+    ContainerStateWaitingType = "containerStateWaiting"
 	ContainerStateWaitingFieldMessage = "message"
-	ContainerStateWaitingFieldReason  = "reason"
+	ContainerStateWaitingFieldReason = "reason"
 )
 
 type ContainerStateWaiting struct {
-	Message string `json:"message,omitempty" yaml:"message,omitempty"`
-	Reason  string `json:"reason,omitempty" yaml:"reason,omitempty"`
+        Message string `json:"message,omitempty" yaml:"message,omitempty"`
+        Reason string `json:"reason,omitempty" yaml:"reason,omitempty"`
 }
+

@@ -1,12 +1,13 @@
 package client
 
 const (
-	ProjectedVolumeSourceType             = "projectedVolumeSource"
+    ProjectedVolumeSourceType = "projectedVolumeSource"
 	ProjectedVolumeSourceFieldDefaultMode = "defaultMode"
-	ProjectedVolumeSourceFieldSources     = "sources"
+	ProjectedVolumeSourceFieldSources = "sources"
 )
 
 type ProjectedVolumeSource struct {
-	DefaultMode *int64             `json:"defaultMode,omitempty" yaml:"defaultMode,omitempty"`
-	Sources     []VolumeProjection `json:"sources,omitempty" yaml:"sources,omitempty"`
+        DefaultMode *int64 `json:"defaultMode,omitempty" yaml:"defaultMode,omitempty"`
+        Sources []VolumeProjection `json:"sources,omitempty" yaml:"sources,omitempty"`
 }
+

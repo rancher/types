@@ -1,10 +1,11 @@
 package client
 
 const (
-	PrometheusRuleSpecType        = "prometheusRuleSpec"
+    PrometheusRuleSpecType = "prometheusRuleSpec"
 	PrometheusRuleSpecFieldGroups = "groups"
 )
 
 type PrometheusRuleSpec struct {
-	Groups []RuleGroup `json:"groups,omitempty" yaml:"groups,omitempty"`
+        Groups []RuleGroup `json:"groups,omitempty" yaml:"groups,omitempty"`
 }
+

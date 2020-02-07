@@ -1,10 +1,11 @@
 package client
 
 const (
-	ServiceStatusType              = "serviceStatus"
+    ServiceStatusType = "serviceStatus"
 	ServiceStatusFieldLoadBalancer = "loadBalancer"
 )
 
 type ServiceStatus struct {
-	LoadBalancer *LoadBalancerStatus `json:"loadBalancer,omitempty" yaml:"loadBalancer,omitempty"`
+        LoadBalancer *LoadBalancerStatus `json:"loadBalancer,omitempty" yaml:"loadBalancer,omitempty"`
 }
+

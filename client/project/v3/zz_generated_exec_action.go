@@ -1,10 +1,11 @@
 package client
 
 const (
-	ExecActionType         = "execAction"
+    ExecActionType = "execAction"
 	ExecActionFieldCommand = "command"
 )
 
 type ExecAction struct {
-	Command []string `json:"command,omitempty" yaml:"command,omitempty"`
+        Command []string `json:"command,omitempty" yaml:"command,omitempty"`
 }
+

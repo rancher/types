@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "namespacedcertificate",
 		Namespaced:   true,
 
-		Kind: NamespacedCertificateGroupVersionKind.Kind,
+		Kind:         NamespacedCertificateGroupVersionKind.Kind,
 	}
 
 	NamespacedCertificateGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "namespacedcertificates",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "namespacedcertificates",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewNamespacedCertificate(namespace, name string, obj NamespacedCertificate)
 }
 
 type NamespacedCertificateList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []NamespacedCertificate `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []NamespacedCertificate `json:"items"`
 }
 
 type NamespacedCertificateHandlerFunc func(key string, obj *NamespacedCertificate) (runtime.Object, error)
@@ -79,7 +80,7 @@ type NamespacedCertificateController interface {
 }
 
 type NamespacedCertificateInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*NamespacedCertificate) (*NamespacedCertificate, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NamespacedCertificate, error)
 	Get(name string, opts metav1.GetOptions) (*NamespacedCertificate, error)
@@ -125,7 +126,7 @@ func (l *namespacedCertificateLister) Get(namespace, name string) (*NamespacedCe
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    NamespacedCertificateGroupVersionKind.Group,
+			Group: NamespacedCertificateGroupVersionKind.Group,
 			Resource: "namespacedCertificate",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *namespacedCertificateController) Lister() NamespacedCertificateLister {
 		controller: c,
 	}
 }
+
 
 func (c *namespacedCertificateController) AddHandler(ctx context.Context, name string, handler NamespacedCertificateHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *namespacedCertificateClient) Controller() NamespacedCertificateControll
 	}
 
 	s.client.namespacedCertificateControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type namespacedCertificateClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   NamespacedCertificateController
 }

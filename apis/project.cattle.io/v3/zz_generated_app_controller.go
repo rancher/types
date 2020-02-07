@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/rancher/norman/controller"
+	
 	"github.com/rancher/norman/objectclient"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,13 +29,13 @@ var (
 		SingularName: "app",
 		Namespaced:   true,
 
-		Kind: AppGroupVersionKind.Kind,
+		Kind:         AppGroupVersionKind.Kind,
 	}
 
 	AppGroupVersionResource = schema.GroupVersionResource{
-		Group:    GroupName,
-		Version:  Version,
-		Resource: "apps",
+		Group:     GroupName,
+		Version:   Version,
+		Resource:  "apps",
 	}
 )
 
@@ -50,9 +51,9 @@ func NewApp(namespace, name string, obj App) *App {
 }
 
 type AppList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []App `json:"items"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ListMeta   `json:"metadata,omitempty"`
+	Items             []App `json:"items"`
 }
 
 type AppHandlerFunc func(key string, obj *App) (runtime.Object, error)
@@ -79,7 +80,7 @@ type AppController interface {
 }
 
 type AppInterface interface {
-	ObjectClient() *objectclient.ObjectClient
+    ObjectClient() *objectclient.ObjectClient
 	Create(*App) (*App, error)
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*App, error)
 	Get(name string, opts metav1.GetOptions) (*App, error)
@@ -125,7 +126,7 @@ func (l *appLister) Get(namespace, name string) (*App, error) {
 	}
 	if !exists {
 		return nil, errors.NewNotFound(schema.GroupResource{
-			Group:    AppGroupVersionKind.Group,
+			Group: AppGroupVersionKind.Group,
 			Resource: "app",
 		}, key)
 	}
@@ -145,6 +146,7 @@ func (c *appController) Lister() AppLister {
 		controller: c,
 	}
 }
+
 
 func (c *appController) AddHandler(ctx context.Context, name string, handler AppHandlerFunc) {
 	c.GenericController.AddHandler(ctx, name, func(key string, obj interface{}) (interface{}, error) {
@@ -226,14 +228,14 @@ func (s *appClient) Controller() AppController {
 	}
 
 	s.client.appControllers[s.ns] = c
-	s.client.starters = append(s.client.starters, c)
+    s.client.starters = append(s.client.starters, c)
 
 	return c
 }
 
 type appClient struct {
-	client       *Client
-	ns           string
+	client *Client
+	ns string
 	objectClient *objectclient.ObjectClient
 	controller   AppController
 }

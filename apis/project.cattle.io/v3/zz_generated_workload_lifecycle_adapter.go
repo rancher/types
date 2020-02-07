@@ -1,9 +1,11 @@
 package v3
 
 import (
+	
+	"k8s.io/apimachinery/pkg/runtime"
+	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/lifecycle"
 	"github.com/rancher/norman/resource"
-	"k8s.io/apimachinery/pkg/runtime"
 )
 
 type WorkloadLifecycle interface {

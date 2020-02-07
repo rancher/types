@@ -1,12 +1,13 @@
 package client
 
 const (
-	LoadBalancerSettingsType                = "loadBalancerSettings"
+    LoadBalancerSettingsType = "loadBalancerSettings"
 	LoadBalancerSettingsFieldConsistentHash = "consistentHash"
-	LoadBalancerSettingsFieldSimple         = "simple"
+	LoadBalancerSettingsFieldSimple = "simple"
 )
 
 type LoadBalancerSettings struct {
-	ConsistentHash *ConsistentHashLB `json:"consistentHash,omitempty" yaml:"consistentHash,omitempty"`
-	Simple         string            `json:"simple,omitempty" yaml:"simple,omitempty"`
+        ConsistentHash *ConsistentHashLB `json:"consistentHash,omitempty" yaml:"consistentHash,omitempty"`
+        Simple string `json:"simple,omitempty" yaml:"simple,omitempty"`
 }
+

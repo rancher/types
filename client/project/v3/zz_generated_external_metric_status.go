@@ -1,12 +1,13 @@
 package client
 
 const (
-	ExternalMetricStatusType         = "externalMetricStatus"
+    ExternalMetricStatusType = "externalMetricStatus"
 	ExternalMetricStatusFieldCurrent = "current"
-	ExternalMetricStatusFieldMetric  = "metric"
+	ExternalMetricStatusFieldMetric = "metric"
 )
 
 type ExternalMetricStatus struct {
-	Current *MetricValueStatus `json:"current,omitempty" yaml:"current,omitempty"`
-	Metric  *MetricIdentifier  `json:"metric,omitempty" yaml:"metric,omitempty"`
+        Current *MetricValueStatus `json:"current,omitempty" yaml:"current,omitempty"`
+        Metric *MetricIdentifier `json:"metric,omitempty" yaml:"metric,omitempty"`
 }
+
