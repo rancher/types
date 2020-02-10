@@ -160,6 +160,7 @@ type WorkloadClient struct {
 
 type WorkloadOperations interface {
 	List(opts *types.ListOpts) (*WorkloadCollection, error)
+	ListAll(opts *types.ListOpts) (*WorkloadCollection, error)
 	Create(opts *Workload) (*Workload, error)
 	Update(existing *Workload, updates interface{}) (*Workload, error)
 	Replace(existing *Workload) (*Workload, error)
@@ -201,6 +202,23 @@ func (c *WorkloadClient) List(opts *types.ListOpts) (*WorkloadCollection, error)
 	resp := &WorkloadCollection{}
 	err := c.apiClient.Ops.DoList(WorkloadType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *WorkloadClient) ListAll(opts *types.ListOpts) (*WorkloadCollection, error) {
+	resp := &WorkloadCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

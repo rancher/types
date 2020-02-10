@@ -52,6 +52,7 @@ type NamespacedSecretClient struct {
 
 type NamespacedSecretOperations interface {
 	List(opts *types.ListOpts) (*NamespacedSecretCollection, error)
+	ListAll(opts *types.ListOpts) (*NamespacedSecretCollection, error)
 	Create(opts *NamespacedSecret) (*NamespacedSecret, error)
 	Update(existing *NamespacedSecret, updates interface{}) (*NamespacedSecret, error)
 	Replace(existing *NamespacedSecret) (*NamespacedSecret, error)
@@ -87,6 +88,23 @@ func (c *NamespacedSecretClient) List(opts *types.ListOpts) (*NamespacedSecretCo
 	resp := &NamespacedSecretCollection{}
 	err := c.apiClient.Ops.DoList(NamespacedSecretType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *NamespacedSecretClient) ListAll(opts *types.ListOpts) (*NamespacedSecretCollection, error) {
+	resp := &NamespacedSecretCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

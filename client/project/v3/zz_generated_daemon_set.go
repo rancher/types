@@ -130,6 +130,7 @@ type DaemonSetClient struct {
 
 type DaemonSetOperations interface {
 	List(opts *types.ListOpts) (*DaemonSetCollection, error)
+	ListAll(opts *types.ListOpts) (*DaemonSetCollection, error)
 	Create(opts *DaemonSet) (*DaemonSet, error)
 	Update(existing *DaemonSet, updates interface{}) (*DaemonSet, error)
 	Replace(existing *DaemonSet) (*DaemonSet, error)
@@ -165,6 +166,23 @@ func (c *DaemonSetClient) List(opts *types.ListOpts) (*DaemonSetCollection, erro
 	resp := &DaemonSetCollection{}
 	err := c.apiClient.Ops.DoList(DaemonSetType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *DaemonSetClient) ListAll(opts *types.ListOpts) (*DaemonSetCollection, error) {
+	resp := &DaemonSetCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

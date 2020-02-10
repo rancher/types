@@ -50,6 +50,7 @@ type GlobalDNSProviderClient struct {
 
 type GlobalDNSProviderOperations interface {
 	List(opts *types.ListOpts) (*GlobalDNSProviderCollection, error)
+	ListAll(opts *types.ListOpts) (*GlobalDNSProviderCollection, error)
 	Create(opts *GlobalDNSProvider) (*GlobalDNSProvider, error)
 	Update(existing *GlobalDNSProvider, updates interface{}) (*GlobalDNSProvider, error)
 	Replace(existing *GlobalDNSProvider) (*GlobalDNSProvider, error)
@@ -85,6 +86,23 @@ func (c *GlobalDNSProviderClient) List(opts *types.ListOpts) (*GlobalDNSProvider
 	resp := &GlobalDNSProviderCollection{}
 	err := c.apiClient.Ops.DoList(GlobalDNSProviderType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *GlobalDNSProviderClient) ListAll(opts *types.ListOpts) (*GlobalDNSProviderCollection, error) {
+	resp := &GlobalDNSProviderCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

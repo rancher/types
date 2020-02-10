@@ -42,6 +42,7 @@ type CisConfigClient struct {
 
 type CisConfigOperations interface {
 	List(opts *types.ListOpts) (*CisConfigCollection, error)
+	ListAll(opts *types.ListOpts) (*CisConfigCollection, error)
 	Create(opts *CisConfig) (*CisConfig, error)
 	Update(existing *CisConfig, updates interface{}) (*CisConfig, error)
 	Replace(existing *CisConfig) (*CisConfig, error)
@@ -77,6 +78,23 @@ func (c *CisConfigClient) List(opts *types.ListOpts) (*CisConfigCollection, erro
 	resp := &CisConfigCollection{}
 	err := c.apiClient.Ops.DoList(CisConfigType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *CisConfigClient) ListAll(opts *types.ListOpts) (*CisConfigCollection, error) {
+	resp := &CisConfigCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

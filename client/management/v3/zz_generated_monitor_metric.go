@@ -48,6 +48,7 @@ type MonitorMetricClient struct {
 
 type MonitorMetricOperations interface {
 	List(opts *types.ListOpts) (*MonitorMetricCollection, error)
+	ListAll(opts *types.ListOpts) (*MonitorMetricCollection, error)
 	Create(opts *MonitorMetric) (*MonitorMetric, error)
 	Update(existing *MonitorMetric, updates interface{}) (*MonitorMetric, error)
 	Replace(existing *MonitorMetric) (*MonitorMetric, error)
@@ -91,6 +92,23 @@ func (c *MonitorMetricClient) List(opts *types.ListOpts) (*MonitorMetricCollecti
 	resp := &MonitorMetricCollection{}
 	err := c.apiClient.Ops.DoList(MonitorMetricType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *MonitorMetricClient) ListAll(opts *types.ListOpts) (*MonitorMetricCollection, error) {
+	resp := &MonitorMetricCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

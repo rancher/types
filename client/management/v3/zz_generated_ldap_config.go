@@ -98,6 +98,7 @@ type LdapConfigClient struct {
 
 type LdapConfigOperations interface {
 	List(opts *types.ListOpts) (*LdapConfigCollection, error)
+	ListAll(opts *types.ListOpts) (*LdapConfigCollection, error)
 	Create(opts *LdapConfig) (*LdapConfig, error)
 	Update(existing *LdapConfig, updates interface{}) (*LdapConfig, error)
 	Replace(existing *LdapConfig) (*LdapConfig, error)
@@ -133,6 +134,23 @@ func (c *LdapConfigClient) List(opts *types.ListOpts) (*LdapConfigCollection, er
 	resp := &LdapConfigCollection{}
 	err := c.apiClient.Ops.DoList(LdapConfigType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *LdapConfigClient) ListAll(opts *types.ListOpts) (*LdapConfigCollection, error) {
+	resp := &LdapConfigCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

@@ -44,6 +44,7 @@ type MultiClusterAppRevisionClient struct {
 
 type MultiClusterAppRevisionOperations interface {
 	List(opts *types.ListOpts) (*MultiClusterAppRevisionCollection, error)
+	ListAll(opts *types.ListOpts) (*MultiClusterAppRevisionCollection, error)
 	Create(opts *MultiClusterAppRevision) (*MultiClusterAppRevision, error)
 	Update(existing *MultiClusterAppRevision, updates interface{}) (*MultiClusterAppRevision, error)
 	Replace(existing *MultiClusterAppRevision) (*MultiClusterAppRevision, error)
@@ -79,6 +80,23 @@ func (c *MultiClusterAppRevisionClient) List(opts *types.ListOpts) (*MultiCluste
 	resp := &MultiClusterAppRevisionCollection{}
 	err := c.apiClient.Ops.DoList(MultiClusterAppRevisionType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *MultiClusterAppRevisionClient) ListAll(opts *types.ListOpts) (*MultiClusterAppRevisionCollection, error) {
+	resp := &MultiClusterAppRevisionCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

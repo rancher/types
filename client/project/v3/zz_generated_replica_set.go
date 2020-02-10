@@ -132,6 +132,7 @@ type ReplicaSetClient struct {
 
 type ReplicaSetOperations interface {
 	List(opts *types.ListOpts) (*ReplicaSetCollection, error)
+	ListAll(opts *types.ListOpts) (*ReplicaSetCollection, error)
 	Create(opts *ReplicaSet) (*ReplicaSet, error)
 	Update(existing *ReplicaSet, updates interface{}) (*ReplicaSet, error)
 	Replace(existing *ReplicaSet) (*ReplicaSet, error)
@@ -167,6 +168,23 @@ func (c *ReplicaSetClient) List(opts *types.ListOpts) (*ReplicaSetCollection, er
 	resp := &ReplicaSetCollection{}
 	err := c.apiClient.Ops.DoList(ReplicaSetType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ReplicaSetClient) ListAll(opts *types.ListOpts) (*ReplicaSetCollection, error) {
+	resp := &ReplicaSetCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

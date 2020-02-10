@@ -92,6 +92,7 @@ type ServiceClient struct {
 
 type ServiceOperations interface {
 	List(opts *types.ListOpts) (*ServiceCollection, error)
+	ListAll(opts *types.ListOpts) (*ServiceCollection, error)
 	Create(opts *Service) (*Service, error)
 	Update(existing *Service, updates interface{}) (*Service, error)
 	Replace(existing *Service) (*Service, error)
@@ -127,6 +128,23 @@ func (c *ServiceClient) List(opts *types.ListOpts) (*ServiceCollection, error) {
 	resp := &ServiceCollection{}
 	err := c.apiClient.Ops.DoList(ServiceType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ServiceClient) ListAll(opts *types.ListOpts) (*ServiceCollection, error) {
+	resp := &ServiceCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

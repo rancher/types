@@ -134,6 +134,7 @@ type DeploymentClient struct {
 
 type DeploymentOperations interface {
 	List(opts *types.ListOpts) (*DeploymentCollection, error)
+	ListAll(opts *types.ListOpts) (*DeploymentCollection, error)
 	Create(opts *Deployment) (*Deployment, error)
 	Update(existing *Deployment, updates interface{}) (*Deployment, error)
 	Replace(existing *Deployment) (*Deployment, error)
@@ -175,6 +176,23 @@ func (c *DeploymentClient) List(opts *types.ListOpts) (*DeploymentCollection, er
 	resp := &DeploymentCollection{}
 	err := c.apiClient.Ops.DoList(DeploymentType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *DeploymentClient) ListAll(opts *types.ListOpts) (*DeploymentCollection, error) {
+	resp := &DeploymentCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

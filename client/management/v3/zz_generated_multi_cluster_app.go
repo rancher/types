@@ -66,6 +66,7 @@ type MultiClusterAppClient struct {
 
 type MultiClusterAppOperations interface {
 	List(opts *types.ListOpts) (*MultiClusterAppCollection, error)
+	ListAll(opts *types.ListOpts) (*MultiClusterAppCollection, error)
 	Create(opts *MultiClusterApp) (*MultiClusterApp, error)
 	Update(existing *MultiClusterApp, updates interface{}) (*MultiClusterApp, error)
 	Replace(existing *MultiClusterApp) (*MultiClusterApp, error)
@@ -107,6 +108,23 @@ func (c *MultiClusterAppClient) List(opts *types.ListOpts) (*MultiClusterAppColl
 	resp := &MultiClusterAppCollection{}
 	err := c.apiClient.Ops.DoList(MultiClusterAppType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *MultiClusterAppClient) ListAll(opts *types.ListOpts) (*MultiClusterAppCollection, error) {
+	resp := &MultiClusterAppCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

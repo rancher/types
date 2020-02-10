@@ -48,6 +48,7 @@ type ClusterTemplateRevisionClient struct {
 
 type ClusterTemplateRevisionOperations interface {
 	List(opts *types.ListOpts) (*ClusterTemplateRevisionCollection, error)
+	ListAll(opts *types.ListOpts) (*ClusterTemplateRevisionCollection, error)
 	Create(opts *ClusterTemplateRevision) (*ClusterTemplateRevision, error)
 	Update(existing *ClusterTemplateRevision, updates interface{}) (*ClusterTemplateRevision, error)
 	Replace(existing *ClusterTemplateRevision) (*ClusterTemplateRevision, error)
@@ -89,6 +90,23 @@ func (c *ClusterTemplateRevisionClient) List(opts *types.ListOpts) (*ClusterTemp
 	resp := &ClusterTemplateRevisionCollection{}
 	err := c.apiClient.Ops.DoList(ClusterTemplateRevisionType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ClusterTemplateRevisionClient) ListAll(opts *types.ListOpts) (*ClusterTemplateRevisionCollection, error) {
+	resp := &ClusterTemplateRevisionCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

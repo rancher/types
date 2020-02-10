@@ -50,6 +50,7 @@ type SSHAuthClient struct {
 
 type SSHAuthOperations interface {
 	List(opts *types.ListOpts) (*SSHAuthCollection, error)
+	ListAll(opts *types.ListOpts) (*SSHAuthCollection, error)
 	Create(opts *SSHAuth) (*SSHAuth, error)
 	Update(existing *SSHAuth, updates interface{}) (*SSHAuth, error)
 	Replace(existing *SSHAuth) (*SSHAuth, error)
@@ -85,6 +86,23 @@ func (c *SSHAuthClient) List(opts *types.ListOpts) (*SSHAuthCollection, error) {
 	resp := &SSHAuthCollection{}
 	err := c.apiClient.Ops.DoList(SSHAuthType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *SSHAuthClient) ListAll(opts *types.ListOpts) (*SSHAuthCollection, error) {
+	resp := &SSHAuthCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

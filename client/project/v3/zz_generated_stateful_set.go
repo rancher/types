@@ -132,6 +132,7 @@ type StatefulSetClient struct {
 
 type StatefulSetOperations interface {
 	List(opts *types.ListOpts) (*StatefulSetCollection, error)
+	ListAll(opts *types.ListOpts) (*StatefulSetCollection, error)
 	Create(opts *StatefulSet) (*StatefulSet, error)
 	Update(existing *StatefulSet, updates interface{}) (*StatefulSet, error)
 	Replace(existing *StatefulSet) (*StatefulSet, error)
@@ -167,6 +168,23 @@ func (c *StatefulSetClient) List(opts *types.ListOpts) (*StatefulSetCollection, 
 	resp := &StatefulSetCollection{}
 	err := c.apiClient.Ops.DoList(StatefulSetType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *StatefulSetClient) ListAll(opts *types.ListOpts) (*StatefulSetCollection, error) {
+	resp := &StatefulSetCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

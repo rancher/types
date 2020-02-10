@@ -52,6 +52,7 @@ type AppRevisionClient struct {
 
 type AppRevisionOperations interface {
 	List(opts *types.ListOpts) (*AppRevisionCollection, error)
+	ListAll(opts *types.ListOpts) (*AppRevisionCollection, error)
 	Create(opts *AppRevision) (*AppRevision, error)
 	Update(existing *AppRevision, updates interface{}) (*AppRevision, error)
 	Replace(existing *AppRevision) (*AppRevision, error)
@@ -87,6 +88,23 @@ func (c *AppRevisionClient) List(opts *types.ListOpts) (*AppRevisionCollection, 
 	resp := &AppRevisionCollection{}
 	err := c.apiClient.Ops.DoList(AppRevisionType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *AppRevisionClient) ListAll(opts *types.ListOpts) (*AppRevisionCollection, error) {
+	resp := &AppRevisionCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 
