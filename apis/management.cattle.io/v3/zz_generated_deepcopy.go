@@ -9000,7 +9000,7 @@ func (in *SettingList) DeepCopyObject() runtime.Object {
 func (in *ShibbolethConfig) DeepCopyInto(out *ShibbolethConfig) {
 	*out = *in
 	in.SamlConfig.DeepCopyInto(&out.SamlConfig)
-	in.LdapFields.DeepCopyInto(&out.LdapFields)
+	in.OpenLdapConfig.DeepCopyInto(&out.OpenLdapConfig)
 	return
 }
 
