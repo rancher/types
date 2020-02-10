@@ -132,6 +132,7 @@ type CronJobClient struct {
 
 type CronJobOperations interface {
 	List(opts *types.ListOpts) (*CronJobCollection, error)
+	ListAll(opts *types.ListOpts) (*CronJobCollection, error)
 	Create(opts *CronJob) (*CronJob, error)
 	Update(existing *CronJob, updates interface{}) (*CronJob, error)
 	Replace(existing *CronJob) (*CronJob, error)
@@ -167,6 +168,23 @@ func (c *CronJobClient) List(opts *types.ListOpts) (*CronJobCollection, error) {
 	resp := &CronJobCollection{}
 	err := c.apiClient.Ops.DoList(CronJobType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *CronJobClient) ListAll(opts *types.ListOpts) (*CronJobCollection, error) {
+	resp := &CronJobCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

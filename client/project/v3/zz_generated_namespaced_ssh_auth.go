@@ -50,6 +50,7 @@ type NamespacedSSHAuthClient struct {
 
 type NamespacedSSHAuthOperations interface {
 	List(opts *types.ListOpts) (*NamespacedSSHAuthCollection, error)
+	ListAll(opts *types.ListOpts) (*NamespacedSSHAuthCollection, error)
 	Create(opts *NamespacedSSHAuth) (*NamespacedSSHAuth, error)
 	Update(existing *NamespacedSSHAuth, updates interface{}) (*NamespacedSSHAuth, error)
 	Replace(existing *NamespacedSSHAuth) (*NamespacedSSHAuth, error)
@@ -85,6 +86,23 @@ func (c *NamespacedSSHAuthClient) List(opts *types.ListOpts) (*NamespacedSSHAuth
 	resp := &NamespacedSSHAuthCollection{}
 	err := c.apiClient.Ops.DoList(NamespacedSSHAuthType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *NamespacedSSHAuthClient) ListAll(opts *types.ListOpts) (*NamespacedSSHAuthCollection, error) {
+	resp := &NamespacedSSHAuthCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

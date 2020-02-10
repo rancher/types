@@ -48,6 +48,7 @@ type ConfigMapClient struct {
 
 type ConfigMapOperations interface {
 	List(opts *types.ListOpts) (*ConfigMapCollection, error)
+	ListAll(opts *types.ListOpts) (*ConfigMapCollection, error)
 	Create(opts *ConfigMap) (*ConfigMap, error)
 	Update(existing *ConfigMap, updates interface{}) (*ConfigMap, error)
 	Replace(existing *ConfigMap) (*ConfigMap, error)
@@ -83,6 +84,23 @@ func (c *ConfigMapClient) List(opts *types.ListOpts) (*ConfigMapCollection, erro
 	resp := &ConfigMapCollection{}
 	err := c.apiClient.Ops.DoList(ConfigMapType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ConfigMapClient) ListAll(opts *types.ListOpts) (*ConfigMapCollection, error) {
+	resp := &ConfigMapCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

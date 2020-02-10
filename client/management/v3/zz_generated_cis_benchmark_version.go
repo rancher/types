@@ -42,6 +42,7 @@ type CisBenchmarkVersionClient struct {
 
 type CisBenchmarkVersionOperations interface {
 	List(opts *types.ListOpts) (*CisBenchmarkVersionCollection, error)
+	ListAll(opts *types.ListOpts) (*CisBenchmarkVersionCollection, error)
 	Create(opts *CisBenchmarkVersion) (*CisBenchmarkVersion, error)
 	Update(existing *CisBenchmarkVersion, updates interface{}) (*CisBenchmarkVersion, error)
 	Replace(existing *CisBenchmarkVersion) (*CisBenchmarkVersion, error)
@@ -77,6 +78,23 @@ func (c *CisBenchmarkVersionClient) List(opts *types.ListOpts) (*CisBenchmarkVer
 	resp := &CisBenchmarkVersionCollection{}
 	err := c.apiClient.Ops.DoList(CisBenchmarkVersionType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *CisBenchmarkVersionClient) ListAll(opts *types.ListOpts) (*CisBenchmarkVersionCollection, error) {
+	resp := &CisBenchmarkVersionCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

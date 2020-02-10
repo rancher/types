@@ -70,6 +70,7 @@ type TokenClient struct {
 
 type TokenOperations interface {
 	List(opts *types.ListOpts) (*TokenCollection, error)
+	ListAll(opts *types.ListOpts) (*TokenCollection, error)
 	Create(opts *Token) (*Token, error)
 	Update(existing *Token, updates interface{}) (*Token, error)
 	Replace(existing *Token) (*Token, error)
@@ -107,6 +108,23 @@ func (c *TokenClient) List(opts *types.ListOpts) (*TokenCollection, error) {
 	resp := &TokenCollection{}
 	err := c.apiClient.Ops.DoList(TokenType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *TokenClient) ListAll(opts *types.ListOpts) (*TokenCollection, error) {
+	resp := &TokenCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

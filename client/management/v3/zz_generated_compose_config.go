@@ -50,6 +50,7 @@ type ComposeConfigClient struct {
 
 type ComposeConfigOperations interface {
 	List(opts *types.ListOpts) (*ComposeConfigCollection, error)
+	ListAll(opts *types.ListOpts) (*ComposeConfigCollection, error)
 	Create(opts *ComposeConfig) (*ComposeConfig, error)
 	Update(existing *ComposeConfig, updates interface{}) (*ComposeConfig, error)
 	Replace(existing *ComposeConfig) (*ComposeConfig, error)
@@ -85,6 +86,23 @@ func (c *ComposeConfigClient) List(opts *types.ListOpts) (*ComposeConfigCollecti
 	resp := &ComposeConfigCollection{}
 	err := c.apiClient.Ops.DoList(ComposeConfigType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ComposeConfigClient) ListAll(opts *types.ListOpts) (*ComposeConfigCollection, error) {
+	resp := &ComposeConfigCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

@@ -54,6 +54,7 @@ type NamespacedServiceAccountTokenClient struct {
 
 type NamespacedServiceAccountTokenOperations interface {
 	List(opts *types.ListOpts) (*NamespacedServiceAccountTokenCollection, error)
+	ListAll(opts *types.ListOpts) (*NamespacedServiceAccountTokenCollection, error)
 	Create(opts *NamespacedServiceAccountToken) (*NamespacedServiceAccountToken, error)
 	Update(existing *NamespacedServiceAccountToken, updates interface{}) (*NamespacedServiceAccountToken, error)
 	Replace(existing *NamespacedServiceAccountToken) (*NamespacedServiceAccountToken, error)
@@ -89,6 +90,23 @@ func (c *NamespacedServiceAccountTokenClient) List(opts *types.ListOpts) (*Names
 	resp := &NamespacedServiceAccountTokenCollection{}
 	err := c.apiClient.Ops.DoList(NamespacedServiceAccountTokenType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *NamespacedServiceAccountTokenClient) ListAll(opts *types.ListOpts) (*NamespacedServiceAccountTokenCollection, error) {
+	resp := &NamespacedServiceAccountTokenCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

@@ -72,6 +72,7 @@ type SourceCodeCredentialClient struct {
 
 type SourceCodeCredentialOperations interface {
 	List(opts *types.ListOpts) (*SourceCodeCredentialCollection, error)
+	ListAll(opts *types.ListOpts) (*SourceCodeCredentialCollection, error)
 	Create(opts *SourceCodeCredential) (*SourceCodeCredential, error)
 	Update(existing *SourceCodeCredential, updates interface{}) (*SourceCodeCredential, error)
 	Replace(existing *SourceCodeCredential) (*SourceCodeCredential, error)
@@ -111,6 +112,23 @@ func (c *SourceCodeCredentialClient) List(opts *types.ListOpts) (*SourceCodeCred
 	resp := &SourceCodeCredentialCollection{}
 	err := c.apiClient.Ops.DoList(SourceCodeCredentialType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *SourceCodeCredentialClient) ListAll(opts *types.ListOpts) (*SourceCodeCredentialCollection, error) {
+	resp := &SourceCodeCredentialCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

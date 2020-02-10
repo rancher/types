@@ -76,6 +76,7 @@ type ClusterLoggingClient struct {
 
 type ClusterLoggingOperations interface {
 	List(opts *types.ListOpts) (*ClusterLoggingCollection, error)
+	ListAll(opts *types.ListOpts) (*ClusterLoggingCollection, error)
 	Create(opts *ClusterLogging) (*ClusterLogging, error)
 	Update(existing *ClusterLogging, updates interface{}) (*ClusterLogging, error)
 	Replace(existing *ClusterLogging) (*ClusterLogging, error)
@@ -115,6 +116,23 @@ func (c *ClusterLoggingClient) List(opts *types.ListOpts) (*ClusterLoggingCollec
 	resp := &ClusterLoggingCollection{}
 	err := c.apiClient.Ops.DoList(ClusterLoggingType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ClusterLoggingClient) ListAll(opts *types.ListOpts) (*ClusterLoggingCollection, error) {
+	resp := &ClusterLoggingCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

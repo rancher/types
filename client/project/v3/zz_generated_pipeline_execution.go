@@ -92,6 +92,7 @@ type PipelineExecutionClient struct {
 
 type PipelineExecutionOperations interface {
 	List(opts *types.ListOpts) (*PipelineExecutionCollection, error)
+	ListAll(opts *types.ListOpts) (*PipelineExecutionCollection, error)
 	Create(opts *PipelineExecution) (*PipelineExecution, error)
 	Update(existing *PipelineExecution, updates interface{}) (*PipelineExecution, error)
 	Replace(existing *PipelineExecution) (*PipelineExecution, error)
@@ -131,6 +132,23 @@ func (c *PipelineExecutionClient) List(opts *types.ListOpts) (*PipelineExecution
 	resp := &PipelineExecutionCollection{}
 	err := c.apiClient.Ops.DoList(PipelineExecutionType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *PipelineExecutionClient) ListAll(opts *types.ListOpts) (*PipelineExecutionCollection, error) {
+	resp := &PipelineExecutionCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

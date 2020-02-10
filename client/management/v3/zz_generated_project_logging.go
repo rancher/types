@@ -70,6 +70,7 @@ type ProjectLoggingClient struct {
 
 type ProjectLoggingOperations interface {
 	List(opts *types.ListOpts) (*ProjectLoggingCollection, error)
+	ListAll(opts *types.ListOpts) (*ProjectLoggingCollection, error)
 	Create(opts *ProjectLogging) (*ProjectLogging, error)
 	Update(existing *ProjectLogging, updates interface{}) (*ProjectLogging, error)
 	Replace(existing *ProjectLogging) (*ProjectLogging, error)
@@ -109,6 +110,23 @@ func (c *ProjectLoggingClient) List(opts *types.ListOpts) (*ProjectLoggingCollec
 	resp := &ProjectLoggingCollection{}
 	err := c.apiClient.Ops.DoList(ProjectLoggingType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ProjectLoggingClient) ListAll(opts *types.ListOpts) (*ProjectLoggingCollection, error) {
+	resp := &ProjectLoggingCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

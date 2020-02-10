@@ -110,6 +110,7 @@ type NodeClient struct {
 
 type NodeOperations interface {
 	List(opts *types.ListOpts) (*NodeCollection, error)
+	ListAll(opts *types.ListOpts) (*NodeCollection, error)
 	Create(opts *Node) (*Node, error)
 	Update(existing *Node, updates interface{}) (*Node, error)
 	Replace(existing *Node) (*Node, error)
@@ -153,6 +154,23 @@ func (c *NodeClient) List(opts *types.ListOpts) (*NodeCollection, error) {
 	resp := &NodeCollection{}
 	err := c.apiClient.Ops.DoList(NodeType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *NodeClient) ListAll(opts *types.ListOpts) (*NodeCollection, error) {
+	resp := &NodeCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

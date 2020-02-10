@@ -56,6 +56,7 @@ type StorageClassClient struct {
 
 type StorageClassOperations interface {
 	List(opts *types.ListOpts) (*StorageClassCollection, error)
+	ListAll(opts *types.ListOpts) (*StorageClassCollection, error)
 	Create(opts *StorageClass) (*StorageClass, error)
 	Update(existing *StorageClass, updates interface{}) (*StorageClass, error)
 	Replace(existing *StorageClass) (*StorageClass, error)
@@ -91,6 +92,23 @@ func (c *StorageClassClient) List(opts *types.ListOpts) (*StorageClassCollection
 	resp := &StorageClassCollection{}
 	err := c.apiClient.Ops.DoList(StorageClassType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *StorageClassClient) ListAll(opts *types.ListOpts) (*StorageClassCollection, error) {
+	resp := &StorageClassCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

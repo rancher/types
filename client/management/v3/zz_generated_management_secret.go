@@ -46,6 +46,7 @@ type ManagementSecretClient struct {
 
 type ManagementSecretOperations interface {
 	List(opts *types.ListOpts) (*ManagementSecretCollection, error)
+	ListAll(opts *types.ListOpts) (*ManagementSecretCollection, error)
 	Create(opts *ManagementSecret) (*ManagementSecret, error)
 	Update(existing *ManagementSecret, updates interface{}) (*ManagementSecret, error)
 	Replace(existing *ManagementSecret) (*ManagementSecret, error)
@@ -81,6 +82,23 @@ func (c *ManagementSecretClient) List(opts *types.ListOpts) (*ManagementSecretCo
 	resp := &ManagementSecretCollection{}
 	err := c.apiClient.Ops.DoList(ManagementSecretType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ManagementSecretClient) ListAll(opts *types.ListOpts) (*ManagementSecretCollection, error) {
+	resp := &ManagementSecretCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

@@ -50,6 +50,7 @@ type PipelineSettingClient struct {
 
 type PipelineSettingOperations interface {
 	List(opts *types.ListOpts) (*PipelineSettingCollection, error)
+	ListAll(opts *types.ListOpts) (*PipelineSettingCollection, error)
 	Create(opts *PipelineSetting) (*PipelineSetting, error)
 	Update(existing *PipelineSetting, updates interface{}) (*PipelineSetting, error)
 	Replace(existing *PipelineSetting) (*PipelineSetting, error)
@@ -85,6 +86,23 @@ func (c *PipelineSettingClient) List(opts *types.ListOpts) (*PipelineSettingColl
 	resp := &PipelineSettingCollection{}
 	err := c.apiClient.Ops.DoList(PipelineSettingType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *PipelineSettingClient) ListAll(opts *types.ListOpts) (*PipelineSettingCollection, error) {
+	resp := &PipelineSettingCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

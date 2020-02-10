@@ -112,6 +112,7 @@ type AlertmanagerClient struct {
 
 type AlertmanagerOperations interface {
 	List(opts *types.ListOpts) (*AlertmanagerCollection, error)
+	ListAll(opts *types.ListOpts) (*AlertmanagerCollection, error)
 	Create(opts *Alertmanager) (*Alertmanager, error)
 	Update(existing *Alertmanager, updates interface{}) (*Alertmanager, error)
 	Replace(existing *Alertmanager) (*Alertmanager, error)
@@ -147,6 +148,23 @@ func (c *AlertmanagerClient) List(opts *types.ListOpts) (*AlertmanagerCollection
 	resp := &AlertmanagerCollection{}
 	err := c.apiClient.Ops.DoList(AlertmanagerType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *AlertmanagerClient) ListAll(opts *types.ListOpts) (*AlertmanagerCollection, error) {
+	resp := &AlertmanagerCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

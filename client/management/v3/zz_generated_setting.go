@@ -48,6 +48,7 @@ type SettingClient struct {
 
 type SettingOperations interface {
 	List(opts *types.ListOpts) (*SettingCollection, error)
+	ListAll(opts *types.ListOpts) (*SettingCollection, error)
 	Create(opts *Setting) (*Setting, error)
 	Update(existing *Setting, updates interface{}) (*Setting, error)
 	Replace(existing *Setting) (*Setting, error)
@@ -83,6 +84,23 @@ func (c *SettingClient) List(opts *types.ListOpts) (*SettingCollection, error) {
 	resp := &SettingCollection{}
 	err := c.apiClient.Ops.DoList(SettingType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *SettingClient) ListAll(opts *types.ListOpts) (*SettingCollection, error) {
+	resp := &SettingCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

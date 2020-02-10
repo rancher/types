@@ -46,6 +46,7 @@ type GlobalRoleBindingClient struct {
 
 type GlobalRoleBindingOperations interface {
 	List(opts *types.ListOpts) (*GlobalRoleBindingCollection, error)
+	ListAll(opts *types.ListOpts) (*GlobalRoleBindingCollection, error)
 	Create(opts *GlobalRoleBinding) (*GlobalRoleBinding, error)
 	Update(existing *GlobalRoleBinding, updates interface{}) (*GlobalRoleBinding, error)
 	Replace(existing *GlobalRoleBinding) (*GlobalRoleBinding, error)
@@ -81,6 +82,23 @@ func (c *GlobalRoleBindingClient) List(opts *types.ListOpts) (*GlobalRoleBinding
 	resp := &GlobalRoleBindingCollection{}
 	err := c.apiClient.Ops.DoList(GlobalRoleBindingType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *GlobalRoleBindingClient) ListAll(opts *types.ListOpts) (*GlobalRoleBindingCollection, error) {
+	resp := &GlobalRoleBindingCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

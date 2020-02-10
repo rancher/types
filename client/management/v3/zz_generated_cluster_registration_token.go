@@ -62,6 +62,7 @@ type ClusterRegistrationTokenClient struct {
 
 type ClusterRegistrationTokenOperations interface {
 	List(opts *types.ListOpts) (*ClusterRegistrationTokenCollection, error)
+	ListAll(opts *types.ListOpts) (*ClusterRegistrationTokenCollection, error)
 	Create(opts *ClusterRegistrationToken) (*ClusterRegistrationToken, error)
 	Update(existing *ClusterRegistrationToken, updates interface{}) (*ClusterRegistrationToken, error)
 	Replace(existing *ClusterRegistrationToken) (*ClusterRegistrationToken, error)
@@ -97,6 +98,23 @@ func (c *ClusterRegistrationTokenClient) List(opts *types.ListOpts) (*ClusterReg
 	resp := &ClusterRegistrationTokenCollection{}
 	err := c.apiClient.Ops.DoList(ClusterRegistrationTokenType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ClusterRegistrationTokenClient) ListAll(opts *types.ListOpts) (*ClusterRegistrationTokenCollection, error) {
+	resp := &ClusterRegistrationTokenCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

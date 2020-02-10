@@ -132,6 +132,7 @@ type ReplicationControllerClient struct {
 
 type ReplicationControllerOperations interface {
 	List(opts *types.ListOpts) (*ReplicationControllerCollection, error)
+	ListAll(opts *types.ListOpts) (*ReplicationControllerCollection, error)
 	Create(opts *ReplicationController) (*ReplicationController, error)
 	Update(existing *ReplicationController, updates interface{}) (*ReplicationController, error)
 	Replace(existing *ReplicationController) (*ReplicationController, error)
@@ -167,6 +168,23 @@ func (c *ReplicationControllerClient) List(opts *types.ListOpts) (*ReplicationCo
 	resp := &ReplicationControllerCollection{}
 	err := c.apiClient.Ops.DoList(ReplicationControllerType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ReplicationControllerClient) ListAll(opts *types.ListOpts) (*ReplicationControllerCollection, error) {
+	resp := &ReplicationControllerCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

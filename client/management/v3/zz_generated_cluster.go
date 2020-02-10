@@ -126,6 +126,7 @@ type ClusterClient struct {
 
 type ClusterOperations interface {
 	List(opts *types.ListOpts) (*ClusterCollection, error)
+	ListAll(opts *types.ListOpts) (*ClusterCollection, error)
 	Create(opts *Cluster) (*Cluster, error)
 	Update(existing *Cluster, updates interface{}) (*Cluster, error)
 	Replace(existing *Cluster) (*Cluster, error)
@@ -185,6 +186,23 @@ func (c *ClusterClient) List(opts *types.ListOpts) (*ClusterCollection, error) {
 	resp := &ClusterCollection{}
 	err := c.apiClient.Ops.DoList(ClusterType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ClusterClient) ListAll(opts *types.ListOpts) (*ClusterCollection, error) {
+	resp := &ClusterCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

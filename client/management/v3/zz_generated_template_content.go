@@ -42,6 +42,7 @@ type TemplateContentClient struct {
 
 type TemplateContentOperations interface {
 	List(opts *types.ListOpts) (*TemplateContentCollection, error)
+	ListAll(opts *types.ListOpts) (*TemplateContentCollection, error)
 	Create(opts *TemplateContent) (*TemplateContent, error)
 	Update(existing *TemplateContent, updates interface{}) (*TemplateContent, error)
 	Replace(existing *TemplateContent) (*TemplateContent, error)
@@ -77,6 +78,23 @@ func (c *TemplateContentClient) List(opts *types.ListOpts) (*TemplateContentColl
 	resp := &TemplateContentCollection{}
 	err := c.apiClient.Ops.DoList(TemplateContentType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *TemplateContentClient) ListAll(opts *types.ListOpts) (*TemplateContentCollection, error) {
+	resp := &TemplateContentCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

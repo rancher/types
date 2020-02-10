@@ -54,6 +54,7 @@ type ClusterRoleTemplateBindingClient struct {
 
 type ClusterRoleTemplateBindingOperations interface {
 	List(opts *types.ListOpts) (*ClusterRoleTemplateBindingCollection, error)
+	ListAll(opts *types.ListOpts) (*ClusterRoleTemplateBindingCollection, error)
 	Create(opts *ClusterRoleTemplateBinding) (*ClusterRoleTemplateBinding, error)
 	Update(existing *ClusterRoleTemplateBinding, updates interface{}) (*ClusterRoleTemplateBinding, error)
 	Replace(existing *ClusterRoleTemplateBinding) (*ClusterRoleTemplateBinding, error)
@@ -89,6 +90,23 @@ func (c *ClusterRoleTemplateBindingClient) List(opts *types.ListOpts) (*ClusterR
 	resp := &ClusterRoleTemplateBindingCollection{}
 	err := c.apiClient.Ops.DoList(ClusterRoleTemplateBindingType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *ClusterRoleTemplateBindingClient) ListAll(opts *types.ListOpts) (*ClusterRoleTemplateBindingCollection, error) {
+	resp := &ClusterRoleTemplateBindingCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

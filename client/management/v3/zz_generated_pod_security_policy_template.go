@@ -90,6 +90,7 @@ type PodSecurityPolicyTemplateClient struct {
 
 type PodSecurityPolicyTemplateOperations interface {
 	List(opts *types.ListOpts) (*PodSecurityPolicyTemplateCollection, error)
+	ListAll(opts *types.ListOpts) (*PodSecurityPolicyTemplateCollection, error)
 	Create(opts *PodSecurityPolicyTemplate) (*PodSecurityPolicyTemplate, error)
 	Update(existing *PodSecurityPolicyTemplate, updates interface{}) (*PodSecurityPolicyTemplate, error)
 	Replace(existing *PodSecurityPolicyTemplate) (*PodSecurityPolicyTemplate, error)
@@ -125,6 +126,23 @@ func (c *PodSecurityPolicyTemplateClient) List(opts *types.ListOpts) (*PodSecuri
 	resp := &PodSecurityPolicyTemplateCollection{}
 	err := c.apiClient.Ops.DoList(PodSecurityPolicyTemplateType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *PodSecurityPolicyTemplateClient) ListAll(opts *types.ListOpts) (*PodSecurityPolicyTemplateCollection, error) {
+	resp := &PodSecurityPolicyTemplateCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

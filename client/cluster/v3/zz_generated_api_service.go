@@ -62,6 +62,7 @@ type APIServiceClient struct {
 
 type APIServiceOperations interface {
 	List(opts *types.ListOpts) (*APIServiceCollection, error)
+	ListAll(opts *types.ListOpts) (*APIServiceCollection, error)
 	Create(opts *APIService) (*APIService, error)
 	Update(existing *APIService, updates interface{}) (*APIService, error)
 	Replace(existing *APIService) (*APIService, error)
@@ -97,6 +98,23 @@ func (c *APIServiceClient) List(opts *types.ListOpts) (*APIServiceCollection, er
 	resp := &APIServiceCollection{}
 	err := c.apiClient.Ops.DoList(APIServiceType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *APIServiceClient) ListAll(opts *types.ListOpts) (*APIServiceCollection, error) {
+	resp := &APIServiceCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

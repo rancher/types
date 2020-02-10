@@ -42,6 +42,7 @@ type RKEK8sServiceOptionClient struct {
 
 type RKEK8sServiceOptionOperations interface {
 	List(opts *types.ListOpts) (*RKEK8sServiceOptionCollection, error)
+	ListAll(opts *types.ListOpts) (*RKEK8sServiceOptionCollection, error)
 	Create(opts *RKEK8sServiceOption) (*RKEK8sServiceOption, error)
 	Update(existing *RKEK8sServiceOption, updates interface{}) (*RKEK8sServiceOption, error)
 	Replace(existing *RKEK8sServiceOption) (*RKEK8sServiceOption, error)
@@ -77,6 +78,23 @@ func (c *RKEK8sServiceOptionClient) List(opts *types.ListOpts) (*RKEK8sServiceOp
 	resp := &RKEK8sServiceOptionCollection{}
 	err := c.apiClient.Ops.DoList(RKEK8sServiceOptionType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *RKEK8sServiceOptionClient) ListAll(opts *types.ListOpts) (*RKEK8sServiceOptionCollection, error) {
+	resp := &RKEK8sServiceOptionCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

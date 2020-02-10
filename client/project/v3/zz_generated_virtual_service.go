@@ -62,6 +62,7 @@ type VirtualServiceClient struct {
 
 type VirtualServiceOperations interface {
 	List(opts *types.ListOpts) (*VirtualServiceCollection, error)
+	ListAll(opts *types.ListOpts) (*VirtualServiceCollection, error)
 	Create(opts *VirtualService) (*VirtualService, error)
 	Update(existing *VirtualService, updates interface{}) (*VirtualService, error)
 	Replace(existing *VirtualService) (*VirtualService, error)
@@ -97,6 +98,23 @@ func (c *VirtualServiceClient) List(opts *types.ListOpts) (*VirtualServiceCollec
 	resp := &VirtualServiceCollection{}
 	err := c.apiClient.Ops.DoList(VirtualServiceType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *VirtualServiceClient) ListAll(opts *types.ListOpts) (*VirtualServiceCollection, error) {
+	resp := &VirtualServiceCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

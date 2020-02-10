@@ -48,6 +48,7 @@ type AuthConfigClient struct {
 
 type AuthConfigOperations interface {
 	List(opts *types.ListOpts) (*AuthConfigCollection, error)
+	ListAll(opts *types.ListOpts) (*AuthConfigCollection, error)
 	Create(opts *AuthConfig) (*AuthConfig, error)
 	Update(existing *AuthConfig, updates interface{}) (*AuthConfig, error)
 	Replace(existing *AuthConfig) (*AuthConfig, error)
@@ -83,6 +84,23 @@ func (c *AuthConfigClient) List(opts *types.ListOpts) (*AuthConfigCollection, er
 	resp := &AuthConfigCollection{}
 	err := c.apiClient.Ops.DoList(AuthConfigType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *AuthConfigClient) ListAll(opts *types.ListOpts) (*AuthConfigCollection, error) {
+	resp := &AuthConfigCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

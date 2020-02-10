@@ -62,6 +62,7 @@ type UserClient struct {
 
 type UserOperations interface {
 	List(opts *types.ListOpts) (*UserCollection, error)
+	ListAll(opts *types.ListOpts) (*UserCollection, error)
 	Create(opts *User) (*User, error)
 	Update(existing *User, updates interface{}) (*User, error)
 	Replace(existing *User) (*User, error)
@@ -105,6 +106,23 @@ func (c *UserClient) List(opts *types.ListOpts) (*UserCollection, error) {
 	resp := &UserCollection{}
 	err := c.apiClient.Ops.DoList(UserType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *UserClient) ListAll(opts *types.ListOpts) (*UserCollection, error) {
+	resp := &UserCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

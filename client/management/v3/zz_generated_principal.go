@@ -56,6 +56,7 @@ type PrincipalClient struct {
 
 type PrincipalOperations interface {
 	List(opts *types.ListOpts) (*PrincipalCollection, error)
+	ListAll(opts *types.ListOpts) (*PrincipalCollection, error)
 	Create(opts *Principal) (*Principal, error)
 	Update(existing *Principal, updates interface{}) (*Principal, error)
 	Replace(existing *Principal) (*Principal, error)
@@ -93,6 +94,23 @@ func (c *PrincipalClient) List(opts *types.ListOpts) (*PrincipalCollection, erro
 	resp := &PrincipalCollection{}
 	err := c.apiClient.Ops.DoList(PrincipalType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *PrincipalClient) ListAll(opts *types.ListOpts) (*PrincipalCollection, error) {
+	resp := &PrincipalCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

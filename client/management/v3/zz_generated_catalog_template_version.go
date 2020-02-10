@@ -80,6 +80,7 @@ type CatalogTemplateVersionClient struct {
 
 type CatalogTemplateVersionOperations interface {
 	List(opts *types.ListOpts) (*CatalogTemplateVersionCollection, error)
+	ListAll(opts *types.ListOpts) (*CatalogTemplateVersionCollection, error)
 	Create(opts *CatalogTemplateVersion) (*CatalogTemplateVersion, error)
 	Update(existing *CatalogTemplateVersion, updates interface{}) (*CatalogTemplateVersion, error)
 	Replace(existing *CatalogTemplateVersion) (*CatalogTemplateVersion, error)
@@ -115,6 +116,23 @@ func (c *CatalogTemplateVersionClient) List(opts *types.ListOpts) (*CatalogTempl
 	resp := &CatalogTemplateVersionCollection{}
 	err := c.apiClient.Ops.DoList(CatalogTemplateVersionType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *CatalogTemplateVersionClient) ListAll(opts *types.ListOpts) (*CatalogTemplateVersionCollection, error) {
+	resp := &CatalogTemplateVersionCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 

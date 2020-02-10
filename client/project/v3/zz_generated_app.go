@@ -80,6 +80,7 @@ type AppClient struct {
 
 type AppOperations interface {
 	List(opts *types.ListOpts) (*AppCollection, error)
+	ListAll(opts *types.ListOpts) (*AppCollection, error)
 	Create(opts *App) (*App, error)
 	Update(existing *App, updates interface{}) (*App, error)
 	Replace(existing *App) (*App, error)
@@ -119,6 +120,23 @@ func (c *AppClient) List(opts *types.ListOpts) (*AppCollection, error) {
 	resp := &AppCollection{}
 	err := c.apiClient.Ops.DoList(AppType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *AppClient) ListAll(opts *types.ListOpts) (*AppCollection, error) {
+	resp := &AppCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
+		data = append(data, resp.Data...)
+	}
+	if err != nil {
+		return resp, err
+	}
+	resp.Data = data
 	return resp, err
 }
 
