@@ -138,6 +138,8 @@ type CronJobOperations interface {
 	Replace(existing *CronJob) (*CronJob, error)
 	ByID(id string) (*CronJob, error)
 	Delete(container *CronJob) error
+
+	ActionRedeploy(resource *CronJob) error
 }
 
 func newCronJobClient(apiClient *Client) *CronJobClient {
@@ -207,4 +209,9 @@ func (c *CronJobClient) ByID(id string) (*CronJob, error) {
 
 func (c *CronJobClient) Delete(container *CronJob) error {
 	return c.apiClient.Ops.DoResourceDelete(CronJobType, &container.Resource)
+}
+
+func (c *CronJobClient) ActionRedeploy(resource *CronJob) error {
+	err := c.apiClient.Ops.DoAction(CronJobType, "redeploy", &resource.Resource, nil, nil)
+	return err
 }

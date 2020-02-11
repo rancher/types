@@ -136,6 +136,8 @@ type DaemonSetOperations interface {
 	Replace(existing *DaemonSet) (*DaemonSet, error)
 	ByID(id string) (*DaemonSet, error)
 	Delete(container *DaemonSet) error
+
+	ActionRedeploy(resource *DaemonSet) error
 }
 
 func newDaemonSetClient(apiClient *Client) *DaemonSetClient {
@@ -205,4 +207,9 @@ func (c *DaemonSetClient) ByID(id string) (*DaemonSet, error) {
 
 func (c *DaemonSetClient) Delete(container *DaemonSet) error {
 	return c.apiClient.Ops.DoResourceDelete(DaemonSetType, &container.Resource)
+}
+
+func (c *DaemonSetClient) ActionRedeploy(resource *DaemonSet) error {
+	err := c.apiClient.Ops.DoAction(DaemonSetType, "redeploy", &resource.Resource, nil, nil)
+	return err
 }

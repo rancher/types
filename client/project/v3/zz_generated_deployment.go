@@ -143,6 +143,8 @@ type DeploymentOperations interface {
 
 	ActionPause(resource *Deployment) error
 
+	ActionRedeploy(resource *Deployment) error
+
 	ActionResume(resource *Deployment) error
 
 	ActionRollback(resource *Deployment, input *DeploymentRollbackInput) error
@@ -219,6 +221,11 @@ func (c *DeploymentClient) Delete(container *Deployment) error {
 
 func (c *DeploymentClient) ActionPause(resource *Deployment) error {
 	err := c.apiClient.Ops.DoAction(DeploymentType, "pause", &resource.Resource, nil, nil)
+	return err
+}
+
+func (c *DeploymentClient) ActionRedeploy(resource *Deployment) error {
+	err := c.apiClient.Ops.DoAction(DeploymentType, "redeploy", &resource.Resource, nil, nil)
 	return err
 }
 

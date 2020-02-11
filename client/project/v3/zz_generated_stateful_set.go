@@ -138,6 +138,8 @@ type StatefulSetOperations interface {
 	Replace(existing *StatefulSet) (*StatefulSet, error)
 	ByID(id string) (*StatefulSet, error)
 	Delete(container *StatefulSet) error
+
+	ActionRedeploy(resource *StatefulSet) error
 }
 
 func newStatefulSetClient(apiClient *Client) *StatefulSetClient {
@@ -207,4 +209,9 @@ func (c *StatefulSetClient) ByID(id string) (*StatefulSet, error) {
 
 func (c *StatefulSetClient) Delete(container *StatefulSet) error {
 	return c.apiClient.Ops.DoResourceDelete(StatefulSetType, &container.Resource)
+}
+
+func (c *StatefulSetClient) ActionRedeploy(resource *StatefulSet) error {
+	err := c.apiClient.Ops.DoAction(StatefulSetType, "redeploy", &resource.Resource, nil, nil)
+	return err
 }

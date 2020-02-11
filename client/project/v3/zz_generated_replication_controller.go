@@ -138,6 +138,8 @@ type ReplicationControllerOperations interface {
 	Replace(existing *ReplicationController) (*ReplicationController, error)
 	ByID(id string) (*ReplicationController, error)
 	Delete(container *ReplicationController) error
+
+	ActionRedeploy(resource *ReplicationController) error
 }
 
 func newReplicationControllerClient(apiClient *Client) *ReplicationControllerClient {
@@ -207,4 +209,9 @@ func (c *ReplicationControllerClient) ByID(id string) (*ReplicationController, e
 
 func (c *ReplicationControllerClient) Delete(container *ReplicationController) error {
 	return c.apiClient.Ops.DoResourceDelete(ReplicationControllerType, &container.Resource)
+}
+
+func (c *ReplicationControllerClient) ActionRedeploy(resource *ReplicationController) error {
+	err := c.apiClient.Ops.DoAction(ReplicationControllerType, "redeploy", &resource.Resource, nil, nil)
+	return err
 }

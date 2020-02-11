@@ -169,6 +169,8 @@ type WorkloadOperations interface {
 
 	ActionPause(resource *Workload) error
 
+	ActionRedeploy(resource *Workload) error
+
 	ActionResume(resource *Workload) error
 
 	ActionRollback(resource *Workload, input *RollbackRevision) error
@@ -245,6 +247,11 @@ func (c *WorkloadClient) Delete(container *Workload) error {
 
 func (c *WorkloadClient) ActionPause(resource *Workload) error {
 	err := c.apiClient.Ops.DoAction(WorkloadType, "pause", &resource.Resource, nil, nil)
+	return err
+}
+
+func (c *WorkloadClient) ActionRedeploy(resource *Workload) error {
+	err := c.apiClient.Ops.DoAction(WorkloadType, "redeploy", &resource.Resource, nil, nil)
 	return err
 }
 

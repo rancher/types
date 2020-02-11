@@ -138,6 +138,8 @@ type ReplicaSetOperations interface {
 	Replace(existing *ReplicaSet) (*ReplicaSet, error)
 	ByID(id string) (*ReplicaSet, error)
 	Delete(container *ReplicaSet) error
+
+	ActionRedeploy(resource *ReplicaSet) error
 }
 
 func newReplicaSetClient(apiClient *Client) *ReplicaSetClient {
@@ -207,4 +209,9 @@ func (c *ReplicaSetClient) ByID(id string) (*ReplicaSet, error) {
 
 func (c *ReplicaSetClient) Delete(container *ReplicaSet) error {
 	return c.apiClient.Ops.DoResourceDelete(ReplicaSetType, &container.Resource)
+}
+
+func (c *ReplicaSetClient) ActionRedeploy(resource *ReplicaSet) error {
+	err := c.apiClient.Ops.DoAction(ReplicaSetType, "redeploy", &resource.Resource, nil, nil)
+	return err
 }
