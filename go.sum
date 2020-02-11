@@ -470,6 +470,8 @@ github.com/rancher/norman v0.0.0-20200206042542-ef3920abad1c h1:+tnpw/MTI6nLCY61
 github.com/rancher/norman v0.0.0-20200206042542-ef3920abad1c/go.mod h1:b+483H276jRBXYosdWrNKFpxH+JYMs3UIdlV60dhdg0=
 github.com/rancher/norman v0.0.0-20200210173039-40f8d46bcfce h1:7mcUz6jN1LLKPpbxQctDXeYDE+t13LP2zoRo/FW4VZc=
 github.com/rancher/norman v0.0.0-20200210173039-40f8d46bcfce/go.mod h1:b+483H276jRBXYosdWrNKFpxH+JYMs3UIdlV60dhdg0=
+github.com/rancher/norman v0.0.0-20200211155126-fc45a55d4dfd h1:96iahn2n4qq7EuJ6QNrW2iqm1xVUktzjHSyNPPm/6YU=
+github.com/rancher/norman v0.0.0-20200211155126-fc45a55d4dfd/go.mod h1:b+483H276jRBXYosdWrNKFpxH+JYMs3UIdlV60dhdg0=
 github.com/rancher/pkg v0.0.0-20190514055449-b30ab9de040e h1:j6+HqCET/NLPBtew2m5apL7jWw/PStQ7iGwXjgAqdvo=
 github.com/rancher/pkg v0.0.0-20190514055449-b30ab9de040e/go.mod h1:XbYHTPaXuw8ZY9bylhYKQh/nJxDaTKk3YhAxPl4Qy/k=
 github.com/rancher/wrangler v0.4.1 h1:kQLE6syPbX4ciwU4OF+EHIPT9zj6r6pyN83u9Gsv5eg=
