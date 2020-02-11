@@ -353,8 +353,8 @@ type OKTAConfig struct {
 }
 
 type ShibbolethConfig struct {
-	SamlConfig `json:",inline" mapstructure:",squash"`
-	LdapFields `json:",inline" mapstructure:",squash"`
+	SamlConfig     `json:",inline" mapstructure:",squash"`
+	OpenLdapConfig LdapFields `json:"openLdapConfig" mapstructure:",squash"`
 }
 
 type AuthSystemImages struct {
