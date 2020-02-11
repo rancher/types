@@ -212,13 +212,14 @@ func (c *WorkloadClient) ListAll(opts *types.ListOpts) (*WorkloadCollection, err
 		return resp, err
 	}
 	data := resp.Data
-	for resp, err = resp.Next(); resp != nil && err == nil; resp, err = resp.Next() {
-		data = append(data, resp.Data...)
+	for next, err := resp.Next(); next != nil && err == nil; next, err = next.Next() {
+		data = append(data, next.Data...)
+		resp = next
+		resp.Data = data
 	}
 	if err != nil {
 		return resp, err
 	}
-	resp.Data = data
 	return resp, err
 }
 
