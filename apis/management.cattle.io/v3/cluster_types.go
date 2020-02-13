@@ -150,6 +150,7 @@ type ClusterStatus struct {
 	AppliedEnableNetworkPolicy           bool                      `json:"appliedEnableNetworkPolicy" norman:"nocreate,noupdate,default=false"`
 	Capabilities                         Capabilities              `json:"capabilities,omitempty"`
 	MonitoringStatus                     *MonitoringStatus         `json:"monitoringStatus,omitempty" norman:"nocreate,noupdate"`
+	NodeVersion                          int                       `json:"nodeVersion,omitempty"`
 	IstioEnabled                         bool                      `json:"istioEnabled,omitempty" norman:"nocreate,noupdate,default=false"`
 	CertificatesExpiration               map[string]CertExpiration `json:"certificatesExpiration,omitempty"`
 }
