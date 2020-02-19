@@ -14,13 +14,27 @@ Run `go generate` in the root of the project
 ### Running code generation after go modules
 
 The code generation code still depends on the GOPATH. 
-To generate types you need to update vendor.
+To generate types you need to update vendor. 
 
-1. Update go.mod for what you need 
-2. Run `GO111MODULE=on go mod vendor`
-3. Export your gopath (export GOPATH=types_go_path_dir)
-4. Run `GO111MODULE=off go generate`
-5. Unset your `GOPATH`
+1. Ensure your types project is where your current PWD is set up like a gopath.
+    
+    `<dir>/src/github.com/rancher/types`
+   
+    Example:    
+    `/Users/<yourusername>/work/types/src/github.com/rancher/types` or
+    `/Users/<yourusername>/go/src/github.com/rancher/types`
+2. Update go.mod for what you need 
+3. Run `GO111MODULE=on go mod vendor`
+4. Export your types gopath directory
+    
+   `export GOPATH=<dir>`
+    
+    Example:  
+    `export GOPATH=/Users/<yourusername>/work/types` or  
+    `export GOPATH=/Users/<yourusername>/go`
+5. Run `GO111MODULE=off go generate`
+6. Run `unset GOPATH`
+
 
 ## License
 Copyright (c) 2014-2017 [Rancher Labs, Inc.](http://rancher.com)
