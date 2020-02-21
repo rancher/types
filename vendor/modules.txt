@@ -107,9 +107,13 @@ github.com/rancher/norman/types/factory
 github.com/rancher/norman/types/mapper
 github.com/rancher/norman/types/slice
 github.com/rancher/norman/types/values
-# github.com/rancher/wrangler v0.4.1
+# github.com/rancher/wrangler v0.4.2-0.20200214231136-099089b8a398
+github.com/rancher/wrangler/pkg/data
+github.com/rancher/wrangler/pkg/data/convert
+github.com/rancher/wrangler/pkg/kv
 github.com/rancher/wrangler/pkg/name
 github.com/rancher/wrangler/pkg/ratelimit
+github.com/rancher/wrangler/pkg/summary
 # github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
 # github.com/spf13/pflag v1.0.5

@@ -283,7 +283,7 @@ type SMTPConfig struct {
 	Host             string `json:"host,omitempty" norman:"required,type=hostname"`
 	Port             int    `json:"port,omitempty" norman:"required,min=1,max=65535,default=587"`
 	Username         string `json:"username,omitempty"`
-	Password         string `json:"password,omitempty"`
+	Password         string `json:"password,omitempty" norman:"type=password"`
 	Sender           string `json:"sender,omitempty" norman:"required"`
 	DefaultRecipient string `json:"defaultRecipient,omitempty" norman:"required"`
 	TLS              bool   `json:"tls,omitempty" norman:"required,default=true"`
@@ -311,6 +311,7 @@ type WechatConfig struct {
 	Agent            string `json:"agent,omitempty" norman:"required"`
 	Corp             string `json:"corp,omitempty" norman:"required"`
 	RecipientType    string `json:"recipientType,omitempty" norman:"required,options=tag|party|user,default=party"`
+	APIURL           string `json:"apiUrl,omitempty"`
 	*HTTPClientConfig
 }
 
