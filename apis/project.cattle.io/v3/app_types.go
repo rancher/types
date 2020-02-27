@@ -62,7 +62,7 @@ type AppStatus struct {
 }
 
 type AppCondition struct {
-	// Type of cluster condition.q
+	// Type of cluster condition.
 	Type condition.Cond `json:"type"`
 	// Status of the condition, one of True, False, Unknown.
 	Status v1.ConditionStatus `json:"status"`
