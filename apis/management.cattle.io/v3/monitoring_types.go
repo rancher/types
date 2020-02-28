@@ -1,6 +1,8 @@
 package v3
 
 import (
+	"strings"
+
 	"github.com/rancher/norman/condition"
 	"github.com/rancher/norman/types"
 	v1 "k8s.io/api/core/v1"
@@ -65,11 +67,22 @@ type ClusterMonitorGraphSpec struct {
 	CommonMonitorGraphSpec
 }
 
+func (c *ClusterMonitorGraphSpec) ObjClusterName() string {
+	return c.ClusterName
+}
+
 type ProjectMonitorGraphSpec struct {
 	ProjectName         string `json:"projectName" norman:"type=reference[project]"`
 	ResourceType        string `json:"resourceType,omitempty" norman:"type=enum,options=workload|pod|container"`
 	DisplayResourceType string `json:"displayResourceType,omitempty" norman:"type=enum,options=workload|pod|container"`
 	CommonMonitorGraphSpec
+}
+
+func (p *ProjectMonitorGraphSpec) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }
 
 type CommonMonitorGraphSpec struct {
@@ -136,9 +149,20 @@ type QueryClusterMetricInput struct {
 	CommonQueryMetricInput
 }
 
+func (q *QueryClusterMetricInput) ObjClusterName() string {
+	return q.ClusterName
+}
+
 type QueryProjectMetricInput struct {
 	ProjectName string `json:"projectId" norman:"type=reference[project]"`
 	CommonQueryMetricInput
+}
+
+func (q *QueryProjectMetricInput) ObjClusterName() string {
+	if parts := strings.SplitN(q.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }
 
 type CommonQueryMetricInput struct {
@@ -167,6 +191,17 @@ type ClusterMetricNamesInput struct {
 	ClusterName string `json:"clusterId" norman:"type=reference[cluster]"`
 }
 
+func (c *ClusterMetricNamesInput) ObjClusterName() string {
+	return c.ClusterName
+}
+
 type ProjectMetricNamesInput struct {
 	ProjectName string `json:"projectId" norman:"type=reference[project]"`
+}
+
+func (p *ProjectMetricNamesInput) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }

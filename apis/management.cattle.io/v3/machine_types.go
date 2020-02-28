@@ -170,6 +170,10 @@ type NodePoolSpec struct {
 	DeleteNotReadyAfterSecs time.Duration `json:"deleteNotReadyAfterSecs" norman:"default=0,max=31540000,min=0"`
 }
 
+func (n *NodePoolSpec) ObjClusterName() string {
+	return n.ClusterName
+}
+
 type NodePoolStatus struct {
 	Conditions []Condition `json:"conditions"`
 }

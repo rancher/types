@@ -1,6 +1,8 @@
 package v3
 
 import (
+	"strings"
+
 	"github.com/rancher/norman/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -51,12 +53,23 @@ type ClusterAlertSpec struct {
 	TargetEvent         *TargetEvent         `json:"targetEvent,omitempty"`
 }
 
+func (c *ClusterAlertSpec) ObjClusterName() string {
+	return c.ClusterName
+}
+
 type ProjectAlertSpec struct {
 	AlertCommonSpec
 
 	ProjectName    string          `json:"projectName" norman:"type=reference[project]"`
 	TargetWorkload *TargetWorkload `json:"targetWorkload,omitempty"`
 	TargetPod      *TargetPod      `json:"targetPod,omitempty"`
+}
+
+func (p *ProjectAlertSpec) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }
 
 type Recipient struct {
@@ -133,10 +146,21 @@ type ClusterGroupSpec struct {
 	CommonGroupField
 }
 
+func (c *ClusterGroupSpec) ObjClusterName() string {
+	return c.ClusterName
+}
+
 type ProjectGroupSpec struct {
 	ProjectName string      `json:"projectName" norman:"type=reference[project]"`
 	Recipients  []Recipient `json:"recipients,omitempty"`
 	CommonGroupField
+}
+
+func (p *ProjectGroupSpec) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }
 
 type ClusterAlertRule struct {
@@ -164,6 +188,10 @@ type ClusterAlertRuleSpec struct {
 	ClusterScanRule   *ClusterScanRule   `json:"clusterScanRule,omitempty"`
 }
 
+func (c *ClusterAlertRuleSpec) ObjClusterName() string {
+	return c.ClusterName
+}
+
 type ProjectAlertRule struct {
 	types.Namespaced
 
@@ -185,6 +213,13 @@ type ProjectAlertRuleSpec struct {
 	PodRule      *PodRule      `json:"podRule,omitempty"`
 	WorkloadRule *WorkloadRule `json:"workloadRule,omitempty"`
 	MetricRule   *MetricRule   `json:"metricRule,omitempty"`
+}
+
+func (p *ProjectAlertRuleSpec) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }
 
 type CommonGroupField struct {
@@ -274,6 +309,10 @@ type NotifierSpec struct {
 	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty"`
 	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty"`
 	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty"`
+}
+
+func (n *NotifierSpec) ObjClusterName() string {
+	return n.ClusterName
 }
 
 type Notification struct {

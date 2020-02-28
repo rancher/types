@@ -1,6 +1,8 @@
 package v3
 
 import (
+	"strings"
+
 	"github.com/rancher/norman/condition"
 	"github.com/rancher/norman/types"
 	v1 "k8s.io/api/core/v1"
@@ -230,11 +232,22 @@ type ProjectCatalog struct {
 	ProjectName string `json:"projectName,omitempty" norman:"type=reference[project]"`
 }
 
+func (p *ProjectCatalog) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
+}
+
 type ClusterCatalog struct {
 	types.Namespaced
 
 	Catalog     `json:",inline" mapstructure:",squash"`
 	ClusterName string `json:"clusterName,omitempty" norman:"required,type=reference[cluster]"`
+}
+
+func (c *ClusterCatalog) ObjClusterName() string {
+	return c.ClusterName
 }
 
 type CatalogRefresh struct {
