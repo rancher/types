@@ -13,7 +13,8 @@ require (
 	github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8
 	github.com/pkg/errors v0.8.1
 	github.com/rancher/norman v0.0.0-20200211155126-fc45a55d4dfd
-	github.com/rancher/wrangler v0.4.2-0.20200214231136-099089b8a398
+	github.com/rancher/wrangler v0.5.0
+	github.com/rancher/wrangler-api v0.5.0
 	github.com/sirupsen/logrus v1.4.2
 	k8s.io/api v0.17.2
 	k8s.io/apiextensions-apiserver v0.17.2
