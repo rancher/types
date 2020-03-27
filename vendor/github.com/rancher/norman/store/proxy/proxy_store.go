@@ -128,13 +128,13 @@ func (s *Store) getUser(apiContext *types.APIContext) string {
 func (s *Store) doAuthed(apiContext *types.APIContext, request *rest.Request) rest.Result {
 	start := time.Now()
 	defer func() {
-		logrus.Debug("GET: ", time.Now().Sub(start), s.resourcePlural)
+		logrus.Tracef("GET: %v, %v", time.Now().Sub(start), s.resourcePlural)
 	}()
 
 	for _, header := range authHeaders {
 		request.SetHeader(header, apiContext.Request.Header[http.CanonicalHeaderKey(header)]...)
 	}
-	return request.Do()
+	return request.Do(apiContext.Request.Context())
 }
 
 func (s *Store) k8sClient(apiContext *types.APIContext) (rest.Interface, error) {
@@ -250,8 +250,8 @@ func (s *Store) retryList(namespace string, apiContext *types.APIContext) (*unst
 		req := s.common(namespace, k8sClient.Get())
 		start := time.Now()
 		resultList = &unstructured.UnstructuredList{}
-		err = req.Do().Into(resultList)
-		logrus.Debugf("LIST: %v, %v", time.Now().Sub(start), s.resourcePlural)
+		err = req.Do(apiContext.Request.Context()).Into(resultList)
+		logrus.Tracef("LIST: %v, %v", time.Now().Sub(start), s.resourcePlural)
 		if err != nil {
 			if i < 2 && strings.Contains(err.Error(), "Client.Timeout exceeded") {
 				logrus.Infof("Error on LIST %v: %v. Attempt: %v. Retrying", s.resourcePlural, err, i+1)
@@ -271,6 +271,7 @@ func (s *Store) Watch(apiContext *types.APIContext, schema *types.Schema, opt *t
 	}
 
 	return convert.Chan(c, func(data map[string]interface{}) map[string]interface{} {
+		apiContext.ExpireAccessControl(schema)
 		return apiContext.AccessControl.Filter(apiContext, schema, data, s.authContext)
 	}), nil
 }
@@ -295,7 +296,7 @@ func (s *Store) realWatch(apiContext *types.APIContext, schema *types.Schema, op
 		ResourceVersion: "0",
 	}, metav1.ParameterCodec)
 
-	body, err := req.Stream()
+	body, err := req.Stream(apiContext.Request.Context())
 	if err != nil {
 		return nil, err
 	}
@@ -307,7 +308,7 @@ func (s *Store) realWatch(apiContext *types.APIContext, schema *types.Schema, op
 	watchingContext, cancelWatchingContext := context.WithCancel(apiContext.Request.Context())
 	go func() {
 		<-watchingContext.Done()
-		logrus.Debugf("stopping watcher for %s", schema.ID)
+		logrus.Tracef("stopping watcher for %s", schema.ID)
 		watcher.Stop()
 	}()
 
@@ -316,7 +317,7 @@ func (s *Store) realWatch(apiContext *types.APIContext, schema *types.Schema, op
 		for event := range watcher.ResultChan() {
 			if data, ok := event.Object.(*metav1.Status); ok {
 				// just logging it, keeping the same behavior as before
-				logrus.Debugf("watcher status for %s: %s", schema.ID, data.Message)
+				logrus.Tracef("watcher status for %s: %s", schema.ID, data.Message)
 			} else {
 				data := event.Object.(*unstructured.Unstructured)
 				s.fromInternal(apiContext, schema, data.Object)
@@ -326,7 +327,7 @@ func (s *Store) realWatch(apiContext *types.APIContext, schema *types.Schema, op
 				result <- data.Object
 			}
 		}
-		logrus.Debugf("closing watcher for %s", schema.ID)
+		logrus.Tracef("closing watcher for %s", schema.ID)
 		close(result)
 		cancelWatchingContext()
 	}()
