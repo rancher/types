@@ -25,6 +25,7 @@ const (
 	ClusterFieldClusterTemplateQuestions             = "questions"
 	ClusterFieldClusterTemplateRevisionID            = "clusterTemplateRevisionId"
 	ClusterFieldComponentStatuses                    = "componentStatuses"
+	ClusterFieldComponentStatusesLastSync            = "componentStatusesLastSync"
 	ClusterFieldConditions                           = "conditions"
 	ClusterFieldCreated                              = "created"
 	ClusterFieldCreatorID                            = "creatorId"
@@ -85,6 +86,7 @@ type Cluster struct {
 	ClusterTemplateQuestions             []Question                     `json:"questions,omitempty" yaml:"questions,omitempty"`
 	ClusterTemplateRevisionID            string                         `json:"clusterTemplateRevisionId,omitempty" yaml:"clusterTemplateRevisionId,omitempty"`
 	ComponentStatuses                    []ClusterComponentStatus       `json:"componentStatuses,omitempty" yaml:"componentStatuses,omitempty"`
+	ComponentStatusesLastSync            string                         `json:"componentStatusesLastSync,omitempty" yaml:"componentStatusesLastSync,omitempty"`
 	Conditions                           []ClusterCondition             `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created                              string                         `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID                            string                         `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
