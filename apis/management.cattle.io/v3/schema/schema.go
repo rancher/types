@@ -71,7 +71,10 @@ func rkeTypes(schemas *types.Schemas) *types.Schemas {
 		).
 		MustImport(&Version, v3.ExtraEnv{}).
 		MustImport(&Version, v3.ExtraVolume{}).
-		MustImport(&Version, v3.ExtraVolumeMount{})
+		MustImport(&Version, v3.ExtraVolumeMount{}).
+		MustImport(&Version, v3.LinearAutoscalerParams{}).
+		MustImport(&Version, v3.DeploymentStrategy{}).
+		MustImport(&Version, v3.DaemonSetUpdateStrategy{})
 }
 
 func schemaTypes(schemas *types.Schemas) *types.Schemas {
@@ -566,6 +569,7 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 		MustImportAndCustomize(&Version, v3.ADFSConfig{}, configSchema).
 		MustImportAndCustomize(&Version, v3.KeyCloakConfig{}, configSchema).
 		MustImportAndCustomize(&Version, v3.OKTAConfig{}, configSchema).
+		MustImportAndCustomize(&Version, v3.ShibbolethConfig{}, configSchema).
 		MustImport(&Version, v3.SamlConfigTestInput{}).
 		MustImport(&Version, v3.SamlConfigTestOutput{}).
 		//GoogleOAuth Config

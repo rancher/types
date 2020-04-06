@@ -50,6 +50,7 @@ type GenericController interface {
 	AddHandler(ctx context.Context, name string, handler HandlerFunc)
 	HandlerCount() int
 	Enqueue(namespace, name string)
+	EnqueueAfter(namespace, name string, after time.Duration)
 	Sync(ctx context.Context) error
 	Start(ctx context.Context, threadiness int) error
 }
@@ -122,7 +123,31 @@ func (g *genericController) Enqueue(namespace, name string) {
 	}
 }
 
+func (g *genericController) EnqueueAfter(namespace, name string, after time.Duration) {
+	key := name
+	if namespace != "" {
+		key = namespace + "/" + name
+	}
+	if g.queue != nil {
+		g.queue.AddAfter(key, after)
+	}
+}
+
 func (g *genericController) AddHandler(ctx context.Context, name string, handler HandlerFunc) {
+	t := getHandlerTransaction(ctx)
+	if t == nil {
+		g.addHandler(ctx, name, handler)
+		return
+	}
+
+	go func() {
+		if t.shouldContinue() {
+			g.addHandler(ctx, name, handler)
+		}
+	}()
+}
+
+func (g *genericController) addHandler(ctx context.Context, name string, handler HandlerFunc) {
 	g.Lock()
 	defer g.Unlock()
 
@@ -151,7 +176,7 @@ func (g *genericController) AddHandler(ctx context.Context, name string, handler
 
 	if g.synced {
 		for _, key := range g.informer.GetStore().ListKeys() {
-			g.queue.AddRateLimited(key)
+			g.queue.Add(key)
 		}
 	}
 
@@ -199,14 +224,14 @@ func (g *genericController) sync(ctx context.Context) (retErr error) {
 		DeleteFunc: g.queueObject,
 	})
 
-	logrus.Debugf("Syncing %s Controller", g.name)
+	logrus.Tracef("Syncing %s Controller", g.name)
 
 	go g.informer.Run(ctx.Done())
 
 	if !cache.WaitForCacheSync(ctx.Done(), g.informer.HasSynced) {
 		return fmt.Errorf("failed to sync controller %s", g.name)
 	}
-	logrus.Debugf("Syncing %s Controller Done", g.name)
+	logrus.Tracef("Syncing %s Controller Done", g.name)
 
 	g.synced = true
 	return nil
@@ -275,7 +300,7 @@ func (g *genericController) processNextWorkItem() bool {
 	}
 	if _, ok := checkErr.(*ForgetError); err == nil || ok {
 		if ok {
-			logrus.Debugf("%v %v completed with dropped err: %v", g.name, key, err)
+			logrus.Tracef("%v %v completed with dropped err: %v", g.name, key, err)
 		}
 		g.queue.Forget(key)
 		return true
@@ -356,7 +381,7 @@ func (g *genericController) syncHandler(key interface{}) (err error) {
 			continue
 		}
 
-		logrus.Debugf("%s calling handler %s %s", g.name, handler.name, s)
+		logrus.Tracef("%s calling handler %s %s", g.name, handler.name, s)
 		metrics.IncTotalHandlerExecution(g.name, handler.name)
 		var newObj interface{}
 		if newObj, err = handler.handler(s, obj); err != nil {

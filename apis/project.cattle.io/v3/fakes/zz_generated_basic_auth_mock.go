@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
@@ -145,6 +146,7 @@ var (
 	lockBasicAuthControllerMockAddFeatureHandler              sync.RWMutex
 	lockBasicAuthControllerMockAddHandler                     sync.RWMutex
 	lockBasicAuthControllerMockEnqueue                        sync.RWMutex
+	lockBasicAuthControllerMockEnqueueAfter                   sync.RWMutex
 	lockBasicAuthControllerMockGeneric                        sync.RWMutex
 	lockBasicAuthControllerMockInformer                       sync.RWMutex
 	lockBasicAuthControllerMockLister                         sync.RWMutex
@@ -176,6 +178,9 @@ var _ v3.BasicAuthController = &BasicAuthControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -213,6 +218,9 @@ type BasicAuthControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -281,6 +289,15 @@ type BasicAuthControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -510,6 +527,45 @@ func (mock *BasicAuthControllerMock) EnqueueCalls() []struct {
 	lockBasicAuthControllerMockEnqueue.RLock()
 	calls = mock.calls.Enqueue
 	lockBasicAuthControllerMockEnqueue.RUnlock()
+	return calls
+}
+
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *BasicAuthControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("BasicAuthControllerMock.EnqueueAfterFunc: method is nil but BasicAuthController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockBasicAuthControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockBasicAuthControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedBasicAuthController.EnqueueAfterCalls())
+func (mock *BasicAuthControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockBasicAuthControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockBasicAuthControllerMockEnqueueAfter.RUnlock()
 	return calls
 }
 
