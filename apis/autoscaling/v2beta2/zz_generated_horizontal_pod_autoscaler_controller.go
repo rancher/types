@@ -85,6 +85,7 @@ type HorizontalPodAutoscalerInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v2beta2.HorizontalPodAutoscaler, error)
 	Get(name string, opts metav1.GetOptions) (*v2beta2.HorizontalPodAutoscaler, error)
 	Update(*v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error)
+	UpdateStatus(*v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*HorizontalPodAutoscalerList, error)
@@ -260,6 +261,11 @@ func (s *horizontalPodAutoscalerClient) GetNamespaced(namespace, name string, op
 
 func (s *horizontalPodAutoscalerClient) Update(o *v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v2beta2.HorizontalPodAutoscaler), err
+}
+
+func (s *horizontalPodAutoscalerClient) UpdateStatus(o *v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v2beta2.HorizontalPodAutoscaler), err
 }
 

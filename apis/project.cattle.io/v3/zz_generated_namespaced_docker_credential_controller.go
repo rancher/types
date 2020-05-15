@@ -84,6 +84,7 @@ type NamespacedDockerCredentialInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NamespacedDockerCredential, error)
 	Get(name string, opts metav1.GetOptions) (*NamespacedDockerCredential, error)
 	Update(*NamespacedDockerCredential) (*NamespacedDockerCredential, error)
+	UpdateStatus(*NamespacedDockerCredential) (*NamespacedDockerCredential, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*NamespacedDockerCredentialList, error)
@@ -259,6 +260,11 @@ func (s *namespacedDockerCredentialClient) GetNamespaced(namespace, name string,
 
 func (s *namespacedDockerCredentialClient) Update(o *NamespacedDockerCredential) (*NamespacedDockerCredential, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*NamespacedDockerCredential), err
+}
+
+func (s *namespacedDockerCredentialClient) UpdateStatus(o *NamespacedDockerCredential) (*NamespacedDockerCredential, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*NamespacedDockerCredential), err
 }
 

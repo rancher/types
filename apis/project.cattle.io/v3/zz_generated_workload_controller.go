@@ -84,6 +84,7 @@ type WorkloadInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Workload, error)
 	Get(name string, opts metav1.GetOptions) (*Workload, error)
 	Update(*Workload) (*Workload, error)
+	UpdateStatus(*Workload) (*Workload, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*WorkloadList, error)
@@ -259,6 +260,11 @@ func (s *workloadClient) GetNamespaced(namespace, name string, opts metav1.GetOp
 
 func (s *workloadClient) Update(o *Workload) (*Workload, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Workload), err
+}
+
+func (s *workloadClient) UpdateStatus(o *Workload) (*Workload, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Workload), err
 }
 

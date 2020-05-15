@@ -83,6 +83,7 @@ type DynamicSchemaInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*DynamicSchema, error)
 	Get(name string, opts metav1.GetOptions) (*DynamicSchema, error)
 	Update(*DynamicSchema) (*DynamicSchema, error)
+	UpdateStatus(*DynamicSchema) (*DynamicSchema, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*DynamicSchemaList, error)
@@ -258,6 +259,11 @@ func (s *dynamicSchemaClient) GetNamespaced(namespace, name string, opts metav1.
 
 func (s *dynamicSchemaClient) Update(o *DynamicSchema) (*DynamicSchema, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*DynamicSchema), err
+}
+
+func (s *dynamicSchemaClient) UpdateStatus(o *DynamicSchema) (*DynamicSchema, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*DynamicSchema), err
 }
 

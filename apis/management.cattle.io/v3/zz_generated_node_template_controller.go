@@ -84,6 +84,7 @@ type NodeTemplateInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NodeTemplate, error)
 	Get(name string, opts metav1.GetOptions) (*NodeTemplate, error)
 	Update(*NodeTemplate) (*NodeTemplate, error)
+	UpdateStatus(*NodeTemplate) (*NodeTemplate, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*NodeTemplateList, error)
@@ -259,6 +260,11 @@ func (s *nodeTemplateClient) GetNamespaced(namespace, name string, opts metav1.G
 
 func (s *nodeTemplateClient) Update(o *NodeTemplate) (*NodeTemplate, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*NodeTemplate), err
+}
+
+func (s *nodeTemplateClient) UpdateStatus(o *NodeTemplate) (*NodeTemplate, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*NodeTemplate), err
 }
 

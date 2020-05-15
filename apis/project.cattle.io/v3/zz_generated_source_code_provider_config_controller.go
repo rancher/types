@@ -84,6 +84,7 @@ type SourceCodeProviderConfigInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*SourceCodeProviderConfig, error)
 	Get(name string, opts metav1.GetOptions) (*SourceCodeProviderConfig, error)
 	Update(*SourceCodeProviderConfig) (*SourceCodeProviderConfig, error)
+	UpdateStatus(*SourceCodeProviderConfig) (*SourceCodeProviderConfig, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*SourceCodeProviderConfigList, error)
@@ -259,6 +260,11 @@ func (s *sourceCodeProviderConfigClient) GetNamespaced(namespace, name string, o
 
 func (s *sourceCodeProviderConfigClient) Update(o *SourceCodeProviderConfig) (*SourceCodeProviderConfig, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*SourceCodeProviderConfig), err
+}
+
+func (s *sourceCodeProviderConfigClient) UpdateStatus(o *SourceCodeProviderConfig) (*SourceCodeProviderConfig, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*SourceCodeProviderConfig), err
 }
 

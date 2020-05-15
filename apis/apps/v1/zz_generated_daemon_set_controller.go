@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/apps/v1"
+	"k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type DaemonSetInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.DaemonSet, error)
 	Get(name string, opts metav1.GetOptions) (*v1.DaemonSet, error)
 	Update(*v1.DaemonSet) (*v1.DaemonSet, error)
+	UpdateStatus(*v1.DaemonSet) (*v1.DaemonSet, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*DaemonSetList, error)
@@ -260,6 +261,11 @@ func (s *daemonSetClient) GetNamespaced(namespace, name string, opts metav1.GetO
 
 func (s *daemonSetClient) Update(o *v1.DaemonSet) (*v1.DaemonSet, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.DaemonSet), err
+}
+
+func (s *daemonSetClient) UpdateStatus(o *v1.DaemonSet) (*v1.DaemonSet, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.DaemonSet), err
 }
 

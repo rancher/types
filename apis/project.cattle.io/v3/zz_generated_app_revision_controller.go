@@ -84,6 +84,7 @@ type AppRevisionInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*AppRevision, error)
 	Get(name string, opts metav1.GetOptions) (*AppRevision, error)
 	Update(*AppRevision) (*AppRevision, error)
+	UpdateStatus(*AppRevision) (*AppRevision, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*AppRevisionList, error)
@@ -259,6 +260,11 @@ func (s *appRevisionClient) GetNamespaced(namespace, name string, opts metav1.Ge
 
 func (s *appRevisionClient) Update(o *AppRevision) (*AppRevision, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*AppRevision), err
+}
+
+func (s *appRevisionClient) UpdateStatus(o *AppRevision) (*AppRevision, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*AppRevision), err
 }
 

@@ -733,6 +733,7 @@ var (
 	lockRKEAddonInterfaceMockListNamespaced                   sync.RWMutex
 	lockRKEAddonInterfaceMockObjectClient                     sync.RWMutex
 	lockRKEAddonInterfaceMockUpdate                           sync.RWMutex
+	lockRKEAddonInterfaceMockUpdateStatus                     sync.RWMutex
 	lockRKEAddonInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.RKEAddonInterface = &RKEAddonInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.RKEAddon) (*v3.RKEAddon, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.RKEAddon) (*v3.RKEAddon, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type RKEAddonInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.RKEAddon) (*v3.RKEAddon, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.RKEAddon) (*v3.RKEAddon, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type RKEAddonInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.RKEAddon
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.RKEAddon
 		}
@@ -1742,6 +1754,37 @@ func (mock *RKEAddonInterfaceMock) UpdateCalls() []struct {
 	lockRKEAddonInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockRKEAddonInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *RKEAddonInterfaceMock) UpdateStatus(in1 *v3.RKEAddon) (*v3.RKEAddon, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("RKEAddonInterfaceMock.UpdateStatusFunc: method is nil but RKEAddonInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.RKEAddon
+	}{
+		In1: in1,
+	}
+	lockRKEAddonInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockRKEAddonInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedRKEAddonInterface.UpdateStatusCalls())
+func (mock *RKEAddonInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.RKEAddon
+} {
+	var calls []struct {
+		In1 *v3.RKEAddon
+	}
+	lockRKEAddonInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockRKEAddonInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

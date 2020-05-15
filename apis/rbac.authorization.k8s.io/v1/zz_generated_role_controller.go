@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/rbac/v1"
+	"k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type RoleInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.Role, error)
 	Get(name string, opts metav1.GetOptions) (*v1.Role, error)
 	Update(*v1.Role) (*v1.Role, error)
+	UpdateStatus(*v1.Role) (*v1.Role, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*RoleList, error)
@@ -260,6 +261,11 @@ func (s *roleClient) GetNamespaced(namespace, name string, opts metav1.GetOption
 
 func (s *roleClient) Update(o *v1.Role) (*v1.Role, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.Role), err
+}
+
+func (s *roleClient) UpdateStatus(o *v1.Role) (*v1.Role, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.Role), err
 }
 

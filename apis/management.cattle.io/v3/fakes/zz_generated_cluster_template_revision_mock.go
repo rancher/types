@@ -733,6 +733,7 @@ var (
 	lockClusterTemplateRevisionInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterTemplateRevisionInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterTemplateRevisionInterfaceMockUpdate                           sync.RWMutex
+	lockClusterTemplateRevisionInterfaceMockUpdateStatus                     sync.RWMutex
 	lockClusterTemplateRevisionInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ClusterTemplateRevisionInterface = &ClusterTemplateRevisionInterfaceMoc
 //             UpdateFunc: func(in1 *v3.ClusterTemplateRevision) (*v3.ClusterTemplateRevision, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ClusterTemplateRevision) (*v3.ClusterTemplateRevision, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ClusterTemplateRevisionInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ClusterTemplateRevision) (*v3.ClusterTemplateRevision, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ClusterTemplateRevision) (*v3.ClusterTemplateRevision, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ClusterTemplateRevisionInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ClusterTemplateRevision
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ClusterTemplateRevision
 		}
@@ -1742,6 +1754,37 @@ func (mock *ClusterTemplateRevisionInterfaceMock) UpdateCalls() []struct {
 	lockClusterTemplateRevisionInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockClusterTemplateRevisionInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ClusterTemplateRevisionInterfaceMock) UpdateStatus(in1 *v3.ClusterTemplateRevision) (*v3.ClusterTemplateRevision, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ClusterTemplateRevisionInterfaceMock.UpdateStatusFunc: method is nil but ClusterTemplateRevisionInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ClusterTemplateRevision
+	}{
+		In1: in1,
+	}
+	lockClusterTemplateRevisionInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockClusterTemplateRevisionInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedClusterTemplateRevisionInterface.UpdateStatusCalls())
+func (mock *ClusterTemplateRevisionInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ClusterTemplateRevision
+} {
+	var calls []struct {
+		In1 *v3.ClusterTemplateRevision
+	}
+	lockClusterTemplateRevisionInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockClusterTemplateRevisionInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

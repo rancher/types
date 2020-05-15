@@ -84,6 +84,7 @@ type ClusterScanInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterScan, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterScan, error)
 	Update(*ClusterScan) (*ClusterScan, error)
+	UpdateStatus(*ClusterScan) (*ClusterScan, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterScanList, error)
@@ -259,6 +260,11 @@ func (s *clusterScanClient) GetNamespaced(namespace, name string, opts metav1.Ge
 
 func (s *clusterScanClient) Update(o *ClusterScan) (*ClusterScan, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterScan), err
+}
+
+func (s *clusterScanClient) UpdateStatus(o *ClusterScan) (*ClusterScan, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterScan), err
 }
 

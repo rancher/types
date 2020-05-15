@@ -84,6 +84,7 @@ type GlobalDNSInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*GlobalDNS, error)
 	Get(name string, opts metav1.GetOptions) (*GlobalDNS, error)
 	Update(*GlobalDNS) (*GlobalDNS, error)
+	UpdateStatus(*GlobalDNS) (*GlobalDNS, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*GlobalDNSList, error)
@@ -259,6 +260,11 @@ func (s *globalDnsClient) GetNamespaced(namespace, name string, opts metav1.GetO
 
 func (s *globalDnsClient) Update(o *GlobalDNS) (*GlobalDNS, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*GlobalDNS), err
+}
+
+func (s *globalDnsClient) UpdateStatus(o *GlobalDNS) (*GlobalDNS, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*GlobalDNS), err
 }
 

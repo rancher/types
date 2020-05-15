@@ -84,6 +84,7 @@ type EtcdBackupInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*EtcdBackup, error)
 	Get(name string, opts metav1.GetOptions) (*EtcdBackup, error)
 	Update(*EtcdBackup) (*EtcdBackup, error)
+	UpdateStatus(*EtcdBackup) (*EtcdBackup, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*EtcdBackupList, error)
@@ -259,6 +260,11 @@ func (s *etcdBackupClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *etcdBackupClient) Update(o *EtcdBackup) (*EtcdBackup, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*EtcdBackup), err
+}
+
+func (s *etcdBackupClient) UpdateStatus(o *EtcdBackup) (*EtcdBackup, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*EtcdBackup), err
 }
 

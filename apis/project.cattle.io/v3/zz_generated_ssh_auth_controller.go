@@ -84,6 +84,7 @@ type SSHAuthInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*SSHAuth, error)
 	Get(name string, opts metav1.GetOptions) (*SSHAuth, error)
 	Update(*SSHAuth) (*SSHAuth, error)
+	UpdateStatus(*SSHAuth) (*SSHAuth, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*SSHAuthList, error)
@@ -259,6 +260,11 @@ func (s *sshAuthClient) GetNamespaced(namespace, name string, opts metav1.GetOpt
 
 func (s *sshAuthClient) Update(o *SSHAuth) (*SSHAuth, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*SSHAuth), err
+}
+
+func (s *sshAuthClient) UpdateStatus(o *SSHAuth) (*SSHAuth, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*SSHAuth), err
 }
 

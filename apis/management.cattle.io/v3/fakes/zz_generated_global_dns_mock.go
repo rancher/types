@@ -733,6 +733,7 @@ var (
 	lockGlobalDNSInterfaceMockListNamespaced                   sync.RWMutex
 	lockGlobalDNSInterfaceMockObjectClient                     sync.RWMutex
 	lockGlobalDNSInterfaceMockUpdate                           sync.RWMutex
+	lockGlobalDNSInterfaceMockUpdateStatus                     sync.RWMutex
 	lockGlobalDNSInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.GlobalDNSInterface = &GlobalDNSInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.GlobalDNS) (*v3.GlobalDNS, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.GlobalDNS) (*v3.GlobalDNS, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type GlobalDNSInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.GlobalDNS) (*v3.GlobalDNS, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.GlobalDNS) (*v3.GlobalDNS, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type GlobalDNSInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.GlobalDNS
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.GlobalDNS
 		}
@@ -1742,6 +1754,37 @@ func (mock *GlobalDNSInterfaceMock) UpdateCalls() []struct {
 	lockGlobalDNSInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockGlobalDNSInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *GlobalDNSInterfaceMock) UpdateStatus(in1 *v3.GlobalDNS) (*v3.GlobalDNS, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("GlobalDNSInterfaceMock.UpdateStatusFunc: method is nil but GlobalDNSInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.GlobalDNS
+	}{
+		In1: in1,
+	}
+	lockGlobalDNSInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockGlobalDNSInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedGlobalDNSInterface.UpdateStatusCalls())
+func (mock *GlobalDNSInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.GlobalDNS
+} {
+	var calls []struct {
+		In1 *v3.GlobalDNS
+	}
+	lockGlobalDNSInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockGlobalDNSInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

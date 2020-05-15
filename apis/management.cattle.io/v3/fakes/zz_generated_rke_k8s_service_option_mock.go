@@ -733,6 +733,7 @@ var (
 	lockRKEK8sServiceOptionInterfaceMockListNamespaced                   sync.RWMutex
 	lockRKEK8sServiceOptionInterfaceMockObjectClient                     sync.RWMutex
 	lockRKEK8sServiceOptionInterfaceMockUpdate                           sync.RWMutex
+	lockRKEK8sServiceOptionInterfaceMockUpdateStatus                     sync.RWMutex
 	lockRKEK8sServiceOptionInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.RKEK8sServiceOptionInterface = &RKEK8sServiceOptionInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.RKEK8sServiceOption) (*v3.RKEK8sServiceOption, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.RKEK8sServiceOption) (*v3.RKEK8sServiceOption, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type RKEK8sServiceOptionInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.RKEK8sServiceOption) (*v3.RKEK8sServiceOption, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.RKEK8sServiceOption) (*v3.RKEK8sServiceOption, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type RKEK8sServiceOptionInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.RKEK8sServiceOption
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.RKEK8sServiceOption
 		}
@@ -1742,6 +1754,37 @@ func (mock *RKEK8sServiceOptionInterfaceMock) UpdateCalls() []struct {
 	lockRKEK8sServiceOptionInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockRKEK8sServiceOptionInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *RKEK8sServiceOptionInterfaceMock) UpdateStatus(in1 *v3.RKEK8sServiceOption) (*v3.RKEK8sServiceOption, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("RKEK8sServiceOptionInterfaceMock.UpdateStatusFunc: method is nil but RKEK8sServiceOptionInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.RKEK8sServiceOption
+	}{
+		In1: in1,
+	}
+	lockRKEK8sServiceOptionInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockRKEK8sServiceOptionInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedRKEK8sServiceOptionInterface.UpdateStatusCalls())
+func (mock *RKEK8sServiceOptionInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.RKEK8sServiceOption
+} {
+	var calls []struct {
+		In1 *v3.RKEK8sServiceOption
+	}
+	lockRKEK8sServiceOptionInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockRKEK8sServiceOptionInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

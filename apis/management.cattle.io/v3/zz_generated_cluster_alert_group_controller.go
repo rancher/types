@@ -84,6 +84,7 @@ type ClusterAlertGroupInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterAlertGroup, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterAlertGroup, error)
 	Update(*ClusterAlertGroup) (*ClusterAlertGroup, error)
+	UpdateStatus(*ClusterAlertGroup) (*ClusterAlertGroup, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterAlertGroupList, error)
@@ -259,6 +260,11 @@ func (s *clusterAlertGroupClient) GetNamespaced(namespace, name string, opts met
 
 func (s *clusterAlertGroupClient) Update(o *ClusterAlertGroup) (*ClusterAlertGroup, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterAlertGroup), err
+}
+
+func (s *clusterAlertGroupClient) UpdateStatus(o *ClusterAlertGroup) (*ClusterAlertGroup, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterAlertGroup), err
 }
 

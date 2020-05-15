@@ -84,6 +84,7 @@ type MultiClusterAppRevisionInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*MultiClusterAppRevision, error)
 	Get(name string, opts metav1.GetOptions) (*MultiClusterAppRevision, error)
 	Update(*MultiClusterAppRevision) (*MultiClusterAppRevision, error)
+	UpdateStatus(*MultiClusterAppRevision) (*MultiClusterAppRevision, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*MultiClusterAppRevisionList, error)
@@ -259,6 +260,11 @@ func (s *multiClusterAppRevisionClient) GetNamespaced(namespace, name string, op
 
 func (s *multiClusterAppRevisionClient) Update(o *MultiClusterAppRevision) (*MultiClusterAppRevision, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*MultiClusterAppRevision), err
+}
+
+func (s *multiClusterAppRevisionClient) UpdateStatus(o *MultiClusterAppRevision) (*MultiClusterAppRevision, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*MultiClusterAppRevision), err
 }
 

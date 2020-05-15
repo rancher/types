@@ -83,6 +83,7 @@ type SettingInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Setting, error)
 	Get(name string, opts metav1.GetOptions) (*Setting, error)
 	Update(*Setting) (*Setting, error)
+	UpdateStatus(*Setting) (*Setting, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*SettingList, error)
@@ -258,6 +259,11 @@ func (s *settingClient) GetNamespaced(namespace, name string, opts metav1.GetOpt
 
 func (s *settingClient) Update(o *Setting) (*Setting, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Setting), err
+}
+
+func (s *settingClient) UpdateStatus(o *Setting) (*Setting, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Setting), err
 }
 

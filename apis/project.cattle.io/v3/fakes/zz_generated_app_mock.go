@@ -733,6 +733,7 @@ var (
 	lockAppInterfaceMockListNamespaced                   sync.RWMutex
 	lockAppInterfaceMockObjectClient                     sync.RWMutex
 	lockAppInterfaceMockUpdate                           sync.RWMutex
+	lockAppInterfaceMockUpdateStatus                     sync.RWMutex
 	lockAppInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.AppInterface = &AppInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.App) (*v3.App, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.App) (*v3.App, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type AppInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.App) (*v3.App, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.App) (*v3.App, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type AppInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.App
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.App
 		}
@@ -1742,6 +1754,37 @@ func (mock *AppInterfaceMock) UpdateCalls() []struct {
 	lockAppInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockAppInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *AppInterfaceMock) UpdateStatus(in1 *v3.App) (*v3.App, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("AppInterfaceMock.UpdateStatusFunc: method is nil but AppInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.App
+	}{
+		In1: in1,
+	}
+	lockAppInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockAppInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedAppInterface.UpdateStatusCalls())
+func (mock *AppInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.App
+} {
+	var calls []struct {
+		In1 *v3.App
+	}
+	lockAppInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockAppInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

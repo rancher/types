@@ -84,6 +84,7 @@ type ProjectCatalogInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ProjectCatalog, error)
 	Get(name string, opts metav1.GetOptions) (*ProjectCatalog, error)
 	Update(*ProjectCatalog) (*ProjectCatalog, error)
+	UpdateStatus(*ProjectCatalog) (*ProjectCatalog, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ProjectCatalogList, error)
@@ -259,6 +260,11 @@ func (s *projectCatalogClient) GetNamespaced(namespace, name string, opts metav1
 
 func (s *projectCatalogClient) Update(o *ProjectCatalog) (*ProjectCatalog, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ProjectCatalog), err
+}
+
+func (s *projectCatalogClient) UpdateStatus(o *ProjectCatalog) (*ProjectCatalog, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ProjectCatalog), err
 }
 

@@ -734,6 +734,7 @@ var (
 	lockClusterRoleBindingInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterRoleBindingInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterRoleBindingInterfaceMockUpdate                           sync.RWMutex
+	lockClusterRoleBindingInterfaceMockUpdateStatus                     sync.RWMutex
 	lockClusterRoleBindingInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.ClusterRoleBindingInterface = &ClusterRoleBindingInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type ClusterRoleBindingInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type ClusterRoleBindingInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.ClusterRoleBinding
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.ClusterRoleBinding
 		}
@@ -1743,6 +1755,37 @@ func (mock *ClusterRoleBindingInterfaceMock) UpdateCalls() []struct {
 	lockClusterRoleBindingInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockClusterRoleBindingInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ClusterRoleBindingInterfaceMock) UpdateStatus(in1 *v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ClusterRoleBindingInterfaceMock.UpdateStatusFunc: method is nil but ClusterRoleBindingInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.ClusterRoleBinding
+	}{
+		In1: in1,
+	}
+	lockClusterRoleBindingInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockClusterRoleBindingInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedClusterRoleBindingInterface.UpdateStatusCalls())
+func (mock *ClusterRoleBindingInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.ClusterRoleBinding
+} {
+	var calls []struct {
+		In1 *v1.ClusterRoleBinding
+	}
+	lockClusterRoleBindingInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockClusterRoleBindingInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

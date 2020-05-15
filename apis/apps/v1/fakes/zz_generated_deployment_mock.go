@@ -734,6 +734,7 @@ var (
 	lockDeploymentInterfaceMockListNamespaced                   sync.RWMutex
 	lockDeploymentInterfaceMockObjectClient                     sync.RWMutex
 	lockDeploymentInterfaceMockUpdate                           sync.RWMutex
+	lockDeploymentInterfaceMockUpdateStatus                     sync.RWMutex
 	lockDeploymentInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.DeploymentInterface = &DeploymentInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.Deployment) (*v1.Deployment, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.Deployment) (*v1.Deployment, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type DeploymentInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.Deployment) (*v1.Deployment, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.Deployment) (*v1.Deployment, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type DeploymentInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.Deployment
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.Deployment
 		}
@@ -1743,6 +1755,37 @@ func (mock *DeploymentInterfaceMock) UpdateCalls() []struct {
 	lockDeploymentInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockDeploymentInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *DeploymentInterfaceMock) UpdateStatus(in1 *v1.Deployment) (*v1.Deployment, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("DeploymentInterfaceMock.UpdateStatusFunc: method is nil but DeploymentInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.Deployment
+	}{
+		In1: in1,
+	}
+	lockDeploymentInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockDeploymentInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedDeploymentInterface.UpdateStatusCalls())
+func (mock *DeploymentInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.Deployment
+} {
+	var calls []struct {
+		In1 *v1.Deployment
+	}
+	lockDeploymentInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockDeploymentInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

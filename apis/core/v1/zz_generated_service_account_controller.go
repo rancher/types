@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type ServiceAccountInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.ServiceAccount, error)
 	Get(name string, opts metav1.GetOptions) (*v1.ServiceAccount, error)
 	Update(*v1.ServiceAccount) (*v1.ServiceAccount, error)
+	UpdateStatus(*v1.ServiceAccount) (*v1.ServiceAccount, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ServiceAccountList, error)
@@ -260,6 +261,11 @@ func (s *serviceAccountClient) GetNamespaced(namespace, name string, opts metav1
 
 func (s *serviceAccountClient) Update(o *v1.ServiceAccount) (*v1.ServiceAccount, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.ServiceAccount), err
+}
+
+func (s *serviceAccountClient) UpdateStatus(o *v1.ServiceAccount) (*v1.ServiceAccount, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.ServiceAccount), err
 }
 

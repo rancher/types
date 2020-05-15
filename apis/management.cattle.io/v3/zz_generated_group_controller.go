@@ -83,6 +83,7 @@ type GroupInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Group, error)
 	Get(name string, opts metav1.GetOptions) (*Group, error)
 	Update(*Group) (*Group, error)
+	UpdateStatus(*Group) (*Group, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*GroupList, error)
@@ -258,6 +259,11 @@ func (s *groupClient) GetNamespaced(namespace, name string, opts metav1.GetOptio
 
 func (s *groupClient) Update(o *Group) (*Group, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Group), err
+}
+
+func (s *groupClient) UpdateStatus(o *Group) (*Group, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Group), err
 }
 

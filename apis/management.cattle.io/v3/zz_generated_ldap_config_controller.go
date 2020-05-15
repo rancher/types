@@ -83,6 +83,7 @@ type LdapConfigInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*LdapConfig, error)
 	Get(name string, opts metav1.GetOptions) (*LdapConfig, error)
 	Update(*LdapConfig) (*LdapConfig, error)
+	UpdateStatus(*LdapConfig) (*LdapConfig, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*LdapConfigList, error)
@@ -258,6 +259,11 @@ func (s *ldapConfigClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *ldapConfigClient) Update(o *LdapConfig) (*LdapConfig, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*LdapConfig), err
+}
+
+func (s *ldapConfigClient) UpdateStatus(o *LdapConfig) (*LdapConfig, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*LdapConfig), err
 }
 

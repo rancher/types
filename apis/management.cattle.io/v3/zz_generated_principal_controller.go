@@ -83,6 +83,7 @@ type PrincipalInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Principal, error)
 	Get(name string, opts metav1.GetOptions) (*Principal, error)
 	Update(*Principal) (*Principal, error)
+	UpdateStatus(*Principal) (*Principal, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*PrincipalList, error)
@@ -258,6 +259,11 @@ func (s *principalClient) GetNamespaced(namespace, name string, opts metav1.GetO
 
 func (s *principalClient) Update(o *Principal) (*Principal, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Principal), err
+}
+
+func (s *principalClient) UpdateStatus(o *Principal) (*Principal, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Principal), err
 }
 

@@ -84,6 +84,7 @@ type CisConfigInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*CisConfig, error)
 	Get(name string, opts metav1.GetOptions) (*CisConfig, error)
 	Update(*CisConfig) (*CisConfig, error)
+	UpdateStatus(*CisConfig) (*CisConfig, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*CisConfigList, error)
@@ -259,6 +260,11 @@ func (s *cisConfigClient) GetNamespaced(namespace, name string, opts metav1.GetO
 
 func (s *cisConfigClient) Update(o *CisConfig) (*CisConfig, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*CisConfig), err
+}
+
+func (s *cisConfigClient) UpdateStatus(o *CisConfig) (*CisConfig, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*CisConfig), err
 }
 

@@ -84,6 +84,7 @@ type ClusterLoggingInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterLogging, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterLogging, error)
 	Update(*ClusterLogging) (*ClusterLogging, error)
+	UpdateStatus(*ClusterLogging) (*ClusterLogging, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterLoggingList, error)
@@ -259,6 +260,11 @@ func (s *clusterLoggingClient) GetNamespaced(namespace, name string, opts metav1
 
 func (s *clusterLoggingClient) Update(o *ClusterLogging) (*ClusterLogging, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterLogging), err
+}
+
+func (s *clusterLoggingClient) UpdateStatus(o *ClusterLogging) (*ClusterLogging, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterLogging), err
 }
 

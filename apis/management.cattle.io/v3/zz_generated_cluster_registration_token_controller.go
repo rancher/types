@@ -84,6 +84,7 @@ type ClusterRegistrationTokenInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterRegistrationToken, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterRegistrationToken, error)
 	Update(*ClusterRegistrationToken) (*ClusterRegistrationToken, error)
+	UpdateStatus(*ClusterRegistrationToken) (*ClusterRegistrationToken, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterRegistrationTokenList, error)
@@ -259,6 +260,11 @@ func (s *clusterRegistrationTokenClient) GetNamespaced(namespace, name string, o
 
 func (s *clusterRegistrationTokenClient) Update(o *ClusterRegistrationToken) (*ClusterRegistrationToken, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterRegistrationToken), err
+}
+
+func (s *clusterRegistrationTokenClient) UpdateStatus(o *ClusterRegistrationToken) (*ClusterRegistrationToken, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterRegistrationToken), err
 }
 

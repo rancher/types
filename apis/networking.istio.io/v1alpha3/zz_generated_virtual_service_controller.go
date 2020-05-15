@@ -85,6 +85,7 @@ type VirtualServiceInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1alpha3.VirtualService, error)
 	Get(name string, opts metav1.GetOptions) (*v1alpha3.VirtualService, error)
 	Update(*v1alpha3.VirtualService) (*v1alpha3.VirtualService, error)
+	UpdateStatus(*v1alpha3.VirtualService) (*v1alpha3.VirtualService, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*VirtualServiceList, error)
@@ -260,6 +261,11 @@ func (s *virtualServiceClient) GetNamespaced(namespace, name string, opts metav1
 
 func (s *virtualServiceClient) Update(o *v1alpha3.VirtualService) (*v1alpha3.VirtualService, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1alpha3.VirtualService), err
+}
+
+func (s *virtualServiceClient) UpdateStatus(o *v1alpha3.VirtualService) (*v1alpha3.VirtualService, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1alpha3.VirtualService), err
 }
 

@@ -734,6 +734,7 @@ var (
 	lockPersistentVolumeClaimInterfaceMockListNamespaced                   sync.RWMutex
 	lockPersistentVolumeClaimInterfaceMockObjectClient                     sync.RWMutex
 	lockPersistentVolumeClaimInterfaceMockUpdate                           sync.RWMutex
+	lockPersistentVolumeClaimInterfaceMockUpdateStatus                     sync.RWMutex
 	lockPersistentVolumeClaimInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.PersistentVolumeClaimInterface = &PersistentVolumeClaimInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.PersistentVolumeClaim) (*v1.PersistentVolumeClaim, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.PersistentVolumeClaim) (*v1.PersistentVolumeClaim, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type PersistentVolumeClaimInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.PersistentVolumeClaim) (*v1.PersistentVolumeClaim, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.PersistentVolumeClaim) (*v1.PersistentVolumeClaim, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type PersistentVolumeClaimInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.PersistentVolumeClaim
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.PersistentVolumeClaim
 		}
@@ -1743,6 +1755,37 @@ func (mock *PersistentVolumeClaimInterfaceMock) UpdateCalls() []struct {
 	lockPersistentVolumeClaimInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockPersistentVolumeClaimInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *PersistentVolumeClaimInterfaceMock) UpdateStatus(in1 *v1.PersistentVolumeClaim) (*v1.PersistentVolumeClaim, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("PersistentVolumeClaimInterfaceMock.UpdateStatusFunc: method is nil but PersistentVolumeClaimInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.PersistentVolumeClaim
+	}{
+		In1: in1,
+	}
+	lockPersistentVolumeClaimInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockPersistentVolumeClaimInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedPersistentVolumeClaimInterface.UpdateStatusCalls())
+func (mock *PersistentVolumeClaimInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.PersistentVolumeClaim
+} {
+	var calls []struct {
+		In1 *v1.PersistentVolumeClaim
+	}
+	lockPersistentVolumeClaimInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockPersistentVolumeClaimInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

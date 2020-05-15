@@ -84,6 +84,7 @@ type CertificateInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Certificate, error)
 	Get(name string, opts metav1.GetOptions) (*Certificate, error)
 	Update(*Certificate) (*Certificate, error)
+	UpdateStatus(*Certificate) (*Certificate, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*CertificateList, error)
@@ -259,6 +260,11 @@ func (s *certificateClient) GetNamespaced(namespace, name string, opts metav1.Ge
 
 func (s *certificateClient) Update(o *Certificate) (*Certificate, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Certificate), err
+}
+
+func (s *certificateClient) UpdateStatus(o *Certificate) (*Certificate, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Certificate), err
 }
 

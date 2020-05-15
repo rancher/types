@@ -733,6 +733,7 @@ var (
 	lockNodeDriverInterfaceMockListNamespaced                   sync.RWMutex
 	lockNodeDriverInterfaceMockObjectClient                     sync.RWMutex
 	lockNodeDriverInterfaceMockUpdate                           sync.RWMutex
+	lockNodeDriverInterfaceMockUpdateStatus                     sync.RWMutex
 	lockNodeDriverInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.NodeDriverInterface = &NodeDriverInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.NodeDriver) (*v3.NodeDriver, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.NodeDriver) (*v3.NodeDriver, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type NodeDriverInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.NodeDriver) (*v3.NodeDriver, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.NodeDriver) (*v3.NodeDriver, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type NodeDriverInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.NodeDriver
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.NodeDriver
 		}
@@ -1742,6 +1754,37 @@ func (mock *NodeDriverInterfaceMock) UpdateCalls() []struct {
 	lockNodeDriverInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockNodeDriverInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *NodeDriverInterfaceMock) UpdateStatus(in1 *v3.NodeDriver) (*v3.NodeDriver, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("NodeDriverInterfaceMock.UpdateStatusFunc: method is nil but NodeDriverInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.NodeDriver
+	}{
+		In1: in1,
+	}
+	lockNodeDriverInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockNodeDriverInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedNodeDriverInterface.UpdateStatusCalls())
+func (mock *NodeDriverInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.NodeDriver
+} {
+	var calls []struct {
+		In1 *v3.NodeDriver
+	}
+	lockNodeDriverInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockNodeDriverInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

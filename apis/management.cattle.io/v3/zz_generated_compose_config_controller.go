@@ -83,6 +83,7 @@ type ComposeConfigInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ComposeConfig, error)
 	Get(name string, opts metav1.GetOptions) (*ComposeConfig, error)
 	Update(*ComposeConfig) (*ComposeConfig, error)
+	UpdateStatus(*ComposeConfig) (*ComposeConfig, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ComposeConfigList, error)
@@ -258,6 +259,11 @@ func (s *composeConfigClient) GetNamespaced(namespace, name string, opts metav1.
 
 func (s *composeConfigClient) Update(o *ComposeConfig) (*ComposeConfig, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ComposeConfig), err
+}
+
+func (s *composeConfigClient) UpdateStatus(o *ComposeConfig) (*ComposeConfig, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ComposeConfig), err
 }
 

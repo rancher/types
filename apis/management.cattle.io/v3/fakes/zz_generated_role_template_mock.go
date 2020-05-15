@@ -733,6 +733,7 @@ var (
 	lockRoleTemplateInterfaceMockListNamespaced                   sync.RWMutex
 	lockRoleTemplateInterfaceMockObjectClient                     sync.RWMutex
 	lockRoleTemplateInterfaceMockUpdate                           sync.RWMutex
+	lockRoleTemplateInterfaceMockUpdateStatus                     sync.RWMutex
 	lockRoleTemplateInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.RoleTemplateInterface = &RoleTemplateInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.RoleTemplate) (*v3.RoleTemplate, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.RoleTemplate) (*v3.RoleTemplate, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type RoleTemplateInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.RoleTemplate) (*v3.RoleTemplate, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.RoleTemplate) (*v3.RoleTemplate, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type RoleTemplateInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.RoleTemplate
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.RoleTemplate
 		}
@@ -1742,6 +1754,37 @@ func (mock *RoleTemplateInterfaceMock) UpdateCalls() []struct {
 	lockRoleTemplateInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockRoleTemplateInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *RoleTemplateInterfaceMock) UpdateStatus(in1 *v3.RoleTemplate) (*v3.RoleTemplate, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("RoleTemplateInterfaceMock.UpdateStatusFunc: method is nil but RoleTemplateInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.RoleTemplate
+	}{
+		In1: in1,
+	}
+	lockRoleTemplateInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockRoleTemplateInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedRoleTemplateInterface.UpdateStatusCalls())
+func (mock *RoleTemplateInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.RoleTemplate
+} {
+	var calls []struct {
+		In1 *v3.RoleTemplate
+	}
+	lockRoleTemplateInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockRoleTemplateInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

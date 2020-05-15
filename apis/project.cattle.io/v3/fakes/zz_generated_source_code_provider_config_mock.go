@@ -733,6 +733,7 @@ var (
 	lockSourceCodeProviderConfigInterfaceMockListNamespaced                   sync.RWMutex
 	lockSourceCodeProviderConfigInterfaceMockObjectClient                     sync.RWMutex
 	lockSourceCodeProviderConfigInterfaceMockUpdate                           sync.RWMutex
+	lockSourceCodeProviderConfigInterfaceMockUpdateStatus                     sync.RWMutex
 	lockSourceCodeProviderConfigInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.SourceCodeProviderConfigInterface = &SourceCodeProviderConfigInterfaceM
 //             UpdateFunc: func(in1 *v3.SourceCodeProviderConfig) (*v3.SourceCodeProviderConfig, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.SourceCodeProviderConfig) (*v3.SourceCodeProviderConfig, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type SourceCodeProviderConfigInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.SourceCodeProviderConfig) (*v3.SourceCodeProviderConfig, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.SourceCodeProviderConfig) (*v3.SourceCodeProviderConfig, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type SourceCodeProviderConfigInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.SourceCodeProviderConfig
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.SourceCodeProviderConfig
 		}
@@ -1742,6 +1754,37 @@ func (mock *SourceCodeProviderConfigInterfaceMock) UpdateCalls() []struct {
 	lockSourceCodeProviderConfigInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockSourceCodeProviderConfigInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *SourceCodeProviderConfigInterfaceMock) UpdateStatus(in1 *v3.SourceCodeProviderConfig) (*v3.SourceCodeProviderConfig, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("SourceCodeProviderConfigInterfaceMock.UpdateStatusFunc: method is nil but SourceCodeProviderConfigInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.SourceCodeProviderConfig
+	}{
+		In1: in1,
+	}
+	lockSourceCodeProviderConfigInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockSourceCodeProviderConfigInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedSourceCodeProviderConfigInterface.UpdateStatusCalls())
+func (mock *SourceCodeProviderConfigInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.SourceCodeProviderConfig
+} {
+	var calls []struct {
+		In1 *v3.SourceCodeProviderConfig
+	}
+	lockSourceCodeProviderConfigInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockSourceCodeProviderConfigInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

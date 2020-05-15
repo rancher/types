@@ -84,6 +84,7 @@ type ProjectMonitorGraphInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ProjectMonitorGraph, error)
 	Get(name string, opts metav1.GetOptions) (*ProjectMonitorGraph, error)
 	Update(*ProjectMonitorGraph) (*ProjectMonitorGraph, error)
+	UpdateStatus(*ProjectMonitorGraph) (*ProjectMonitorGraph, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ProjectMonitorGraphList, error)
@@ -259,6 +260,11 @@ func (s *projectMonitorGraphClient) GetNamespaced(namespace, name string, opts m
 
 func (s *projectMonitorGraphClient) Update(o *ProjectMonitorGraph) (*ProjectMonitorGraph, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ProjectMonitorGraph), err
+}
+
+func (s *projectMonitorGraphClient) UpdateStatus(o *ProjectMonitorGraph) (*ProjectMonitorGraph, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ProjectMonitorGraph), err
 }
 

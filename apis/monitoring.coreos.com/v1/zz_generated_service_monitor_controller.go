@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	v1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
+	"github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
@@ -85,6 +85,7 @@ type ServiceMonitorInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.ServiceMonitor, error)
 	Get(name string, opts metav1.GetOptions) (*v1.ServiceMonitor, error)
 	Update(*v1.ServiceMonitor) (*v1.ServiceMonitor, error)
+	UpdateStatus(*v1.ServiceMonitor) (*v1.ServiceMonitor, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ServiceMonitorList, error)
@@ -260,6 +261,11 @@ func (s *serviceMonitorClient) GetNamespaced(namespace, name string, opts metav1
 
 func (s *serviceMonitorClient) Update(o *v1.ServiceMonitor) (*v1.ServiceMonitor, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.ServiceMonitor), err
+}
+
+func (s *serviceMonitorClient) UpdateStatus(o *v1.ServiceMonitor) (*v1.ServiceMonitor, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.ServiceMonitor), err
 }
 

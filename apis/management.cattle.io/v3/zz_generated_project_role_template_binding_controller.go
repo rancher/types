@@ -84,6 +84,7 @@ type ProjectRoleTemplateBindingInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ProjectRoleTemplateBinding, error)
 	Get(name string, opts metav1.GetOptions) (*ProjectRoleTemplateBinding, error)
 	Update(*ProjectRoleTemplateBinding) (*ProjectRoleTemplateBinding, error)
+	UpdateStatus(*ProjectRoleTemplateBinding) (*ProjectRoleTemplateBinding, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ProjectRoleTemplateBindingList, error)
@@ -259,6 +260,11 @@ func (s *projectRoleTemplateBindingClient) GetNamespaced(namespace, name string,
 
 func (s *projectRoleTemplateBindingClient) Update(o *ProjectRoleTemplateBinding) (*ProjectRoleTemplateBinding, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ProjectRoleTemplateBinding), err
+}
+
+func (s *projectRoleTemplateBindingClient) UpdateStatus(o *ProjectRoleTemplateBinding) (*ProjectRoleTemplateBinding, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ProjectRoleTemplateBinding), err
 }
 

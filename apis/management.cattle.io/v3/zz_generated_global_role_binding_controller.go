@@ -83,6 +83,7 @@ type GlobalRoleBindingInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*GlobalRoleBinding, error)
 	Get(name string, opts metav1.GetOptions) (*GlobalRoleBinding, error)
 	Update(*GlobalRoleBinding) (*GlobalRoleBinding, error)
+	UpdateStatus(*GlobalRoleBinding) (*GlobalRoleBinding, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*GlobalRoleBindingList, error)
@@ -258,6 +259,11 @@ func (s *globalRoleBindingClient) GetNamespaced(namespace, name string, opts met
 
 func (s *globalRoleBindingClient) Update(o *GlobalRoleBinding) (*GlobalRoleBinding, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*GlobalRoleBinding), err
+}
+
+func (s *globalRoleBindingClient) UpdateStatus(o *GlobalRoleBinding) (*GlobalRoleBinding, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*GlobalRoleBinding), err
 }
 

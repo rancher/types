@@ -733,6 +733,7 @@ var (
 	lockCertificateInterfaceMockListNamespaced                   sync.RWMutex
 	lockCertificateInterfaceMockObjectClient                     sync.RWMutex
 	lockCertificateInterfaceMockUpdate                           sync.RWMutex
+	lockCertificateInterfaceMockUpdateStatus                     sync.RWMutex
 	lockCertificateInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.CertificateInterface = &CertificateInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Certificate) (*v3.Certificate, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Certificate) (*v3.Certificate, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type CertificateInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Certificate) (*v3.Certificate, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Certificate) (*v3.Certificate, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type CertificateInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Certificate
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Certificate
 		}
@@ -1742,6 +1754,37 @@ func (mock *CertificateInterfaceMock) UpdateCalls() []struct {
 	lockCertificateInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockCertificateInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *CertificateInterfaceMock) UpdateStatus(in1 *v3.Certificate) (*v3.Certificate, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("CertificateInterfaceMock.UpdateStatusFunc: method is nil but CertificateInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Certificate
+	}{
+		In1: in1,
+	}
+	lockCertificateInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockCertificateInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedCertificateInterface.UpdateStatusCalls())
+func (mock *CertificateInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Certificate
+} {
+	var calls []struct {
+		In1 *v3.Certificate
+	}
+	lockCertificateInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockCertificateInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

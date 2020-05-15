@@ -733,6 +733,7 @@ var (
 	lockKontainerDriverInterfaceMockListNamespaced                   sync.RWMutex
 	lockKontainerDriverInterfaceMockObjectClient                     sync.RWMutex
 	lockKontainerDriverInterfaceMockUpdate                           sync.RWMutex
+	lockKontainerDriverInterfaceMockUpdateStatus                     sync.RWMutex
 	lockKontainerDriverInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.KontainerDriverInterface = &KontainerDriverInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.KontainerDriver) (*v3.KontainerDriver, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.KontainerDriver) (*v3.KontainerDriver, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type KontainerDriverInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.KontainerDriver) (*v3.KontainerDriver, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.KontainerDriver) (*v3.KontainerDriver, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type KontainerDriverInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.KontainerDriver
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.KontainerDriver
 		}
@@ -1742,6 +1754,37 @@ func (mock *KontainerDriverInterfaceMock) UpdateCalls() []struct {
 	lockKontainerDriverInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockKontainerDriverInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *KontainerDriverInterfaceMock) UpdateStatus(in1 *v3.KontainerDriver) (*v3.KontainerDriver, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("KontainerDriverInterfaceMock.UpdateStatusFunc: method is nil but KontainerDriverInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.KontainerDriver
+	}{
+		In1: in1,
+	}
+	lockKontainerDriverInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockKontainerDriverInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedKontainerDriverInterface.UpdateStatusCalls())
+func (mock *KontainerDriverInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.KontainerDriver
+} {
+	var calls []struct {
+		In1 *v3.KontainerDriver
+	}
+	lockKontainerDriverInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockKontainerDriverInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

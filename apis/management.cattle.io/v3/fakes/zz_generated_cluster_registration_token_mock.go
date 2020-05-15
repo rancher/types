@@ -733,6 +733,7 @@ var (
 	lockClusterRegistrationTokenInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterRegistrationTokenInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterRegistrationTokenInterfaceMockUpdate                           sync.RWMutex
+	lockClusterRegistrationTokenInterfaceMockUpdateStatus                     sync.RWMutex
 	lockClusterRegistrationTokenInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ClusterRegistrationTokenInterface = &ClusterRegistrationTokenInterfaceM
 //             UpdateFunc: func(in1 *v3.ClusterRegistrationToken) (*v3.ClusterRegistrationToken, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ClusterRegistrationToken) (*v3.ClusterRegistrationToken, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ClusterRegistrationTokenInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ClusterRegistrationToken) (*v3.ClusterRegistrationToken, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ClusterRegistrationToken) (*v3.ClusterRegistrationToken, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ClusterRegistrationTokenInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ClusterRegistrationToken
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ClusterRegistrationToken
 		}
@@ -1742,6 +1754,37 @@ func (mock *ClusterRegistrationTokenInterfaceMock) UpdateCalls() []struct {
 	lockClusterRegistrationTokenInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockClusterRegistrationTokenInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ClusterRegistrationTokenInterfaceMock) UpdateStatus(in1 *v3.ClusterRegistrationToken) (*v3.ClusterRegistrationToken, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ClusterRegistrationTokenInterfaceMock.UpdateStatusFunc: method is nil but ClusterRegistrationTokenInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ClusterRegistrationToken
+	}{
+		In1: in1,
+	}
+	lockClusterRegistrationTokenInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockClusterRegistrationTokenInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedClusterRegistrationTokenInterface.UpdateStatusCalls())
+func (mock *ClusterRegistrationTokenInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ClusterRegistrationToken
+} {
+	var calls []struct {
+		In1 *v3.ClusterRegistrationToken
+	}
+	lockClusterRegistrationTokenInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockClusterRegistrationTokenInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -15,7 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/tools/cache"
-	v1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
+	"k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 )
 
 var (
@@ -84,6 +84,7 @@ type APIServiceInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.APIService, error)
 	Get(name string, opts metav1.GetOptions) (*v1.APIService, error)
 	Update(*v1.APIService) (*v1.APIService, error)
+	UpdateStatus(*v1.APIService) (*v1.APIService, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*APIServiceList, error)
@@ -259,6 +260,11 @@ func (s *apiServiceClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *apiServiceClient) Update(o *v1.APIService) (*v1.APIService, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.APIService), err
+}
+
+func (s *apiServiceClient) UpdateStatus(o *v1.APIService) (*v1.APIService, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.APIService), err
 }
 

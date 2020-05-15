@@ -733,6 +733,7 @@ var (
 	lockRKEK8sSystemImageInterfaceMockListNamespaced                   sync.RWMutex
 	lockRKEK8sSystemImageInterfaceMockObjectClient                     sync.RWMutex
 	lockRKEK8sSystemImageInterfaceMockUpdate                           sync.RWMutex
+	lockRKEK8sSystemImageInterfaceMockUpdateStatus                     sync.RWMutex
 	lockRKEK8sSystemImageInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.RKEK8sSystemImageInterface = &RKEK8sSystemImageInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.RKEK8sSystemImage) (*v3.RKEK8sSystemImage, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.RKEK8sSystemImage) (*v3.RKEK8sSystemImage, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type RKEK8sSystemImageInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.RKEK8sSystemImage) (*v3.RKEK8sSystemImage, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.RKEK8sSystemImage) (*v3.RKEK8sSystemImage, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type RKEK8sSystemImageInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.RKEK8sSystemImage
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.RKEK8sSystemImage
 		}
@@ -1742,6 +1754,37 @@ func (mock *RKEK8sSystemImageInterfaceMock) UpdateCalls() []struct {
 	lockRKEK8sSystemImageInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockRKEK8sSystemImageInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *RKEK8sSystemImageInterfaceMock) UpdateStatus(in1 *v3.RKEK8sSystemImage) (*v3.RKEK8sSystemImage, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("RKEK8sSystemImageInterfaceMock.UpdateStatusFunc: method is nil but RKEK8sSystemImageInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.RKEK8sSystemImage
+	}{
+		In1: in1,
+	}
+	lockRKEK8sSystemImageInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockRKEK8sSystemImageInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedRKEK8sSystemImageInterface.UpdateStatusCalls())
+func (mock *RKEK8sSystemImageInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.RKEK8sSystemImage
+} {
+	var calls []struct {
+		In1 *v3.RKEK8sSystemImage
+	}
+	lockRKEK8sSystemImageInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockRKEK8sSystemImageInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

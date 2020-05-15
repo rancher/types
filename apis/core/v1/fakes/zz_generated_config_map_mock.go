@@ -734,6 +734,7 @@ var (
 	lockConfigMapInterfaceMockListNamespaced                   sync.RWMutex
 	lockConfigMapInterfaceMockObjectClient                     sync.RWMutex
 	lockConfigMapInterfaceMockUpdate                           sync.RWMutex
+	lockConfigMapInterfaceMockUpdateStatus                     sync.RWMutex
 	lockConfigMapInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.ConfigMapInterface = &ConfigMapInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.ConfigMap) (*v1.ConfigMap, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.ConfigMap) (*v1.ConfigMap, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type ConfigMapInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.ConfigMap) (*v1.ConfigMap, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.ConfigMap) (*v1.ConfigMap, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type ConfigMapInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.ConfigMap
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.ConfigMap
 		}
@@ -1743,6 +1755,37 @@ func (mock *ConfigMapInterfaceMock) UpdateCalls() []struct {
 	lockConfigMapInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockConfigMapInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ConfigMapInterfaceMock) UpdateStatus(in1 *v1.ConfigMap) (*v1.ConfigMap, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ConfigMapInterfaceMock.UpdateStatusFunc: method is nil but ConfigMapInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.ConfigMap
+	}{
+		In1: in1,
+	}
+	lockConfigMapInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockConfigMapInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedConfigMapInterface.UpdateStatusCalls())
+func (mock *ConfigMapInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.ConfigMap
+} {
+	var calls []struct {
+		In1 *v1.ConfigMap
+	}
+	lockConfigMapInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockConfigMapInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

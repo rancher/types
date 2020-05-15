@@ -734,6 +734,7 @@ var (
 	lockPrometheusInterfaceMockListNamespaced                   sync.RWMutex
 	lockPrometheusInterfaceMockObjectClient                     sync.RWMutex
 	lockPrometheusInterfaceMockUpdate                           sync.RWMutex
+	lockPrometheusInterfaceMockUpdateStatus                     sync.RWMutex
 	lockPrometheusInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.PrometheusInterface = &PrometheusInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.Prometheus) (*v1.Prometheus, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.Prometheus) (*v1.Prometheus, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type PrometheusInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.Prometheus) (*v1.Prometheus, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.Prometheus) (*v1.Prometheus, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type PrometheusInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.Prometheus
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.Prometheus
 		}
@@ -1743,6 +1755,37 @@ func (mock *PrometheusInterfaceMock) UpdateCalls() []struct {
 	lockPrometheusInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockPrometheusInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *PrometheusInterfaceMock) UpdateStatus(in1 *v1.Prometheus) (*v1.Prometheus, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("PrometheusInterfaceMock.UpdateStatusFunc: method is nil but PrometheusInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.Prometheus
+	}{
+		In1: in1,
+	}
+	lockPrometheusInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockPrometheusInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedPrometheusInterface.UpdateStatusCalls())
+func (mock *PrometheusInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.Prometheus
+} {
+	var calls []struct {
+		In1 *v1.Prometheus
+	}
+	lockPrometheusInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockPrometheusInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

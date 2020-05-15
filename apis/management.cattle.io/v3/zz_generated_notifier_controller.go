@@ -84,6 +84,7 @@ type NotifierInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Notifier, error)
 	Get(name string, opts metav1.GetOptions) (*Notifier, error)
 	Update(*Notifier) (*Notifier, error)
+	UpdateStatus(*Notifier) (*Notifier, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*NotifierList, error)
@@ -259,6 +260,11 @@ func (s *notifierClient) GetNamespaced(namespace, name string, opts metav1.GetOp
 
 func (s *notifierClient) Update(o *Notifier) (*Notifier, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Notifier), err
+}
+
+func (s *notifierClient) UpdateStatus(o *Notifier) (*Notifier, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Notifier), err
 }
 

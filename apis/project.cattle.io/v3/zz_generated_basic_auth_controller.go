@@ -84,6 +84,7 @@ type BasicAuthInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*BasicAuth, error)
 	Get(name string, opts metav1.GetOptions) (*BasicAuth, error)
 	Update(*BasicAuth) (*BasicAuth, error)
+	UpdateStatus(*BasicAuth) (*BasicAuth, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*BasicAuthList, error)
@@ -259,6 +260,11 @@ func (s *basicAuthClient) GetNamespaced(namespace, name string, opts metav1.GetO
 
 func (s *basicAuthClient) Update(o *BasicAuth) (*BasicAuth, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*BasicAuth), err
+}
+
+func (s *basicAuthClient) UpdateStatus(o *BasicAuth) (*BasicAuth, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*BasicAuth), err
 }
 

@@ -733,6 +733,7 @@ var (
 	lockWorkloadInterfaceMockListNamespaced                   sync.RWMutex
 	lockWorkloadInterfaceMockObjectClient                     sync.RWMutex
 	lockWorkloadInterfaceMockUpdate                           sync.RWMutex
+	lockWorkloadInterfaceMockUpdateStatus                     sync.RWMutex
 	lockWorkloadInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.WorkloadInterface = &WorkloadInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Workload) (*v3.Workload, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Workload) (*v3.Workload, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type WorkloadInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Workload) (*v3.Workload, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Workload) (*v3.Workload, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type WorkloadInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Workload
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Workload
 		}
@@ -1742,6 +1754,37 @@ func (mock *WorkloadInterfaceMock) UpdateCalls() []struct {
 	lockWorkloadInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockWorkloadInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *WorkloadInterfaceMock) UpdateStatus(in1 *v3.Workload) (*v3.Workload, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("WorkloadInterfaceMock.UpdateStatusFunc: method is nil but WorkloadInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Workload
+	}{
+		In1: in1,
+	}
+	lockWorkloadInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockWorkloadInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedWorkloadInterface.UpdateStatusCalls())
+func (mock *WorkloadInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Workload
+} {
+	var calls []struct {
+		In1 *v3.Workload
+	}
+	lockWorkloadInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockWorkloadInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -733,6 +733,7 @@ var (
 	lockCisConfigInterfaceMockListNamespaced                   sync.RWMutex
 	lockCisConfigInterfaceMockObjectClient                     sync.RWMutex
 	lockCisConfigInterfaceMockUpdate                           sync.RWMutex
+	lockCisConfigInterfaceMockUpdateStatus                     sync.RWMutex
 	lockCisConfigInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.CisConfigInterface = &CisConfigInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.CisConfig) (*v3.CisConfig, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.CisConfig) (*v3.CisConfig, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type CisConfigInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.CisConfig) (*v3.CisConfig, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.CisConfig) (*v3.CisConfig, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type CisConfigInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.CisConfig
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.CisConfig
 		}
@@ -1742,6 +1754,37 @@ func (mock *CisConfigInterfaceMock) UpdateCalls() []struct {
 	lockCisConfigInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockCisConfigInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *CisConfigInterfaceMock) UpdateStatus(in1 *v3.CisConfig) (*v3.CisConfig, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("CisConfigInterfaceMock.UpdateStatusFunc: method is nil but CisConfigInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.CisConfig
+	}{
+		In1: in1,
+	}
+	lockCisConfigInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockCisConfigInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedCisConfigInterface.UpdateStatusCalls())
+func (mock *CisConfigInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.CisConfig
+} {
+	var calls []struct {
+		In1 *v3.CisConfig
+	}
+	lockCisConfigInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockCisConfigInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

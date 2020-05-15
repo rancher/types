@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/apps/v1"
+	"k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type ReplicaSetInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.ReplicaSet, error)
 	Get(name string, opts metav1.GetOptions) (*v1.ReplicaSet, error)
 	Update(*v1.ReplicaSet) (*v1.ReplicaSet, error)
+	UpdateStatus(*v1.ReplicaSet) (*v1.ReplicaSet, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ReplicaSetList, error)
@@ -260,6 +261,11 @@ func (s *replicaSetClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *replicaSetClient) Update(o *v1.ReplicaSet) (*v1.ReplicaSet, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.ReplicaSet), err
+}
+
+func (s *replicaSetClient) UpdateStatus(o *v1.ReplicaSet) (*v1.ReplicaSet, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.ReplicaSet), err
 }
 

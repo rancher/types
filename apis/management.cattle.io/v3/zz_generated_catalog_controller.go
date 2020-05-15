@@ -83,6 +83,7 @@ type CatalogInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Catalog, error)
 	Get(name string, opts metav1.GetOptions) (*Catalog, error)
 	Update(*Catalog) (*Catalog, error)
+	UpdateStatus(*Catalog) (*Catalog, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*CatalogList, error)
@@ -258,6 +259,11 @@ func (s *catalogClient) GetNamespaced(namespace, name string, opts metav1.GetOpt
 
 func (s *catalogClient) Update(o *Catalog) (*Catalog, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Catalog), err
+}
+
+func (s *catalogClient) UpdateStatus(o *Catalog) (*Catalog, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Catalog), err
 }
 

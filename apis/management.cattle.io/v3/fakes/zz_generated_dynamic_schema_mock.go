@@ -733,6 +733,7 @@ var (
 	lockDynamicSchemaInterfaceMockListNamespaced                   sync.RWMutex
 	lockDynamicSchemaInterfaceMockObjectClient                     sync.RWMutex
 	lockDynamicSchemaInterfaceMockUpdate                           sync.RWMutex
+	lockDynamicSchemaInterfaceMockUpdateStatus                     sync.RWMutex
 	lockDynamicSchemaInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.DynamicSchemaInterface = &DynamicSchemaInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.DynamicSchema) (*v3.DynamicSchema, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.DynamicSchema) (*v3.DynamicSchema, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type DynamicSchemaInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.DynamicSchema) (*v3.DynamicSchema, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.DynamicSchema) (*v3.DynamicSchema, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type DynamicSchemaInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.DynamicSchema
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.DynamicSchema
 		}
@@ -1742,6 +1754,37 @@ func (mock *DynamicSchemaInterfaceMock) UpdateCalls() []struct {
 	lockDynamicSchemaInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockDynamicSchemaInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *DynamicSchemaInterfaceMock) UpdateStatus(in1 *v3.DynamicSchema) (*v3.DynamicSchema, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("DynamicSchemaInterfaceMock.UpdateStatusFunc: method is nil but DynamicSchemaInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.DynamicSchema
+	}{
+		In1: in1,
+	}
+	lockDynamicSchemaInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockDynamicSchemaInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedDynamicSchemaInterface.UpdateStatusCalls())
+func (mock *DynamicSchemaInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.DynamicSchema
+} {
+	var calls []struct {
+		In1 *v3.DynamicSchema
+	}
+	lockDynamicSchemaInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockDynamicSchemaInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

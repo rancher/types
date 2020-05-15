@@ -84,6 +84,7 @@ type MultiClusterAppInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*MultiClusterApp, error)
 	Get(name string, opts metav1.GetOptions) (*MultiClusterApp, error)
 	Update(*MultiClusterApp) (*MultiClusterApp, error)
+	UpdateStatus(*MultiClusterApp) (*MultiClusterApp, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*MultiClusterAppList, error)
@@ -259,6 +260,11 @@ func (s *multiClusterAppClient) GetNamespaced(namespace, name string, opts metav
 
 func (s *multiClusterAppClient) Update(o *MultiClusterApp) (*MultiClusterApp, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*MultiClusterApp), err
+}
+
+func (s *multiClusterAppClient) UpdateStatus(o *MultiClusterApp) (*MultiClusterApp, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*MultiClusterApp), err
 }
 

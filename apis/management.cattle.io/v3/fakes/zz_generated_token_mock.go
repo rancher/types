@@ -733,6 +733,7 @@ var (
 	lockTokenInterfaceMockListNamespaced                   sync.RWMutex
 	lockTokenInterfaceMockObjectClient                     sync.RWMutex
 	lockTokenInterfaceMockUpdate                           sync.RWMutex
+	lockTokenInterfaceMockUpdateStatus                     sync.RWMutex
 	lockTokenInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.TokenInterface = &TokenInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Token) (*v3.Token, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Token) (*v3.Token, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type TokenInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Token) (*v3.Token, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Token) (*v3.Token, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type TokenInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Token
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Token
 		}
@@ -1742,6 +1754,37 @@ func (mock *TokenInterfaceMock) UpdateCalls() []struct {
 	lockTokenInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockTokenInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *TokenInterfaceMock) UpdateStatus(in1 *v3.Token) (*v3.Token, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("TokenInterfaceMock.UpdateStatusFunc: method is nil but TokenInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Token
+	}{
+		In1: in1,
+	}
+	lockTokenInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockTokenInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedTokenInterface.UpdateStatusCalls())
+func (mock *TokenInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Token
+} {
+	var calls []struct {
+		In1 *v3.Token
+	}
+	lockTokenInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockTokenInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

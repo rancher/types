@@ -733,6 +733,7 @@ var (
 	lockLdapConfigInterfaceMockListNamespaced                   sync.RWMutex
 	lockLdapConfigInterfaceMockObjectClient                     sync.RWMutex
 	lockLdapConfigInterfaceMockUpdate                           sync.RWMutex
+	lockLdapConfigInterfaceMockUpdateStatus                     sync.RWMutex
 	lockLdapConfigInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.LdapConfigInterface = &LdapConfigInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.LdapConfig) (*v3.LdapConfig, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.LdapConfig) (*v3.LdapConfig, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type LdapConfigInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.LdapConfig) (*v3.LdapConfig, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.LdapConfig) (*v3.LdapConfig, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type LdapConfigInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.LdapConfig
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.LdapConfig
 		}
@@ -1742,6 +1754,37 @@ func (mock *LdapConfigInterfaceMock) UpdateCalls() []struct {
 	lockLdapConfigInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockLdapConfigInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *LdapConfigInterfaceMock) UpdateStatus(in1 *v3.LdapConfig) (*v3.LdapConfig, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("LdapConfigInterfaceMock.UpdateStatusFunc: method is nil but LdapConfigInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.LdapConfig
+	}{
+		In1: in1,
+	}
+	lockLdapConfigInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockLdapConfigInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedLdapConfigInterface.UpdateStatusCalls())
+func (mock *LdapConfigInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.LdapConfig
+} {
+	var calls []struct {
+		In1 *v3.LdapConfig
+	}
+	lockLdapConfigInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockLdapConfigInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

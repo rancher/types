@@ -84,6 +84,7 @@ type SourceCodeCredentialInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*SourceCodeCredential, error)
 	Get(name string, opts metav1.GetOptions) (*SourceCodeCredential, error)
 	Update(*SourceCodeCredential) (*SourceCodeCredential, error)
+	UpdateStatus(*SourceCodeCredential) (*SourceCodeCredential, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*SourceCodeCredentialList, error)
@@ -259,6 +260,11 @@ func (s *sourceCodeCredentialClient) GetNamespaced(namespace, name string, opts 
 
 func (s *sourceCodeCredentialClient) Update(o *SourceCodeCredential) (*SourceCodeCredential, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*SourceCodeCredential), err
+}
+
+func (s *sourceCodeCredentialClient) UpdateStatus(o *SourceCodeCredential) (*SourceCodeCredential, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*SourceCodeCredential), err
 }
 

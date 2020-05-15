@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -84,6 +84,7 @@ type EventInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.Event, error)
 	Get(name string, opts metav1.GetOptions) (*v1.Event, error)
 	Update(*v1.Event) (*v1.Event, error)
+	UpdateStatus(*v1.Event) (*v1.Event, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*EventList, error)
@@ -259,6 +260,11 @@ func (s *eventClient) GetNamespaced(namespace, name string, opts metav1.GetOptio
 
 func (s *eventClient) Update(o *v1.Event) (*v1.Event, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.Event), err
+}
+
+func (s *eventClient) UpdateStatus(o *v1.Event) (*v1.Event, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.Event), err
 }
 

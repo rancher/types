@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	v1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
+	"github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
@@ -85,6 +85,7 @@ type AlertmanagerInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.Alertmanager, error)
 	Get(name string, opts metav1.GetOptions) (*v1.Alertmanager, error)
 	Update(*v1.Alertmanager) (*v1.Alertmanager, error)
+	UpdateStatus(*v1.Alertmanager) (*v1.Alertmanager, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*AlertmanagerList, error)
@@ -260,6 +261,11 @@ func (s *alertmanagerClient) GetNamespaced(namespace, name string, opts metav1.G
 
 func (s *alertmanagerClient) Update(o *v1.Alertmanager) (*v1.Alertmanager, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.Alertmanager), err
+}
+
+func (s *alertmanagerClient) UpdateStatus(o *v1.Alertmanager) (*v1.Alertmanager, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.Alertmanager), err
 }
 

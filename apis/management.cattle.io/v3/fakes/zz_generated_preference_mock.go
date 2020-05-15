@@ -733,6 +733,7 @@ var (
 	lockPreferenceInterfaceMockListNamespaced                   sync.RWMutex
 	lockPreferenceInterfaceMockObjectClient                     sync.RWMutex
 	lockPreferenceInterfaceMockUpdate                           sync.RWMutex
+	lockPreferenceInterfaceMockUpdateStatus                     sync.RWMutex
 	lockPreferenceInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.PreferenceInterface = &PreferenceInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Preference) (*v3.Preference, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Preference) (*v3.Preference, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type PreferenceInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Preference) (*v3.Preference, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Preference) (*v3.Preference, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type PreferenceInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Preference
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Preference
 		}
@@ -1742,6 +1754,37 @@ func (mock *PreferenceInterfaceMock) UpdateCalls() []struct {
 	lockPreferenceInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockPreferenceInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *PreferenceInterfaceMock) UpdateStatus(in1 *v3.Preference) (*v3.Preference, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("PreferenceInterfaceMock.UpdateStatusFunc: method is nil but PreferenceInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Preference
+	}{
+		In1: in1,
+	}
+	lockPreferenceInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockPreferenceInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedPreferenceInterface.UpdateStatusCalls())
+func (mock *PreferenceInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Preference
+} {
+	var calls []struct {
+		In1 *v3.Preference
+	}
+	lockPreferenceInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockPreferenceInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

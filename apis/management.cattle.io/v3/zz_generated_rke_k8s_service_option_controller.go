@@ -84,6 +84,7 @@ type RKEK8sServiceOptionInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*RKEK8sServiceOption, error)
 	Get(name string, opts metav1.GetOptions) (*RKEK8sServiceOption, error)
 	Update(*RKEK8sServiceOption) (*RKEK8sServiceOption, error)
+	UpdateStatus(*RKEK8sServiceOption) (*RKEK8sServiceOption, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*RKEK8sServiceOptionList, error)
@@ -259,6 +260,11 @@ func (s *rkeK8sServiceOptionClient) GetNamespaced(namespace, name string, opts m
 
 func (s *rkeK8sServiceOptionClient) Update(o *RKEK8sServiceOption) (*RKEK8sServiceOption, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*RKEK8sServiceOption), err
+}
+
+func (s *rkeK8sServiceOptionClient) UpdateStatus(o *RKEK8sServiceOption) (*RKEK8sServiceOption, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*RKEK8sServiceOption), err
 }
 

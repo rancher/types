@@ -84,6 +84,7 @@ type PreferenceInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Preference, error)
 	Get(name string, opts metav1.GetOptions) (*Preference, error)
 	Update(*Preference) (*Preference, error)
+	UpdateStatus(*Preference) (*Preference, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*PreferenceList, error)
@@ -259,6 +260,11 @@ func (s *preferenceClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *preferenceClient) Update(o *Preference) (*Preference, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Preference), err
+}
+
+func (s *preferenceClient) UpdateStatus(o *Preference) (*Preference, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Preference), err
 }
 

@@ -734,6 +734,7 @@ var (
 	lockCronJobInterfaceMockListNamespaced                   sync.RWMutex
 	lockCronJobInterfaceMockObjectClient                     sync.RWMutex
 	lockCronJobInterfaceMockUpdate                           sync.RWMutex
+	lockCronJobInterfaceMockUpdateStatus                     sync.RWMutex
 	lockCronJobInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1beta1a.CronJobInterface = &CronJobInterfaceMock{}
 //             UpdateFunc: func(in1 *v1beta1.CronJob) (*v1beta1.CronJob, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1beta1.CronJob) (*v1beta1.CronJob, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type CronJobInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1beta1.CronJob) (*v1beta1.CronJob, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1beta1.CronJob) (*v1beta1.CronJob, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type CronJobInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1beta1.CronJob
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1beta1.CronJob
 		}
@@ -1743,6 +1755,37 @@ func (mock *CronJobInterfaceMock) UpdateCalls() []struct {
 	lockCronJobInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockCronJobInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *CronJobInterfaceMock) UpdateStatus(in1 *v1beta1.CronJob) (*v1beta1.CronJob, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("CronJobInterfaceMock.UpdateStatusFunc: method is nil but CronJobInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1beta1.CronJob
+	}{
+		In1: in1,
+	}
+	lockCronJobInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockCronJobInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedCronJobInterface.UpdateStatusCalls())
+func (mock *CronJobInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1beta1.CronJob
+} {
+	var calls []struct {
+		In1 *v1beta1.CronJob
+	}
+	lockCronJobInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockCronJobInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

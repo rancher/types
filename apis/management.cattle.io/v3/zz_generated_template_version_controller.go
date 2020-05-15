@@ -83,6 +83,7 @@ type TemplateVersionInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*TemplateVersion, error)
 	Get(name string, opts metav1.GetOptions) (*TemplateVersion, error)
 	Update(*TemplateVersion) (*TemplateVersion, error)
+	UpdateStatus(*TemplateVersion) (*TemplateVersion, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*TemplateVersionList, error)
@@ -258,6 +259,11 @@ func (s *templateVersionClient) GetNamespaced(namespace, name string, opts metav
 
 func (s *templateVersionClient) Update(o *TemplateVersion) (*TemplateVersion, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*TemplateVersion), err
+}
+
+func (s *templateVersionClient) UpdateStatus(o *TemplateVersion) (*TemplateVersion, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*TemplateVersion), err
 }
 

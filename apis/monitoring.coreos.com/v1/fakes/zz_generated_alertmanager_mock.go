@@ -734,6 +734,7 @@ var (
 	lockAlertmanagerInterfaceMockListNamespaced                   sync.RWMutex
 	lockAlertmanagerInterfaceMockObjectClient                     sync.RWMutex
 	lockAlertmanagerInterfaceMockUpdate                           sync.RWMutex
+	lockAlertmanagerInterfaceMockUpdateStatus                     sync.RWMutex
 	lockAlertmanagerInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.AlertmanagerInterface = &AlertmanagerInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.Alertmanager) (*v1.Alertmanager, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.Alertmanager) (*v1.Alertmanager, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type AlertmanagerInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.Alertmanager) (*v1.Alertmanager, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.Alertmanager) (*v1.Alertmanager, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type AlertmanagerInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.Alertmanager
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.Alertmanager
 		}
@@ -1743,6 +1755,37 @@ func (mock *AlertmanagerInterfaceMock) UpdateCalls() []struct {
 	lockAlertmanagerInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockAlertmanagerInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *AlertmanagerInterfaceMock) UpdateStatus(in1 *v1.Alertmanager) (*v1.Alertmanager, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("AlertmanagerInterfaceMock.UpdateStatusFunc: method is nil but AlertmanagerInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.Alertmanager
+	}{
+		In1: in1,
+	}
+	lockAlertmanagerInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockAlertmanagerInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedAlertmanagerInterface.UpdateStatusCalls())
+func (mock *AlertmanagerInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.Alertmanager
+} {
+	var calls []struct {
+		In1 *v1.Alertmanager
+	}
+	lockAlertmanagerInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockAlertmanagerInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

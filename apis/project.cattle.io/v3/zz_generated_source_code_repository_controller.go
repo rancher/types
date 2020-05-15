@@ -84,6 +84,7 @@ type SourceCodeRepositoryInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*SourceCodeRepository, error)
 	Get(name string, opts metav1.GetOptions) (*SourceCodeRepository, error)
 	Update(*SourceCodeRepository) (*SourceCodeRepository, error)
+	UpdateStatus(*SourceCodeRepository) (*SourceCodeRepository, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*SourceCodeRepositoryList, error)
@@ -259,6 +260,11 @@ func (s *sourceCodeRepositoryClient) GetNamespaced(namespace, name string, opts 
 
 func (s *sourceCodeRepositoryClient) Update(o *SourceCodeRepository) (*SourceCodeRepository, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*SourceCodeRepository), err
+}
+
+func (s *sourceCodeRepositoryClient) UpdateStatus(o *SourceCodeRepository) (*SourceCodeRepository, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*SourceCodeRepository), err
 }
 

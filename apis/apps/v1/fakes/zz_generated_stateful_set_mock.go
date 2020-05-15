@@ -734,6 +734,7 @@ var (
 	lockStatefulSetInterfaceMockListNamespaced                   sync.RWMutex
 	lockStatefulSetInterfaceMockObjectClient                     sync.RWMutex
 	lockStatefulSetInterfaceMockUpdate                           sync.RWMutex
+	lockStatefulSetInterfaceMockUpdateStatus                     sync.RWMutex
 	lockStatefulSetInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.StatefulSetInterface = &StatefulSetInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.StatefulSet) (*v1.StatefulSet, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.StatefulSet) (*v1.StatefulSet, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type StatefulSetInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.StatefulSet) (*v1.StatefulSet, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.StatefulSet) (*v1.StatefulSet, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type StatefulSetInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.StatefulSet
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.StatefulSet
 		}
@@ -1743,6 +1755,37 @@ func (mock *StatefulSetInterfaceMock) UpdateCalls() []struct {
 	lockStatefulSetInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockStatefulSetInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *StatefulSetInterfaceMock) UpdateStatus(in1 *v1.StatefulSet) (*v1.StatefulSet, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("StatefulSetInterfaceMock.UpdateStatusFunc: method is nil but StatefulSetInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.StatefulSet
+	}{
+		In1: in1,
+	}
+	lockStatefulSetInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockStatefulSetInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedStatefulSetInterface.UpdateStatusCalls())
+func (mock *StatefulSetInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.StatefulSet
+} {
+	var calls []struct {
+		In1 *v1.StatefulSet
+	}
+	lockStatefulSetInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockStatefulSetInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

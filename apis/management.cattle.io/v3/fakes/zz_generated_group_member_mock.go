@@ -733,6 +733,7 @@ var (
 	lockGroupMemberInterfaceMockListNamespaced                   sync.RWMutex
 	lockGroupMemberInterfaceMockObjectClient                     sync.RWMutex
 	lockGroupMemberInterfaceMockUpdate                           sync.RWMutex
+	lockGroupMemberInterfaceMockUpdateStatus                     sync.RWMutex
 	lockGroupMemberInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.GroupMemberInterface = &GroupMemberInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.GroupMember) (*v3.GroupMember, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.GroupMember) (*v3.GroupMember, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type GroupMemberInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.GroupMember) (*v3.GroupMember, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.GroupMember) (*v3.GroupMember, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type GroupMemberInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.GroupMember
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.GroupMember
 		}
@@ -1742,6 +1754,37 @@ func (mock *GroupMemberInterfaceMock) UpdateCalls() []struct {
 	lockGroupMemberInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockGroupMemberInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *GroupMemberInterfaceMock) UpdateStatus(in1 *v3.GroupMember) (*v3.GroupMember, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("GroupMemberInterfaceMock.UpdateStatusFunc: method is nil but GroupMemberInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.GroupMember
+	}{
+		In1: in1,
+	}
+	lockGroupMemberInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockGroupMemberInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedGroupMemberInterface.UpdateStatusCalls())
+func (mock *GroupMemberInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.GroupMember
+} {
+	var calls []struct {
+		In1 *v3.GroupMember
+	}
+	lockGroupMemberInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockGroupMemberInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -84,6 +84,7 @@ type ClusterMonitorGraphInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterMonitorGraph, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterMonitorGraph, error)
 	Update(*ClusterMonitorGraph) (*ClusterMonitorGraph, error)
+	UpdateStatus(*ClusterMonitorGraph) (*ClusterMonitorGraph, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterMonitorGraphList, error)
@@ -259,6 +260,11 @@ func (s *clusterMonitorGraphClient) GetNamespaced(namespace, name string, opts m
 
 func (s *clusterMonitorGraphClient) Update(o *ClusterMonitorGraph) (*ClusterMonitorGraph, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterMonitorGraph), err
+}
+
+func (s *clusterMonitorGraphClient) UpdateStatus(o *ClusterMonitorGraph) (*ClusterMonitorGraph, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterMonitorGraph), err
 }
 

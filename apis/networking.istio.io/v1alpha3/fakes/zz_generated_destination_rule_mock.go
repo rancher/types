@@ -734,6 +734,7 @@ var (
 	lockDestinationRuleInterfaceMockListNamespaced                   sync.RWMutex
 	lockDestinationRuleInterfaceMockObjectClient                     sync.RWMutex
 	lockDestinationRuleInterfaceMockUpdate                           sync.RWMutex
+	lockDestinationRuleInterfaceMockUpdateStatus                     sync.RWMutex
 	lockDestinationRuleInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1alpha3a.DestinationRuleInterface = &DestinationRuleInterfaceMock{}
 //             UpdateFunc: func(in1 *v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type DestinationRuleInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type DestinationRuleInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1alpha3.DestinationRule
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1alpha3.DestinationRule
 		}
@@ -1743,6 +1755,37 @@ func (mock *DestinationRuleInterfaceMock) UpdateCalls() []struct {
 	lockDestinationRuleInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockDestinationRuleInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *DestinationRuleInterfaceMock) UpdateStatus(in1 *v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("DestinationRuleInterfaceMock.UpdateStatusFunc: method is nil but DestinationRuleInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1alpha3.DestinationRule
+	}{
+		In1: in1,
+	}
+	lockDestinationRuleInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockDestinationRuleInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedDestinationRuleInterface.UpdateStatusCalls())
+func (mock *DestinationRuleInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1alpha3.DestinationRule
+} {
+	var calls []struct {
+		In1 *v1alpha3.DestinationRule
+	}
+	lockDestinationRuleInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockDestinationRuleInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

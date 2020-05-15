@@ -84,6 +84,7 @@ type ProjectNetworkPolicyInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ProjectNetworkPolicy, error)
 	Get(name string, opts metav1.GetOptions) (*ProjectNetworkPolicy, error)
 	Update(*ProjectNetworkPolicy) (*ProjectNetworkPolicy, error)
+	UpdateStatus(*ProjectNetworkPolicy) (*ProjectNetworkPolicy, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ProjectNetworkPolicyList, error)
@@ -259,6 +260,11 @@ func (s *projectNetworkPolicyClient) GetNamespaced(namespace, name string, opts 
 
 func (s *projectNetworkPolicyClient) Update(o *ProjectNetworkPolicy) (*ProjectNetworkPolicy, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ProjectNetworkPolicy), err
+}
+
+func (s *projectNetworkPolicyClient) UpdateStatus(o *ProjectNetworkPolicy) (*ProjectNetworkPolicy, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ProjectNetworkPolicy), err
 }
 

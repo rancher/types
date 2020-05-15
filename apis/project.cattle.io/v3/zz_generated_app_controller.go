@@ -84,6 +84,7 @@ type AppInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*App, error)
 	Get(name string, opts metav1.GetOptions) (*App, error)
 	Update(*App) (*App, error)
+	UpdateStatus(*App) (*App, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*AppList, error)
@@ -259,6 +260,11 @@ func (s *appClient) GetNamespaced(namespace, name string, opts metav1.GetOptions
 
 func (s *appClient) Update(o *App) (*App, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*App), err
+}
+
+func (s *appClient) UpdateStatus(o *App) (*App, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*App), err
 }
 

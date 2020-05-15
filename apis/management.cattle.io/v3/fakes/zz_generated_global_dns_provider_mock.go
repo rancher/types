@@ -733,6 +733,7 @@ var (
 	lockGlobalDNSProviderInterfaceMockListNamespaced                   sync.RWMutex
 	lockGlobalDNSProviderInterfaceMockObjectClient                     sync.RWMutex
 	lockGlobalDNSProviderInterfaceMockUpdate                           sync.RWMutex
+	lockGlobalDNSProviderInterfaceMockUpdateStatus                     sync.RWMutex
 	lockGlobalDNSProviderInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.GlobalDNSProviderInterface = &GlobalDNSProviderInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.GlobalDNSProvider) (*v3.GlobalDNSProvider, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.GlobalDNSProvider) (*v3.GlobalDNSProvider, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type GlobalDNSProviderInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.GlobalDNSProvider) (*v3.GlobalDNSProvider, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.GlobalDNSProvider) (*v3.GlobalDNSProvider, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type GlobalDNSProviderInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.GlobalDNSProvider
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.GlobalDNSProvider
 		}
@@ -1742,6 +1754,37 @@ func (mock *GlobalDNSProviderInterfaceMock) UpdateCalls() []struct {
 	lockGlobalDNSProviderInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockGlobalDNSProviderInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *GlobalDNSProviderInterfaceMock) UpdateStatus(in1 *v3.GlobalDNSProvider) (*v3.GlobalDNSProvider, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("GlobalDNSProviderInterfaceMock.UpdateStatusFunc: method is nil but GlobalDNSProviderInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.GlobalDNSProvider
+	}{
+		In1: in1,
+	}
+	lockGlobalDNSProviderInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockGlobalDNSProviderInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedGlobalDNSProviderInterface.UpdateStatusCalls())
+func (mock *GlobalDNSProviderInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.GlobalDNSProvider
+} {
+	var calls []struct {
+		In1 *v3.GlobalDNSProvider
+	}
+	lockGlobalDNSProviderInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockGlobalDNSProviderInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

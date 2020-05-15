@@ -85,6 +85,7 @@ type CronJobInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1beta1.CronJob, error)
 	Get(name string, opts metav1.GetOptions) (*v1beta1.CronJob, error)
 	Update(*v1beta1.CronJob) (*v1beta1.CronJob, error)
+	UpdateStatus(*v1beta1.CronJob) (*v1beta1.CronJob, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*CronJobList, error)
@@ -260,6 +261,11 @@ func (s *cronJobClient) GetNamespaced(namespace, name string, opts metav1.GetOpt
 
 func (s *cronJobClient) Update(o *v1beta1.CronJob) (*v1beta1.CronJob, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1beta1.CronJob), err
+}
+
+func (s *cronJobClient) UpdateStatus(o *v1beta1.CronJob) (*v1beta1.CronJob, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1beta1.CronJob), err
 }
 

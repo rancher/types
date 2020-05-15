@@ -83,6 +83,7 @@ type AuthProviderInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*AuthProvider, error)
 	Get(name string, opts metav1.GetOptions) (*AuthProvider, error)
 	Update(*AuthProvider) (*AuthProvider, error)
+	UpdateStatus(*AuthProvider) (*AuthProvider, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*AuthProviderList, error)
@@ -258,6 +259,11 @@ func (s *authProviderClient) GetNamespaced(namespace, name string, opts metav1.G
 
 func (s *authProviderClient) Update(o *AuthProvider) (*AuthProvider, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*AuthProvider), err
+}
+
+func (s *authProviderClient) UpdateStatus(o *AuthProvider) (*AuthProvider, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*AuthProvider), err
 }
 

@@ -733,6 +733,7 @@ var (
 	lockCloudCredentialInterfaceMockListNamespaced                   sync.RWMutex
 	lockCloudCredentialInterfaceMockObjectClient                     sync.RWMutex
 	lockCloudCredentialInterfaceMockUpdate                           sync.RWMutex
+	lockCloudCredentialInterfaceMockUpdateStatus                     sync.RWMutex
 	lockCloudCredentialInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.CloudCredentialInterface = &CloudCredentialInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.CloudCredential) (*v3.CloudCredential, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.CloudCredential) (*v3.CloudCredential, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type CloudCredentialInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.CloudCredential) (*v3.CloudCredential, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.CloudCredential) (*v3.CloudCredential, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type CloudCredentialInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.CloudCredential
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.CloudCredential
 		}
@@ -1742,6 +1754,37 @@ func (mock *CloudCredentialInterfaceMock) UpdateCalls() []struct {
 	lockCloudCredentialInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockCloudCredentialInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *CloudCredentialInterfaceMock) UpdateStatus(in1 *v3.CloudCredential) (*v3.CloudCredential, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("CloudCredentialInterfaceMock.UpdateStatusFunc: method is nil but CloudCredentialInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.CloudCredential
+	}{
+		In1: in1,
+	}
+	lockCloudCredentialInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockCloudCredentialInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedCloudCredentialInterface.UpdateStatusCalls())
+func (mock *CloudCredentialInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.CloudCredential
+} {
+	var calls []struct {
+		In1 *v3.CloudCredential
+	}
+	lockCloudCredentialInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockCloudCredentialInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

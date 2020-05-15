@@ -733,6 +733,7 @@ var (
 	lockSourceCodeCredentialInterfaceMockListNamespaced                   sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockObjectClient                     sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockUpdate                           sync.RWMutex
+	lockSourceCodeCredentialInterfaceMockUpdateStatus                     sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.SourceCodeCredentialInterface = &SourceCodeCredentialInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.SourceCodeCredential) (*v3.SourceCodeCredential, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.SourceCodeCredential) (*v3.SourceCodeCredential, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type SourceCodeCredentialInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.SourceCodeCredential) (*v3.SourceCodeCredential, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.SourceCodeCredential) (*v3.SourceCodeCredential, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type SourceCodeCredentialInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.SourceCodeCredential
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.SourceCodeCredential
 		}
@@ -1742,6 +1754,37 @@ func (mock *SourceCodeCredentialInterfaceMock) UpdateCalls() []struct {
 	lockSourceCodeCredentialInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockSourceCodeCredentialInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *SourceCodeCredentialInterfaceMock) UpdateStatus(in1 *v3.SourceCodeCredential) (*v3.SourceCodeCredential, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("SourceCodeCredentialInterfaceMock.UpdateStatusFunc: method is nil but SourceCodeCredentialInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.SourceCodeCredential
+	}{
+		In1: in1,
+	}
+	lockSourceCodeCredentialInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockSourceCodeCredentialInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedSourceCodeCredentialInterface.UpdateStatusCalls())
+func (mock *SourceCodeCredentialInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.SourceCodeCredential
+} {
+	var calls []struct {
+		In1 *v3.SourceCodeCredential
+	}
+	lockSourceCodeCredentialInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockSourceCodeCredentialInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -733,6 +733,7 @@ var (
 	lockSettingInterfaceMockListNamespaced                   sync.RWMutex
 	lockSettingInterfaceMockObjectClient                     sync.RWMutex
 	lockSettingInterfaceMockUpdate                           sync.RWMutex
+	lockSettingInterfaceMockUpdateStatus                     sync.RWMutex
 	lockSettingInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.SettingInterface = &SettingInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Setting) (*v3.Setting, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Setting) (*v3.Setting, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type SettingInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Setting) (*v3.Setting, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Setting) (*v3.Setting, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type SettingInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Setting
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Setting
 		}
@@ -1742,6 +1754,37 @@ func (mock *SettingInterfaceMock) UpdateCalls() []struct {
 	lockSettingInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockSettingInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *SettingInterfaceMock) UpdateStatus(in1 *v3.Setting) (*v3.Setting, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("SettingInterfaceMock.UpdateStatusFunc: method is nil but SettingInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Setting
+	}{
+		In1: in1,
+	}
+	lockSettingInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockSettingInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedSettingInterface.UpdateStatusCalls())
+func (mock *SettingInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Setting
+} {
+	var calls []struct {
+		In1 *v3.Setting
+	}
+	lockSettingInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockSettingInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -83,6 +83,7 @@ type GlobalRoleInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*GlobalRole, error)
 	Get(name string, opts metav1.GetOptions) (*GlobalRole, error)
 	Update(*GlobalRole) (*GlobalRole, error)
+	UpdateStatus(*GlobalRole) (*GlobalRole, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*GlobalRoleList, error)
@@ -258,6 +259,11 @@ func (s *globalRoleClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *globalRoleClient) Update(o *GlobalRole) (*GlobalRole, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*GlobalRole), err
+}
+
+func (s *globalRoleClient) UpdateStatus(o *GlobalRole) (*GlobalRole, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*GlobalRole), err
 }
 

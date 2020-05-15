@@ -83,6 +83,7 @@ type TemplateContentInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*TemplateContent, error)
 	Get(name string, opts metav1.GetOptions) (*TemplateContent, error)
 	Update(*TemplateContent) (*TemplateContent, error)
+	UpdateStatus(*TemplateContent) (*TemplateContent, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*TemplateContentList, error)
@@ -258,6 +259,11 @@ func (s *templateContentClient) GetNamespaced(namespace, name string, opts metav
 
 func (s *templateContentClient) Update(o *TemplateContent) (*TemplateContent, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*TemplateContent), err
+}
+
+func (s *templateContentClient) UpdateStatus(o *TemplateContent) (*TemplateContent, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*TemplateContent), err
 }
 

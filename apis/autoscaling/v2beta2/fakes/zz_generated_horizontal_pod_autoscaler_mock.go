@@ -734,6 +734,7 @@ var (
 	lockHorizontalPodAutoscalerInterfaceMockListNamespaced                   sync.RWMutex
 	lockHorizontalPodAutoscalerInterfaceMockObjectClient                     sync.RWMutex
 	lockHorizontalPodAutoscalerInterfaceMockUpdate                           sync.RWMutex
+	lockHorizontalPodAutoscalerInterfaceMockUpdateStatus                     sync.RWMutex
 	lockHorizontalPodAutoscalerInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v2beta2a.HorizontalPodAutoscalerInterface = &HorizontalPodAutoscalerInterf
 //             UpdateFunc: func(in1 *v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type HorizontalPodAutoscalerInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type HorizontalPodAutoscalerInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v2beta2.HorizontalPodAutoscaler
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v2beta2.HorizontalPodAutoscaler
 		}
@@ -1743,6 +1755,37 @@ func (mock *HorizontalPodAutoscalerInterfaceMock) UpdateCalls() []struct {
 	lockHorizontalPodAutoscalerInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockHorizontalPodAutoscalerInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *HorizontalPodAutoscalerInterfaceMock) UpdateStatus(in1 *v2beta2.HorizontalPodAutoscaler) (*v2beta2.HorizontalPodAutoscaler, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("HorizontalPodAutoscalerInterfaceMock.UpdateStatusFunc: method is nil but HorizontalPodAutoscalerInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v2beta2.HorizontalPodAutoscaler
+	}{
+		In1: in1,
+	}
+	lockHorizontalPodAutoscalerInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockHorizontalPodAutoscalerInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedHorizontalPodAutoscalerInterface.UpdateStatusCalls())
+func (mock *HorizontalPodAutoscalerInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v2beta2.HorizontalPodAutoscaler
+} {
+	var calls []struct {
+		In1 *v2beta2.HorizontalPodAutoscaler
+	}
+	lockHorizontalPodAutoscalerInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockHorizontalPodAutoscalerInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

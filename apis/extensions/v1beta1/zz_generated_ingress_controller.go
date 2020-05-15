@@ -85,6 +85,7 @@ type IngressInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1beta1.Ingress, error)
 	Get(name string, opts metav1.GetOptions) (*v1beta1.Ingress, error)
 	Update(*v1beta1.Ingress) (*v1beta1.Ingress, error)
+	UpdateStatus(*v1beta1.Ingress) (*v1beta1.Ingress, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*IngressList, error)
@@ -260,6 +261,11 @@ func (s *ingressClient) GetNamespaced(namespace, name string, opts metav1.GetOpt
 
 func (s *ingressClient) Update(o *v1beta1.Ingress) (*v1beta1.Ingress, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1beta1.Ingress), err
+}
+
+func (s *ingressClient) UpdateStatus(o *v1beta1.Ingress) (*v1beta1.Ingress, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1beta1.Ingress), err
 }
 

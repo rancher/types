@@ -84,6 +84,7 @@ type NodeInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Node, error)
 	Get(name string, opts metav1.GetOptions) (*Node, error)
 	Update(*Node) (*Node, error)
+	UpdateStatus(*Node) (*Node, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*NodeList, error)
@@ -259,6 +260,11 @@ func (s *nodeClient) GetNamespaced(namespace, name string, opts metav1.GetOption
 
 func (s *nodeClient) Update(o *Node) (*Node, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Node), err
+}
+
+func (s *nodeClient) UpdateStatus(o *Node) (*Node, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Node), err
 }
 

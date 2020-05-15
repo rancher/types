@@ -733,6 +733,7 @@ var (
 	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockListNamespaced                   sync.RWMutex
 	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockObjectClient                     sync.RWMutex
 	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockUpdate                           sync.RWMutex
+	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockUpdateStatus                     sync.RWMutex
 	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.PodSecurityPolicyTemplateProjectBindingInterface = &PodSecurityPolicyTe
 //             UpdateFunc: func(in1 *v3.PodSecurityPolicyTemplateProjectBinding) (*v3.PodSecurityPolicyTemplateProjectBinding, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.PodSecurityPolicyTemplateProjectBinding) (*v3.PodSecurityPolicyTemplateProjectBinding, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type PodSecurityPolicyTemplateProjectBindingInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.PodSecurityPolicyTemplateProjectBinding) (*v3.PodSecurityPolicyTemplateProjectBinding, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.PodSecurityPolicyTemplateProjectBinding) (*v3.PodSecurityPolicyTemplateProjectBinding, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type PodSecurityPolicyTemplateProjectBindingInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.PodSecurityPolicyTemplateProjectBinding
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.PodSecurityPolicyTemplateProjectBinding
 		}
@@ -1742,6 +1754,37 @@ func (mock *PodSecurityPolicyTemplateProjectBindingInterfaceMock) UpdateCalls() 
 	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *PodSecurityPolicyTemplateProjectBindingInterfaceMock) UpdateStatus(in1 *v3.PodSecurityPolicyTemplateProjectBinding) (*v3.PodSecurityPolicyTemplateProjectBinding, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("PodSecurityPolicyTemplateProjectBindingInterfaceMock.UpdateStatusFunc: method is nil but PodSecurityPolicyTemplateProjectBindingInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.PodSecurityPolicyTemplateProjectBinding
+	}{
+		In1: in1,
+	}
+	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedPodSecurityPolicyTemplateProjectBindingInterface.UpdateStatusCalls())
+func (mock *PodSecurityPolicyTemplateProjectBindingInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.PodSecurityPolicyTemplateProjectBinding
+} {
+	var calls []struct {
+		In1 *v3.PodSecurityPolicyTemplateProjectBinding
+	}
+	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockPodSecurityPolicyTemplateProjectBindingInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

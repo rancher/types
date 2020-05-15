@@ -733,6 +733,7 @@ var (
 	lockCatalogInterfaceMockListNamespaced                   sync.RWMutex
 	lockCatalogInterfaceMockObjectClient                     sync.RWMutex
 	lockCatalogInterfaceMockUpdate                           sync.RWMutex
+	lockCatalogInterfaceMockUpdateStatus                     sync.RWMutex
 	lockCatalogInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.CatalogInterface = &CatalogInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Catalog) (*v3.Catalog, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Catalog) (*v3.Catalog, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type CatalogInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Catalog) (*v3.Catalog, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Catalog) (*v3.Catalog, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type CatalogInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Catalog
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Catalog
 		}
@@ -1742,6 +1754,37 @@ func (mock *CatalogInterfaceMock) UpdateCalls() []struct {
 	lockCatalogInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockCatalogInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *CatalogInterfaceMock) UpdateStatus(in1 *v3.Catalog) (*v3.Catalog, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("CatalogInterfaceMock.UpdateStatusFunc: method is nil but CatalogInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Catalog
+	}{
+		In1: in1,
+	}
+	lockCatalogInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockCatalogInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedCatalogInterface.UpdateStatusCalls())
+func (mock *CatalogInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Catalog
+} {
+	var calls []struct {
+		In1 *v3.Catalog
+	}
+	lockCatalogInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockCatalogInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

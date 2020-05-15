@@ -84,6 +84,7 @@ type RKEK8sSystemImageInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*RKEK8sSystemImage, error)
 	Get(name string, opts metav1.GetOptions) (*RKEK8sSystemImage, error)
 	Update(*RKEK8sSystemImage) (*RKEK8sSystemImage, error)
+	UpdateStatus(*RKEK8sSystemImage) (*RKEK8sSystemImage, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*RKEK8sSystemImageList, error)
@@ -259,6 +260,11 @@ func (s *rkeK8sSystemImageClient) GetNamespaced(namespace, name string, opts met
 
 func (s *rkeK8sSystemImageClient) Update(o *RKEK8sSystemImage) (*RKEK8sSystemImage, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*RKEK8sSystemImage), err
+}
+
+func (s *rkeK8sSystemImageClient) UpdateStatus(o *RKEK8sSystemImage) (*RKEK8sSystemImage, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*RKEK8sSystemImage), err
 }
 

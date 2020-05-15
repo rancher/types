@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/rbac/v1"
+	"k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -84,6 +84,7 @@ type ClusterRoleInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.ClusterRole, error)
 	Get(name string, opts metav1.GetOptions) (*v1.ClusterRole, error)
 	Update(*v1.ClusterRole) (*v1.ClusterRole, error)
+	UpdateStatus(*v1.ClusterRole) (*v1.ClusterRole, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterRoleList, error)
@@ -259,6 +260,11 @@ func (s *clusterRoleClient) GetNamespaced(namespace, name string, opts metav1.Ge
 
 func (s *clusterRoleClient) Update(o *v1.ClusterRole) (*v1.ClusterRole, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.ClusterRole), err
+}
+
+func (s *clusterRoleClient) UpdateStatus(o *v1.ClusterRole) (*v1.ClusterRole, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.ClusterRole), err
 }
 

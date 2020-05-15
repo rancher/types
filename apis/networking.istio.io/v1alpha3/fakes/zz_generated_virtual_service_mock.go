@@ -734,6 +734,7 @@ var (
 	lockVirtualServiceInterfaceMockListNamespaced                   sync.RWMutex
 	lockVirtualServiceInterfaceMockObjectClient                     sync.RWMutex
 	lockVirtualServiceInterfaceMockUpdate                           sync.RWMutex
+	lockVirtualServiceInterfaceMockUpdateStatus                     sync.RWMutex
 	lockVirtualServiceInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1alpha3a.VirtualServiceInterface = &VirtualServiceInterfaceMock{}
 //             UpdateFunc: func(in1 *v1alpha3.VirtualService) (*v1alpha3.VirtualService, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1alpha3.VirtualService) (*v1alpha3.VirtualService, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type VirtualServiceInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1alpha3.VirtualService) (*v1alpha3.VirtualService, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1alpha3.VirtualService) (*v1alpha3.VirtualService, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type VirtualServiceInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1alpha3.VirtualService
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1alpha3.VirtualService
 		}
@@ -1743,6 +1755,37 @@ func (mock *VirtualServiceInterfaceMock) UpdateCalls() []struct {
 	lockVirtualServiceInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockVirtualServiceInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *VirtualServiceInterfaceMock) UpdateStatus(in1 *v1alpha3.VirtualService) (*v1alpha3.VirtualService, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("VirtualServiceInterfaceMock.UpdateStatusFunc: method is nil but VirtualServiceInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1alpha3.VirtualService
+	}{
+		In1: in1,
+	}
+	lockVirtualServiceInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockVirtualServiceInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedVirtualServiceInterface.UpdateStatusCalls())
+func (mock *VirtualServiceInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1alpha3.VirtualService
+} {
+	var calls []struct {
+		In1 *v1alpha3.VirtualService
+	}
+	lockVirtualServiceInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockVirtualServiceInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

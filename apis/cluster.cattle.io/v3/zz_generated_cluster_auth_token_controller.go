@@ -84,6 +84,7 @@ type ClusterAuthTokenInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterAuthToken, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterAuthToken, error)
 	Update(*ClusterAuthToken) (*ClusterAuthToken, error)
+	UpdateStatus(*ClusterAuthToken) (*ClusterAuthToken, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterAuthTokenList, error)
@@ -259,6 +260,11 @@ func (s *clusterAuthTokenClient) GetNamespaced(namespace, name string, opts meta
 
 func (s *clusterAuthTokenClient) Update(o *ClusterAuthToken) (*ClusterAuthToken, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterAuthToken), err
+}
+
+func (s *clusterAuthTokenClient) UpdateStatus(o *ClusterAuthToken) (*ClusterAuthToken, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterAuthToken), err
 }
 

@@ -733,6 +733,7 @@ var (
 	lockSourceCodeRepositoryInterfaceMockListNamespaced                   sync.RWMutex
 	lockSourceCodeRepositoryInterfaceMockObjectClient                     sync.RWMutex
 	lockSourceCodeRepositoryInterfaceMockUpdate                           sync.RWMutex
+	lockSourceCodeRepositoryInterfaceMockUpdateStatus                     sync.RWMutex
 	lockSourceCodeRepositoryInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.SourceCodeRepositoryInterface = &SourceCodeRepositoryInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.SourceCodeRepository) (*v3.SourceCodeRepository, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.SourceCodeRepository) (*v3.SourceCodeRepository, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type SourceCodeRepositoryInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.SourceCodeRepository) (*v3.SourceCodeRepository, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.SourceCodeRepository) (*v3.SourceCodeRepository, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type SourceCodeRepositoryInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.SourceCodeRepository
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.SourceCodeRepository
 		}
@@ -1742,6 +1754,37 @@ func (mock *SourceCodeRepositoryInterfaceMock) UpdateCalls() []struct {
 	lockSourceCodeRepositoryInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockSourceCodeRepositoryInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *SourceCodeRepositoryInterfaceMock) UpdateStatus(in1 *v3.SourceCodeRepository) (*v3.SourceCodeRepository, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("SourceCodeRepositoryInterfaceMock.UpdateStatusFunc: method is nil but SourceCodeRepositoryInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.SourceCodeRepository
+	}{
+		In1: in1,
+	}
+	lockSourceCodeRepositoryInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockSourceCodeRepositoryInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedSourceCodeRepositoryInterface.UpdateStatusCalls())
+func (mock *SourceCodeRepositoryInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.SourceCodeRepository
+} {
+	var calls []struct {
+		In1 *v3.SourceCodeRepository
+	}
+	lockSourceCodeRepositoryInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockSourceCodeRepositoryInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

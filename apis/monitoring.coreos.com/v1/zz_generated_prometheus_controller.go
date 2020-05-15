@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	v1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
+	"github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
@@ -85,6 +85,7 @@ type PrometheusInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.Prometheus, error)
 	Get(name string, opts metav1.GetOptions) (*v1.Prometheus, error)
 	Update(*v1.Prometheus) (*v1.Prometheus, error)
+	UpdateStatus(*v1.Prometheus) (*v1.Prometheus, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*PrometheusList, error)
@@ -260,6 +261,11 @@ func (s *prometheusClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *prometheusClient) Update(o *v1.Prometheus) (*v1.Prometheus, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.Prometheus), err
+}
+
+func (s *prometheusClient) UpdateStatus(o *v1.Prometheus) (*v1.Prometheus, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.Prometheus), err
 }
 

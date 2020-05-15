@@ -734,6 +734,7 @@ var (
 	lockLimitRangeInterfaceMockListNamespaced                   sync.RWMutex
 	lockLimitRangeInterfaceMockObjectClient                     sync.RWMutex
 	lockLimitRangeInterfaceMockUpdate                           sync.RWMutex
+	lockLimitRangeInterfaceMockUpdateStatus                     sync.RWMutex
 	lockLimitRangeInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.LimitRangeInterface = &LimitRangeInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.LimitRange) (*v1.LimitRange, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.LimitRange) (*v1.LimitRange, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type LimitRangeInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.LimitRange) (*v1.LimitRange, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.LimitRange) (*v1.LimitRange, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type LimitRangeInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.LimitRange
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.LimitRange
 		}
@@ -1743,6 +1755,37 @@ func (mock *LimitRangeInterfaceMock) UpdateCalls() []struct {
 	lockLimitRangeInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockLimitRangeInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *LimitRangeInterfaceMock) UpdateStatus(in1 *v1.LimitRange) (*v1.LimitRange, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("LimitRangeInterfaceMock.UpdateStatusFunc: method is nil but LimitRangeInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.LimitRange
+	}{
+		In1: in1,
+	}
+	lockLimitRangeInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockLimitRangeInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedLimitRangeInterface.UpdateStatusCalls())
+func (mock *LimitRangeInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.LimitRange
+} {
+	var calls []struct {
+		In1 *v1.LimitRange
+	}
+	lockLimitRangeInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockLimitRangeInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

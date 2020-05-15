@@ -733,6 +733,7 @@ var (
 	lockProjectRoleTemplateBindingInterfaceMockListNamespaced                   sync.RWMutex
 	lockProjectRoleTemplateBindingInterfaceMockObjectClient                     sync.RWMutex
 	lockProjectRoleTemplateBindingInterfaceMockUpdate                           sync.RWMutex
+	lockProjectRoleTemplateBindingInterfaceMockUpdateStatus                     sync.RWMutex
 	lockProjectRoleTemplateBindingInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ProjectRoleTemplateBindingInterface = &ProjectRoleTemplateBindingInterf
 //             UpdateFunc: func(in1 *v3.ProjectRoleTemplateBinding) (*v3.ProjectRoleTemplateBinding, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ProjectRoleTemplateBinding) (*v3.ProjectRoleTemplateBinding, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ProjectRoleTemplateBindingInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ProjectRoleTemplateBinding) (*v3.ProjectRoleTemplateBinding, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ProjectRoleTemplateBinding) (*v3.ProjectRoleTemplateBinding, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ProjectRoleTemplateBindingInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ProjectRoleTemplateBinding
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ProjectRoleTemplateBinding
 		}
@@ -1742,6 +1754,37 @@ func (mock *ProjectRoleTemplateBindingInterfaceMock) UpdateCalls() []struct {
 	lockProjectRoleTemplateBindingInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockProjectRoleTemplateBindingInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ProjectRoleTemplateBindingInterfaceMock) UpdateStatus(in1 *v3.ProjectRoleTemplateBinding) (*v3.ProjectRoleTemplateBinding, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ProjectRoleTemplateBindingInterfaceMock.UpdateStatusFunc: method is nil but ProjectRoleTemplateBindingInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ProjectRoleTemplateBinding
+	}{
+		In1: in1,
+	}
+	lockProjectRoleTemplateBindingInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockProjectRoleTemplateBindingInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedProjectRoleTemplateBindingInterface.UpdateStatusCalls())
+func (mock *ProjectRoleTemplateBindingInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ProjectRoleTemplateBinding
+} {
+	var calls []struct {
+		In1 *v3.ProjectRoleTemplateBinding
+	}
+	lockProjectRoleTemplateBindingInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockProjectRoleTemplateBindingInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

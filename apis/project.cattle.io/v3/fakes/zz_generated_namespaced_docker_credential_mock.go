@@ -733,6 +733,7 @@ var (
 	lockNamespacedDockerCredentialInterfaceMockListNamespaced                   sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockObjectClient                     sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockUpdate                           sync.RWMutex
+	lockNamespacedDockerCredentialInterfaceMockUpdateStatus                     sync.RWMutex
 	lockNamespacedDockerCredentialInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.NamespacedDockerCredentialInterface = &NamespacedDockerCredentialInterf
 //             UpdateFunc: func(in1 *v3.NamespacedDockerCredential) (*v3.NamespacedDockerCredential, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.NamespacedDockerCredential) (*v3.NamespacedDockerCredential, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type NamespacedDockerCredentialInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.NamespacedDockerCredential) (*v3.NamespacedDockerCredential, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.NamespacedDockerCredential) (*v3.NamespacedDockerCredential, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type NamespacedDockerCredentialInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.NamespacedDockerCredential
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.NamespacedDockerCredential
 		}
@@ -1742,6 +1754,37 @@ func (mock *NamespacedDockerCredentialInterfaceMock) UpdateCalls() []struct {
 	lockNamespacedDockerCredentialInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockNamespacedDockerCredentialInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *NamespacedDockerCredentialInterfaceMock) UpdateStatus(in1 *v3.NamespacedDockerCredential) (*v3.NamespacedDockerCredential, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("NamespacedDockerCredentialInterfaceMock.UpdateStatusFunc: method is nil but NamespacedDockerCredentialInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.NamespacedDockerCredential
+	}{
+		In1: in1,
+	}
+	lockNamespacedDockerCredentialInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockNamespacedDockerCredentialInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedNamespacedDockerCredentialInterface.UpdateStatusCalls())
+func (mock *NamespacedDockerCredentialInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.NamespacedDockerCredential
+} {
+	var calls []struct {
+		In1 *v3.NamespacedDockerCredential
+	}
+	lockNamespacedDockerCredentialInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockNamespacedDockerCredentialInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

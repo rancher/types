@@ -85,6 +85,7 @@ type DestinationRuleInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1alpha3.DestinationRule, error)
 	Get(name string, opts metav1.GetOptions) (*v1alpha3.DestinationRule, error)
 	Update(*v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error)
+	UpdateStatus(*v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*DestinationRuleList, error)
@@ -260,6 +261,11 @@ func (s *destinationRuleClient) GetNamespaced(namespace, name string, opts metav
 
 func (s *destinationRuleClient) Update(o *v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1alpha3.DestinationRule), err
+}
+
+func (s *destinationRuleClient) UpdateStatus(o *v1alpha3.DestinationRule) (*v1alpha3.DestinationRule, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1alpha3.DestinationRule), err
 }
 

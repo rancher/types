@@ -733,6 +733,7 @@ var (
 	lockMultiClusterAppInterfaceMockListNamespaced                   sync.RWMutex
 	lockMultiClusterAppInterfaceMockObjectClient                     sync.RWMutex
 	lockMultiClusterAppInterfaceMockUpdate                           sync.RWMutex
+	lockMultiClusterAppInterfaceMockUpdateStatus                     sync.RWMutex
 	lockMultiClusterAppInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.MultiClusterAppInterface = &MultiClusterAppInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.MultiClusterApp) (*v3.MultiClusterApp, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.MultiClusterApp) (*v3.MultiClusterApp, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type MultiClusterAppInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.MultiClusterApp) (*v3.MultiClusterApp, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.MultiClusterApp) (*v3.MultiClusterApp, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type MultiClusterAppInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.MultiClusterApp
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.MultiClusterApp
 		}
@@ -1742,6 +1754,37 @@ func (mock *MultiClusterAppInterfaceMock) UpdateCalls() []struct {
 	lockMultiClusterAppInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockMultiClusterAppInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *MultiClusterAppInterfaceMock) UpdateStatus(in1 *v3.MultiClusterApp) (*v3.MultiClusterApp, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("MultiClusterAppInterfaceMock.UpdateStatusFunc: method is nil but MultiClusterAppInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.MultiClusterApp
+	}{
+		In1: in1,
+	}
+	lockMultiClusterAppInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockMultiClusterAppInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedMultiClusterAppInterface.UpdateStatusCalls())
+func (mock *MultiClusterAppInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.MultiClusterApp
+} {
+	var calls []struct {
+		In1 *v3.MultiClusterApp
+	}
+	lockMultiClusterAppInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockMultiClusterAppInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

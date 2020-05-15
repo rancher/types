@@ -84,6 +84,7 @@ type NodePoolInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NodePool, error)
 	Get(name string, opts metav1.GetOptions) (*NodePool, error)
 	Update(*NodePool) (*NodePool, error)
+	UpdateStatus(*NodePool) (*NodePool, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*NodePoolList, error)
@@ -259,6 +260,11 @@ func (s *nodePoolClient) GetNamespaced(namespace, name string, opts metav1.GetOp
 
 func (s *nodePoolClient) Update(o *NodePool) (*NodePool, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*NodePool), err
+}
+
+func (s *nodePoolClient) UpdateStatus(o *NodePool) (*NodePool, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*NodePool), err
 }
 

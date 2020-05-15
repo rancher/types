@@ -734,6 +734,7 @@ var (
 	lockResourceQuotaInterfaceMockListNamespaced                   sync.RWMutex
 	lockResourceQuotaInterfaceMockObjectClient                     sync.RWMutex
 	lockResourceQuotaInterfaceMockUpdate                           sync.RWMutex
+	lockResourceQuotaInterfaceMockUpdateStatus                     sync.RWMutex
 	lockResourceQuotaInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.ResourceQuotaInterface = &ResourceQuotaInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.ResourceQuota) (*v1.ResourceQuota, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.ResourceQuota) (*v1.ResourceQuota, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type ResourceQuotaInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.ResourceQuota) (*v1.ResourceQuota, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.ResourceQuota) (*v1.ResourceQuota, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type ResourceQuotaInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.ResourceQuota
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.ResourceQuota
 		}
@@ -1743,6 +1755,37 @@ func (mock *ResourceQuotaInterfaceMock) UpdateCalls() []struct {
 	lockResourceQuotaInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockResourceQuotaInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ResourceQuotaInterfaceMock) UpdateStatus(in1 *v1.ResourceQuota) (*v1.ResourceQuota, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ResourceQuotaInterfaceMock.UpdateStatusFunc: method is nil but ResourceQuotaInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.ResourceQuota
+	}{
+		In1: in1,
+	}
+	lockResourceQuotaInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockResourceQuotaInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedResourceQuotaInterface.UpdateStatusCalls())
+func (mock *ResourceQuotaInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.ResourceQuota
+} {
+	var calls []struct {
+		In1 *v1.ResourceQuota
+	}
+	lockResourceQuotaInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockResourceQuotaInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -83,6 +83,7 @@ type TokenInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Token, error)
 	Get(name string, opts metav1.GetOptions) (*Token, error)
 	Update(*Token) (*Token, error)
+	UpdateStatus(*Token) (*Token, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*TokenList, error)
@@ -258,6 +259,11 @@ func (s *tokenClient) GetNamespaced(namespace, name string, opts metav1.GetOptio
 
 func (s *tokenClient) Update(o *Token) (*Token, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Token), err
+}
+
+func (s *tokenClient) UpdateStatus(o *Token) (*Token, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Token), err
 }
 

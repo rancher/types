@@ -734,6 +734,7 @@ var (
 	lockServiceAccountInterfaceMockListNamespaced                   sync.RWMutex
 	lockServiceAccountInterfaceMockObjectClient                     sync.RWMutex
 	lockServiceAccountInterfaceMockUpdate                           sync.RWMutex
+	lockServiceAccountInterfaceMockUpdateStatus                     sync.RWMutex
 	lockServiceAccountInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.ServiceAccountInterface = &ServiceAccountInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.ServiceAccount) (*v1.ServiceAccount, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.ServiceAccount) (*v1.ServiceAccount, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type ServiceAccountInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.ServiceAccount) (*v1.ServiceAccount, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.ServiceAccount) (*v1.ServiceAccount, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type ServiceAccountInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.ServiceAccount
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.ServiceAccount
 		}
@@ -1743,6 +1755,37 @@ func (mock *ServiceAccountInterfaceMock) UpdateCalls() []struct {
 	lockServiceAccountInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockServiceAccountInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ServiceAccountInterfaceMock) UpdateStatus(in1 *v1.ServiceAccount) (*v1.ServiceAccount, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ServiceAccountInterfaceMock.UpdateStatusFunc: method is nil but ServiceAccountInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.ServiceAccount
+	}{
+		In1: in1,
+	}
+	lockServiceAccountInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockServiceAccountInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedServiceAccountInterface.UpdateStatusCalls())
+func (mock *ServiceAccountInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.ServiceAccount
+} {
+	var calls []struct {
+		In1 *v1.ServiceAccount
+	}
+	lockServiceAccountInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockServiceAccountInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

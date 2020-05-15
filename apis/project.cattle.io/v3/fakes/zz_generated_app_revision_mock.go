@@ -733,6 +733,7 @@ var (
 	lockAppRevisionInterfaceMockListNamespaced                   sync.RWMutex
 	lockAppRevisionInterfaceMockObjectClient                     sync.RWMutex
 	lockAppRevisionInterfaceMockUpdate                           sync.RWMutex
+	lockAppRevisionInterfaceMockUpdateStatus                     sync.RWMutex
 	lockAppRevisionInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.AppRevisionInterface = &AppRevisionInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.AppRevision) (*v3.AppRevision, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.AppRevision) (*v3.AppRevision, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type AppRevisionInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.AppRevision) (*v3.AppRevision, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.AppRevision) (*v3.AppRevision, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type AppRevisionInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.AppRevision
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.AppRevision
 		}
@@ -1742,6 +1754,37 @@ func (mock *AppRevisionInterfaceMock) UpdateCalls() []struct {
 	lockAppRevisionInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockAppRevisionInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *AppRevisionInterfaceMock) UpdateStatus(in1 *v3.AppRevision) (*v3.AppRevision, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("AppRevisionInterfaceMock.UpdateStatusFunc: method is nil but AppRevisionInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.AppRevision
+	}{
+		In1: in1,
+	}
+	lockAppRevisionInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockAppRevisionInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedAppRevisionInterface.UpdateStatusCalls())
+func (mock *AppRevisionInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.AppRevision
+} {
+	var calls []struct {
+		In1 *v3.AppRevision
+	}
+	lockAppRevisionInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockAppRevisionInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

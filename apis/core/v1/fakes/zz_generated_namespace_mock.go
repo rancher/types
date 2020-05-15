@@ -734,6 +734,7 @@ var (
 	lockNamespaceInterfaceMockListNamespaced                   sync.RWMutex
 	lockNamespaceInterfaceMockObjectClient                     sync.RWMutex
 	lockNamespaceInterfaceMockUpdate                           sync.RWMutex
+	lockNamespaceInterfaceMockUpdateStatus                     sync.RWMutex
 	lockNamespaceInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.NamespaceInterface = &NamespaceInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.Namespace) (*v1.Namespace, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.Namespace) (*v1.Namespace, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type NamespaceInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.Namespace) (*v1.Namespace, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.Namespace) (*v1.Namespace, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type NamespaceInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.Namespace
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.Namespace
 		}
@@ -1743,6 +1755,37 @@ func (mock *NamespaceInterfaceMock) UpdateCalls() []struct {
 	lockNamespaceInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockNamespaceInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *NamespaceInterfaceMock) UpdateStatus(in1 *v1.Namespace) (*v1.Namespace, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("NamespaceInterfaceMock.UpdateStatusFunc: method is nil but NamespaceInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.Namespace
+	}{
+		In1: in1,
+	}
+	lockNamespaceInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockNamespaceInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedNamespaceInterface.UpdateStatusCalls())
+func (mock *NamespaceInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.Namespace
+} {
+	var calls []struct {
+		In1 *v1.Namespace
+	}
+	lockNamespaceInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockNamespaceInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

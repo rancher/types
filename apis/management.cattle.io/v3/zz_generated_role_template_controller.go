@@ -83,6 +83,7 @@ type RoleTemplateInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*RoleTemplate, error)
 	Get(name string, opts metav1.GetOptions) (*RoleTemplate, error)
 	Update(*RoleTemplate) (*RoleTemplate, error)
+	UpdateStatus(*RoleTemplate) (*RoleTemplate, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*RoleTemplateList, error)
@@ -258,6 +259,11 @@ func (s *roleTemplateClient) GetNamespaced(namespace, name string, opts metav1.G
 
 func (s *roleTemplateClient) Update(o *RoleTemplate) (*RoleTemplate, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*RoleTemplate), err
+}
+
+func (s *roleTemplateClient) UpdateStatus(o *RoleTemplate) (*RoleTemplate, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*RoleTemplate), err
 }
 

@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/networking/v1"
+	"k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type NetworkPolicyInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.NetworkPolicy, error)
 	Get(name string, opts metav1.GetOptions) (*v1.NetworkPolicy, error)
 	Update(*v1.NetworkPolicy) (*v1.NetworkPolicy, error)
+	UpdateStatus(*v1.NetworkPolicy) (*v1.NetworkPolicy, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*NetworkPolicyList, error)
@@ -260,6 +261,11 @@ func (s *networkPolicyClient) GetNamespaced(namespace, name string, opts metav1.
 
 func (s *networkPolicyClient) Update(o *v1.NetworkPolicy) (*v1.NetworkPolicy, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.NetworkPolicy), err
+}
+
+func (s *networkPolicyClient) UpdateStatus(o *v1.NetworkPolicy) (*v1.NetworkPolicy, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.NetworkPolicy), err
 }
 

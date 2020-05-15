@@ -733,6 +733,7 @@ var (
 	lockClusterLoggingInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterLoggingInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterLoggingInterfaceMockUpdate                           sync.RWMutex
+	lockClusterLoggingInterfaceMockUpdateStatus                     sync.RWMutex
 	lockClusterLoggingInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ClusterLoggingInterface = &ClusterLoggingInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.ClusterLogging) (*v3.ClusterLogging, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ClusterLogging) (*v3.ClusterLogging, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ClusterLoggingInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ClusterLogging) (*v3.ClusterLogging, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ClusterLogging) (*v3.ClusterLogging, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ClusterLoggingInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ClusterLogging
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ClusterLogging
 		}
@@ -1742,6 +1754,37 @@ func (mock *ClusterLoggingInterfaceMock) UpdateCalls() []struct {
 	lockClusterLoggingInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockClusterLoggingInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ClusterLoggingInterfaceMock) UpdateStatus(in1 *v3.ClusterLogging) (*v3.ClusterLogging, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ClusterLoggingInterfaceMock.UpdateStatusFunc: method is nil but ClusterLoggingInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ClusterLogging
+	}{
+		In1: in1,
+	}
+	lockClusterLoggingInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockClusterLoggingInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedClusterLoggingInterface.UpdateStatusCalls())
+func (mock *ClusterLoggingInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ClusterLogging
+} {
+	var calls []struct {
+		In1 *v3.ClusterLogging
+	}
+	lockClusterLoggingInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockClusterLoggingInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

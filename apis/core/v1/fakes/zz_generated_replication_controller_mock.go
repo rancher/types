@@ -734,6 +734,7 @@ var (
 	lockReplicationControllerInterfaceMockListNamespaced                   sync.RWMutex
 	lockReplicationControllerInterfaceMockObjectClient                     sync.RWMutex
 	lockReplicationControllerInterfaceMockUpdate                           sync.RWMutex
+	lockReplicationControllerInterfaceMockUpdateStatus                     sync.RWMutex
 	lockReplicationControllerInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.ReplicationControllerInterface = &ReplicationControllerInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.ReplicationController) (*v1.ReplicationController, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.ReplicationController) (*v1.ReplicationController, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type ReplicationControllerInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.ReplicationController) (*v1.ReplicationController, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.ReplicationController) (*v1.ReplicationController, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type ReplicationControllerInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.ReplicationController
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.ReplicationController
 		}
@@ -1743,6 +1755,37 @@ func (mock *ReplicationControllerInterfaceMock) UpdateCalls() []struct {
 	lockReplicationControllerInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockReplicationControllerInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ReplicationControllerInterfaceMock) UpdateStatus(in1 *v1.ReplicationController) (*v1.ReplicationController, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ReplicationControllerInterfaceMock.UpdateStatusFunc: method is nil but ReplicationControllerInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.ReplicationController
+	}{
+		In1: in1,
+	}
+	lockReplicationControllerInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockReplicationControllerInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedReplicationControllerInterface.UpdateStatusCalls())
+func (mock *ReplicationControllerInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.ReplicationController
+} {
+	var calls []struct {
+		In1 *v1.ReplicationController
+	}
+	lockReplicationControllerInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockReplicationControllerInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

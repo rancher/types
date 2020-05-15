@@ -733,6 +733,7 @@ var (
 	lockEtcdBackupInterfaceMockListNamespaced                   sync.RWMutex
 	lockEtcdBackupInterfaceMockObjectClient                     sync.RWMutex
 	lockEtcdBackupInterfaceMockUpdate                           sync.RWMutex
+	lockEtcdBackupInterfaceMockUpdateStatus                     sync.RWMutex
 	lockEtcdBackupInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.EtcdBackupInterface = &EtcdBackupInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.EtcdBackup) (*v3.EtcdBackup, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.EtcdBackup) (*v3.EtcdBackup, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type EtcdBackupInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.EtcdBackup) (*v3.EtcdBackup, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.EtcdBackup) (*v3.EtcdBackup, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type EtcdBackupInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.EtcdBackup
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.EtcdBackup
 		}
@@ -1742,6 +1754,37 @@ func (mock *EtcdBackupInterfaceMock) UpdateCalls() []struct {
 	lockEtcdBackupInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockEtcdBackupInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *EtcdBackupInterfaceMock) UpdateStatus(in1 *v3.EtcdBackup) (*v3.EtcdBackup, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("EtcdBackupInterfaceMock.UpdateStatusFunc: method is nil but EtcdBackupInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.EtcdBackup
+	}{
+		In1: in1,
+	}
+	lockEtcdBackupInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockEtcdBackupInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedEtcdBackupInterface.UpdateStatusCalls())
+func (mock *EtcdBackupInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.EtcdBackup
+} {
+	var calls []struct {
+		In1 *v3.EtcdBackup
+	}
+	lockEtcdBackupInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockEtcdBackupInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

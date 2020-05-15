@@ -733,6 +733,7 @@ var (
 	lockGroupInterfaceMockListNamespaced                   sync.RWMutex
 	lockGroupInterfaceMockObjectClient                     sync.RWMutex
 	lockGroupInterfaceMockUpdate                           sync.RWMutex
+	lockGroupInterfaceMockUpdateStatus                     sync.RWMutex
 	lockGroupInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.GroupInterface = &GroupInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Group) (*v3.Group, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Group) (*v3.Group, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type GroupInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Group) (*v3.Group, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Group) (*v3.Group, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type GroupInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Group
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Group
 		}
@@ -1742,6 +1754,37 @@ func (mock *GroupInterfaceMock) UpdateCalls() []struct {
 	lockGroupInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockGroupInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *GroupInterfaceMock) UpdateStatus(in1 *v3.Group) (*v3.Group, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("GroupInterfaceMock.UpdateStatusFunc: method is nil but GroupInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Group
+	}{
+		In1: in1,
+	}
+	lockGroupInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockGroupInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedGroupInterface.UpdateStatusCalls())
+func (mock *GroupInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Group
+} {
+	var calls []struct {
+		In1 *v3.Group
+	}
+	lockGroupInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockGroupInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

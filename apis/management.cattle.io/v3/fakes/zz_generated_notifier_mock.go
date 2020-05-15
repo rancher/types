@@ -733,6 +733,7 @@ var (
 	lockNotifierInterfaceMockListNamespaced                   sync.RWMutex
 	lockNotifierInterfaceMockObjectClient                     sync.RWMutex
 	lockNotifierInterfaceMockUpdate                           sync.RWMutex
+	lockNotifierInterfaceMockUpdateStatus                     sync.RWMutex
 	lockNotifierInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.NotifierInterface = &NotifierInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Notifier) (*v3.Notifier, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Notifier) (*v3.Notifier, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type NotifierInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Notifier) (*v3.Notifier, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Notifier) (*v3.Notifier, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type NotifierInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Notifier
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Notifier
 		}
@@ -1742,6 +1754,37 @@ func (mock *NotifierInterfaceMock) UpdateCalls() []struct {
 	lockNotifierInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockNotifierInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *NotifierInterfaceMock) UpdateStatus(in1 *v3.Notifier) (*v3.Notifier, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("NotifierInterfaceMock.UpdateStatusFunc: method is nil but NotifierInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Notifier
+	}{
+		In1: in1,
+	}
+	lockNotifierInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockNotifierInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedNotifierInterface.UpdateStatusCalls())
+func (mock *NotifierInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Notifier
+} {
+	var calls []struct {
+		In1 *v3.Notifier
+	}
+	lockNotifierInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockNotifierInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

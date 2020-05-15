@@ -84,6 +84,7 @@ type MonitorMetricInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*MonitorMetric, error)
 	Get(name string, opts metav1.GetOptions) (*MonitorMetric, error)
 	Update(*MonitorMetric) (*MonitorMetric, error)
+	UpdateStatus(*MonitorMetric) (*MonitorMetric, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*MonitorMetricList, error)
@@ -259,6 +260,11 @@ func (s *monitorMetricClient) GetNamespaced(namespace, name string, opts metav1.
 
 func (s *monitorMetricClient) Update(o *MonitorMetric) (*MonitorMetric, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*MonitorMetric), err
+}
+
+func (s *monitorMetricClient) UpdateStatus(o *MonitorMetric) (*MonitorMetric, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*MonitorMetric), err
 }
 

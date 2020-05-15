@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type LimitRangeInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.LimitRange, error)
 	Get(name string, opts metav1.GetOptions) (*v1.LimitRange, error)
 	Update(*v1.LimitRange) (*v1.LimitRange, error)
+	UpdateStatus(*v1.LimitRange) (*v1.LimitRange, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*LimitRangeList, error)
@@ -260,6 +261,11 @@ func (s *limitRangeClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *limitRangeClient) Update(o *v1.LimitRange) (*v1.LimitRange, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.LimitRange), err
+}
+
+func (s *limitRangeClient) UpdateStatus(o *v1.LimitRange) (*v1.LimitRange, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.LimitRange), err
 }
 

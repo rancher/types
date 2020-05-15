@@ -733,6 +733,7 @@ var (
 	lockClusterAlertRuleInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterAlertRuleInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterAlertRuleInterfaceMockUpdate                           sync.RWMutex
+	lockClusterAlertRuleInterfaceMockUpdateStatus                     sync.RWMutex
 	lockClusterAlertRuleInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ClusterAlertRuleInterface = &ClusterAlertRuleInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.ClusterAlertRule) (*v3.ClusterAlertRule, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ClusterAlertRule) (*v3.ClusterAlertRule, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ClusterAlertRuleInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ClusterAlertRule) (*v3.ClusterAlertRule, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ClusterAlertRule) (*v3.ClusterAlertRule, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ClusterAlertRuleInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ClusterAlertRule
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ClusterAlertRule
 		}
@@ -1742,6 +1754,37 @@ func (mock *ClusterAlertRuleInterfaceMock) UpdateCalls() []struct {
 	lockClusterAlertRuleInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockClusterAlertRuleInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ClusterAlertRuleInterfaceMock) UpdateStatus(in1 *v3.ClusterAlertRule) (*v3.ClusterAlertRule, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ClusterAlertRuleInterfaceMock.UpdateStatusFunc: method is nil but ClusterAlertRuleInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ClusterAlertRule
+	}{
+		In1: in1,
+	}
+	lockClusterAlertRuleInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockClusterAlertRuleInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedClusterAlertRuleInterface.UpdateStatusCalls())
+func (mock *ClusterAlertRuleInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ClusterAlertRule
+} {
+	var calls []struct {
+		In1 *v3.ClusterAlertRule
+	}
+	lockClusterAlertRuleInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockClusterAlertRuleInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

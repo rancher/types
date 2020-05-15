@@ -734,6 +734,7 @@ var (
 	lockEventInterfaceMockListNamespaced                   sync.RWMutex
 	lockEventInterfaceMockObjectClient                     sync.RWMutex
 	lockEventInterfaceMockUpdate                           sync.RWMutex
+	lockEventInterfaceMockUpdateStatus                     sync.RWMutex
 	lockEventInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.EventInterface = &EventInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.Event) (*v1.Event, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.Event) (*v1.Event, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type EventInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.Event) (*v1.Event, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.Event) (*v1.Event, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type EventInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.Event
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.Event
 		}
@@ -1743,6 +1755,37 @@ func (mock *EventInterfaceMock) UpdateCalls() []struct {
 	lockEventInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockEventInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *EventInterfaceMock) UpdateStatus(in1 *v1.Event) (*v1.Event, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("EventInterfaceMock.UpdateStatusFunc: method is nil but EventInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.Event
+	}{
+		In1: in1,
+	}
+	lockEventInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockEventInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedEventInterface.UpdateStatusCalls())
+func (mock *EventInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.Event
+} {
+	var calls []struct {
+		In1 *v1.Event
+	}
+	lockEventInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockEventInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

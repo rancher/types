@@ -83,6 +83,7 @@ type UserInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*User, error)
 	Get(name string, opts metav1.GetOptions) (*User, error)
 	Update(*User) (*User, error)
+	UpdateStatus(*User) (*User, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*UserList, error)
@@ -258,6 +259,11 @@ func (s *userClient) GetNamespaced(namespace, name string, opts metav1.GetOption
 
 func (s *userClient) Update(o *User) (*User, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*User), err
+}
+
+func (s *userClient) UpdateStatus(o *User) (*User, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*User), err
 }
 

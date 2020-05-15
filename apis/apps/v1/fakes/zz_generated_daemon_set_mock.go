@@ -734,6 +734,7 @@ var (
 	lockDaemonSetInterfaceMockListNamespaced                   sync.RWMutex
 	lockDaemonSetInterfaceMockObjectClient                     sync.RWMutex
 	lockDaemonSetInterfaceMockUpdate                           sync.RWMutex
+	lockDaemonSetInterfaceMockUpdateStatus                     sync.RWMutex
 	lockDaemonSetInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.DaemonSetInterface = &DaemonSetInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.DaemonSet) (*v1.DaemonSet, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.DaemonSet) (*v1.DaemonSet, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type DaemonSetInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.DaemonSet) (*v1.DaemonSet, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.DaemonSet) (*v1.DaemonSet, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type DaemonSetInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.DaemonSet
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.DaemonSet
 		}
@@ -1743,6 +1755,37 @@ func (mock *DaemonSetInterfaceMock) UpdateCalls() []struct {
 	lockDaemonSetInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockDaemonSetInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *DaemonSetInterfaceMock) UpdateStatus(in1 *v1.DaemonSet) (*v1.DaemonSet, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("DaemonSetInterfaceMock.UpdateStatusFunc: method is nil but DaemonSetInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.DaemonSet
+	}{
+		In1: in1,
+	}
+	lockDaemonSetInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockDaemonSetInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedDaemonSetInterface.UpdateStatusCalls())
+func (mock *DaemonSetInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.DaemonSet
+} {
+	var calls []struct {
+		In1 *v1.DaemonSet
+	}
+	lockDaemonSetInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockDaemonSetInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

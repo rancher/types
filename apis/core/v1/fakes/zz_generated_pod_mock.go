@@ -734,6 +734,7 @@ var (
 	lockPodInterfaceMockListNamespaced                   sync.RWMutex
 	lockPodInterfaceMockObjectClient                     sync.RWMutex
 	lockPodInterfaceMockUpdate                           sync.RWMutex
+	lockPodInterfaceMockUpdateStatus                     sync.RWMutex
 	lockPodInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.PodInterface = &PodInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.Pod) (*v1.Pod, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.Pod) (*v1.Pod, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type PodInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.Pod) (*v1.Pod, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.Pod) (*v1.Pod, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type PodInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.Pod
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.Pod
 		}
@@ -1743,6 +1755,37 @@ func (mock *PodInterfaceMock) UpdateCalls() []struct {
 	lockPodInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockPodInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *PodInterfaceMock) UpdateStatus(in1 *v1.Pod) (*v1.Pod, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("PodInterfaceMock.UpdateStatusFunc: method is nil but PodInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.Pod
+	}{
+		In1: in1,
+	}
+	lockPodInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockPodInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedPodInterface.UpdateStatusCalls())
+func (mock *PodInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.Pod
+} {
+	var calls []struct {
+		In1 *v1.Pod
+	}
+	lockPodInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockPodInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

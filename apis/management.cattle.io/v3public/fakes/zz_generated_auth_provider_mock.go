@@ -733,6 +733,7 @@ var (
 	lockAuthProviderInterfaceMockListNamespaced                   sync.RWMutex
 	lockAuthProviderInterfaceMockObjectClient                     sync.RWMutex
 	lockAuthProviderInterfaceMockUpdate                           sync.RWMutex
+	lockAuthProviderInterfaceMockUpdateStatus                     sync.RWMutex
 	lockAuthProviderInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3public.AuthProviderInterface = &AuthProviderInterfaceMock{}
 //             UpdateFunc: func(in1 *v3public.AuthProvider) (*v3public.AuthProvider, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3public.AuthProvider) (*v3public.AuthProvider, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type AuthProviderInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3public.AuthProvider) (*v3public.AuthProvider, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3public.AuthProvider) (*v3public.AuthProvider, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type AuthProviderInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3public.AuthProvider
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3public.AuthProvider
 		}
@@ -1742,6 +1754,37 @@ func (mock *AuthProviderInterfaceMock) UpdateCalls() []struct {
 	lockAuthProviderInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockAuthProviderInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *AuthProviderInterfaceMock) UpdateStatus(in1 *v3public.AuthProvider) (*v3public.AuthProvider, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("AuthProviderInterfaceMock.UpdateStatusFunc: method is nil but AuthProviderInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3public.AuthProvider
+	}{
+		In1: in1,
+	}
+	lockAuthProviderInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockAuthProviderInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedAuthProviderInterface.UpdateStatusCalls())
+func (mock *AuthProviderInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3public.AuthProvider
+} {
+	var calls []struct {
+		In1 *v3public.AuthProvider
+	}
+	lockAuthProviderInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockAuthProviderInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

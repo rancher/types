@@ -733,6 +733,7 @@ var (
 	lockComposeConfigInterfaceMockListNamespaced                   sync.RWMutex
 	lockComposeConfigInterfaceMockObjectClient                     sync.RWMutex
 	lockComposeConfigInterfaceMockUpdate                           sync.RWMutex
+	lockComposeConfigInterfaceMockUpdateStatus                     sync.RWMutex
 	lockComposeConfigInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ComposeConfigInterface = &ComposeConfigInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.ComposeConfig) (*v3.ComposeConfig, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ComposeConfig) (*v3.ComposeConfig, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ComposeConfigInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ComposeConfig) (*v3.ComposeConfig, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ComposeConfig) (*v3.ComposeConfig, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ComposeConfigInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ComposeConfig
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ComposeConfig
 		}
@@ -1742,6 +1754,37 @@ func (mock *ComposeConfigInterfaceMock) UpdateCalls() []struct {
 	lockComposeConfigInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockComposeConfigInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ComposeConfigInterfaceMock) UpdateStatus(in1 *v3.ComposeConfig) (*v3.ComposeConfig, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ComposeConfigInterfaceMock.UpdateStatusFunc: method is nil but ComposeConfigInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ComposeConfig
+	}{
+		In1: in1,
+	}
+	lockComposeConfigInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockComposeConfigInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedComposeConfigInterface.UpdateStatusCalls())
+func (mock *ComposeConfigInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ComposeConfig
+} {
+	var calls []struct {
+		In1 *v3.ComposeConfig
+	}
+	lockComposeConfigInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockComposeConfigInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

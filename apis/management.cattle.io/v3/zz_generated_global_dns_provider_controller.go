@@ -84,6 +84,7 @@ type GlobalDNSProviderInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*GlobalDNSProvider, error)
 	Get(name string, opts metav1.GetOptions) (*GlobalDNSProvider, error)
 	Update(*GlobalDNSProvider) (*GlobalDNSProvider, error)
+	UpdateStatus(*GlobalDNSProvider) (*GlobalDNSProvider, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*GlobalDNSProviderList, error)
@@ -259,6 +260,11 @@ func (s *globalDnsProviderClient) GetNamespaced(namespace, name string, opts met
 
 func (s *globalDnsProviderClient) Update(o *GlobalDNSProvider) (*GlobalDNSProvider, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*GlobalDNSProvider), err
+}
+
+func (s *globalDnsProviderClient) UpdateStatus(o *GlobalDNSProvider) (*GlobalDNSProvider, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*GlobalDNSProvider), err
 }
 

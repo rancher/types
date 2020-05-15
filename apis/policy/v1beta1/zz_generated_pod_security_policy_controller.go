@@ -84,6 +84,7 @@ type PodSecurityPolicyInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1beta1.PodSecurityPolicy, error)
 	Get(name string, opts metav1.GetOptions) (*v1beta1.PodSecurityPolicy, error)
 	Update(*v1beta1.PodSecurityPolicy) (*v1beta1.PodSecurityPolicy, error)
+	UpdateStatus(*v1beta1.PodSecurityPolicy) (*v1beta1.PodSecurityPolicy, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*PodSecurityPolicyList, error)
@@ -259,6 +260,11 @@ func (s *podSecurityPolicyClient) GetNamespaced(namespace, name string, opts met
 
 func (s *podSecurityPolicyClient) Update(o *v1beta1.PodSecurityPolicy) (*v1beta1.PodSecurityPolicy, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1beta1.PodSecurityPolicy), err
+}
+
+func (s *podSecurityPolicyClient) UpdateStatus(o *v1beta1.PodSecurityPolicy) (*v1beta1.PodSecurityPolicy, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1beta1.PodSecurityPolicy), err
 }
 

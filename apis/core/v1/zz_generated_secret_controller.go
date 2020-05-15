@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type SecretInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.Secret, error)
 	Get(name string, opts metav1.GetOptions) (*v1.Secret, error)
 	Update(*v1.Secret) (*v1.Secret, error)
+	UpdateStatus(*v1.Secret) (*v1.Secret, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*SecretList, error)
@@ -260,6 +261,11 @@ func (s *secretClient) GetNamespaced(namespace, name string, opts metav1.GetOpti
 
 func (s *secretClient) Update(o *v1.Secret) (*v1.Secret, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.Secret), err
+}
+
+func (s *secretClient) UpdateStatus(o *v1.Secret) (*v1.Secret, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.Secret), err
 }
 

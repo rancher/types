@@ -733,6 +733,7 @@ var (
 	lockPodSecurityPolicyTemplateInterfaceMockListNamespaced                   sync.RWMutex
 	lockPodSecurityPolicyTemplateInterfaceMockObjectClient                     sync.RWMutex
 	lockPodSecurityPolicyTemplateInterfaceMockUpdate                           sync.RWMutex
+	lockPodSecurityPolicyTemplateInterfaceMockUpdateStatus                     sync.RWMutex
 	lockPodSecurityPolicyTemplateInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.PodSecurityPolicyTemplateInterface = &PodSecurityPolicyTemplateInterfac
 //             UpdateFunc: func(in1 *v3.PodSecurityPolicyTemplate) (*v3.PodSecurityPolicyTemplate, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.PodSecurityPolicyTemplate) (*v3.PodSecurityPolicyTemplate, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type PodSecurityPolicyTemplateInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.PodSecurityPolicyTemplate) (*v3.PodSecurityPolicyTemplate, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.PodSecurityPolicyTemplate) (*v3.PodSecurityPolicyTemplate, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type PodSecurityPolicyTemplateInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.PodSecurityPolicyTemplate
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.PodSecurityPolicyTemplate
 		}
@@ -1742,6 +1754,37 @@ func (mock *PodSecurityPolicyTemplateInterfaceMock) UpdateCalls() []struct {
 	lockPodSecurityPolicyTemplateInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockPodSecurityPolicyTemplateInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *PodSecurityPolicyTemplateInterfaceMock) UpdateStatus(in1 *v3.PodSecurityPolicyTemplate) (*v3.PodSecurityPolicyTemplate, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("PodSecurityPolicyTemplateInterfaceMock.UpdateStatusFunc: method is nil but PodSecurityPolicyTemplateInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.PodSecurityPolicyTemplate
+	}{
+		In1: in1,
+	}
+	lockPodSecurityPolicyTemplateInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockPodSecurityPolicyTemplateInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedPodSecurityPolicyTemplateInterface.UpdateStatusCalls())
+func (mock *PodSecurityPolicyTemplateInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.PodSecurityPolicyTemplate
+} {
+	var calls []struct {
+		In1 *v3.PodSecurityPolicyTemplate
+	}
+	lockPodSecurityPolicyTemplateInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockPodSecurityPolicyTemplateInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

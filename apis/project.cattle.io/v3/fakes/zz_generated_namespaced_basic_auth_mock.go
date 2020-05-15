@@ -733,6 +733,7 @@ var (
 	lockNamespacedBasicAuthInterfaceMockListNamespaced                   sync.RWMutex
 	lockNamespacedBasicAuthInterfaceMockObjectClient                     sync.RWMutex
 	lockNamespacedBasicAuthInterfaceMockUpdate                           sync.RWMutex
+	lockNamespacedBasicAuthInterfaceMockUpdateStatus                     sync.RWMutex
 	lockNamespacedBasicAuthInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.NamespacedBasicAuthInterface = &NamespacedBasicAuthInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.NamespacedBasicAuth) (*v3.NamespacedBasicAuth, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.NamespacedBasicAuth) (*v3.NamespacedBasicAuth, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type NamespacedBasicAuthInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.NamespacedBasicAuth) (*v3.NamespacedBasicAuth, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.NamespacedBasicAuth) (*v3.NamespacedBasicAuth, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type NamespacedBasicAuthInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.NamespacedBasicAuth
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.NamespacedBasicAuth
 		}
@@ -1742,6 +1754,37 @@ func (mock *NamespacedBasicAuthInterfaceMock) UpdateCalls() []struct {
 	lockNamespacedBasicAuthInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockNamespacedBasicAuthInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *NamespacedBasicAuthInterfaceMock) UpdateStatus(in1 *v3.NamespacedBasicAuth) (*v3.NamespacedBasicAuth, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("NamespacedBasicAuthInterfaceMock.UpdateStatusFunc: method is nil but NamespacedBasicAuthInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.NamespacedBasicAuth
+	}{
+		In1: in1,
+	}
+	lockNamespacedBasicAuthInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockNamespacedBasicAuthInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedNamespacedBasicAuthInterface.UpdateStatusCalls())
+func (mock *NamespacedBasicAuthInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.NamespacedBasicAuth
+} {
+	var calls []struct {
+		In1 *v3.NamespacedBasicAuth
+	}
+	lockNamespacedBasicAuthInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockNamespacedBasicAuthInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

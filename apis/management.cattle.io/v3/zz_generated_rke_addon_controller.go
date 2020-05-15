@@ -84,6 +84,7 @@ type RKEAddonInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*RKEAddon, error)
 	Get(name string, opts metav1.GetOptions) (*RKEAddon, error)
 	Update(*RKEAddon) (*RKEAddon, error)
+	UpdateStatus(*RKEAddon) (*RKEAddon, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*RKEAddonList, error)
@@ -259,6 +260,11 @@ func (s *rkeAddonClient) GetNamespaced(namespace, name string, opts metav1.GetOp
 
 func (s *rkeAddonClient) Update(o *RKEAddon) (*RKEAddon, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*RKEAddon), err
+}
+
+func (s *rkeAddonClient) UpdateStatus(o *RKEAddon) (*RKEAddon, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*RKEAddon), err
 }
 

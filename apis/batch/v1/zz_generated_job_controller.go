@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/batch/v1"
+	"k8s.io/api/batch/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type JobInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.Job, error)
 	Get(name string, opts metav1.GetOptions) (*v1.Job, error)
 	Update(*v1.Job) (*v1.Job, error)
+	UpdateStatus(*v1.Job) (*v1.Job, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*JobList, error)
@@ -260,6 +261,11 @@ func (s *jobClient) GetNamespaced(namespace, name string, opts metav1.GetOptions
 
 func (s *jobClient) Update(o *v1.Job) (*v1.Job, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.Job), err
+}
+
+func (s *jobClient) UpdateStatus(o *v1.Job) (*v1.Job, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.Job), err
 }
 

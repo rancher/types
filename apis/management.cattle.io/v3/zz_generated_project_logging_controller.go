@@ -84,6 +84,7 @@ type ProjectLoggingInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ProjectLogging, error)
 	Get(name string, opts metav1.GetOptions) (*ProjectLogging, error)
 	Update(*ProjectLogging) (*ProjectLogging, error)
+	UpdateStatus(*ProjectLogging) (*ProjectLogging, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ProjectLoggingList, error)
@@ -259,6 +260,11 @@ func (s *projectLoggingClient) GetNamespaced(namespace, name string, opts metav1
 
 func (s *projectLoggingClient) Update(o *ProjectLogging) (*ProjectLogging, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ProjectLogging), err
+}
+
+func (s *projectLoggingClient) UpdateStatus(o *ProjectLogging) (*ProjectLogging, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ProjectLogging), err
 }
 

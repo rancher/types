@@ -83,6 +83,7 @@ type NodeDriverInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NodeDriver, error)
 	Get(name string, opts metav1.GetOptions) (*NodeDriver, error)
 	Update(*NodeDriver) (*NodeDriver, error)
+	UpdateStatus(*NodeDriver) (*NodeDriver, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*NodeDriverList, error)
@@ -258,6 +259,11 @@ func (s *nodeDriverClient) GetNamespaced(namespace, name string, opts metav1.Get
 
 func (s *nodeDriverClient) Update(o *NodeDriver) (*NodeDriver, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*NodeDriver), err
+}
+
+func (s *nodeDriverClient) UpdateStatus(o *NodeDriver) (*NodeDriver, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*NodeDriver), err
 }
 

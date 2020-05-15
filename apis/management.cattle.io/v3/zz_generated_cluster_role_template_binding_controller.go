@@ -84,6 +84,7 @@ type ClusterRoleTemplateBindingInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterRoleTemplateBinding, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterRoleTemplateBinding, error)
 	Update(*ClusterRoleTemplateBinding) (*ClusterRoleTemplateBinding, error)
+	UpdateStatus(*ClusterRoleTemplateBinding) (*ClusterRoleTemplateBinding, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterRoleTemplateBindingList, error)
@@ -259,6 +260,11 @@ func (s *clusterRoleTemplateBindingClient) GetNamespaced(namespace, name string,
 
 func (s *clusterRoleTemplateBindingClient) Update(o *ClusterRoleTemplateBinding) (*ClusterRoleTemplateBinding, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterRoleTemplateBinding), err
+}
+
+func (s *clusterRoleTemplateBindingClient) UpdateStatus(o *ClusterRoleTemplateBinding) (*ClusterRoleTemplateBinding, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterRoleTemplateBinding), err
 }
 

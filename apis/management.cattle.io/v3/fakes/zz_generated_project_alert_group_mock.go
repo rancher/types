@@ -733,6 +733,7 @@ var (
 	lockProjectAlertGroupInterfaceMockListNamespaced                   sync.RWMutex
 	lockProjectAlertGroupInterfaceMockObjectClient                     sync.RWMutex
 	lockProjectAlertGroupInterfaceMockUpdate                           sync.RWMutex
+	lockProjectAlertGroupInterfaceMockUpdateStatus                     sync.RWMutex
 	lockProjectAlertGroupInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ProjectAlertGroupInterface = &ProjectAlertGroupInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.ProjectAlertGroup) (*v3.ProjectAlertGroup, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ProjectAlertGroup) (*v3.ProjectAlertGroup, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ProjectAlertGroupInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ProjectAlertGroup) (*v3.ProjectAlertGroup, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ProjectAlertGroup) (*v3.ProjectAlertGroup, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ProjectAlertGroupInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ProjectAlertGroup
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ProjectAlertGroup
 		}
@@ -1742,6 +1754,37 @@ func (mock *ProjectAlertGroupInterfaceMock) UpdateCalls() []struct {
 	lockProjectAlertGroupInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockProjectAlertGroupInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ProjectAlertGroupInterfaceMock) UpdateStatus(in1 *v3.ProjectAlertGroup) (*v3.ProjectAlertGroup, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ProjectAlertGroupInterfaceMock.UpdateStatusFunc: method is nil but ProjectAlertGroupInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ProjectAlertGroup
+	}{
+		In1: in1,
+	}
+	lockProjectAlertGroupInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockProjectAlertGroupInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedProjectAlertGroupInterface.UpdateStatusCalls())
+func (mock *ProjectAlertGroupInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ProjectAlertGroup
+} {
+	var calls []struct {
+		In1 *v3.ProjectAlertGroup
+	}
+	lockProjectAlertGroupInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockProjectAlertGroupInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

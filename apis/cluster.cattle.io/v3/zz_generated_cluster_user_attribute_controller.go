@@ -84,6 +84,7 @@ type ClusterUserAttributeInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterUserAttribute, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterUserAttribute, error)
 	Update(*ClusterUserAttribute) (*ClusterUserAttribute, error)
+	UpdateStatus(*ClusterUserAttribute) (*ClusterUserAttribute, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterUserAttributeList, error)
@@ -259,6 +260,11 @@ func (s *clusterUserAttributeClient) GetNamespaced(namespace, name string, opts 
 
 func (s *clusterUserAttributeClient) Update(o *ClusterUserAttribute) (*ClusterUserAttribute, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterUserAttribute), err
+}
+
+func (s *clusterUserAttributeClient) UpdateStatus(o *ClusterUserAttribute) (*ClusterUserAttribute, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterUserAttribute), err
 }
 

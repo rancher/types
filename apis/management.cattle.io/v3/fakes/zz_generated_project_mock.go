@@ -733,6 +733,7 @@ var (
 	lockProjectInterfaceMockListNamespaced                   sync.RWMutex
 	lockProjectInterfaceMockObjectClient                     sync.RWMutex
 	lockProjectInterfaceMockUpdate                           sync.RWMutex
+	lockProjectInterfaceMockUpdateStatus                     sync.RWMutex
 	lockProjectInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ProjectInterface = &ProjectInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Project) (*v3.Project, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Project) (*v3.Project, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ProjectInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Project) (*v3.Project, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Project) (*v3.Project, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ProjectInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Project
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Project
 		}
@@ -1742,6 +1754,37 @@ func (mock *ProjectInterfaceMock) UpdateCalls() []struct {
 	lockProjectInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockProjectInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ProjectInterfaceMock) UpdateStatus(in1 *v3.Project) (*v3.Project, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ProjectInterfaceMock.UpdateStatusFunc: method is nil but ProjectInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Project
+	}{
+		In1: in1,
+	}
+	lockProjectInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockProjectInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedProjectInterface.UpdateStatusCalls())
+func (mock *ProjectInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Project
+} {
+	var calls []struct {
+		In1 *v3.Project
+	}
+	lockProjectInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockProjectInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

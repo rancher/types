@@ -83,6 +83,7 @@ type FeatureInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Feature, error)
 	Get(name string, opts metav1.GetOptions) (*Feature, error)
 	Update(*Feature) (*Feature, error)
+	UpdateStatus(*Feature) (*Feature, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*FeatureList, error)
@@ -258,6 +259,11 @@ func (s *featureClient) GetNamespaced(namespace, name string, opts metav1.GetOpt
 
 func (s *featureClient) Update(o *Feature) (*Feature, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Feature), err
+}
+
+func (s *featureClient) UpdateStatus(o *Feature) (*Feature, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Feature), err
 }
 

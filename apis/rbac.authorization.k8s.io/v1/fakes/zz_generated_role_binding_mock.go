@@ -734,6 +734,7 @@ var (
 	lockRoleBindingInterfaceMockListNamespaced                   sync.RWMutex
 	lockRoleBindingInterfaceMockObjectClient                     sync.RWMutex
 	lockRoleBindingInterfaceMockUpdate                           sync.RWMutex
+	lockRoleBindingInterfaceMockUpdateStatus                     sync.RWMutex
 	lockRoleBindingInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.RoleBindingInterface = &RoleBindingInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.RoleBinding) (*v1.RoleBinding, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.RoleBinding) (*v1.RoleBinding, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type RoleBindingInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.RoleBinding) (*v1.RoleBinding, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.RoleBinding) (*v1.RoleBinding, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type RoleBindingInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.RoleBinding
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.RoleBinding
 		}
@@ -1743,6 +1755,37 @@ func (mock *RoleBindingInterfaceMock) UpdateCalls() []struct {
 	lockRoleBindingInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockRoleBindingInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *RoleBindingInterfaceMock) UpdateStatus(in1 *v1.RoleBinding) (*v1.RoleBinding, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("RoleBindingInterfaceMock.UpdateStatusFunc: method is nil but RoleBindingInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.RoleBinding
+	}{
+		In1: in1,
+	}
+	lockRoleBindingInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockRoleBindingInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedRoleBindingInterface.UpdateStatusCalls())
+func (mock *RoleBindingInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.RoleBinding
+} {
+	var calls []struct {
+		In1 *v1.RoleBinding
+	}
+	lockRoleBindingInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockRoleBindingInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

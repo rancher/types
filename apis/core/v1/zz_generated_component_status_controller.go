@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -84,6 +84,7 @@ type ComponentStatusInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.ComponentStatus, error)
 	Get(name string, opts metav1.GetOptions) (*v1.ComponentStatus, error)
 	Update(*v1.ComponentStatus) (*v1.ComponentStatus, error)
+	UpdateStatus(*v1.ComponentStatus) (*v1.ComponentStatus, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ComponentStatusList, error)
@@ -259,6 +260,11 @@ func (s *componentStatusClient) GetNamespaced(namespace, name string, opts metav
 
 func (s *componentStatusClient) Update(o *v1.ComponentStatus) (*v1.ComponentStatus, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.ComponentStatus), err
+}
+
+func (s *componentStatusClient) UpdateStatus(o *v1.ComponentStatus) (*v1.ComponentStatus, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.ComponentStatus), err
 }
 

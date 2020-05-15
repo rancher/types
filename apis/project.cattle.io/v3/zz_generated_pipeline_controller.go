@@ -84,6 +84,7 @@ type PipelineInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*Pipeline, error)
 	Get(name string, opts metav1.GetOptions) (*Pipeline, error)
 	Update(*Pipeline) (*Pipeline, error)
+	UpdateStatus(*Pipeline) (*Pipeline, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*PipelineList, error)
@@ -259,6 +260,11 @@ func (s *pipelineClient) GetNamespaced(namespace, name string, opts metav1.GetOp
 
 func (s *pipelineClient) Update(o *Pipeline) (*Pipeline, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*Pipeline), err
+}
+
+func (s *pipelineClient) UpdateStatus(o *Pipeline) (*Pipeline, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*Pipeline), err
 }
 

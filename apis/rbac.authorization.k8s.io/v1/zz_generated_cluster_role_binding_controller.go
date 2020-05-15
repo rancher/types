@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/rbac/v1"
+	"k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -84,6 +84,7 @@ type ClusterRoleBindingInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.ClusterRoleBinding, error)
 	Get(name string, opts metav1.GetOptions) (*v1.ClusterRoleBinding, error)
 	Update(*v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error)
+	UpdateStatus(*v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterRoleBindingList, error)
@@ -259,6 +260,11 @@ func (s *clusterRoleBindingClient) GetNamespaced(namespace, name string, opts me
 
 func (s *clusterRoleBindingClient) Update(o *v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.ClusterRoleBinding), err
+}
+
+func (s *clusterRoleBindingClient) UpdateStatus(o *v1.ClusterRoleBinding) (*v1.ClusterRoleBinding, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.ClusterRoleBinding), err
 }
 

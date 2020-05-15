@@ -84,6 +84,7 @@ type ClusterCatalogInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterCatalog, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterCatalog, error)
 	Update(*ClusterCatalog) (*ClusterCatalog, error)
+	UpdateStatus(*ClusterCatalog) (*ClusterCatalog, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterCatalogList, error)
@@ -259,6 +260,11 @@ func (s *clusterCatalogClient) GetNamespaced(namespace, name string, opts metav1
 
 func (s *clusterCatalogClient) Update(o *ClusterCatalog) (*ClusterCatalog, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterCatalog), err
+}
+
+func (s *clusterCatalogClient) UpdateStatus(o *ClusterCatalog) (*ClusterCatalog, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterCatalog), err
 }
 

@@ -733,6 +733,7 @@ var (
 	lockNamespacedCertificateInterfaceMockListNamespaced                   sync.RWMutex
 	lockNamespacedCertificateInterfaceMockObjectClient                     sync.RWMutex
 	lockNamespacedCertificateInterfaceMockUpdate                           sync.RWMutex
+	lockNamespacedCertificateInterfaceMockUpdateStatus                     sync.RWMutex
 	lockNamespacedCertificateInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.NamespacedCertificateInterface = &NamespacedCertificateInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.NamespacedCertificate) (*v3.NamespacedCertificate, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.NamespacedCertificate) (*v3.NamespacedCertificate, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type NamespacedCertificateInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.NamespacedCertificate) (*v3.NamespacedCertificate, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.NamespacedCertificate) (*v3.NamespacedCertificate, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type NamespacedCertificateInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.NamespacedCertificate
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.NamespacedCertificate
 		}
@@ -1742,6 +1754,37 @@ func (mock *NamespacedCertificateInterfaceMock) UpdateCalls() []struct {
 	lockNamespacedCertificateInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockNamespacedCertificateInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *NamespacedCertificateInterfaceMock) UpdateStatus(in1 *v3.NamespacedCertificate) (*v3.NamespacedCertificate, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("NamespacedCertificateInterfaceMock.UpdateStatusFunc: method is nil but NamespacedCertificateInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.NamespacedCertificate
+	}{
+		In1: in1,
+	}
+	lockNamespacedCertificateInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockNamespacedCertificateInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedNamespacedCertificateInterface.UpdateStatusCalls())
+func (mock *NamespacedCertificateInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.NamespacedCertificate
+} {
+	var calls []struct {
+		In1 *v3.NamespacedCertificate
+	}
+	lockNamespacedCertificateInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockNamespacedCertificateInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -83,6 +83,7 @@ type KontainerDriverInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*KontainerDriver, error)
 	Get(name string, opts metav1.GetOptions) (*KontainerDriver, error)
 	Update(*KontainerDriver) (*KontainerDriver, error)
+	UpdateStatus(*KontainerDriver) (*KontainerDriver, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*KontainerDriverList, error)
@@ -258,6 +259,11 @@ func (s *kontainerDriverClient) GetNamespaced(namespace, name string, opts metav
 
 func (s *kontainerDriverClient) Update(o *KontainerDriver) (*KontainerDriver, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*KontainerDriver), err
+}
+
+func (s *kontainerDriverClient) UpdateStatus(o *KontainerDriver) (*KontainerDriver, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*KontainerDriver), err
 }
 

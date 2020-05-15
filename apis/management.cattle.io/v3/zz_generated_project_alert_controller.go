@@ -84,6 +84,7 @@ type ProjectAlertInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ProjectAlert, error)
 	Get(name string, opts metav1.GetOptions) (*ProjectAlert, error)
 	Update(*ProjectAlert) (*ProjectAlert, error)
+	UpdateStatus(*ProjectAlert) (*ProjectAlert, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ProjectAlertList, error)
@@ -259,6 +260,11 @@ func (s *projectAlertClient) GetNamespaced(namespace, name string, opts metav1.G
 
 func (s *projectAlertClient) Update(o *ProjectAlert) (*ProjectAlert, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ProjectAlert), err
+}
+
+func (s *projectAlertClient) UpdateStatus(o *ProjectAlert) (*ProjectAlert, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ProjectAlert), err
 }
 

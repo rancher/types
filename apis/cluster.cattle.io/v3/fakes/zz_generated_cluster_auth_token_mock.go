@@ -733,6 +733,7 @@ var (
 	lockClusterAuthTokenInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterAuthTokenInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterAuthTokenInterfaceMockUpdate                           sync.RWMutex
+	lockClusterAuthTokenInterfaceMockUpdateStatus                     sync.RWMutex
 	lockClusterAuthTokenInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ClusterAuthTokenInterface = &ClusterAuthTokenInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.ClusterAuthToken) (*v3.ClusterAuthToken, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ClusterAuthToken) (*v3.ClusterAuthToken, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ClusterAuthTokenInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ClusterAuthToken) (*v3.ClusterAuthToken, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ClusterAuthToken) (*v3.ClusterAuthToken, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ClusterAuthTokenInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ClusterAuthToken
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ClusterAuthToken
 		}
@@ -1742,6 +1754,37 @@ func (mock *ClusterAuthTokenInterfaceMock) UpdateCalls() []struct {
 	lockClusterAuthTokenInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockClusterAuthTokenInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ClusterAuthTokenInterfaceMock) UpdateStatus(in1 *v3.ClusterAuthToken) (*v3.ClusterAuthToken, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ClusterAuthTokenInterfaceMock.UpdateStatusFunc: method is nil but ClusterAuthTokenInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ClusterAuthToken
+	}{
+		In1: in1,
+	}
+	lockClusterAuthTokenInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockClusterAuthTokenInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedClusterAuthTokenInterface.UpdateStatusCalls())
+func (mock *ClusterAuthTokenInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ClusterAuthToken
+} {
+	var calls []struct {
+		In1 *v3.ClusterAuthToken
+	}
+	lockClusterAuthTokenInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockClusterAuthTokenInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -733,6 +733,7 @@ var (
 	lockMonitorMetricInterfaceMockListNamespaced                   sync.RWMutex
 	lockMonitorMetricInterfaceMockObjectClient                     sync.RWMutex
 	lockMonitorMetricInterfaceMockUpdate                           sync.RWMutex
+	lockMonitorMetricInterfaceMockUpdateStatus                     sync.RWMutex
 	lockMonitorMetricInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.MonitorMetricInterface = &MonitorMetricInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.MonitorMetric) (*v3.MonitorMetric, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.MonitorMetric) (*v3.MonitorMetric, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type MonitorMetricInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.MonitorMetric) (*v3.MonitorMetric, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.MonitorMetric) (*v3.MonitorMetric, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type MonitorMetricInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.MonitorMetric
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.MonitorMetric
 		}
@@ -1742,6 +1754,37 @@ func (mock *MonitorMetricInterfaceMock) UpdateCalls() []struct {
 	lockMonitorMetricInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockMonitorMetricInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *MonitorMetricInterfaceMock) UpdateStatus(in1 *v3.MonitorMetric) (*v3.MonitorMetric, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("MonitorMetricInterfaceMock.UpdateStatusFunc: method is nil but MonitorMetricInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.MonitorMetric
+	}{
+		In1: in1,
+	}
+	lockMonitorMetricInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockMonitorMetricInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedMonitorMetricInterface.UpdateStatusCalls())
+func (mock *MonitorMetricInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.MonitorMetric
+} {
+	var calls []struct {
+		In1 *v3.MonitorMetric
+	}
+	lockMonitorMetricInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockMonitorMetricInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -733,6 +733,7 @@ var (
 	lockGlobalRoleBindingInterfaceMockListNamespaced                   sync.RWMutex
 	lockGlobalRoleBindingInterfaceMockObjectClient                     sync.RWMutex
 	lockGlobalRoleBindingInterfaceMockUpdate                           sync.RWMutex
+	lockGlobalRoleBindingInterfaceMockUpdateStatus                     sync.RWMutex
 	lockGlobalRoleBindingInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.GlobalRoleBindingInterface = &GlobalRoleBindingInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.GlobalRoleBinding) (*v3.GlobalRoleBinding, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.GlobalRoleBinding) (*v3.GlobalRoleBinding, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type GlobalRoleBindingInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.GlobalRoleBinding) (*v3.GlobalRoleBinding, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.GlobalRoleBinding) (*v3.GlobalRoleBinding, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type GlobalRoleBindingInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.GlobalRoleBinding
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.GlobalRoleBinding
 		}
@@ -1742,6 +1754,37 @@ func (mock *GlobalRoleBindingInterfaceMock) UpdateCalls() []struct {
 	lockGlobalRoleBindingInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockGlobalRoleBindingInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *GlobalRoleBindingInterfaceMock) UpdateStatus(in1 *v3.GlobalRoleBinding) (*v3.GlobalRoleBinding, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("GlobalRoleBindingInterfaceMock.UpdateStatusFunc: method is nil but GlobalRoleBindingInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.GlobalRoleBinding
+	}{
+		In1: in1,
+	}
+	lockGlobalRoleBindingInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockGlobalRoleBindingInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedGlobalRoleBindingInterface.UpdateStatusCalls())
+func (mock *GlobalRoleBindingInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.GlobalRoleBinding
+} {
+	var calls []struct {
+		In1 *v3.GlobalRoleBinding
+	}
+	lockGlobalRoleBindingInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockGlobalRoleBindingInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

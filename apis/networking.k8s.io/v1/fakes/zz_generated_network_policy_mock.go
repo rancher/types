@@ -734,6 +734,7 @@ var (
 	lockNetworkPolicyInterfaceMockListNamespaced                   sync.RWMutex
 	lockNetworkPolicyInterfaceMockObjectClient                     sync.RWMutex
 	lockNetworkPolicyInterfaceMockUpdate                           sync.RWMutex
+	lockNetworkPolicyInterfaceMockUpdateStatus                     sync.RWMutex
 	lockNetworkPolicyInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.NetworkPolicyInterface = &NetworkPolicyInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.NetworkPolicy) (*v1.NetworkPolicy, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.NetworkPolicy) (*v1.NetworkPolicy, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type NetworkPolicyInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.NetworkPolicy) (*v1.NetworkPolicy, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.NetworkPolicy) (*v1.NetworkPolicy, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type NetworkPolicyInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.NetworkPolicy
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.NetworkPolicy
 		}
@@ -1743,6 +1755,37 @@ func (mock *NetworkPolicyInterfaceMock) UpdateCalls() []struct {
 	lockNetworkPolicyInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockNetworkPolicyInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *NetworkPolicyInterfaceMock) UpdateStatus(in1 *v1.NetworkPolicy) (*v1.NetworkPolicy, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("NetworkPolicyInterfaceMock.UpdateStatusFunc: method is nil but NetworkPolicyInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.NetworkPolicy
+	}{
+		In1: in1,
+	}
+	lockNetworkPolicyInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockNetworkPolicyInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedNetworkPolicyInterface.UpdateStatusCalls())
+func (mock *NetworkPolicyInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.NetworkPolicy
+} {
+	var calls []struct {
+		In1 *v1.NetworkPolicy
+	}
+	lockNetworkPolicyInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockNetworkPolicyInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -733,6 +733,7 @@ var (
 	lockClusterMonitorGraphInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterMonitorGraphInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterMonitorGraphInterfaceMockUpdate                           sync.RWMutex
+	lockClusterMonitorGraphInterfaceMockUpdateStatus                     sync.RWMutex
 	lockClusterMonitorGraphInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ClusterMonitorGraphInterface = &ClusterMonitorGraphInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.ClusterMonitorGraph) (*v3.ClusterMonitorGraph, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ClusterMonitorGraph) (*v3.ClusterMonitorGraph, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ClusterMonitorGraphInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ClusterMonitorGraph) (*v3.ClusterMonitorGraph, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ClusterMonitorGraph) (*v3.ClusterMonitorGraph, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ClusterMonitorGraphInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ClusterMonitorGraph
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ClusterMonitorGraph
 		}
@@ -1742,6 +1754,37 @@ func (mock *ClusterMonitorGraphInterfaceMock) UpdateCalls() []struct {
 	lockClusterMonitorGraphInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockClusterMonitorGraphInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ClusterMonitorGraphInterfaceMock) UpdateStatus(in1 *v3.ClusterMonitorGraph) (*v3.ClusterMonitorGraph, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ClusterMonitorGraphInterfaceMock.UpdateStatusFunc: method is nil but ClusterMonitorGraphInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ClusterMonitorGraph
+	}{
+		In1: in1,
+	}
+	lockClusterMonitorGraphInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockClusterMonitorGraphInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedClusterMonitorGraphInterface.UpdateStatusCalls())
+func (mock *ClusterMonitorGraphInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ClusterMonitorGraph
+} {
+	var calls []struct {
+		In1 *v3.ClusterMonitorGraph
+	}
+	lockClusterMonitorGraphInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockClusterMonitorGraphInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

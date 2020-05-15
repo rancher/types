@@ -734,6 +734,7 @@ var (
 	lockIngressInterfaceMockListNamespaced                   sync.RWMutex
 	lockIngressInterfaceMockObjectClient                     sync.RWMutex
 	lockIngressInterfaceMockUpdate                           sync.RWMutex
+	lockIngressInterfaceMockUpdateStatus                     sync.RWMutex
 	lockIngressInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1beta1a.IngressInterface = &IngressInterfaceMock{}
 //             UpdateFunc: func(in1 *v1beta1.Ingress) (*v1beta1.Ingress, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1beta1.Ingress) (*v1beta1.Ingress, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type IngressInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1beta1.Ingress) (*v1beta1.Ingress, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1beta1.Ingress) (*v1beta1.Ingress, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type IngressInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1beta1.Ingress
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1beta1.Ingress
 		}
@@ -1743,6 +1755,37 @@ func (mock *IngressInterfaceMock) UpdateCalls() []struct {
 	lockIngressInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockIngressInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *IngressInterfaceMock) UpdateStatus(in1 *v1beta1.Ingress) (*v1beta1.Ingress, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("IngressInterfaceMock.UpdateStatusFunc: method is nil but IngressInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1beta1.Ingress
+	}{
+		In1: in1,
+	}
+	lockIngressInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockIngressInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedIngressInterface.UpdateStatusCalls())
+func (mock *IngressInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1beta1.Ingress
+} {
+	var calls []struct {
+		In1 *v1beta1.Ingress
+	}
+	lockIngressInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockIngressInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

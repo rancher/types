@@ -7,7 +7,7 @@ import (
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -85,6 +85,7 @@ type ConfigMapInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*v1.ConfigMap, error)
 	Get(name string, opts metav1.GetOptions) (*v1.ConfigMap, error)
 	Update(*v1.ConfigMap) (*v1.ConfigMap, error)
+	UpdateStatus(*v1.ConfigMap) (*v1.ConfigMap, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ConfigMapList, error)
@@ -260,6 +261,11 @@ func (s *configMapClient) GetNamespaced(namespace, name string, opts metav1.GetO
 
 func (s *configMapClient) Update(o *v1.ConfigMap) (*v1.ConfigMap, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*v1.ConfigMap), err
+}
+
+func (s *configMapClient) UpdateStatus(o *v1.ConfigMap) (*v1.ConfigMap, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*v1.ConfigMap), err
 }
 

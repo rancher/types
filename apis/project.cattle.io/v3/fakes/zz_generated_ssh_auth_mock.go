@@ -733,6 +733,7 @@ var (
 	lockSSHAuthInterfaceMockListNamespaced                   sync.RWMutex
 	lockSSHAuthInterfaceMockObjectClient                     sync.RWMutex
 	lockSSHAuthInterfaceMockUpdate                           sync.RWMutex
+	lockSSHAuthInterfaceMockUpdateStatus                     sync.RWMutex
 	lockSSHAuthInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.SSHAuthInterface = &SSHAuthInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.SSHAuth) (*v3.SSHAuth, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.SSHAuth) (*v3.SSHAuth, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type SSHAuthInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.SSHAuth) (*v3.SSHAuth, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.SSHAuth) (*v3.SSHAuth, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type SSHAuthInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.SSHAuth
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.SSHAuth
 		}
@@ -1742,6 +1754,37 @@ func (mock *SSHAuthInterfaceMock) UpdateCalls() []struct {
 	lockSSHAuthInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockSSHAuthInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *SSHAuthInterfaceMock) UpdateStatus(in1 *v3.SSHAuth) (*v3.SSHAuth, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("SSHAuthInterfaceMock.UpdateStatusFunc: method is nil but SSHAuthInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.SSHAuth
+	}{
+		In1: in1,
+	}
+	lockSSHAuthInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockSSHAuthInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedSSHAuthInterface.UpdateStatusCalls())
+func (mock *SSHAuthInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.SSHAuth
+} {
+	var calls []struct {
+		In1 *v3.SSHAuth
+	}
+	lockSSHAuthInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockSSHAuthInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

@@ -84,6 +84,7 @@ type CisBenchmarkVersionInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*CisBenchmarkVersion, error)
 	Get(name string, opts metav1.GetOptions) (*CisBenchmarkVersion, error)
 	Update(*CisBenchmarkVersion) (*CisBenchmarkVersion, error)
+	UpdateStatus(*CisBenchmarkVersion) (*CisBenchmarkVersion, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*CisBenchmarkVersionList, error)
@@ -259,6 +260,11 @@ func (s *cisBenchmarkVersionClient) GetNamespaced(namespace, name string, opts m
 
 func (s *cisBenchmarkVersionClient) Update(o *CisBenchmarkVersion) (*CisBenchmarkVersion, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*CisBenchmarkVersion), err
+}
+
+func (s *cisBenchmarkVersionClient) UpdateStatus(o *CisBenchmarkVersion) (*CisBenchmarkVersion, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*CisBenchmarkVersion), err
 }
 

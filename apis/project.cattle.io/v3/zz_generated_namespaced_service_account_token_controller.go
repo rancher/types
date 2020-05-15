@@ -84,6 +84,7 @@ type NamespacedServiceAccountTokenInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*NamespacedServiceAccountToken, error)
 	Get(name string, opts metav1.GetOptions) (*NamespacedServiceAccountToken, error)
 	Update(*NamespacedServiceAccountToken) (*NamespacedServiceAccountToken, error)
+	UpdateStatus(*NamespacedServiceAccountToken) (*NamespacedServiceAccountToken, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*NamespacedServiceAccountTokenList, error)
@@ -259,6 +260,11 @@ func (s *namespacedServiceAccountTokenClient) GetNamespaced(namespace, name stri
 
 func (s *namespacedServiceAccountTokenClient) Update(o *NamespacedServiceAccountToken) (*NamespacedServiceAccountToken, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*NamespacedServiceAccountToken), err
+}
+
+func (s *namespacedServiceAccountTokenClient) UpdateStatus(o *NamespacedServiceAccountToken) (*NamespacedServiceAccountToken, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*NamespacedServiceAccountToken), err
 }
 

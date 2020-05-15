@@ -734,6 +734,7 @@ var (
 	lockEndpointsInterfaceMockListNamespaced                   sync.RWMutex
 	lockEndpointsInterfaceMockObjectClient                     sync.RWMutex
 	lockEndpointsInterfaceMockUpdate                           sync.RWMutex
+	lockEndpointsInterfaceMockUpdateStatus                     sync.RWMutex
 	lockEndpointsInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.EndpointsInterface = &EndpointsInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.Endpoints) (*v1.Endpoints, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.Endpoints) (*v1.Endpoints, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type EndpointsInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.Endpoints) (*v1.Endpoints, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.Endpoints) (*v1.Endpoints, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type EndpointsInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.Endpoints
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.Endpoints
 		}
@@ -1743,6 +1755,37 @@ func (mock *EndpointsInterfaceMock) UpdateCalls() []struct {
 	lockEndpointsInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockEndpointsInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *EndpointsInterfaceMock) UpdateStatus(in1 *v1.Endpoints) (*v1.Endpoints, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("EndpointsInterfaceMock.UpdateStatusFunc: method is nil but EndpointsInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.Endpoints
+	}{
+		In1: in1,
+	}
+	lockEndpointsInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockEndpointsInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedEndpointsInterface.UpdateStatusCalls())
+func (mock *EndpointsInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.Endpoints
+} {
+	var calls []struct {
+		In1 *v1.Endpoints
+	}
+	lockEndpointsInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockEndpointsInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

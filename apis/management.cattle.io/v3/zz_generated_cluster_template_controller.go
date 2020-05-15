@@ -84,6 +84,7 @@ type ClusterTemplateInterface interface {
 	GetNamespaced(namespace, name string, opts metav1.GetOptions) (*ClusterTemplate, error)
 	Get(name string, opts metav1.GetOptions) (*ClusterTemplate, error)
 	Update(*ClusterTemplate) (*ClusterTemplate, error)
+	UpdateStatus(*ClusterTemplate) (*ClusterTemplate, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteNamespaced(namespace, name string, options *metav1.DeleteOptions) error
 	List(opts metav1.ListOptions) (*ClusterTemplateList, error)
@@ -259,6 +260,11 @@ func (s *clusterTemplateClient) GetNamespaced(namespace, name string, opts metav
 
 func (s *clusterTemplateClient) Update(o *ClusterTemplate) (*ClusterTemplate, error) {
 	obj, err := s.objectClient.Update(o.Name, o)
+	return obj.(*ClusterTemplate), err
+}
+
+func (s *clusterTemplateClient) UpdateStatus(o *ClusterTemplate) (*ClusterTemplate, error) {
+	obj, err := s.objectClient.UpdateStatus(o.Name, o)
 	return obj.(*ClusterTemplate), err
 }
 

@@ -734,6 +734,7 @@ var (
 	lockComponentStatusInterfaceMockListNamespaced                   sync.RWMutex
 	lockComponentStatusInterfaceMockObjectClient                     sync.RWMutex
 	lockComponentStatusInterfaceMockUpdate                           sync.RWMutex
+	lockComponentStatusInterfaceMockUpdateStatus                     sync.RWMutex
 	lockComponentStatusInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.ComponentStatusInterface = &ComponentStatusInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.ComponentStatus) (*v1.ComponentStatus, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.ComponentStatus) (*v1.ComponentStatus, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type ComponentStatusInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.ComponentStatus) (*v1.ComponentStatus, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.ComponentStatus) (*v1.ComponentStatus, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type ComponentStatusInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.ComponentStatus
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.ComponentStatus
 		}
@@ -1743,6 +1755,37 @@ func (mock *ComponentStatusInterfaceMock) UpdateCalls() []struct {
 	lockComponentStatusInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockComponentStatusInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ComponentStatusInterfaceMock) UpdateStatus(in1 *v1.ComponentStatus) (*v1.ComponentStatus, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ComponentStatusInterfaceMock.UpdateStatusFunc: method is nil but ComponentStatusInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.ComponentStatus
+	}{
+		In1: in1,
+	}
+	lockComponentStatusInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockComponentStatusInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedComponentStatusInterface.UpdateStatusCalls())
+func (mock *ComponentStatusInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.ComponentStatus
+} {
+	var calls []struct {
+		In1 *v1.ComponentStatus
+	}
+	lockComponentStatusInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockComponentStatusInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

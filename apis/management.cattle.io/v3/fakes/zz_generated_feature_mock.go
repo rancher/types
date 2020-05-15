@@ -733,6 +733,7 @@ var (
 	lockFeatureInterfaceMockListNamespaced                   sync.RWMutex
 	lockFeatureInterfaceMockObjectClient                     sync.RWMutex
 	lockFeatureInterfaceMockUpdate                           sync.RWMutex
+	lockFeatureInterfaceMockUpdateStatus                     sync.RWMutex
 	lockFeatureInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.FeatureInterface = &FeatureInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.Feature) (*v3.Feature, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.Feature) (*v3.Feature, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type FeatureInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.Feature) (*v3.Feature, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.Feature) (*v3.Feature, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type FeatureInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.Feature
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.Feature
 		}
@@ -1742,6 +1754,37 @@ func (mock *FeatureInterfaceMock) UpdateCalls() []struct {
 	lockFeatureInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockFeatureInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *FeatureInterfaceMock) UpdateStatus(in1 *v3.Feature) (*v3.Feature, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("FeatureInterfaceMock.UpdateStatusFunc: method is nil but FeatureInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.Feature
+	}{
+		In1: in1,
+	}
+	lockFeatureInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockFeatureInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedFeatureInterface.UpdateStatusCalls())
+func (mock *FeatureInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.Feature
+} {
+	var calls []struct {
+		In1 *v3.Feature
+	}
+	lockFeatureInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockFeatureInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

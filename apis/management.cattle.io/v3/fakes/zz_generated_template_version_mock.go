@@ -733,6 +733,7 @@ var (
 	lockTemplateVersionInterfaceMockListNamespaced                   sync.RWMutex
 	lockTemplateVersionInterfaceMockObjectClient                     sync.RWMutex
 	lockTemplateVersionInterfaceMockUpdate                           sync.RWMutex
+	lockTemplateVersionInterfaceMockUpdateStatus                     sync.RWMutex
 	lockTemplateVersionInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.TemplateVersionInterface = &TemplateVersionInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.TemplateVersion) (*v3.TemplateVersion, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.TemplateVersion) (*v3.TemplateVersion, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type TemplateVersionInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.TemplateVersion) (*v3.TemplateVersion, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.TemplateVersion) (*v3.TemplateVersion, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type TemplateVersionInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.TemplateVersion
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.TemplateVersion
 		}
@@ -1742,6 +1754,37 @@ func (mock *TemplateVersionInterfaceMock) UpdateCalls() []struct {
 	lockTemplateVersionInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockTemplateVersionInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *TemplateVersionInterfaceMock) UpdateStatus(in1 *v3.TemplateVersion) (*v3.TemplateVersion, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("TemplateVersionInterfaceMock.UpdateStatusFunc: method is nil but TemplateVersionInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.TemplateVersion
+	}{
+		In1: in1,
+	}
+	lockTemplateVersionInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockTemplateVersionInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedTemplateVersionInterface.UpdateStatusCalls())
+func (mock *TemplateVersionInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.TemplateVersion
+} {
+	var calls []struct {
+		In1 *v3.TemplateVersion
+	}
+	lockTemplateVersionInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockTemplateVersionInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

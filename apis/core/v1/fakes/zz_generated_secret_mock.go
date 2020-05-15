@@ -734,6 +734,7 @@ var (
 	lockSecretInterfaceMockListNamespaced                   sync.RWMutex
 	lockSecretInterfaceMockObjectClient                     sync.RWMutex
 	lockSecretInterfaceMockUpdate                           sync.RWMutex
+	lockSecretInterfaceMockUpdateStatus                     sync.RWMutex
 	lockSecretInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.SecretInterface = &SecretInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.Secret) (*v1.Secret, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.Secret) (*v1.Secret, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type SecretInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.Secret) (*v1.Secret, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.Secret) (*v1.Secret, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type SecretInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.Secret
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.Secret
 		}
@@ -1743,6 +1755,37 @@ func (mock *SecretInterfaceMock) UpdateCalls() []struct {
 	lockSecretInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockSecretInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *SecretInterfaceMock) UpdateStatus(in1 *v1.Secret) (*v1.Secret, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("SecretInterfaceMock.UpdateStatusFunc: method is nil but SecretInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.Secret
+	}{
+		In1: in1,
+	}
+	lockSecretInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockSecretInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedSecretInterface.UpdateStatusCalls())
+func (mock *SecretInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.Secret
+} {
+	var calls []struct {
+		In1 *v1.Secret
+	}
+	lockSecretInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockSecretInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

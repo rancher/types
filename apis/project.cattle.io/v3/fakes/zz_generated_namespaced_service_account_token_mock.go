@@ -733,6 +733,7 @@ var (
 	lockNamespacedServiceAccountTokenInterfaceMockListNamespaced                   sync.RWMutex
 	lockNamespacedServiceAccountTokenInterfaceMockObjectClient                     sync.RWMutex
 	lockNamespacedServiceAccountTokenInterfaceMockUpdate                           sync.RWMutex
+	lockNamespacedServiceAccountTokenInterfaceMockUpdateStatus                     sync.RWMutex
 	lockNamespacedServiceAccountTokenInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.NamespacedServiceAccountTokenInterface = &NamespacedServiceAccountToken
 //             UpdateFunc: func(in1 *v3.NamespacedServiceAccountToken) (*v3.NamespacedServiceAccountToken, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.NamespacedServiceAccountToken) (*v3.NamespacedServiceAccountToken, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type NamespacedServiceAccountTokenInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.NamespacedServiceAccountToken) (*v3.NamespacedServiceAccountToken, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.NamespacedServiceAccountToken) (*v3.NamespacedServiceAccountToken, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type NamespacedServiceAccountTokenInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.NamespacedServiceAccountToken
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.NamespacedServiceAccountToken
 		}
@@ -1742,6 +1754,37 @@ func (mock *NamespacedServiceAccountTokenInterfaceMock) UpdateCalls() []struct {
 	lockNamespacedServiceAccountTokenInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockNamespacedServiceAccountTokenInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *NamespacedServiceAccountTokenInterfaceMock) UpdateStatus(in1 *v3.NamespacedServiceAccountToken) (*v3.NamespacedServiceAccountToken, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("NamespacedServiceAccountTokenInterfaceMock.UpdateStatusFunc: method is nil but NamespacedServiceAccountTokenInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.NamespacedServiceAccountToken
+	}{
+		In1: in1,
+	}
+	lockNamespacedServiceAccountTokenInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockNamespacedServiceAccountTokenInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedNamespacedServiceAccountTokenInterface.UpdateStatusCalls())
+func (mock *NamespacedServiceAccountTokenInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.NamespacedServiceAccountToken
+} {
+	var calls []struct {
+		In1 *v3.NamespacedServiceAccountToken
+	}
+	lockNamespacedServiceAccountTokenInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockNamespacedServiceAccountTokenInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

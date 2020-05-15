@@ -734,6 +734,7 @@ var (
 	lockStorageClassInterfaceMockListNamespaced                   sync.RWMutex
 	lockStorageClassInterfaceMockObjectClient                     sync.RWMutex
 	lockStorageClassInterfaceMockUpdate                           sync.RWMutex
+	lockStorageClassInterfaceMockUpdateStatus                     sync.RWMutex
 	lockStorageClassInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -804,6 +805,9 @@ var _ v1a.StorageClassInterface = &StorageClassInterfaceMock{}
 //             UpdateFunc: func(in1 *v1.StorageClass) (*v1.StorageClass, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v1.StorageClass) (*v1.StorageClass, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1b.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -870,6 +874,9 @@ type StorageClassInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v1.StorageClass) (*v1.StorageClass, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v1.StorageClass) (*v1.StorageClass, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1b.ListOptions) (watch.Interface, error)
@@ -1028,6 +1035,11 @@ type StorageClassInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v1.StorageClass
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v1.StorageClass
 		}
@@ -1743,6 +1755,37 @@ func (mock *StorageClassInterfaceMock) UpdateCalls() []struct {
 	lockStorageClassInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockStorageClassInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *StorageClassInterfaceMock) UpdateStatus(in1 *v1.StorageClass) (*v1.StorageClass, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("StorageClassInterfaceMock.UpdateStatusFunc: method is nil but StorageClassInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v1.StorageClass
+	}{
+		In1: in1,
+	}
+	lockStorageClassInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockStorageClassInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedStorageClassInterface.UpdateStatusCalls())
+func (mock *StorageClassInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v1.StorageClass
+} {
+	var calls []struct {
+		In1 *v1.StorageClass
+	}
+	lockStorageClassInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockStorageClassInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

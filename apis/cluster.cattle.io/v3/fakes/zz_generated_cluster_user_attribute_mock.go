@@ -733,6 +733,7 @@ var (
 	lockClusterUserAttributeInterfaceMockListNamespaced                   sync.RWMutex
 	lockClusterUserAttributeInterfaceMockObjectClient                     sync.RWMutex
 	lockClusterUserAttributeInterfaceMockUpdate                           sync.RWMutex
+	lockClusterUserAttributeInterfaceMockUpdateStatus                     sync.RWMutex
 	lockClusterUserAttributeInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.ClusterUserAttributeInterface = &ClusterUserAttributeInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.ClusterUserAttribute) (*v3.ClusterUserAttribute, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.ClusterUserAttribute) (*v3.ClusterUserAttribute, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type ClusterUserAttributeInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.ClusterUserAttribute) (*v3.ClusterUserAttribute, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.ClusterUserAttribute) (*v3.ClusterUserAttribute, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type ClusterUserAttributeInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.ClusterUserAttribute
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.ClusterUserAttribute
 		}
@@ -1742,6 +1754,37 @@ func (mock *ClusterUserAttributeInterfaceMock) UpdateCalls() []struct {
 	lockClusterUserAttributeInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockClusterUserAttributeInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *ClusterUserAttributeInterfaceMock) UpdateStatus(in1 *v3.ClusterUserAttribute) (*v3.ClusterUserAttribute, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("ClusterUserAttributeInterfaceMock.UpdateStatusFunc: method is nil but ClusterUserAttributeInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.ClusterUserAttribute
+	}{
+		In1: in1,
+	}
+	lockClusterUserAttributeInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockClusterUserAttributeInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedClusterUserAttributeInterface.UpdateStatusCalls())
+func (mock *ClusterUserAttributeInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.ClusterUserAttribute
+} {
+	var calls []struct {
+		In1 *v3.ClusterUserAttribute
+	}
+	lockClusterUserAttributeInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockClusterUserAttributeInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 

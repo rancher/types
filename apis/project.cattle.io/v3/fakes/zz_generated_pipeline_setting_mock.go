@@ -733,6 +733,7 @@ var (
 	lockPipelineSettingInterfaceMockListNamespaced                   sync.RWMutex
 	lockPipelineSettingInterfaceMockObjectClient                     sync.RWMutex
 	lockPipelineSettingInterfaceMockUpdate                           sync.RWMutex
+	lockPipelineSettingInterfaceMockUpdateStatus                     sync.RWMutex
 	lockPipelineSettingInterfaceMockWatch                            sync.RWMutex
 )
 
@@ -803,6 +804,9 @@ var _ v3.PipelineSettingInterface = &PipelineSettingInterfaceMock{}
 //             UpdateFunc: func(in1 *v3.PipelineSetting) (*v3.PipelineSetting, error) {
 // 	               panic("mock out the Update method")
 //             },
+//             UpdateStatusFunc: func(in1 *v3.PipelineSetting) (*v3.PipelineSetting, error) {
+// 	               panic("mock out the UpdateStatus method")
+//             },
 //             WatchFunc: func(opts v1.ListOptions) (watch.Interface, error) {
 // 	               panic("mock out the Watch method")
 //             },
@@ -869,6 +873,9 @@ type PipelineSettingInterfaceMock struct {
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(in1 *v3.PipelineSetting) (*v3.PipelineSetting, error)
+
+	// UpdateStatusFunc mocks the UpdateStatus method.
+	UpdateStatusFunc func(in1 *v3.PipelineSetting) (*v3.PipelineSetting, error)
 
 	// WatchFunc mocks the Watch method.
 	WatchFunc func(opts v1.ListOptions) (watch.Interface, error)
@@ -1027,6 +1034,11 @@ type PipelineSettingInterfaceMock struct {
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
+			// In1 is the in1 argument value.
+			In1 *v3.PipelineSetting
+		}
+		// UpdateStatus holds details about calls to the UpdateStatus method.
+		UpdateStatus []struct {
 			// In1 is the in1 argument value.
 			In1 *v3.PipelineSetting
 		}
@@ -1742,6 +1754,37 @@ func (mock *PipelineSettingInterfaceMock) UpdateCalls() []struct {
 	lockPipelineSettingInterfaceMockUpdate.RLock()
 	calls = mock.calls.Update
 	lockPipelineSettingInterfaceMockUpdate.RUnlock()
+	return calls
+}
+
+// UpdateStatus calls UpdateStatusFunc.
+func (mock *PipelineSettingInterfaceMock) UpdateStatus(in1 *v3.PipelineSetting) (*v3.PipelineSetting, error) {
+	if mock.UpdateStatusFunc == nil {
+		panic("PipelineSettingInterfaceMock.UpdateStatusFunc: method is nil but PipelineSettingInterface.UpdateStatus was just called")
+	}
+	callInfo := struct {
+		In1 *v3.PipelineSetting
+	}{
+		In1: in1,
+	}
+	lockPipelineSettingInterfaceMockUpdateStatus.Lock()
+	mock.calls.UpdateStatus = append(mock.calls.UpdateStatus, callInfo)
+	lockPipelineSettingInterfaceMockUpdateStatus.Unlock()
+	return mock.UpdateStatusFunc(in1)
+}
+
+// UpdateStatusCalls gets all the calls that were made to UpdateStatus.
+// Check the length with:
+//     len(mockedPipelineSettingInterface.UpdateStatusCalls())
+func (mock *PipelineSettingInterfaceMock) UpdateStatusCalls() []struct {
+	In1 *v3.PipelineSetting
+} {
+	var calls []struct {
+		In1 *v3.PipelineSetting
+	}
+	lockPipelineSettingInterfaceMockUpdateStatus.RLock()
+	calls = mock.calls.UpdateStatus
+	lockPipelineSettingInterfaceMockUpdateStatus.RUnlock()
 	return calls
 }
 
