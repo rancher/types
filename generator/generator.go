@@ -103,6 +103,7 @@ func generateComposeType(baseCompose string, projectSchemas *types.Schemas, mana
 
 func gofmt(workDir, pkg string) error {
 	cmd := exec.Command("goimports", "-w", "-l", "./"+pkg)
+	fmt.Println(cmd.Args)
 	cmd.Dir = workDir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
