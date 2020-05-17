@@ -151,8 +151,6 @@ var (
 	lockCronJobControllerMockGeneric                        sync.RWMutex
 	lockCronJobControllerMockInformer                       sync.RWMutex
 	lockCronJobControllerMockLister                         sync.RWMutex
-	lockCronJobControllerMockStart                          sync.RWMutex
-	lockCronJobControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that CronJobControllerMock does implement CronJobController.
@@ -192,12 +190,6 @@ var _ v1beta1a.CronJobController = &CronJobControllerMock{}
 //             ListerFunc: func() v1beta1a.CronJobLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedCronJobController in code that requires CronJobController
@@ -231,12 +223,6 @@ type CronJobControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1beta1a.CronJobLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type CronJobControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *CronJobControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *CronJobControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("CronJobControllerMock.StartFunc: method is nil but CronJobController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockCronJobControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockCronJobControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedCronJobController.StartCalls())
-func (mock *CronJobControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockCronJobControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockCronJobControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *CronJobControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("CronJobControllerMock.SyncFunc: method is nil but CronJobController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockCronJobControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockCronJobControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedCronJobController.SyncCalls())
-func (mock *CronJobControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockCronJobControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockCronJobControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockCronJobInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockCronJobInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1beta1a.CronJobInterface = &CronJobInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1.GetOptions) (*v1beta1.CronJob, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1.ListOptions) (*v1beta1a.CronJobList, error) {
+//             ListFunc: func(opts v1.ListOptions) (*v1beta1.CronJobList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1beta1a.CronJobList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1beta1.CronJobList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type CronJobInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1.GetOptions) (*v1beta1.CronJob, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1.ListOptions) (*v1beta1a.CronJobList, error)
+	ListFunc func(opts v1.ListOptions) (*v1beta1.CronJobList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1beta1a.CronJobList, error)
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1beta1.CronJobList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *CronJobInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *CronJobInterfaceMock) List(opts v1.ListOptions) (*v1beta1a.CronJobList, error) {
+func (mock *CronJobInterfaceMock) List(opts v1.ListOptions) (*v1beta1.CronJobList, error) {
 	if mock.ListFunc == nil {
 		panic("CronJobInterfaceMock.ListFunc: method is nil but CronJobInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *CronJobInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *CronJobInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1beta1a.CronJobList, error) {
+func (mock *CronJobInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1beta1.CronJobList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("CronJobInterfaceMock.ListNamespacedFunc: method is nil but CronJobInterface.ListNamespaced was just called")
 	}

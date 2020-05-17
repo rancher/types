@@ -151,8 +151,6 @@ var (
 	lockIngressControllerMockGeneric                        sync.RWMutex
 	lockIngressControllerMockInformer                       sync.RWMutex
 	lockIngressControllerMockLister                         sync.RWMutex
-	lockIngressControllerMockStart                          sync.RWMutex
-	lockIngressControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that IngressControllerMock does implement IngressController.
@@ -192,12 +190,6 @@ var _ v1beta1a.IngressController = &IngressControllerMock{}
 //             ListerFunc: func() v1beta1a.IngressLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedIngressController in code that requires IngressController
@@ -231,12 +223,6 @@ type IngressControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1beta1a.IngressLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type IngressControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *IngressControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *IngressControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("IngressControllerMock.StartFunc: method is nil but IngressController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockIngressControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockIngressControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedIngressController.StartCalls())
-func (mock *IngressControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockIngressControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockIngressControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *IngressControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("IngressControllerMock.SyncFunc: method is nil but IngressController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockIngressControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockIngressControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedIngressController.SyncCalls())
-func (mock *IngressControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockIngressControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockIngressControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockIngressInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockIngressInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1beta1a.IngressInterface = &IngressInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1.GetOptions) (*v1beta1.Ingress, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1.ListOptions) (*v1beta1a.IngressList, error) {
+//             ListFunc: func(opts v1.ListOptions) (*v1beta1.IngressList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1beta1a.IngressList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1beta1.IngressList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type IngressInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1.GetOptions) (*v1beta1.Ingress, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1.ListOptions) (*v1beta1a.IngressList, error)
+	ListFunc func(opts v1.ListOptions) (*v1beta1.IngressList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1beta1a.IngressList, error)
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1beta1.IngressList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *IngressInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *IngressInterfaceMock) List(opts v1.ListOptions) (*v1beta1a.IngressList, error) {
+func (mock *IngressInterfaceMock) List(opts v1.ListOptions) (*v1beta1.IngressList, error) {
 	if mock.ListFunc == nil {
 		panic("IngressInterfaceMock.ListFunc: method is nil but IngressInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *IngressInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *IngressInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1beta1a.IngressList, error) {
+func (mock *IngressInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1beta1.IngressList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("IngressInterfaceMock.ListNamespacedFunc: method is nil but IngressInterface.ListNamespaced was just called")
 	}

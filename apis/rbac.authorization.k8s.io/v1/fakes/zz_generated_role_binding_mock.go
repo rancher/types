@@ -151,8 +151,6 @@ var (
 	lockRoleBindingControllerMockGeneric                        sync.RWMutex
 	lockRoleBindingControllerMockInformer                       sync.RWMutex
 	lockRoleBindingControllerMockLister                         sync.RWMutex
-	lockRoleBindingControllerMockStart                          sync.RWMutex
-	lockRoleBindingControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that RoleBindingControllerMock does implement RoleBindingController.
@@ -192,12 +190,6 @@ var _ v1a.RoleBindingController = &RoleBindingControllerMock{}
 //             ListerFunc: func() v1a.RoleBindingLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedRoleBindingController in code that requires RoleBindingController
@@ -231,12 +223,6 @@ type RoleBindingControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1a.RoleBindingLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type RoleBindingControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *RoleBindingControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *RoleBindingControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("RoleBindingControllerMock.StartFunc: method is nil but RoleBindingController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockRoleBindingControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockRoleBindingControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedRoleBindingController.StartCalls())
-func (mock *RoleBindingControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockRoleBindingControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockRoleBindingControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *RoleBindingControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("RoleBindingControllerMock.SyncFunc: method is nil but RoleBindingController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockRoleBindingControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockRoleBindingControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedRoleBindingController.SyncCalls())
-func (mock *RoleBindingControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockRoleBindingControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockRoleBindingControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockRoleBindingInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockRoleBindingInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1a.RoleBindingInterface = &RoleBindingInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.RoleBinding, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1b.ListOptions) (*v1a.RoleBindingList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1.RoleBindingList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.RoleBindingList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1.RoleBindingList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type RoleBindingInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.RoleBinding, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1b.ListOptions) (*v1a.RoleBindingList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1.RoleBindingList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.RoleBindingList, error)
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1.RoleBindingList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *RoleBindingInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *RoleBindingInterfaceMock) List(opts v1b.ListOptions) (*v1a.RoleBindingList, error) {
+func (mock *RoleBindingInterfaceMock) List(opts v1b.ListOptions) (*v1.RoleBindingList, error) {
 	if mock.ListFunc == nil {
 		panic("RoleBindingInterfaceMock.ListFunc: method is nil but RoleBindingInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *RoleBindingInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *RoleBindingInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.RoleBindingList, error) {
+func (mock *RoleBindingInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1.RoleBindingList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("RoleBindingInterfaceMock.ListNamespacedFunc: method is nil but RoleBindingInterface.ListNamespaced was just called")
 	}

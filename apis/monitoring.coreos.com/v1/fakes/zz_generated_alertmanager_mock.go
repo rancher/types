@@ -151,8 +151,6 @@ var (
 	lockAlertmanagerControllerMockGeneric                        sync.RWMutex
 	lockAlertmanagerControllerMockInformer                       sync.RWMutex
 	lockAlertmanagerControllerMockLister                         sync.RWMutex
-	lockAlertmanagerControllerMockStart                          sync.RWMutex
-	lockAlertmanagerControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that AlertmanagerControllerMock does implement AlertmanagerController.
@@ -192,12 +190,6 @@ var _ v1a.AlertmanagerController = &AlertmanagerControllerMock{}
 //             ListerFunc: func() v1a.AlertmanagerLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedAlertmanagerController in code that requires AlertmanagerController
@@ -231,12 +223,6 @@ type AlertmanagerControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1a.AlertmanagerLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type AlertmanagerControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *AlertmanagerControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *AlertmanagerControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("AlertmanagerControllerMock.StartFunc: method is nil but AlertmanagerController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockAlertmanagerControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockAlertmanagerControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedAlertmanagerController.StartCalls())
-func (mock *AlertmanagerControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockAlertmanagerControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockAlertmanagerControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *AlertmanagerControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("AlertmanagerControllerMock.SyncFunc: method is nil but AlertmanagerController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockAlertmanagerControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockAlertmanagerControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedAlertmanagerController.SyncCalls())
-func (mock *AlertmanagerControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockAlertmanagerControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockAlertmanagerControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockAlertmanagerInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockAlertmanagerInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1a.AlertmanagerInterface = &AlertmanagerInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.Alertmanager, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1.AlertmanagerList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1.AlertmanagerList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type AlertmanagerInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.Alertmanager, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1b.ListOptions) (*v1a.AlertmanagerList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1.AlertmanagerList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error)
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1.AlertmanagerList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *AlertmanagerInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *AlertmanagerInterfaceMock) List(opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
+func (mock *AlertmanagerInterfaceMock) List(opts v1b.ListOptions) (*v1.AlertmanagerList, error) {
 	if mock.ListFunc == nil {
 		panic("AlertmanagerInterfaceMock.ListFunc: method is nil but AlertmanagerInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *AlertmanagerInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *AlertmanagerInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
+func (mock *AlertmanagerInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1.AlertmanagerList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("AlertmanagerInterfaceMock.ListNamespacedFunc: method is nil but AlertmanagerInterface.ListNamespaced was just called")
 	}

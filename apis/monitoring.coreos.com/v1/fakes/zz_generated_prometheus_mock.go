@@ -151,8 +151,6 @@ var (
 	lockPrometheusControllerMockGeneric                        sync.RWMutex
 	lockPrometheusControllerMockInformer                       sync.RWMutex
 	lockPrometheusControllerMockLister                         sync.RWMutex
-	lockPrometheusControllerMockStart                          sync.RWMutex
-	lockPrometheusControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that PrometheusControllerMock does implement PrometheusController.
@@ -192,12 +190,6 @@ var _ v1a.PrometheusController = &PrometheusControllerMock{}
 //             ListerFunc: func() v1a.PrometheusLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedPrometheusController in code that requires PrometheusController
@@ -231,12 +223,6 @@ type PrometheusControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1a.PrometheusLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type PrometheusControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *PrometheusControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *PrometheusControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("PrometheusControllerMock.StartFunc: method is nil but PrometheusController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockPrometheusControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockPrometheusControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedPrometheusController.StartCalls())
-func (mock *PrometheusControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockPrometheusControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockPrometheusControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *PrometheusControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("PrometheusControllerMock.SyncFunc: method is nil but PrometheusController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockPrometheusControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockPrometheusControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedPrometheusController.SyncCalls())
-func (mock *PrometheusControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockPrometheusControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockPrometheusControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockPrometheusInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockPrometheusInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1a.PrometheusInterface = &PrometheusInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.Prometheus, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1b.ListOptions) (*v1a.PrometheusList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1.PrometheusList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.PrometheusList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1.PrometheusList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type PrometheusInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.Prometheus, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1b.ListOptions) (*v1a.PrometheusList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1.PrometheusList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.PrometheusList, error)
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1.PrometheusList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *PrometheusInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *PrometheusInterfaceMock) List(opts v1b.ListOptions) (*v1a.PrometheusList, error) {
+func (mock *PrometheusInterfaceMock) List(opts v1b.ListOptions) (*v1.PrometheusList, error) {
 	if mock.ListFunc == nil {
 		panic("PrometheusInterfaceMock.ListFunc: method is nil but PrometheusInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *PrometheusInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *PrometheusInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.PrometheusList, error) {
+func (mock *PrometheusInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1.PrometheusList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("PrometheusInterfaceMock.ListNamespacedFunc: method is nil but PrometheusInterface.ListNamespaced was just called")
 	}

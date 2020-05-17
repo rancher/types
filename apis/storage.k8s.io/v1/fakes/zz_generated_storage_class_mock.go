@@ -151,8 +151,6 @@ var (
 	lockStorageClassControllerMockGeneric                        sync.RWMutex
 	lockStorageClassControllerMockInformer                       sync.RWMutex
 	lockStorageClassControllerMockLister                         sync.RWMutex
-	lockStorageClassControllerMockStart                          sync.RWMutex
-	lockStorageClassControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that StorageClassControllerMock does implement StorageClassController.
@@ -192,12 +190,6 @@ var _ v1a.StorageClassController = &StorageClassControllerMock{}
 //             ListerFunc: func() v1a.StorageClassLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedStorageClassController in code that requires StorageClassController
@@ -231,12 +223,6 @@ type StorageClassControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1a.StorageClassLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type StorageClassControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *StorageClassControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *StorageClassControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("StorageClassControllerMock.StartFunc: method is nil but StorageClassController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockStorageClassControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockStorageClassControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedStorageClassController.StartCalls())
-func (mock *StorageClassControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockStorageClassControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockStorageClassControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *StorageClassControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("StorageClassControllerMock.SyncFunc: method is nil but StorageClassController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockStorageClassControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockStorageClassControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedStorageClassController.SyncCalls())
-func (mock *StorageClassControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockStorageClassControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockStorageClassControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockStorageClassInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockStorageClassInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1a.StorageClassInterface = &StorageClassInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.StorageClass, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1b.ListOptions) (*v1a.StorageClassList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1.StorageClassList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.StorageClassList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1.StorageClassList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type StorageClassInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.StorageClass, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1b.ListOptions) (*v1a.StorageClassList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1.StorageClassList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.StorageClassList, error)
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1.StorageClassList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *StorageClassInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *StorageClassInterfaceMock) List(opts v1b.ListOptions) (*v1a.StorageClassList, error) {
+func (mock *StorageClassInterfaceMock) List(opts v1b.ListOptions) (*v1.StorageClassList, error) {
 	if mock.ListFunc == nil {
 		panic("StorageClassInterfaceMock.ListFunc: method is nil but StorageClassInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *StorageClassInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *StorageClassInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.StorageClassList, error) {
+func (mock *StorageClassInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1.StorageClassList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("StorageClassInterfaceMock.ListNamespacedFunc: method is nil but StorageClassInterface.ListNamespaced was just called")
 	}

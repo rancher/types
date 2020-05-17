@@ -151,8 +151,6 @@ var (
 	lockPodSecurityPolicyControllerMockGeneric                        sync.RWMutex
 	lockPodSecurityPolicyControllerMockInformer                       sync.RWMutex
 	lockPodSecurityPolicyControllerMockLister                         sync.RWMutex
-	lockPodSecurityPolicyControllerMockStart                          sync.RWMutex
-	lockPodSecurityPolicyControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that PodSecurityPolicyControllerMock does implement PodSecurityPolicyController.
@@ -192,12 +190,6 @@ var _ v1beta1a.PodSecurityPolicyController = &PodSecurityPolicyControllerMock{}
 //             ListerFunc: func() v1beta1a.PodSecurityPolicyLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedPodSecurityPolicyController in code that requires PodSecurityPolicyController
@@ -231,12 +223,6 @@ type PodSecurityPolicyControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1beta1a.PodSecurityPolicyLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type PodSecurityPolicyControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *PodSecurityPolicyControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *PodSecurityPolicyControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("PodSecurityPolicyControllerMock.StartFunc: method is nil but PodSecurityPolicyController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockPodSecurityPolicyControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockPodSecurityPolicyControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedPodSecurityPolicyController.StartCalls())
-func (mock *PodSecurityPolicyControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockPodSecurityPolicyControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockPodSecurityPolicyControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *PodSecurityPolicyControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("PodSecurityPolicyControllerMock.SyncFunc: method is nil but PodSecurityPolicyController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockPodSecurityPolicyControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockPodSecurityPolicyControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedPodSecurityPolicyController.SyncCalls())
-func (mock *PodSecurityPolicyControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockPodSecurityPolicyControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockPodSecurityPolicyControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockPodSecurityPolicyInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockPodSecurityPolicyInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1beta1a.PodSecurityPolicyInterface = &PodSecurityPolicyInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1.GetOptions) (*v1beta1.PodSecurityPolicy, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1.ListOptions) (*v1beta1a.PodSecurityPolicyList, error) {
+//             ListFunc: func(opts v1.ListOptions) (*v1beta1.PodSecurityPolicyList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1beta1a.PodSecurityPolicyList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1beta1.PodSecurityPolicyList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type PodSecurityPolicyInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1.GetOptions) (*v1beta1.PodSecurityPolicy, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1.ListOptions) (*v1beta1a.PodSecurityPolicyList, error)
+	ListFunc func(opts v1.ListOptions) (*v1beta1.PodSecurityPolicyList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1beta1a.PodSecurityPolicyList, error)
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1beta1.PodSecurityPolicyList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *PodSecurityPolicyInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *PodSecurityPolicyInterfaceMock) List(opts v1.ListOptions) (*v1beta1a.PodSecurityPolicyList, error) {
+func (mock *PodSecurityPolicyInterfaceMock) List(opts v1.ListOptions) (*v1beta1.PodSecurityPolicyList, error) {
 	if mock.ListFunc == nil {
 		panic("PodSecurityPolicyInterfaceMock.ListFunc: method is nil but PodSecurityPolicyInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *PodSecurityPolicyInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *PodSecurityPolicyInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1beta1a.PodSecurityPolicyList, error) {
+func (mock *PodSecurityPolicyInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1beta1.PodSecurityPolicyList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("PodSecurityPolicyInterfaceMock.ListNamespacedFunc: method is nil but PodSecurityPolicyInterface.ListNamespaced was just called")
 	}
