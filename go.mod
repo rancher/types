@@ -11,10 +11,11 @@ replace (
 require (
 	github.com/coreos/prometheus-operator v0.36.0
 	github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8
-	github.com/pkg/errors v0.8.1
-	github.com/rancher/norman v0.0.0-20200326201949-eb806263e8ad
-	github.com/rancher/wrangler v0.5.4-0.20200326191509-4054411d9736
-	github.com/rancher/wrangler-api v0.5.1-0.20200326194427-c13310506d04
+	github.com/pkg/errors v0.9.1
+	github.com/rancher/lasso v0.0.0-20200515155337-a34e1e26ad91
+	github.com/rancher/norman v0.0.0-20200517050325-f53cae161640
+	github.com/rancher/wrangler v0.6.2-0.20200515155908-1923f3f8ec3f
+	github.com/rancher/wrangler-api v0.6.1-0.20200515193802-dcf70881b087
 	github.com/sirupsen/logrus v1.4.2
 	k8s.io/api v0.18.0
 	k8s.io/apiextensions-apiserver v0.18.0
