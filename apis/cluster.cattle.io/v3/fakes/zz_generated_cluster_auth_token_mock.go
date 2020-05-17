@@ -150,8 +150,6 @@ var (
 	lockClusterAuthTokenControllerMockGeneric                        sync.RWMutex
 	lockClusterAuthTokenControllerMockInformer                       sync.RWMutex
 	lockClusterAuthTokenControllerMockLister                         sync.RWMutex
-	lockClusterAuthTokenControllerMockStart                          sync.RWMutex
-	lockClusterAuthTokenControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that ClusterAuthTokenControllerMock does implement ClusterAuthTokenController.
@@ -191,12 +189,6 @@ var _ v3.ClusterAuthTokenController = &ClusterAuthTokenControllerMock{}
 //             ListerFunc: func() v3.ClusterAuthTokenLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedClusterAuthTokenController in code that requires ClusterAuthTokenController
@@ -230,12 +222,6 @@ type ClusterAuthTokenControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v3.ClusterAuthTokenLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -307,18 +293,6 @@ type ClusterAuthTokenControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -644,72 +618,6 @@ func (mock *ClusterAuthTokenControllerMock) ListerCalls() []struct {
 	lockClusterAuthTokenControllerMockLister.RLock()
 	calls = mock.calls.Lister
 	lockClusterAuthTokenControllerMockLister.RUnlock()
-	return calls
-}
-
-// Start calls StartFunc.
-func (mock *ClusterAuthTokenControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("ClusterAuthTokenControllerMock.StartFunc: method is nil but ClusterAuthTokenController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockClusterAuthTokenControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockClusterAuthTokenControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedClusterAuthTokenController.StartCalls())
-func (mock *ClusterAuthTokenControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockClusterAuthTokenControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockClusterAuthTokenControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *ClusterAuthTokenControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("ClusterAuthTokenControllerMock.SyncFunc: method is nil but ClusterAuthTokenController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockClusterAuthTokenControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockClusterAuthTokenControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedClusterAuthTokenController.SyncCalls())
-func (mock *ClusterAuthTokenControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockClusterAuthTokenControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockClusterAuthTokenControllerMockSync.RUnlock()
 	return calls
 }
 

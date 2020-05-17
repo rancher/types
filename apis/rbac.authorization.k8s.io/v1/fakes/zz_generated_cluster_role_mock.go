@@ -151,8 +151,6 @@ var (
 	lockClusterRoleControllerMockGeneric                        sync.RWMutex
 	lockClusterRoleControllerMockInformer                       sync.RWMutex
 	lockClusterRoleControllerMockLister                         sync.RWMutex
-	lockClusterRoleControllerMockStart                          sync.RWMutex
-	lockClusterRoleControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that ClusterRoleControllerMock does implement ClusterRoleController.
@@ -192,12 +190,6 @@ var _ v1a.ClusterRoleController = &ClusterRoleControllerMock{}
 //             ListerFunc: func() v1a.ClusterRoleLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedClusterRoleController in code that requires ClusterRoleController
@@ -231,12 +223,6 @@ type ClusterRoleControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1a.ClusterRoleLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type ClusterRoleControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *ClusterRoleControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *ClusterRoleControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("ClusterRoleControllerMock.StartFunc: method is nil but ClusterRoleController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockClusterRoleControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockClusterRoleControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedClusterRoleController.StartCalls())
-func (mock *ClusterRoleControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockClusterRoleControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockClusterRoleControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *ClusterRoleControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("ClusterRoleControllerMock.SyncFunc: method is nil but ClusterRoleController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockClusterRoleControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockClusterRoleControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedClusterRoleController.SyncCalls())
-func (mock *ClusterRoleControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockClusterRoleControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockClusterRoleControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockClusterRoleInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockClusterRoleInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1a.ClusterRoleInterface = &ClusterRoleInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.ClusterRole, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1b.ListOptions) (*v1a.ClusterRoleList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1.ClusterRoleList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.ClusterRoleList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1.ClusterRoleList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type ClusterRoleInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.ClusterRole, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1b.ListOptions) (*v1a.ClusterRoleList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1.ClusterRoleList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.ClusterRoleList, error)
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1.ClusterRoleList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *ClusterRoleInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *ClusterRoleInterfaceMock) List(opts v1b.ListOptions) (*v1a.ClusterRoleList, error) {
+func (mock *ClusterRoleInterfaceMock) List(opts v1b.ListOptions) (*v1.ClusterRoleList, error) {
 	if mock.ListFunc == nil {
 		panic("ClusterRoleInterfaceMock.ListFunc: method is nil but ClusterRoleInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *ClusterRoleInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *ClusterRoleInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.ClusterRoleList, error) {
+func (mock *ClusterRoleInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1.ClusterRoleList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("ClusterRoleInterfaceMock.ListNamespacedFunc: method is nil but ClusterRoleInterface.ListNamespaced was just called")
 	}

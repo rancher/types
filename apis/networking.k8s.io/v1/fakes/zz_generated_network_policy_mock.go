@@ -151,8 +151,6 @@ var (
 	lockNetworkPolicyControllerMockGeneric                        sync.RWMutex
 	lockNetworkPolicyControllerMockInformer                       sync.RWMutex
 	lockNetworkPolicyControllerMockLister                         sync.RWMutex
-	lockNetworkPolicyControllerMockStart                          sync.RWMutex
-	lockNetworkPolicyControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that NetworkPolicyControllerMock does implement NetworkPolicyController.
@@ -192,12 +190,6 @@ var _ v1a.NetworkPolicyController = &NetworkPolicyControllerMock{}
 //             ListerFunc: func() v1a.NetworkPolicyLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedNetworkPolicyController in code that requires NetworkPolicyController
@@ -231,12 +223,6 @@ type NetworkPolicyControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1a.NetworkPolicyLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type NetworkPolicyControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *NetworkPolicyControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *NetworkPolicyControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("NetworkPolicyControllerMock.StartFunc: method is nil but NetworkPolicyController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockNetworkPolicyControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockNetworkPolicyControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedNetworkPolicyController.StartCalls())
-func (mock *NetworkPolicyControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockNetworkPolicyControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockNetworkPolicyControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *NetworkPolicyControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("NetworkPolicyControllerMock.SyncFunc: method is nil but NetworkPolicyController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockNetworkPolicyControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockNetworkPolicyControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedNetworkPolicyController.SyncCalls())
-func (mock *NetworkPolicyControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockNetworkPolicyControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockNetworkPolicyControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockNetworkPolicyInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1a.NetworkPolicyInterface = &NetworkPolicyInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.NetworkPolicy, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1b.ListOptions) (*v1a.NetworkPolicyList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1.NetworkPolicyList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.NetworkPolicyList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1.NetworkPolicyList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type NetworkPolicyInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.NetworkPolicy, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1b.ListOptions) (*v1a.NetworkPolicyList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1.NetworkPolicyList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.NetworkPolicyList, error)
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1.NetworkPolicyList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *NetworkPolicyInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *NetworkPolicyInterfaceMock) List(opts v1b.ListOptions) (*v1a.NetworkPolicyList, error) {
+func (mock *NetworkPolicyInterfaceMock) List(opts v1b.ListOptions) (*v1.NetworkPolicyList, error) {
 	if mock.ListFunc == nil {
 		panic("NetworkPolicyInterfaceMock.ListFunc: method is nil but NetworkPolicyInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *NetworkPolicyInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *NetworkPolicyInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.NetworkPolicyList, error) {
+func (mock *NetworkPolicyInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1.NetworkPolicyList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("NetworkPolicyInterfaceMock.ListNamespacedFunc: method is nil but NetworkPolicyInterface.ListNamespaced was just called")
 	}

@@ -150,8 +150,6 @@ var (
 	lockDockerCredentialControllerMockGeneric                        sync.RWMutex
 	lockDockerCredentialControllerMockInformer                       sync.RWMutex
 	lockDockerCredentialControllerMockLister                         sync.RWMutex
-	lockDockerCredentialControllerMockStart                          sync.RWMutex
-	lockDockerCredentialControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that DockerCredentialControllerMock does implement DockerCredentialController.
@@ -191,12 +189,6 @@ var _ v3.DockerCredentialController = &DockerCredentialControllerMock{}
 //             ListerFunc: func() v3.DockerCredentialLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedDockerCredentialController in code that requires DockerCredentialController
@@ -230,12 +222,6 @@ type DockerCredentialControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v3.DockerCredentialLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -307,18 +293,6 @@ type DockerCredentialControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -644,72 +618,6 @@ func (mock *DockerCredentialControllerMock) ListerCalls() []struct {
 	lockDockerCredentialControllerMockLister.RLock()
 	calls = mock.calls.Lister
 	lockDockerCredentialControllerMockLister.RUnlock()
-	return calls
-}
-
-// Start calls StartFunc.
-func (mock *DockerCredentialControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("DockerCredentialControllerMock.StartFunc: method is nil but DockerCredentialController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockDockerCredentialControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockDockerCredentialControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedDockerCredentialController.StartCalls())
-func (mock *DockerCredentialControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockDockerCredentialControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockDockerCredentialControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *DockerCredentialControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("DockerCredentialControllerMock.SyncFunc: method is nil but DockerCredentialController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockDockerCredentialControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockDockerCredentialControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedDockerCredentialController.SyncCalls())
-func (mock *DockerCredentialControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockDockerCredentialControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockDockerCredentialControllerMockSync.RUnlock()
 	return calls
 }
 

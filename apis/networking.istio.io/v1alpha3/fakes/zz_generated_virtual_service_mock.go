@@ -151,8 +151,6 @@ var (
 	lockVirtualServiceControllerMockGeneric                        sync.RWMutex
 	lockVirtualServiceControllerMockInformer                       sync.RWMutex
 	lockVirtualServiceControllerMockLister                         sync.RWMutex
-	lockVirtualServiceControllerMockStart                          sync.RWMutex
-	lockVirtualServiceControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that VirtualServiceControllerMock does implement VirtualServiceController.
@@ -192,12 +190,6 @@ var _ v1alpha3a.VirtualServiceController = &VirtualServiceControllerMock{}
 //             ListerFunc: func() v1alpha3a.VirtualServiceLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedVirtualServiceController in code that requires VirtualServiceController
@@ -231,12 +223,6 @@ type VirtualServiceControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1alpha3a.VirtualServiceLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type VirtualServiceControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *VirtualServiceControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *VirtualServiceControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("VirtualServiceControllerMock.StartFunc: method is nil but VirtualServiceController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockVirtualServiceControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockVirtualServiceControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedVirtualServiceController.StartCalls())
-func (mock *VirtualServiceControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockVirtualServiceControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockVirtualServiceControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *VirtualServiceControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("VirtualServiceControllerMock.SyncFunc: method is nil but VirtualServiceController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockVirtualServiceControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockVirtualServiceControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedVirtualServiceController.SyncCalls())
-func (mock *VirtualServiceControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockVirtualServiceControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockVirtualServiceControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockVirtualServiceInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockVirtualServiceInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1alpha3a.VirtualServiceInterface = &VirtualServiceInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1.GetOptions) (*v1alpha3.VirtualService, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error) {
+//             ListFunc: func(opts v1.ListOptions) (*v1alpha3.VirtualServiceList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1alpha3.VirtualServiceList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type VirtualServiceInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1.GetOptions) (*v1alpha3.VirtualService, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error)
+	ListFunc func(opts v1.ListOptions) (*v1alpha3.VirtualServiceList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error)
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1alpha3.VirtualServiceList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *VirtualServiceInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *VirtualServiceInterfaceMock) List(opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error) {
+func (mock *VirtualServiceInterfaceMock) List(opts v1.ListOptions) (*v1alpha3.VirtualServiceList, error) {
 	if mock.ListFunc == nil {
 		panic("VirtualServiceInterfaceMock.ListFunc: method is nil but VirtualServiceInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *VirtualServiceInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *VirtualServiceInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error) {
+func (mock *VirtualServiceInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1alpha3.VirtualServiceList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("VirtualServiceInterfaceMock.ListNamespacedFunc: method is nil but VirtualServiceInterface.ListNamespaced was just called")
 	}

@@ -151,8 +151,6 @@ var (
 	lockStatefulSetControllerMockGeneric                        sync.RWMutex
 	lockStatefulSetControllerMockInformer                       sync.RWMutex
 	lockStatefulSetControllerMockLister                         sync.RWMutex
-	lockStatefulSetControllerMockStart                          sync.RWMutex
-	lockStatefulSetControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that StatefulSetControllerMock does implement StatefulSetController.
@@ -192,12 +190,6 @@ var _ v1a.StatefulSetController = &StatefulSetControllerMock{}
 //             ListerFunc: func() v1a.StatefulSetLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedStatefulSetController in code that requires StatefulSetController
@@ -231,12 +223,6 @@ type StatefulSetControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1a.StatefulSetLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type StatefulSetControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *StatefulSetControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *StatefulSetControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("StatefulSetControllerMock.StartFunc: method is nil but StatefulSetController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockStatefulSetControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockStatefulSetControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedStatefulSetController.StartCalls())
-func (mock *StatefulSetControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockStatefulSetControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockStatefulSetControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *StatefulSetControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("StatefulSetControllerMock.SyncFunc: method is nil but StatefulSetController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockStatefulSetControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockStatefulSetControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedStatefulSetController.SyncCalls())
-func (mock *StatefulSetControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockStatefulSetControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockStatefulSetControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockStatefulSetInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockStatefulSetInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1a.StatefulSetInterface = &StatefulSetInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.StatefulSet, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1b.ListOptions) (*v1a.StatefulSetList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1.StatefulSetList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.StatefulSetList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1.StatefulSetList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type StatefulSetInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.StatefulSet, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1b.ListOptions) (*v1a.StatefulSetList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1.StatefulSetList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.StatefulSetList, error)
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1.StatefulSetList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *StatefulSetInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *StatefulSetInterfaceMock) List(opts v1b.ListOptions) (*v1a.StatefulSetList, error) {
+func (mock *StatefulSetInterfaceMock) List(opts v1b.ListOptions) (*v1.StatefulSetList, error) {
 	if mock.ListFunc == nil {
 		panic("StatefulSetInterfaceMock.ListFunc: method is nil but StatefulSetInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *StatefulSetInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *StatefulSetInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.StatefulSetList, error) {
+func (mock *StatefulSetInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1.StatefulSetList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("StatefulSetInterfaceMock.ListNamespacedFunc: method is nil but StatefulSetInterface.ListNamespaced was just called")
 	}

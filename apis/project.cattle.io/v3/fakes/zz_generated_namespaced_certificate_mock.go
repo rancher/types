@@ -150,8 +150,6 @@ var (
 	lockNamespacedCertificateControllerMockGeneric                        sync.RWMutex
 	lockNamespacedCertificateControllerMockInformer                       sync.RWMutex
 	lockNamespacedCertificateControllerMockLister                         sync.RWMutex
-	lockNamespacedCertificateControllerMockStart                          sync.RWMutex
-	lockNamespacedCertificateControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that NamespacedCertificateControllerMock does implement NamespacedCertificateController.
@@ -191,12 +189,6 @@ var _ v3.NamespacedCertificateController = &NamespacedCertificateControllerMock{
 //             ListerFunc: func() v3.NamespacedCertificateLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedNamespacedCertificateController in code that requires NamespacedCertificateController
@@ -230,12 +222,6 @@ type NamespacedCertificateControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v3.NamespacedCertificateLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -307,18 +293,6 @@ type NamespacedCertificateControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -644,72 +618,6 @@ func (mock *NamespacedCertificateControllerMock) ListerCalls() []struct {
 	lockNamespacedCertificateControllerMockLister.RLock()
 	calls = mock.calls.Lister
 	lockNamespacedCertificateControllerMockLister.RUnlock()
-	return calls
-}
-
-// Start calls StartFunc.
-func (mock *NamespacedCertificateControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("NamespacedCertificateControllerMock.StartFunc: method is nil but NamespacedCertificateController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockNamespacedCertificateControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockNamespacedCertificateControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedNamespacedCertificateController.StartCalls())
-func (mock *NamespacedCertificateControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockNamespacedCertificateControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockNamespacedCertificateControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *NamespacedCertificateControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("NamespacedCertificateControllerMock.SyncFunc: method is nil but NamespacedCertificateController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockNamespacedCertificateControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockNamespacedCertificateControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedNamespacedCertificateController.SyncCalls())
-func (mock *NamespacedCertificateControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockNamespacedCertificateControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockNamespacedCertificateControllerMockSync.RUnlock()
 	return calls
 }
 

@@ -150,8 +150,6 @@ var (
 	lockWorkloadControllerMockGeneric                        sync.RWMutex
 	lockWorkloadControllerMockInformer                       sync.RWMutex
 	lockWorkloadControllerMockLister                         sync.RWMutex
-	lockWorkloadControllerMockStart                          sync.RWMutex
-	lockWorkloadControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that WorkloadControllerMock does implement WorkloadController.
@@ -191,12 +189,6 @@ var _ v3.WorkloadController = &WorkloadControllerMock{}
 //             ListerFunc: func() v3.WorkloadLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedWorkloadController in code that requires WorkloadController
@@ -230,12 +222,6 @@ type WorkloadControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v3.WorkloadLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -307,18 +293,6 @@ type WorkloadControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -644,72 +618,6 @@ func (mock *WorkloadControllerMock) ListerCalls() []struct {
 	lockWorkloadControllerMockLister.RLock()
 	calls = mock.calls.Lister
 	lockWorkloadControllerMockLister.RUnlock()
-	return calls
-}
-
-// Start calls StartFunc.
-func (mock *WorkloadControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("WorkloadControllerMock.StartFunc: method is nil but WorkloadController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockWorkloadControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockWorkloadControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedWorkloadController.StartCalls())
-func (mock *WorkloadControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockWorkloadControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockWorkloadControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *WorkloadControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("WorkloadControllerMock.SyncFunc: method is nil but WorkloadController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockWorkloadControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockWorkloadControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedWorkloadController.SyncCalls())
-func (mock *WorkloadControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockWorkloadControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockWorkloadControllerMockSync.RUnlock()
 	return calls
 }
 

@@ -150,8 +150,6 @@ var (
 	lockSourceCodeProviderControllerMockGeneric                        sync.RWMutex
 	lockSourceCodeProviderControllerMockInformer                       sync.RWMutex
 	lockSourceCodeProviderControllerMockLister                         sync.RWMutex
-	lockSourceCodeProviderControllerMockStart                          sync.RWMutex
-	lockSourceCodeProviderControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that SourceCodeProviderControllerMock does implement SourceCodeProviderController.
@@ -191,12 +189,6 @@ var _ v3.SourceCodeProviderController = &SourceCodeProviderControllerMock{}
 //             ListerFunc: func() v3.SourceCodeProviderLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedSourceCodeProviderController in code that requires SourceCodeProviderController
@@ -230,12 +222,6 @@ type SourceCodeProviderControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v3.SourceCodeProviderLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -307,18 +293,6 @@ type SourceCodeProviderControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -644,72 +618,6 @@ func (mock *SourceCodeProviderControllerMock) ListerCalls() []struct {
 	lockSourceCodeProviderControllerMockLister.RLock()
 	calls = mock.calls.Lister
 	lockSourceCodeProviderControllerMockLister.RUnlock()
-	return calls
-}
-
-// Start calls StartFunc.
-func (mock *SourceCodeProviderControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("SourceCodeProviderControllerMock.StartFunc: method is nil but SourceCodeProviderController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockSourceCodeProviderControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockSourceCodeProviderControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedSourceCodeProviderController.StartCalls())
-func (mock *SourceCodeProviderControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockSourceCodeProviderControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockSourceCodeProviderControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *SourceCodeProviderControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("SourceCodeProviderControllerMock.SyncFunc: method is nil but SourceCodeProviderController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockSourceCodeProviderControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockSourceCodeProviderControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedSourceCodeProviderController.SyncCalls())
-func (mock *SourceCodeProviderControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockSourceCodeProviderControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockSourceCodeProviderControllerMockSync.RUnlock()
 	return calls
 }
 
