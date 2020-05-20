@@ -24,7 +24,7 @@ github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
-# github.com/google/gofuzz v1.0.0
+# github.com/google/gofuzz v1.1.0
 github.com/google/gofuzz
 # github.com/googleapis/gnostic v0.3.1
 github.com/googleapis/gnostic/OpenAPIv2
@@ -66,7 +66,7 @@ github.com/prometheus/common/model
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
-# github.com/rancher/norman v0.0.0-20200211155126-fc45a55d4dfd
+# github.com/rancher/norman v0.0.0-20200520181341-ab75acb55410
 github.com/rancher/norman/clientbase
 github.com/rancher/norman/condition
 github.com/rancher/norman/controller
@@ -88,7 +88,7 @@ github.com/rancher/norman/types/factory
 github.com/rancher/norman/types/mapper
 github.com/rancher/norman/types/slice
 github.com/rancher/norman/types/values
-# github.com/rancher/wrangler v0.5.0
+# github.com/rancher/wrangler v0.5.4-0.20200520040055-b8d49179cfc8
 github.com/rancher/wrangler/pkg/data
 github.com/rancher/wrangler/pkg/data/convert
 github.com/rancher/wrangler/pkg/generic
@@ -97,14 +97,14 @@ github.com/rancher/wrangler/pkg/name
 github.com/rancher/wrangler/pkg/ratelimit
 github.com/rancher/wrangler/pkg/schemes
 github.com/rancher/wrangler/pkg/summary
-# github.com/rancher/wrangler-api v0.5.0
+# github.com/rancher/wrangler-api v0.5.1-0.20200326194427-c13310506d04
 github.com/rancher/wrangler-api/pkg/generated/controllers/rbac
 github.com/rancher/wrangler-api/pkg/generated/controllers/rbac/v1
 # github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
 # github.com/spf13/pflag v1.0.5
 github.com/spf13/pflag
-# golang.org/x/crypto v0.0.0-20191112222119-e1110fd1c708
+# golang.org/x/crypto v0.0.0-20200220183623-bac4c82f6975
 golang.org/x/crypto/ssh/terminal
 # golang.org/x/net v0.0.0-20191112182307-2180aed22343
 golang.org/x/net/context
@@ -151,9 +151,9 @@ google.golang.org/appengine/internal/urlfetch
 google.golang.org/appengine/urlfetch
 # gopkg.in/inf.v0 v0.9.1
 gopkg.in/inf.v0
-# gopkg.in/yaml.v2 v2.2.5
+# gopkg.in/yaml.v2 v2.2.8
 gopkg.in/yaml.v2
-# k8s.io/api v0.17.2
+# k8s.io/api v0.18.0
 k8s.io/api/admissionregistration/v1
 k8s.io/api/admissionregistration/v1beta1
 k8s.io/api/apps/v1
@@ -194,7 +194,7 @@ k8s.io/api/settings/v1alpha1
 k8s.io/api/storage/v1
 k8s.io/api/storage/v1alpha1
 k8s.io/api/storage/v1beta1
-# k8s.io/apiextensions-apiserver v0.17.2
+# k8s.io/apiextensions-apiserver v0.18.0
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1
@@ -202,7 +202,7 @@ k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1
-# k8s.io/apimachinery v0.17.2
+# k8s.io/apimachinery v0.18.0
 k8s.io/apimachinery/pkg/api/equality
 k8s.io/apimachinery/pkg/api/errors
 k8s.io/apimachinery/pkg/api/meta
@@ -244,13 +244,13 @@ k8s.io/apimachinery/pkg/util/yaml
 k8s.io/apimachinery/pkg/version
 k8s.io/apimachinery/pkg/watch
 k8s.io/apimachinery/third_party/forked/golang/reflect
-# k8s.io/apiserver v0.17.2
+# k8s.io/apiserver v0.18.0
 k8s.io/apiserver/pkg/apis/apiserver
 k8s.io/apiserver/pkg/apis/apiserver/v1alpha1
 k8s.io/apiserver/pkg/apis/audit
 k8s.io/apiserver/pkg/apis/audit/v1
 k8s.io/apiserver/pkg/apis/config
-# k8s.io/client-go v12.0.0+incompatible => k8s.io/client-go v0.17.2
+# k8s.io/client-go v12.0.0+incompatible => k8s.io/client-go v0.18.0
 k8s.io/client-go/discovery
 k8s.io/client-go/dynamic
 k8s.io/client-go/informers
@@ -405,9 +405,8 @@ k8s.io/client-go/util/cert
 k8s.io/client-go/util/connrotation
 k8s.io/client-go/util/flowcontrol
 k8s.io/client-go/util/keyutil
-k8s.io/client-go/util/retry
 k8s.io/client-go/util/workqueue
-# k8s.io/gengo v0.0.0-20191120174120-e74f70b9b27e
+# k8s.io/gengo v0.0.0-20200114144118-36b2048a9120
 k8s.io/gengo/args
 k8s.io/gengo/examples/deepcopy-gen/generators
 k8s.io/gengo/examples/set-gen/sets
@@ -417,13 +416,15 @@ k8s.io/gengo/parser
 k8s.io/gengo/types
 # k8s.io/klog v1.0.0
 k8s.io/klog
-# k8s.io/kube-aggregator v0.17.2
+# k8s.io/kube-aggregator v0.18.0
 k8s.io/kube-aggregator/pkg/apis/apiregistration
 k8s.io/kube-aggregator/pkg/apis/apiregistration/v1
-# k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6
+# k8s.io/utils v0.0.0-20200324210504-a9aa75ae1b89
 k8s.io/utils/buffer
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# sigs.k8s.io/yaml v1.1.0
+# sigs.k8s.io/structured-merge-diff/v3 v3.0.0
+sigs.k8s.io/structured-merge-diff/v3/value
+# sigs.k8s.io/yaml v1.2.0
 sigs.k8s.io/yaml
