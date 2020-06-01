@@ -29,6 +29,7 @@ const (
 	ClusterLoggingFieldSplunkConfig           = "splunkConfig"
 	ClusterLoggingFieldState                  = "state"
 	ClusterLoggingFieldSyslogConfig           = "syslogConfig"
+	ClusterLoggingFieldTolerations            = "tolerations"
 	ClusterLoggingFieldTransitioning          = "transitioning"
 	ClusterLoggingFieldTransitioningMessage   = "transitioningMessage"
 	ClusterLoggingFieldUUID                   = "uuid"
@@ -59,6 +60,7 @@ type ClusterLogging struct {
 	SplunkConfig           *SplunkConfig          `json:"splunkConfig,omitempty" yaml:"splunkConfig,omitempty"`
 	State                  string                 `json:"state,omitempty" yaml:"state,omitempty"`
 	SyslogConfig           *SyslogConfig          `json:"syslogConfig,omitempty" yaml:"syslogConfig,omitempty"`
+	Tolerations            []Toleration           `json:"tolerations,omitempty" yaml:"tolerations,omitempty"`
 	Transitioning          string                 `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
 	TransitioningMessage   string                 `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
 	UUID                   string                 `json:"uuid,omitempty" yaml:"uuid,omitempty"`

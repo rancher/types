@@ -13,6 +13,7 @@ const (
 	ProjectLoggingSpecFieldProjectID             = "projectId"
 	ProjectLoggingSpecFieldSplunkConfig          = "splunkConfig"
 	ProjectLoggingSpecFieldSyslogConfig          = "syslogConfig"
+	ProjectLoggingSpecFieldTolerations           = "tolerations"
 )
 
 type ProjectLoggingSpec struct {
@@ -27,4 +28,5 @@ type ProjectLoggingSpec struct {
 	ProjectID             string                 `json:"projectId,omitempty" yaml:"projectId,omitempty"`
 	SplunkConfig          *SplunkConfig          `json:"splunkConfig,omitempty" yaml:"splunkConfig,omitempty"`
 	SyslogConfig          *SyslogConfig          `json:"syslogConfig,omitempty" yaml:"syslogConfig,omitempty"`
+	Tolerations           []Toleration           `json:"tolerations,omitempty" yaml:"tolerations,omitempty"`
 }

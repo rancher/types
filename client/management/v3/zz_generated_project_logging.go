@@ -26,6 +26,7 @@ const (
 	ProjectLoggingFieldState                 = "state"
 	ProjectLoggingFieldStatus                = "status"
 	ProjectLoggingFieldSyslogConfig          = "syslogConfig"
+	ProjectLoggingFieldTolerations           = "tolerations"
 	ProjectLoggingFieldTransitioning         = "transitioning"
 	ProjectLoggingFieldTransitioningMessage  = "transitioningMessage"
 	ProjectLoggingFieldUUID                  = "uuid"
@@ -53,6 +54,7 @@ type ProjectLogging struct {
 	State                 string                 `json:"state,omitempty" yaml:"state,omitempty"`
 	Status                *ProjectLoggingStatus  `json:"status,omitempty" yaml:"status,omitempty"`
 	SyslogConfig          *SyslogConfig          `json:"syslogConfig,omitempty" yaml:"syslogConfig,omitempty"`
+	Tolerations           []Toleration           `json:"tolerations,omitempty" yaml:"tolerations,omitempty"`
 	Transitioning         string                 `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
 	TransitioningMessage  string                 `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
 	UUID                  string                 `json:"uuid,omitempty" yaml:"uuid,omitempty"`
