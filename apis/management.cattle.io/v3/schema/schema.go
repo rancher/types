@@ -206,9 +206,6 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 		AddMapperForType(&Version, v3.Cluster{},
 			&m.Embed{Field: "status"},
 			mapper.NewDropFromSchema("genericEngineConfig"),
-			mapper.NewDropFromSchema("googleKubernetesEngineConfig"),
-			mapper.NewDropFromSchema("azureKubernetesServiceConfig"),
-			mapper.NewDropFromSchema("amazonElasticContainerServiceConfig"),
 			m.DisplayName{},
 		).
 		AddMapperForType(&Version, v3.ClusterStatus{},
