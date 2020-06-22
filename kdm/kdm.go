@@ -14,6 +14,7 @@ const (
 	CoreDNS       = "coreDNS"
 	KubeDNS       = "kubeDNS"
 	MetricsServer = "metricsServer"
+	Aci           = "aci"
 	NginxIngress  = "nginxIngress"
 	Nodelocal     = "nodelocal"
 	TemplateKeys  = "templateKeys"

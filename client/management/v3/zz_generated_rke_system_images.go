@@ -2,6 +2,11 @@ package client
 
 const (
 	RKESystemImagesType                           = "rkeSystemImages"
+	RKESystemImagesFieldAciControllerContainer    = "aci_controller_container"
+	RKESystemImagesFieldAciHostContainer          = "aci_host_container"
+	RKESystemImagesFieldAciMcastContainer         = "aci_mcast_container"
+	RKESystemImagesFieldAciOpenvSwitchContainer   = "aci_ovs_container"
+	RKESystemImagesFieldAciOpflexContainer        = "aci_opflex_container"
 	RKESystemImagesFieldAlpine                    = "alpine"
 	RKESystemImagesFieldCalicoCNI                 = "calicoCni"
 	RKESystemImagesFieldCalicoControllers         = "calicoControllers"
@@ -36,6 +41,11 @@ const (
 )
 
 type RKESystemImages struct {
+	AciControllerContainer    string `json:"aci_controller_container,omitempty" yaml:"aci_controller_container,omitempty"`
+	AciHostContainer          string `json:"aci_host_container,omitempty" yaml:"aci_host_container,omitempty"`
+	AciMcastContainer         string `json:"aci_mcast_container,omitempty" yaml:"aci_mcast_container,omitempty"`
+	AciOpenvSwitchContainer   string `json:"aci_ovs_container,omitempty" yaml:"aci_ovs_container,omitempty"`
+	AciOpflexContainer        string `json:"aci_opflex_container,omitempty" yaml:"aci_opflex_container,omitempty"`
 	Alpine                    string `json:"alpine,omitempty" yaml:"alpine,omitempty"`
 	CalicoCNI                 string `json:"calicoCni,omitempty" yaml:"calicoCni,omitempty"`
 	CalicoControllers         string `json:"calicoControllers,omitempty" yaml:"calicoControllers,omitempty"`
