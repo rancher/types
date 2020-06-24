@@ -13,7 +13,7 @@ require (
 	github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8
 	github.com/pkg/errors v0.9.1
 	github.com/rancher/lasso v0.0.0-20200515155337-a34e1e26ad91
-	github.com/rancher/norman v0.0.0-20200517050325-f53cae161640
+	github.com/rancher/norman v0.0.0-20200609220258-00d350370ee8
 	github.com/rancher/wrangler v0.6.2-0.20200515155908-1923f3f8ec3f
 	github.com/rancher/wrangler-api v0.6.1-0.20200515193802-dcf70881b087
 	github.com/sirupsen/logrus v1.4.2
