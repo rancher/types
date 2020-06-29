@@ -619,17 +619,24 @@ type OpenstackCloudProvider struct {
 }
 
 type GlobalOpenstackOpts struct {
-	AuthURL    string `json:"auth-url" yaml:"auth-url" ini:"auth-url,omitempty"`
-	Username   string `json:"username" yaml:"username" ini:"username,omitempty"`
-	UserID     string `json:"user-id" yaml:"user-id" ini:"user-id,omitempty"`
-	Password   string `json:"password" yaml:"password" ini:"password,omitempty" norman:"type=password"`
-	TenantID   string `json:"tenant-id" yaml:"tenant-id" ini:"tenant-id,omitempty"`
-	TenantName string `json:"tenant-name" yaml:"tenant-name" ini:"tenant-name,omitempty"`
-	TrustID    string `json:"trust-id" yaml:"trust-id" ini:"trust-id,omitempty"`
-	DomainID   string `json:"domain-id" yaml:"domain-id" ini:"domain-id,omitempty"`
-	DomainName string `json:"domain-name" yaml:"domain-name" ini:"domain-name,omitempty"`
-	Region     string `json:"region" yaml:"region" ini:"region,omitempty"`
-	CAFile     string `json:"ca-file" yaml:"ca-file" ini:"ca-file,omitempty"`
+	AuthURL                     string `json:"auth-url" yaml:"auth-url" ini:"auth-url,omitempty"`
+	Username                    string `json:"username" yaml:"username" ini:"username,omitempty"`
+	UserID                      string `json:"user-id" yaml:"user-id" ini:"user-id,omitempty"`
+	Password                    string `json:"password" yaml:"password" ini:"password,omitempty" norman:"type=password"`
+	TenantID                    string `json:"tenant-id" yaml:"tenant-id" ini:"tenant-id,omitempty"`
+	TenantName                  string `json:"tenant-name" yaml:"tenant-name" ini:"tenant-name,omitempty"`
+	TenantDomainID              string `json:"tenant-domain-id" yaml:"tenant-domain-id" ini:"tenant-domain-id,omitempty"`
+	TenantDomainName            string `json:"tenant-domain-name" yaml:"tenant-domain-name" ini:"tenant-domain-name,omitempty"`
+	TrustID                     string `json:"trust-id" yaml:"trust-id" ini:"trust-id,omitempty"`
+	DomainID                    string `json:"domain-id" yaml:"domain-id" ini:"domain-id,omitempty"`
+	DomainName                  string `json:"domain-name" yaml:"domain-name" ini:"domain-name,omitempty"`
+	UserDomainID                string `json:"user-domain-id" yaml:"user-domain-id" ini:"user-domain-id,omitempty"`
+	UserDomainName              string `json:"user-domain-name" yaml:"user-domain-name" ini:"user-domain-name,omitempty"`
+	ApplicationCredentialID     string `json:"application-credential-id" yaml:"application-credential-id" ini:"application-credential-id,omitempty"`
+	ApplicationCredentialName   string `json:"application-credential-name" yaml:"application-credential-name" ini:"application-credential-name,omitempty"`
+	ApplicationCredentialSecret string `json:"application-credential-secret" yaml:"application-credential-secret" ini:"application-credential-secret,omitempty" norman:"type=password"`
+	Region                      string `json:"region" yaml:"region" ini:"region,omitempty"`
+	CAFile                      string `json:"ca-file" yaml:"ca-file" ini:"ca-file,omitempty"`
 }
 
 type LoadBalancerOpenstackOpts struct {
