@@ -573,6 +573,8 @@ type VsphereCloudProvider struct {
 type GlobalVsphereOpts struct {
 	User              string `json:"user,omitempty" yaml:"user,omitempty" ini:"user,omitempty"`
 	Password          string `json:"password,omitempty" yaml:"password,omitempty" ini:"password,omitempty" norman:"type=password"`
+	SecretName        string `json:"secret-name,omitempty" yaml:"secret-name,omitempty" ini:"secret-name,omitempty"`
+	SecretNamespace   string `json:"secret-namespace,omitempty" yaml:"secret-namespace,omitempty" ini:"secret-namespace,omitempty"`
 	VCenterIP         string `json:"server,omitempty" yaml:"server,omitempty" ini:"server,omitempty"`
 	VCenterPort       string `json:"port,omitempty" yaml:"port,omitempty" ini:"port,omitempty"`
 	InsecureFlag      bool   `json:"insecure-flag,omitempty" yaml:"insecure-flag,omitempty" ini:"insecure-flag,omitempty"`
@@ -588,6 +590,8 @@ type GlobalVsphereOpts struct {
 type VirtualCenterConfig struct {
 	User              string `json:"user,omitempty" yaml:"user,omitempty" ini:"user,omitempty"`
 	Password          string `json:"password,omitempty" yaml:"password,omitempty" ini:"password,omitempty" norman:"type=password"`
+	SecretName        string `json:"secret-name,omitempty" yaml:"secret-name,omitempty" ini:"secret-name,omitempty"`
+	SecretNamespace   string `json:"secret-namespace,omitempty" yaml:"secret-namespace,omitempty" ini:"secret-namespace,omitempty"`
 	VCenterPort       string `json:"port,omitempty" yaml:"port,omitempty" ini:"port,omitempty"`
 	Datacenters       string `json:"datacenters,omitempty" yaml:"datacenters,omitempty" ini:"datacenters,omitempty"`
 	RoundTripperCount int    `json:"soap-roundtrip-count,omitempty" yaml:"soap-roundtrip-count,omitempty" ini:"soap-roundtrip-count,omitempty"`
