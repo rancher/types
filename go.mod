@@ -12,6 +12,7 @@ require (
 	github.com/coreos/prometheus-operator v0.36.0
 	github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8
 	github.com/pkg/errors v0.9.1
+	github.com/rancher/eks-controller v0.1.0-rc7.0.20200708232505-85ce7a9575f5
 	github.com/rancher/lasso v0.0.0-20200515155337-a34e1e26ad91
 	github.com/rancher/norman v0.0.0-20200517050325-f53cae161640
 	github.com/rancher/wrangler v0.6.2-0.20200515155908-1923f3f8ec3f
