@@ -363,6 +363,14 @@ type BaseService struct {
 	ExtraBinds []string `yaml:"extra_binds" json:"extraBinds,omitempty"`
 	// this is to provide extra env variable to the docker container running kubernetes service
 	ExtraEnv []string `yaml:"extra_env" json:"extraEnv,omitempty"`
+
+	// Windows nodes only of the same as the above
+	// Extra arguments that are added to the services
+	WindowsExtraArgs map[string]string `yaml:"win_extra_args" json:"winExtraArgs,omitempty"`
+	// Extra binds added to the nodes
+	WindowsExtraBinds []string `yaml:"win_extra_binds" json:"winExtraBinds,omitempty"`
+	// this is to provide extra env variable to the docker container running kubernetes service
+	WindowsExtraEnv []string `yaml:"win_extra_env" json:"winExtraEnv,omitempty"`
 }
 
 type NetworkConfig struct {
