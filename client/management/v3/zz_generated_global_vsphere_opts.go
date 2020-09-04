@@ -8,6 +8,8 @@ const (
 	GlobalVsphereOptsFieldInsecureFlag      = "insecure-flag"
 	GlobalVsphereOptsFieldPassword          = "password"
 	GlobalVsphereOptsFieldRoundTripperCount = "soap-roundtrip-count"
+	GlobalVsphereOptsFieldSecretName        = "secret-name"
+	GlobalVsphereOptsFieldSecretNamespace   = "secret-namespace"
 	GlobalVsphereOptsFieldUser              = "user"
 	GlobalVsphereOptsFieldVCenterIP         = "server"
 	GlobalVsphereOptsFieldVCenterPort       = "port"
@@ -23,6 +25,8 @@ type GlobalVsphereOpts struct {
 	InsecureFlag      bool   `json:"insecure-flag,omitempty" yaml:"insecure-flag,omitempty"`
 	Password          string `json:"password,omitempty" yaml:"password,omitempty"`
 	RoundTripperCount int64  `json:"soap-roundtrip-count,omitempty" yaml:"soap-roundtrip-count,omitempty"`
+	SecretName        string `json:"secret-name,omitempty" yaml:"secret-name,omitempty"`
+	SecretNamespace   string `json:"secret-namespace,omitempty" yaml:"secret-namespace,omitempty"`
 	User              string `json:"user,omitempty" yaml:"user,omitempty"`
 	VCenterIP         string `json:"server,omitempty" yaml:"server,omitempty"`
 	VCenterPort       string `json:"port,omitempty" yaml:"port,omitempty"`
