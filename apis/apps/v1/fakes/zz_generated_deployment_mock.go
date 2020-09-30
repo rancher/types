@@ -151,8 +151,6 @@ var (
 	lockDeploymentControllerMockGeneric                        sync.RWMutex
 	lockDeploymentControllerMockInformer                       sync.RWMutex
 	lockDeploymentControllerMockLister                         sync.RWMutex
-	lockDeploymentControllerMockStart                          sync.RWMutex
-	lockDeploymentControllerMockSync                           sync.RWMutex
 )
 
 // Ensure, that DeploymentControllerMock does implement DeploymentController.
@@ -192,12 +190,6 @@ var _ v1a.DeploymentController = &DeploymentControllerMock{}
 //             ListerFunc: func() v1a.DeploymentLister {
 // 	               panic("mock out the Lister method")
 //             },
-//             StartFunc: func(ctx context.Context, threadiness int) error {
-// 	               panic("mock out the Start method")
-//             },
-//             SyncFunc: func(ctx context.Context) error {
-// 	               panic("mock out the Sync method")
-//             },
 //         }
 //
 //         // use mockedDeploymentController in code that requires DeploymentController
@@ -231,12 +223,6 @@ type DeploymentControllerMock struct {
 
 	// ListerFunc mocks the Lister method.
 	ListerFunc func() v1a.DeploymentLister
-
-	// StartFunc mocks the Start method.
-	StartFunc func(ctx context.Context, threadiness int) error
-
-	// SyncFunc mocks the Sync method.
-	SyncFunc func(ctx context.Context) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -308,18 +294,6 @@ type DeploymentControllerMock struct {
 		}
 		// Lister holds details about calls to the Lister method.
 		Lister []struct {
-		}
-		// Start holds details about calls to the Start method.
-		Start []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Threadiness is the threadiness argument value.
-			Threadiness int
-		}
-		// Sync holds details about calls to the Sync method.
-		Sync []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
 		}
 	}
 }
@@ -648,72 +622,6 @@ func (mock *DeploymentControllerMock) ListerCalls() []struct {
 	return calls
 }
 
-// Start calls StartFunc.
-func (mock *DeploymentControllerMock) Start(ctx context.Context, threadiness int) error {
-	if mock.StartFunc == nil {
-		panic("DeploymentControllerMock.StartFunc: method is nil but DeploymentController.Start was just called")
-	}
-	callInfo := struct {
-		Ctx         context.Context
-		Threadiness int
-	}{
-		Ctx:         ctx,
-		Threadiness: threadiness,
-	}
-	lockDeploymentControllerMockStart.Lock()
-	mock.calls.Start = append(mock.calls.Start, callInfo)
-	lockDeploymentControllerMockStart.Unlock()
-	return mock.StartFunc(ctx, threadiness)
-}
-
-// StartCalls gets all the calls that were made to Start.
-// Check the length with:
-//     len(mockedDeploymentController.StartCalls())
-func (mock *DeploymentControllerMock) StartCalls() []struct {
-	Ctx         context.Context
-	Threadiness int
-} {
-	var calls []struct {
-		Ctx         context.Context
-		Threadiness int
-	}
-	lockDeploymentControllerMockStart.RLock()
-	calls = mock.calls.Start
-	lockDeploymentControllerMockStart.RUnlock()
-	return calls
-}
-
-// Sync calls SyncFunc.
-func (mock *DeploymentControllerMock) Sync(ctx context.Context) error {
-	if mock.SyncFunc == nil {
-		panic("DeploymentControllerMock.SyncFunc: method is nil but DeploymentController.Sync was just called")
-	}
-	callInfo := struct {
-		Ctx context.Context
-	}{
-		Ctx: ctx,
-	}
-	lockDeploymentControllerMockSync.Lock()
-	mock.calls.Sync = append(mock.calls.Sync, callInfo)
-	lockDeploymentControllerMockSync.Unlock()
-	return mock.SyncFunc(ctx)
-}
-
-// SyncCalls gets all the calls that were made to Sync.
-// Check the length with:
-//     len(mockedDeploymentController.SyncCalls())
-func (mock *DeploymentControllerMock) SyncCalls() []struct {
-	Ctx context.Context
-} {
-	var calls []struct {
-		Ctx context.Context
-	}
-	lockDeploymentControllerMockSync.RLock()
-	calls = mock.calls.Sync
-	lockDeploymentControllerMockSync.RUnlock()
-	return calls
-}
-
 var (
 	lockDeploymentInterfaceMockAddClusterScopedFeatureHandler   sync.RWMutex
 	lockDeploymentInterfaceMockAddClusterScopedFeatureLifecycle sync.RWMutex
@@ -792,10 +700,10 @@ var _ v1a.DeploymentInterface = &DeploymentInterfaceMock{}
 //             GetNamespacedFunc: func(namespace string, name string, opts v1b.GetOptions) (*v1.Deployment, error) {
 // 	               panic("mock out the GetNamespaced method")
 //             },
-//             ListFunc: func(opts v1b.ListOptions) (*v1a.DeploymentList, error) {
+//             ListFunc: func(opts v1b.ListOptions) (*v1.DeploymentList, error) {
 // 	               panic("mock out the List method")
 //             },
-//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.DeploymentList, error) {
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1.DeploymentList, error) {
 // 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
@@ -860,10 +768,10 @@ type DeploymentInterfaceMock struct {
 	GetNamespacedFunc func(namespace string, name string, opts v1b.GetOptions) (*v1.Deployment, error)
 
 	// ListFunc mocks the List method.
-	ListFunc func(opts v1b.ListOptions) (*v1a.DeploymentList, error)
+	ListFunc func(opts v1b.ListOptions) (*v1.DeploymentList, error)
 
 	// ListNamespacedFunc mocks the ListNamespaced method.
-	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.DeploymentList, error)
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1.DeploymentList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -1624,7 +1532,7 @@ func (mock *DeploymentInterfaceMock) GetNamespacedCalls() []struct {
 }
 
 // List calls ListFunc.
-func (mock *DeploymentInterfaceMock) List(opts v1b.ListOptions) (*v1a.DeploymentList, error) {
+func (mock *DeploymentInterfaceMock) List(opts v1b.ListOptions) (*v1.DeploymentList, error) {
 	if mock.ListFunc == nil {
 		panic("DeploymentInterfaceMock.ListFunc: method is nil but DeploymentInterface.List was just called")
 	}
@@ -1655,7 +1563,7 @@ func (mock *DeploymentInterfaceMock) ListCalls() []struct {
 }
 
 // ListNamespaced calls ListNamespacedFunc.
-func (mock *DeploymentInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.DeploymentList, error) {
+func (mock *DeploymentInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1.DeploymentList, error) {
 	if mock.ListNamespacedFunc == nil {
 		panic("DeploymentInterfaceMock.ListNamespacedFunc: method is nil but DeploymentInterface.ListNamespaced was just called")
 	}

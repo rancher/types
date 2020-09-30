@@ -11,7 +11,10 @@ echo Running: go vet
 go vet ${PACKAGES}
 echo Running: golint
 for i in ${PACKAGES}; do
-    if [ -n "$(golint $i | grep -v zz_generated | grep -v 'should have comment.*or be unexported' | tee /dev/stderr)" ]; then
+    if [ -n "$(golint $i | grep -v zz_generated | \
+        grep -v 'should have comment.*or be unexported' | \
+        grep -v 'type GlobalDns should be GlobalDNS' | \
+        tee /dev/stderr)" ]; then
         failed=true
     fi
 done

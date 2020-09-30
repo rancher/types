@@ -33,7 +33,7 @@ type RancherKubernetesEngineConfig struct {
 	// Authorization mode configuration used in the cluster
 	Authorization AuthzConfig `yaml:"authorization" json:"authorization,omitempty"`
 	// Enable/disable strict docker version checking
-	IgnoreDockerVersion bool `yaml:"ignore_docker_version" json:"ignoreDockerVersion" norman:"default=true"`
+	IgnoreDockerVersion *bool `yaml:"ignore_docker_version" json:"ignoreDockerVersion" norman:"default=true"`
 	// Kubernetes version to use (if kubernetes image is specifed, image version takes precedence)
 	Version string `yaml:"kubernetes_version" json:"kubernetesVersion,omitempty"`
 	// List of private registries and their credentials
@@ -205,7 +205,7 @@ type RKEConfigNode struct {
 	Taints []RKETaint `yaml:"taints" json:"taints,omitempty"`
 }
 
-type RKEK8sSystemImage struct {
+type RkeK8sSystemImage struct {
 	types.Namespaced
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -213,7 +213,7 @@ type RKEK8sSystemImage struct {
 	SystemImages RKESystemImages `yaml:"system_images" json:"systemImages,omitempty"`
 }
 
-type RKEK8sServiceOption struct {
+type RkeK8sServiceOption struct {
 	types.Namespaced
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -221,7 +221,7 @@ type RKEK8sServiceOption struct {
 	ServiceOptions KubernetesServicesOptions `yaml:"service_options" json:"serviceOptions,omitempty"`
 }
 
-type RKEAddon struct {
+type RkeAddon struct {
 	types.Namespaced
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
