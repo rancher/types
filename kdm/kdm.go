@@ -11,6 +11,7 @@ const (
 	Canal         = "canal"
 	Flannel       = "flannel"
 	Weave         = "weave"
+	KubeRouter    = "kube-router"
 	CoreDNS       = "coreDNS"
 	KubeDNS       = "kubeDNS"
 	MetricsServer = "metricsServer"
