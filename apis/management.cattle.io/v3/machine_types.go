@@ -119,15 +119,16 @@ type DockerInfo struct {
 }
 
 var (
-	NodeConditionInitialized condition.Cond = "Initialized"
-	NodeConditionProvisioned condition.Cond = "Provisioned"
-	NodeConditionUpdated     condition.Cond = "Updated"
-	NodeConditionRegistered  condition.Cond = "Registered"
-	NodeConditionRemoved     condition.Cond = "Removed"
-	NodeConditionConfigSaved condition.Cond = "Saved"
-	NodeConditionReady       condition.Cond = "Ready"
-	NodeConditionDrained     condition.Cond = "Drained"
-	NodeConditionUpgraded    condition.Cond = "Upgraded"
+	NodeConditionInitialized       condition.Cond = "Initialized"
+	NodeConditionProvisioned       condition.Cond = "Provisioned"
+	NodeConditionUpdated           condition.Cond = "Updated"
+	NodeConditionRegistered        condition.Cond = "Registered"
+	NodeConditionRemoved           condition.Cond = "Removed"
+	NodeConditionConfigSaved       condition.Cond = "Saved"
+	NodeConditionReady             condition.Cond = "Ready"
+	NodeConditionDrained           condition.Cond = "Drained"
+	NodeConditionUpgraded          condition.Cond = "Upgraded"
+	NodeConditionDrainBeforeDelete condition.Cond = "DrainBeforeDelete"
 )
 
 type NodeCondition struct {
