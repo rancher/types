@@ -52,20 +52,18 @@ type GlobalDNSProviderSpec struct {
 }
 
 type Route53ProviderConfig struct {
-	AccessKey         string            `json:"accessKey" norman:"notnullable,required,minLength=1"`
-	SecretKey         string            `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
-	CredentialsPath   string            `json:"credentialsPath" norman:"default=/.aws"`
-	RoleArn           string            `json:"roleArn,omitempty"`
-	Region            string            `json:"region" norman:"default=us-east-1"`
-	ZoneType          string            `json:"zoneType" norman:"default=public"`
-	AdditionalOptions map[string]string `json:"additionalOptions,omitempty"`
+	AccessKey       string `json:"accessKey" norman:"notnullable,required,minLength=1"`
+	SecretKey       string `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
+	CredentialsPath string `json:"credentialsPath" norman:"default=/.aws"`
+	RoleArn         string `json:"roleArn,omitempty"`
+	Region          string `json:"region" norman:"default=us-east-1"`
+	ZoneType        string `json:"zoneType" norman:"default=public"`
 }
 
 type CloudflareProviderConfig struct {
-	APIKey            string            `json:"apiKey" norman:"notnullable,required,minLength=1,type=password"`
-	APIEmail          string            `json:"apiEmail" norman:"notnullable,required,minLength=1"`
-	ProxySetting      *bool             `json:"proxySetting" norman:"default=true"`
-	AdditionalOptions map[string]string `json:"additionalOptions,omitempty"`
+	APIKey       string `json:"apiKey" norman:"notnullable,required,minLength=1,type=password"`
+	APIEmail     string `json:"apiEmail" norman:"notnullable,required,minLength=1"`
+	ProxySetting *bool  `json:"proxySetting" norman:"default=true"`
 }
 
 type UpdateGlobalDNSTargetsInput struct {
@@ -73,7 +71,6 @@ type UpdateGlobalDNSTargetsInput struct {
 }
 
 type AlidnsProviderConfig struct {
-	AccessKey         string            `json:"accessKey" norman:"notnullable,required,minLength=1"`
-	SecretKey         string            `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
-	AdditionalOptions map[string]string `json:"additionalOptions,omitempty"`
+	AccessKey string `json:"accessKey" norman:"notnullable,required,minLength=1"`
+	SecretKey string `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
 }
