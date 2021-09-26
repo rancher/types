@@ -843,7 +843,7 @@ type DNSConfig struct {
 	// NodeSelector key pair
 	NodeSelector map[string]string `yaml:"node_selector" json:"nodeSelector,omitempty"`
 	// Nodelocal DNS
-	Nodelocal *Nodelocal `yaml:"nodelocal" json:"nodelocal,omitempy"`
+	Nodelocal *Nodelocal `yaml:"nodelocal" json:"nodelocal,omitempty"`
 	// Update strategy
 	UpdateStrategy *DeploymentStrategy `yaml:"update_strategy" json:"updateStrategy,omitempty"`
 	// Autoscaler fields to determine number of dns replicas
@@ -852,7 +852,7 @@ type DNSConfig struct {
 
 type Nodelocal struct {
 	// link-local IP for nodelocal DNS
-	IPAddress string `yaml:"ip_address" json:"ipAddress,omitempy"`
+	IPAddress string `yaml:"ip_address" json:"ipAddress,omitempty"`
 	// Nodelocal DNS daemonset upgrade strategy
 	UpdateStrategy *DaemonSetUpdateStrategy `yaml:"update_strategy" json:"updateStrategy,omitempty"`
 	// NodeSelector key pair
