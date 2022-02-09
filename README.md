@@ -1,3 +1,5 @@
+### Note: This repository is deprecated. It was migrated to [Rancher/Rancher](https://github.com/rancher/rancher). No new issue or PR should be open here.
+
 Rancher API Types
 ========
 
