@@ -3,17 +3,30 @@ package summary
 import (
 	"strings"
 
-	"k8s.io/apimachinery/pkg/runtime"
-
 	"github.com/rancher/wrangler/pkg/data"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 type Summary struct {
-	State         string
-	Error         bool
-	Transitioning bool
-	Message       []string
+	State         string                 `json:"state,omitempty"`
+	Error         bool                   `json:"error,omitempty"`
+	Transitioning bool                   `json:"transitioning,omitempty"`
+	Message       []string               `json:"message,omitempty"`
+	Attributes    map[string]interface{} `json:"-"`
+	Relationships []Relationship         `json:"-"`
+}
+
+type Relationship struct {
+	Name         string
+	Namespace    string
+	ControlledBy bool
+	Kind         string
+	APIVersion   string
+	Inbound      bool
+	Type         string
+	Selector     *metav1.LabelSelector
 }
 
 func (s Summary) String() string {
@@ -34,7 +47,7 @@ func (s Summary) String() string {
 		msg += "]"
 	}
 	if len(s.Message) > 0 {
-		msg = msg + " " + s.Message[0]
+		msg = msg + " " + strings.Join(s.Message, ", ")
 	}
 	return msg
 }
@@ -61,6 +74,10 @@ func dedupMessage(messages []string) []string {
 	var result []string
 
 	for _, message := range messages {
+		message = strings.TrimSpace(message)
+		if message == "" {
+			continue
+		}
 		if seen[message] {
 			continue
 		}
